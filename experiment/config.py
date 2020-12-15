@@ -1,3 +1,8 @@
 class Config:
     def __init__(self):
-        path_test = ''
+        self.path_test = 'abc'
+        self.path_patch = 'abc'
+
+
+if __name__ == '__main__':
+    Config()
