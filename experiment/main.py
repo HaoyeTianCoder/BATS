@@ -2,6 +2,7 @@ import pickle
 from experiment.config import Config
 from representation.word2vector import Word2vector
 import numpy as np
+from sklearn.cluster import KMeans
 
 class Experiment:
     def __init__(self, path_test, path_patch):
@@ -25,6 +26,8 @@ class Experiment:
 
         self.cal_all_simi(self.test_vector)
 
+        self.cluster_dist(self.test_vector)
+
     def test2vector(self, word2v='code2vec'):
         w2v = Word2vector(word2v)
         self.test_vector = w2v.convert(self.test_data)
@@ -38,6 +41,14 @@ class Experiment:
         center = np.mean(test_vector)
         dists = [np.linalg.norm(vec - center) for vec in test_vector]
         average = np.array(dists).mean()
+
+    def cluster_dist(self, test_vector):
+        self.cluster(test_vector)
+
+    def cluster(self, test_vector):
+        kmeans = KMeans(n_clusters=4)
+        # kmeans.fit(np.array(test_vector))
+        y_km = kmeans.fit_predict(test_vector)
 
 
 if __name__ == '__main__':
