@@ -7,12 +7,12 @@ class Word2vector:
         self.w2v = word2vec
 
     def convert(self, data_text):
-        # test_data: ['function A {...}','function B {}']
         if self.w2v == 'code2vec':
+            # data_text: ['function A {...}','function B {}']
             test_vector = []
             for i in range(len(data_text)):
-                test_function = data_text[i]
-                vector = Code2vector().convert(test_function)
+                function = data_text[i]
+                vector = Code2vector().convert(function)
                 test_vector.append(vector)
             return test_vector
 

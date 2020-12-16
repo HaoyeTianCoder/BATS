@@ -175,7 +175,7 @@ def get_all(PATH_PROJECTS, NAME_LIST):
 
     res = [name_number_list, error_title_list, error_message_embed_list, case_func_list]
 
-    output = open('../data/data.pkl', 'wb')
+    output = open('../data/test_case.pkl', 'wb')
     pickle.dump(res, output)
 
 

@@ -1,4 +1,7 @@
 import pickle
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+
 from experiment.config import Config
 from representation.word2vector import Word2vector
 import numpy as np
@@ -15,14 +18,16 @@ class Experiment:
         self.patch_vector = None
 
     def load_test(self,):
-        self.test_data = pickle.load(self.path_test)
-        self.patch_data = pickle.load(self.path_patch)
+        with open(self.path_test,'rb') as f:
+            self.test_data = pickle.load(f)
+
+        # self.patch_data = pickle.load(self.path_patch)
 
     def run(self):
         self.load_test()
 
         self.test2vector(word2v='code2vec')
-        self.patch2vector(word2v='cc2vec')
+        # self.patch2vector(word2v='cc2vec')
 
         self.cal_all_simi(self.test_vector)
 
@@ -30,7 +35,8 @@ class Experiment:
 
     def test2vector(self, word2v='code2vec'):
         w2v = Word2vector(word2v)
-        self.test_vector = w2v.convert(self.test_data)
+        test_function = self.test_data[3]
+        self.test_vector = w2v.convert(test_function)
 
     def patch2vector(self, word2v='cc2vec'):
         w2v = Word2vector(word2v)
@@ -41,14 +47,23 @@ class Experiment:
         center = np.mean(test_vector)
         dists = [np.linalg.norm(vec - center) for vec in test_vector]
         average = np.array(dists).mean()
+        print('average: {}'.format(average))
 
     def cluster_dist(self, test_vector):
         self.cluster(test_vector)
 
     def cluster(self, test_vector):
+        scaler = StandardScaler()
+        X = pd.DataFrame(scaler.fit_transform(test_vector))
+
         kmeans = KMeans(n_clusters=4)
         # kmeans.fit(np.array(test_vector))
-        y_km = kmeans.fit_predict(test_vector)
+        clusters = kmeans.fit_predict(test_vector)
+
+        X["Cluster"] = clusters
+
+
+
 
 
 if __name__ == '__main__':
