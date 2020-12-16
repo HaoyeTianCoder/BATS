@@ -45,7 +45,7 @@ def count_error_number(trigger_path_list):
             dic[count] += 1
 
     new_dict = {key: val for key, val in dic.items() if val != 0}
-    json.dump(new_dict, open('error_number.json', 'w'), sort_keys=True, indent=4)
+    json.dump(new_dict, open('test_case_number.json', 'w'), sort_keys=True, indent=4)
 
 
 def get_buggy_path(error_path):
@@ -54,8 +54,9 @@ def get_buggy_path(error_path):
     for line in lines:
         if '---' in line:
             path = line.split('::')
-            buggy_path = (path[0].split('---')[-1].strip().replace('.', '/'))
+            buggy_path = path[0].split('---')[-1].strip().replace('.', '/')
             case_func = path[-1]
+            break
     return buggy_path, case_func
 
 
@@ -106,33 +107,38 @@ def get_error_message(error_path):
 def get_func_list(error_path, buggy_path):
 
     func = get_name_func(error_path)
-    f = open(buggy_path, 'r')
+    try:
+        f = open(buggy_path, 'r')
+    except:
+        buggy_path = buggy_path.replace('/java/', '/')
+        f = open(buggy_path, 'r')
+
     lines = f.readlines()
-    ind_start = -1
-    ind_end = -1
+    ind_start = 0
+    ind_end = 0
 
     for ind in range(len(lines)):
-        if func + '() {' in lines[ind]:
+        if 'void ' + func + '()' in lines[ind]:
             ind_start = ind
             break
 
-    if not ind_start:
-        print(error_path)
-
-    for ind in range(ind_start, len(lines)):
-        if '/**' in lines[ind]:
-            ind_end = ind
-            break
-
-    if not ind_end:
-        ind_end = len(lines)
-
-    func_message = lines[ind_start: ind_end]
+    left = 1
+    for ind in range(ind_start + 1, len(lines)):
+        if '}' in lines[ind]:
+            left -= 1
+            if left == 0:
+                ind_end = ind
+                break
+        elif '{' in lines[ind]:
+            left += 1
+    func_message = lines[ind_start: ind_end+1]
     res = ''
     for line in func_message:
         res += line
-
-    return res
+    if ind_start:
+        return res
+    else:
+        return -1
 
 
 def get_all(PATH_PROJECTS, NAME_LIST):
@@ -160,23 +166,31 @@ def get_all(PATH_PROJECTS, NAME_LIST):
                 error_message_list = get_error_message(error_path)
                 func_mesage = get_func_list(error_path, buggy_path)
 
-
-                name_number_list.append(name_number)
-                error_title_list.append(error_title)
-                error_message_embed_list.append(error_message_list)
-                case_func_list.append(func_mesage)
+                if func_mesage != -1:
+                    name_number_list.append(name_number)
+                    error_title_list.append(error_title)
+                    error_message_embed_list.append(error_message_list)
+                    case_func_list.append(func_mesage)
             except:
                pass
 
-    # print(len(name_number_list))
-    # print(len(error_title_list))
-    # print(len(error_message_embed_list))
-    # print(len(case_func_list))
+    print(len(name_number_list))
+    print(len(error_title_list))
+    print(len(error_message_embed_list))
+    print(len(case_func_list))
+
+    # print(name_number_list[20])
+    # print(error_title_list[20])
+    # print(error_message_embed_list[20])
+    # print(case_func_list[20])
 
     res = [name_number_list, error_title_list, error_message_embed_list, case_func_list]
 
     output = open('../data/test_case.pkl', 'wb')
     pickle.dump(res, output)
+
+    trigger_path_list = get_trigger_path(PATH_PROJECTS, NAME_LIST)
+    count_error_number(trigger_path_list)
 
 
 def main():
