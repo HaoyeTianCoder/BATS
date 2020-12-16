@@ -45,7 +45,7 @@ def count_error_number(trigger_path_list):
             dic[count] += 1
 
     new_dict = {key: val for key, val in dic.items() if val != 0}
-    json.dump(new_dict, open('error_number.json', 'w'), sort_keys=True, indent=4)
+    json.dump(new_dict, open('test_case_number.json', 'w'), sort_keys=True, indent=4)
 
 
 def get_buggy_path(error_path):
@@ -179,15 +179,18 @@ def get_all(PATH_PROJECTS, NAME_LIST):
     print(len(error_message_embed_list))
     print(len(case_func_list))
 
-    print(name_number_list[20])
-    print(error_title_list[20])
-    print(error_message_embed_list[20])
-    print(case_func_list[20])
+    # print(name_number_list[20])
+    # print(error_title_list[20])
+    # print(error_message_embed_list[20])
+    # print(case_func_list[20])
 
     res = [name_number_list, error_title_list, error_message_embed_list, case_func_list]
 
     output = open('../data/test_case.pkl', 'wb')
     pickle.dump(res, output)
+
+    trigger_path_list = get_trigger_path(PATH_PROJECTS, NAME_LIST)
+    count_error_number(trigger_path_list)
 
 
 def main():
