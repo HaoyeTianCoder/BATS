@@ -5,11 +5,11 @@ from typing import Dict, Optional, List, Iterable
 from collections import Counter
 from functools import partial
 
-from code2vec.path_context_reader import PathContextReader, ModelInputTensorsFormer, ReaderInputTensors, EstimatorAction
-from code2vec.common import common
-from code2vec.vocabularies import VocabType
-from code2vec.config import Config
-from code2vec.model_base import Code2VecModelBase, ModelEvaluationResults, ModelPredictionResults
+from representation.code2vec.path_context_reader import PathContextReader, ModelInputTensorsFormer, ReaderInputTensors, EstimatorAction
+from representation.code2vec.common import common
+from representation.code2vec.vocabularies import VocabType
+from representation.code2vec.config import Config
+from representation.code2vec.model_base import Code2VecModelBase, ModelEvaluationResults, ModelPredictionResults
 
 
 tf.compat.v1.disable_eager_execution()

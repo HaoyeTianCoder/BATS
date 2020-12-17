@@ -3,9 +3,9 @@ import abc
 import os
 from typing import NamedTuple, Optional, List, Dict, Tuple, Iterable
 
-from code2vec.common import common
-from code2vec.vocabularies import Code2VecVocabs, VocabType
-from code2vec.config import Config
+from representation.code2vec.common import common
+from representation.code2vec.vocabularies import Code2VecVocabs, VocabType
+from representation.code2vec.config import Config
 
 
 class ModelEvaluationResults(NamedTuple):

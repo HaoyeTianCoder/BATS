@@ -1,4 +1,4 @@
-from code2vec.extractor import Extractor
+from representation.code2vec.extractor import Extractor
 import io
 from os import path, mkdir
 import tempfile

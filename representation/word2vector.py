@@ -3,10 +3,10 @@ import pickle
 from representation.CC2Vec import lmg_cc2ftr_interface
 
 # Imports and method code2vec
-from code2vector import Code2vector
-from code2vec.vocabularies import VocabType
-from code2vec.config import Config
-from code2vec.model_base import Code2VecModelBase
+from representation.code2vector import Code2vector
+from representation.code2vec.vocabularies import VocabType
+from representation.code2vec.config import Config
+from representation.code2vec.model_base import Code2VecModelBase
 
 MODEL_MODEL_LOAD_PATH = '/Users/abdoulkader.kabore/snt/PhD/01/PatchSimilarity/data/code2vec/models/java14_model/saved_model_iter8.release'
 
@@ -27,9 +27,9 @@ class Word2vector:
     def load_model_code2vec_dynamically(config: Config) -> Code2VecModelBase:
         assert config.DL_FRAMEWORK in {'tensorflow', 'keras'}
         if config.DL_FRAMEWORK == 'tensorflow':
-            from code2vec.tensorflow_model import Code2VecModel
+            from representation.code2vec.tensorflow_model import Code2VecModel
         elif config.DL_FRAMEWORK == 'keras':
-            from code2vec.keras_model import Code2VecModel
+            from representation.code2vec.keras_model import Code2VecModel
         return Code2VecModel(config)
 
     def convert(self, data_text):
@@ -39,7 +39,6 @@ class Word2vector:
                 function = data_text[i]
                 vector = self.c2v.convert(function)
                 test_vector.append(vector)
-                break
             return test_vector
 
         if self.w2v == 'cc2vec':

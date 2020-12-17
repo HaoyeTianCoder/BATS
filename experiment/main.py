@@ -1,8 +1,11 @@
+import sys, os
+sys.path.append(os.path.abspath(os.path.join('..', '.')))
+
 import pickle
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
-from experiment.config import Config
+from config import Config
 from representation.word2vector import Word2vector
 import numpy as np
 from sklearn.cluster import KMeans
@@ -37,6 +40,7 @@ class Experiment:
         w2v = Word2vector(word2v)
         test_function = self.test_data[3]
         self.test_vector = w2v.convert(test_function)
+        print(self.test_vector)
 
     def patch2vector(self, word2v='cc2vec'):
         w2v = Word2vector(word2v)
@@ -61,10 +65,6 @@ class Experiment:
         clusters = kmeans.fit_predict(test_vector)
 
         X["Cluster"] = clusters
-
-
-
-
 
 if __name__ == '__main__':
     config = Config()
