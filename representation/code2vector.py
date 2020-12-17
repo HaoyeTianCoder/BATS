@@ -1,6 +1,4 @@
 from representation.code2vec.extractor import Extractor
-import io
-from os import path, mkdir
 import tempfile
 
 EXTRACTOR_JAR = "../representation/code2vec/JavaExtractor/JPredict/target/JavaExtractor-0.0.1-SNAPSHOT.jar"
