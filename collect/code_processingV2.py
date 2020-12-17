@@ -108,10 +108,14 @@ def get_func_list(error_path, buggy_path):
 
     func = get_name_func(error_path)
     try:
-        f = open(buggy_path, 'r')
+        f = open(buggy_path, 'r', encoding="ISO-8859-1")
     except:
-        buggy_path = buggy_path.replace('/java/', '/')
-        f = open(buggy_path, 'r')
+        path = buggy_path.replace('/java/', '/')
+        try:
+            f = open(path, 'r', encoding="ISO-8859-1")
+        except:
+            path = buggy_path.replace('/test/', '/test/java/')
+            f = open(path, 'r', encoding="ISO-8859-1")
 
     lines = f.readlines()
     ind_start = 0
@@ -138,7 +142,7 @@ def get_func_list(error_path, buggy_path):
     if ind_start:
         return res
     else:
-        return -1
+        return '-1'
 
 
 def get_all(PATH_PROJECTS, NAME_LIST):
@@ -153,11 +157,11 @@ def get_all(PATH_PROJECTS, NAME_LIST):
         error_path_list = get_error_path(trigger_path)
         for error_path in error_path_list:
             try:
+
                 name = error_path.split('/')[-3]
                 number = error_path.split('/')[-1]
                 name_number = name + '_' + number
 
-                # get buggy path
                 buggy_path = dic_buggy_path[name].replace(name, name_number)
                 code_buggy_path, case_func = get_buggy_path(error_path)
                 buggy_path = buggy_path + code_buggy_path + '.java'
@@ -166,23 +170,25 @@ def get_all(PATH_PROJECTS, NAME_LIST):
                 error_message_list = get_error_message(error_path)
                 func_mesage = get_func_list(error_path, buggy_path)
 
-                if func_mesage != -1:
+                if func_mesage != '-1':
                     name_number_list.append(name_number)
                     error_title_list.append(error_title)
                     error_message_embed_list.append(error_message_list)
                     case_func_list.append(func_mesage)
+
             except:
-               print(buggy_path)
+                pass
+
 
     print(len(name_number_list))
     print(len(error_title_list))
     print(len(error_message_embed_list))
     print(len(case_func_list))
-
-    # print(name_number_list[20])
-    # print(error_title_list[20])
-    # print(error_message_embed_list[20])
-    # print(case_func_list[20])
+    #
+    # print(name_number_list[25])
+    # print(error_title_list[25])
+    # print(error_message_embed_list[25])
+    # print(case_func_list[25])
 
     res = [name_number_list, error_title_list, error_message_embed_list, case_func_list]
 
