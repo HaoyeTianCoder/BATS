@@ -32,7 +32,7 @@ class Word2vector:
             from representation.code2vec.keras_model import Code2VecModel
         return Code2VecModel(config)
 
-    def convert(self, data_text):
+    def convert(self, test_name, data_text):
         if self.w2v == 'code2vec':
             test_vector = []
             for i in range(len(data_text)):
@@ -40,8 +40,9 @@ class Word2vector:
                 try:
                     vector = self.c2v.convert(function)
                 except Exception as e:
-                    print('Exception:{}'.format(e))
+                    print('{} test_name:{} Exception:{}'.format(i, test_name[i], 'Wrong syntax'))
                     continue
+                print('{} test_name:{}'.format(i, test_name[i]))
                 test_vector.append(vector)
             return test_vector
 
