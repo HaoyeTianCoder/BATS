@@ -8,7 +8,7 @@ from representation.code2vec.vocabularies import VocabType
 from representation.code2vec.config import Config
 from representation.code2vec.model_base import Code2VecModelBase
 
-MODEL_MODEL_LOAD_PATH = '/Users/abdoulkader.kabore/snt/PhD/01/PatchSimilarity/data/code2vec/models/java14_model/saved_model_iter8.release'
+MODEL_MODEL_LOAD_PATH = '../models/java14_model/saved_model_iter8.release'
 
 class Word2vector:
     def __init__(self, word2vec):
@@ -37,7 +37,11 @@ class Word2vector:
             test_vector = []
             for i in range(len(data_text)):
                 function = data_text[i]
-                vector = self.c2v.convert(function)
+                try:
+                    vector = self.c2v.convert(function)
+                except Exception as e:
+                    print('Exception:{}'.format(e))
+                    continue
                 test_vector.append(vector)
             return test_vector
 
