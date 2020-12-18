@@ -37,10 +37,6 @@ def count_error_number(trigger_path_list):
         error_path_list = get_error_path(trigger_path)
         for error_path in error_path_list:
 
-            name = error_path.split('/')[-3]
-            number = error_path.split('/')[-1]
-            name_number = name + '_' + number
-
             f = open(error_path, 'r')
             lines = f.readlines()
             count = 0
@@ -48,17 +44,25 @@ def count_error_number(trigger_path_list):
                 if '---' in line:
                     count += 1
 
-                    if name_number not in dic_name_number:
-                        dic_name_number[name_number] = 1
-                    else:
-                        dic_name_number[name_number] += 1
-
             dic[count] += 1
+
+            name = error_path.split('/')[-3]
+            number = error_path.split('/')[-1]
+            name_number = name + '_' + number
+            dic_name_number[name_number] = []
+
+            for ind in range(len(lines)):
+                if '---' in lines[ind]:
+                    line = lines[ind]
+                    line = line.split('::')
+                    dic_name_number[name_number].append(line[-1].strip())
 
 
     new_dict = {key: val for key, val in dic.items() if val != 0}
     json.dump(new_dict, open('test_case_numberV2.json', 'w'), sort_keys=True, indent=4)
-    json.dump(dic_name_number, open('test_case_name_numberV2.json', 'w'), sort_keys=True, indent=4)
+
+    new_dic_name_number = {key: val for key, val in dic_name_number.items() if len(val) > 1}
+    json.dump(new_dic_name_number, open('test_case_name_numberV2.json', 'w'), sort_keys=True, indent=4)
 
 
 
