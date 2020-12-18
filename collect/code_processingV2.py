@@ -126,15 +126,21 @@ def get_func_list(error_path, buggy_path):
             ind_start = ind
             break
 
-    left = 1
-    for ind in range(ind_start + 1, len(lines)):
-        if '}' in lines[ind]:
-            left -= 1
-            if left == 0:
-                ind_end = ind
-                break
-        elif '{' in lines[ind]:
-            left += 1
+    left = 0
+    flag = 0
+    for ind in range(ind_start, len(lines)):
+        for s in lines[ind]:
+            if s == '{':
+                left += 1
+            elif s == '}':
+                left -= 1
+                if left == 0:
+                    ind_end = ind
+                    flag = 1
+                    break
+        if flag:
+            break
+
     func_message = lines[ind_start: ind_end+1]
     res = ''
     for line in func_message:
@@ -188,7 +194,7 @@ def get_all(PATH_PROJECTS, NAME_LIST):
     # print(name_number_list[25])
     # print(error_title_list[25])
     # print(error_message_embed_list[25])
-    # print(case_func_list[25])
+    # print(case_func_list[345])
 
     res = [name_number_list, error_title_list, error_message_embed_list, case_func_list]
 
