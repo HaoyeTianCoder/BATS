@@ -32,9 +32,14 @@ def count_error_number(trigger_path_list):
     count_value = [0] * 10000
     key = list(range(10000))
     dic = dict(zip(key, count_value))
+    dic_name_number = {}
     for trigger_path in trigger_path_list:
         error_path_list = get_error_path(trigger_path)
         for error_path in error_path_list:
+
+            name = error_path.split('/')[-3]
+            number = error_path.split('/')[-1]
+            name_number = name + '_' + number
 
             f = open(error_path, 'r')
             lines = f.readlines()
@@ -42,10 +47,19 @@ def count_error_number(trigger_path_list):
             for line in lines:
                 if '---' in line:
                     count += 1
+
+                    if name_number not in dic_name_number:
+                        dic_name_number[name_number] = 1
+                    else:
+                        dic_name_number[name_number] += 1
+
             dic[count] += 1
+
 
     new_dict = {key: val for key, val in dic.items() if val != 0}
     json.dump(new_dict, open('test_case_numberV2.json', 'w'), sort_keys=True, indent=4)
+    json.dump(dic_name_number, open('test_case_name_numberV2.json', 'w'), sort_keys=True, indent=4)
+
 
 
 def get_buggy_path(error_path):
