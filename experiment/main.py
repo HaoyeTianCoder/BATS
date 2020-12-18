@@ -5,7 +5,7 @@ import pickle
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
-from config import Config
+from experiment.config import Config
 from representation.word2vector import Word2vector
 import numpy as np
 from sklearn.cluster import KMeans
@@ -49,10 +49,10 @@ class Experiment:
 
     def cal_all_simi(self, test_vector):
         test_vector = np.array(test_vector)
-        center = np.mean(test_vector, axis=1)
+        center = np.mean(test_vector, axis=0)
         dists = [np.linalg.norm(vec - center) for vec in test_vector]
         average = np.array(dists).mean()
-        print('average: {}'.format(average))
+        print('one cluster average distance: {}'.format(average))
 
     def cluster_dist(self, test_vector):
         self.cluster(test_vector)
