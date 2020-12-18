@@ -130,7 +130,7 @@ def get_func_list(error_path, buggy_path):
     flag = 0
     for ind in range(ind_start, len(lines)):
         for s in lines[ind]:
-            if s == '{' and '//' not in lines[ind]:
+            if s == '{' and '"{" around' not in lines[ind] and "'{';" not in lines[ind]:  # Closure_173, JacksonCore_25 special handling
                 left += 1
             elif s == '}':
                 left -= 1
@@ -176,10 +176,11 @@ def get_all(PATH_PROJECTS, NAME_LIST):
                 error_message_list = get_error_message(error_path)
                 func_mesage = get_func_list(error_path, buggy_path)
 
-                if name_number == 'Closure_173':
-                    print(error_path)
-                    print(buggy_path)
-                    print(func_mesage)
+                # if name_number == 'JacksonCore_25':
+                #     print(error_path)
+                #     print(buggy_path)
+                #     print(func_mesage)
+
                 if func_mesage != '-1':
                     name_number_list.append(name_number)
                     error_title_list.append(error_title)
@@ -194,7 +195,7 @@ def get_all(PATH_PROJECTS, NAME_LIST):
     print(len(error_title_list))
     print(len(error_message_embed_list))
     print(len(case_func_list))
-    #
+
     # print(name_number_list[25])
     # print(error_title_list[25])
     # print(error_message_embed_list[25])
