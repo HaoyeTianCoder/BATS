@@ -1,0 +1,12 @@
+{
+  "Chart_14-org.jfree.chart.plot.junit.CategoryPlotTests::testRemoveDomainMarker": "Chart_14_1",
+  "Chart_14-org.jfree.chart.plot.junit.CategoryPlotTests::testRemoveRangeMarker": "Chart_14_2",
+  "Chart_14-org.jfree.chart.plot.junit.XYPlotTests::testRemoveDomainMarker": "Chart_14_3",
+  "Chart_14-org.jfree.chart.plot.junit.XYPlotTests::testRemoveRangeMarker": "Chart_14_4",
+
+  "Chart_16-org.jfree.data.category.junit.DefaultIntervalCategoryDatasetTests::testSetCategoryKeys":"Chart_16_2",
+
+  "Chart_18-": ""
+
+
+}
