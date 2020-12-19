@@ -8,7 +8,7 @@ from representation.code2vec.vocabularies import VocabType
 from representation.code2vec.config import Config
 from representation.code2vec.model_base import Code2VecModelBase
 
-MODEL_MODEL_LOAD_PATH = '../models/java14_model/saved_model_iter8.release'
+MODEL_MODEL_LOAD_PATH = '/Users/haoye.tian/Documents/University/data/models/java14_model/saved_model_iter8.release'
 
 class Word2vector:
     def __init__(self, word2vec):
