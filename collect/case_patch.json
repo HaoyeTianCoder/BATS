@@ -20,7 +20,20 @@
   "Chart_18-org.jfree.data.junit.DefaultKeyedValues2DTests::testRemoveColumnByKey": ["Chart_18_1","Chart_18_2","Chart_18_3"],
 
   "Chart_19-org.jfree.chart.plot.junit.CategoryPlotTests::testGetDomainAxisIndex": ["Chart_19_1"],
-  "Chart_19-org.jfree.chart.plot.junit.CategoryPlotTests::testGetRangeAxisIndex": ["Chart_19_2"]
+  "Chart_19-org.jfree.chart.plot.junit.CategoryPlotTests::testGetRangeAxisIndex": ["Chart_19_2"],
+
+  "Chart_2-org.jfree.data.general.junit.DatasetUtilitiesTests::testBug2849731_2": ["Chart_2_1"],
+  "Chart_2-org.jfree.data.general.junit.DatasetUtilitiesTests::testBug2849731_3": ["Chart_2_2"],
+
+  "Chart_22-org.jfree.data.junit.KeyedObjects2DTests::testRemoveValue": ["Chart_22_2"],
+  "Chart_22-org.jfree.data.junit.KeyedObjects2DTests::testRemoveRowByKey": ["Chart_22_3"],
+  "#3": "multiple tests to same",
+  "Chart_22-org.jfree.data.junit.KeyedObjects2DTests::testGetValueByKey": ["Chart_22_1"],
+  "Chart_22-org.jfree.data.junit.KeyedObjects2DTests::testSetObject": ["Chart_22_1"],
+  "#4": "multiple tests to same",
+  "Chart_22-org.jfree.data.junit.KeyedObjects2DTests::testRemoveColumnByKey": ["Chart_22_4"],
+  "Chart_22-org.jfree.data.junit.KeyedObjects2DTests::testRemoveColumnByIndex": ["Chart_22_4"],
+
 
 
 
