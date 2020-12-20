@@ -1,12 +1,27 @@
 {
-  "Chart_14-org.jfree.chart.plot.junit.CategoryPlotTests::testRemoveDomainMarker": "Chart_14_1",
-  "Chart_14-org.jfree.chart.plot.junit.CategoryPlotTests::testRemoveRangeMarker": "Chart_14_2",
-  "Chart_14-org.jfree.chart.plot.junit.XYPlotTests::testRemoveDomainMarker": "Chart_14_3",
-  "Chart_14-org.jfree.chart.plot.junit.XYPlotTests::testRemoveRangeMarker": "Chart_14_4",
+  "Chart_14-org.jfree.chart.plot.junit.CategoryPlotTests::testRemoveDomainMarker": ["Chart_14_1"],
+  "Chart_14-org.jfree.chart.plot.junit.CategoryPlotTests::testRemoveRangeMarker": ["Chart_14_2"],
+  "Chart_14-org.jfree.chart.plot.junit.XYPlotTests::testRemoveDomainMarker": ["Chart_14_3"],
+  "Chart_14-org.jfree.chart.plot.junit.XYPlotTests::testRemoveRangeMarker": ["Chart_14_4"],
 
-  "Chart_16-org.jfree.data.category.junit.DefaultIntervalCategoryDatasetTests::testSetCategoryKeys":"Chart_16_2",
+  "Chart_16-org.jfree.data.category.junit.DefaultIntervalCategoryDatasetTests::testSetCategoryKeys":["Chart_16_2"],
+  "#1": "multiple tests to same",
+  "Chart_16-org.jfree.data.category.junit.DefaultIntervalCategoryDatasetTests::testGetCategoryIndex":["Chart_16_1"],
+  "Chart_16-org.jfree.data.category.junit.DefaultIntervalCategoryDatasetTests::testGetSeriesIndex":["Chart_16_1"],
+  "Chart_16-org.jfree.data.category.junit.DefaultIntervalCategoryDatasetTests::testGetRowCount":["Chart_16_1"],
+  "Chart_16-org.jfree.data.category.junit.DefaultIntervalCategoryDatasetTests::testGetRowIndex":["Chart_16_1"],
+  "Chart_16-org.jfree.data.category.junit.DefaultIntervalCategoryDatasetTests::testGetColumnCount":["Chart_16_1"],
+  "Chart_16-org.jfree.data.category.junit.DefaultIntervalCategoryDatasetTests::testGetColumnIndex":["Chart_16_1"],
+  "Chart_16-org.jfree.data.category.junit.DefaultIntervalCategoryDatasetTests::testCloning2":["Chart_16_1"],
 
-  "Chart_18-": ""
+  "Chart_18-org.jfree.data.junit.DefaultKeyedValuesTests::testGetIndex2": ["Chart_18_1"],
+  "#2": "multiple tests to same",
+  "Chart_18-org.jfree.data.category.junit.DefaultCategoryDatasetTests::testBug1835955": ["Chart_18_1","Chart_18_2","Chart_18_3"],
+  "Chart_18-org.jfree.data.junit.DefaultKeyedValues2DTests::testRemoveColumnByKey": ["Chart_18_1","Chart_18_2","Chart_18_3"],
+
+  "Chart_19-org.jfree.chart.plot.junit.CategoryPlotTests::testGetDomainAxisIndex": ["Chart_19_1"],
+  "Chart_19-org.jfree.chart.plot.junit.CategoryPlotTests::testGetRangeAxisIndex": ["Chart_19_2"]
+
 
 
 }
