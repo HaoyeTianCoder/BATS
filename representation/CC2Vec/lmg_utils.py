@@ -2,6 +2,7 @@ import os
 import torch
 import numpy as np
 import math
+import re
 
 def commit_msg_label(data, dict_msg):
     labels_ = np.array([1 if w in d.split() else 0 for d in data for w in dict_msg])
@@ -49,3 +50,62 @@ def mini_batches(X_added_code, X_removed_code, Y, mini_batch_size=64, seed=0, Sh
         mini_batch = (mini_batch_X_added, mini_batch_X_removed, mini_batch_Y)
         mini_batches.append(mini_batch)        
     return mini_batches
+
+def get_lines(patch):
+    with open(patch, 'r') as file:
+        lines = ''
+        p = r"([^\w_])"
+        for line in file:
+            if line != '':
+                if line.startswith('@@') or line.startswith('diff') or line.startswith('index'):
+                    continue
+                if line == '+++':
+                    newline = ''
+                    lines += newline
+                elif line.startswith('---') or line.startswith('PATCH_DIFF_ORIG=---'):
+                    newline = re.split(pattern=p, string=line.split(' ')[1].strip())
+                    newline = ' '.join(newline)
+                    lines += newline
+                elif line.startswith('+++'):
+                    newline = re.split(pattern=p, string=line.split(' ')[1].strip())
+                    newline = ' '.join(newline)
+                    lines += newline
+                else:
+                    newline = re.split(pattern=p, string=line.strip())
+                    newline = [x.strip() for x in newline]
+                    while '' in newline:
+                        newline.remove('')
+                    newline = ' '.join(newline)
+                    lines += newline
+        return lines
+
+def get_files_once(folder, extension):
+    files = list()
+    for dirpath, _, _files in os.walk(folder):  
+        for filename in _files: 
+            fname = os.path.join(dirpath,filename) 
+            if fname.endswith('.' + extension): 
+                files.append(fname)
+    return files
+
+def update_dict(old_dictionary, params):
+    dict_msg, dict_code = old_dictionary
+    files = get_files_once(params.new_data_dir, 'patch')
+    tokens = list()
+    for f in files:
+        try:
+            lines = get_lines(f)
+            tokens.extend(lines.split())
+        except:
+            print("Cannot read properly file : %s" % f)
+    tokens = set(tokens)
+    l = len(dict_code)
+    keys = dict_code.keys()
+    for t in tokens:
+        if t not in keys:
+            dict_code[t] = l
+            l = l + 1
+    
+    new_dictionary = (dict_msg, dict_code)
+    return new_dictionary
+
