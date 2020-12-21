@@ -395,7 +395,47 @@
   "Closure_163-com.google.javascript.jscomp.CrossModuleMethodMotionTest::testIssue600e":["Closure_163_1", "Closure_163_2", "Closure_163_3", "Closure_163_4", "Closure_163_5", "Closure_163_6", "Closure_163_7", "Closure_163_8", "Closure_163_9", "Closure_163_10", "Closure_163_11", "Closure_163_12", "Closure_163_13", "Closure_163_14", "Closure_163_15", "Closure_163_16", "Closure_163_17", "Closure_163_18"],
   "Closure_163-com.google.javascript.jscomp.CrossModuleMethodMotionTest::testIssue600":["Closure_163_1", "Closure_163_2", "Closure_163_3", "Closure_163_4", "Closure_163_5", "Closure_163_6", "Closure_163_7", "Closure_163_8", "Closure_163_9", "Closure_163_10", "Closure_163_11", "Closure_163_12", "Closure_163_13", "Closure_163_14", "Closure_163_15", "Closure_163_16", "Closure_163_17", "Closure_163_18"],
 
+  "#46": "multiple tests to same",
+  "Closure_164-com.google.javascript.jscomp.LooseTypeCheckTest::testMethodInference7": ["Closure_164_1", "Closure_164_2"],
+  "Closure_164-com.google.javascript.jscomp.TypeCheckTest::testMethodInference7": ["Closure_164_1", "Closure_164_2"],
+  "Closure_164-com.google.javascript.rhino.jstype.FunctionTypeTest::testSupAndInfOfReturnTypesWithNumOfParams": ["Closure_164_1", "Closure_164_2"],
 
+  "#47": "multiple tests to same",
+  "Closure_166-com.google.javascript.jscomp.TypeInferenceTest::testRecordInference": ["Closure_166_1"],
+  "Closure_166-com.google.javascript.jscomp.TypeInferenceTest::testIssue785": ["Closure_166_1"],
+
+  "Closure_167-com.google.javascript.rhino.jstype.JSTypeTest::testRestrictedTypeGivenToBoolean": ["Closure_167_6"],
+  "#48": "multiple tests to same",
+  "Closure_167-com.google.javascript.jscomp.TypeCheckTest::testIssue783": ["Closure_167_1", "Closure_167_2", "Closure_167_3", "Closure_167_4", "Closure_167_5"],
+  "Closure_167-com.google.javascript.jscomp.TypeCheckTest::testMissingProperty20": ["Closure_167_1", "Closure_167_2", "Closure_167_3", "Closure_167_4", "Closure_167_5"],
+
+  "#49": "multiple tests to same",
+  "Closure_169-com.google.javascript.jscomp.TypeCheckTest::testIssue791": ["Closure_169_1", "Closure_169_2", "Closure_169_3", "Closure_169_4", "Closure_169_5", "Closure_169_6", "Closure_169_7", "Closure_169_8", "Closure_169_9", "Closure_169_10", "Closure_169_11", "Closure_169_12", "Closure_169_13", "Closure_169_14", "Closure_169_15", "Closure_169_16", "Closure_169_17", "Closure_169_18", "Closure_169_19", "Closure_169_20", "Closure_169_21", "Closure_169_22"],
+  "Closure_169-com.google.javascript.rhino.jstype.RecordTypeTest::testSubtypeWithUnknowns2": ["Closure_169_1", "Closure_169_2", "Closure_169_3", "Closure_169_4", "Closure_169_5", "Closure_169_6", "Closure_169_7", "Closure_169_8", "Closure_169_9", "Closure_169_10", "Closure_169_11", "Closure_169_12", "Closure_169_13", "Closure_169_14", "Closure_169_15", "Closure_169_16", "Closure_169_17", "Closure_169_18", "Closure_169_19", "Closure_169_20", "Closure_169_21", "Closure_169_22"],
+
+  "#50": "multiple tests to same",
+  "Closure_171-com.google.javascript.jscomp.TypeCheckTest::testIssue1023": ["Closure_171_1", "Closure_171_2"],
+  "Closure_171-com.google.javascript.jscomp.TypedScopeCreatorTest::testMethodBeforeFunction2": ["Closure_171_1", "Closure_171_2"],
+  "Closure_171-com.google.javascript.jscomp.TypedScopeCreatorTest::testPropertiesOnInterface2": ["Closure_171_1", "Closure_171_2"],
+
+  "Closure_173-com.google.javascript.jscomp.PeepholeSubstituteAlternateSyntaxTest::testAssocitivity": ["Closure_173_2"],
+  "#51": "multiple tests to same",
+  "Closure_173-com.google.javascript.jscomp.CodePrinterTest::testPrint": ["Closure_173_1"],
+  "Closure_173-com.google.javascript.jscomp.CodePrinterTest::testIssue1062": ["Closure_173_1"],
+
+  "#52": "multiple tests to same",
+  "Closure_174-com.google.javascript.jscomp.ScopedAliasesTest::testIssue1103a": ["Closure_174_1", "Closure_174_2", "Closure_174_3", "Closure_174_4", "Closure_174_5","Closure_174_6" ,"Closure_174_7"],
+  "Closure_174-com.google.javascript.jscomp.ScopedAliasesTest::testIssue1103b": ["Closure_174_1", "Closure_174_2", "Closure_174_3", "Closure_174_4", "Closure_174_5","Closure_174_6" ,"Closure_174_7"],
+  "Closure_174-com.google.javascript.jscomp.ScopedAliasesTest::testIssue1103c": ["Closure_174_1", "Closure_174_2", "Closure_174_3", "Closure_174_4", "Closure_174_5","Closure_174_6" ,"Closure_174_7"],
+
+  "#53": "multiple tests to same",
+  "Closure_175-com.google.javascript.jscomp.FunctionInjectorTest::testIssue1101a":["Closure_175_1", "Closure_175_2", "Closure_175_3", "Closure_175_4"],
+  "Closure_175-com.google.javascript.jscomp.FunctionInjectorTest::testIssue1101b":["Closure_175_1", "Closure_175_2", "Closure_175_3", "Closure_175_4"],
+  "Closure_175-com.google.javascript.jscomp.InlineFunctionsTest::testCostBasedInlining10":["Closure_175_1", "Closure_175_2", "Closure_175_3", "Closure_175_4"],
+  "Closure_175-com.google.javascript.jscomp.InlineFunctionsTest::testIssue1101":["Closure_175_1", "Closure_175_2", "Closure_175_3", "Closure_175_4"],
+  "Closure_175-com.google.javascript.jscomp.InlineFunctionsTest::testInlineMutableArgsReferencedOnce":["Closure_175_1", "Closure_175_2", "Closure_175_3", "Closure_175_4"],
+
+  ""
 
 
 }
