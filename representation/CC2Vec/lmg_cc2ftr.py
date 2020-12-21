@@ -1,8 +1,12 @@
+import sys, os
+sys.path.append(os.path.abspath(os.path.join('.', '.')))
+
 import argparse
 from representation.CC2Vec.lmg_padding import processing_data
 import pickle
 from representation.CC2Vec.lmg_cc2ftr_train import train_model
 from representation.CC2Vec.lmg_cc2ftr_extracted import extracted_cc2ftr
+from representation.CC2Vec.lmg_utils import update_dict
 
 def read_args_lmg():
     parser = argparse.ArgumentParser()
@@ -11,6 +15,11 @@ def read_args_lmg():
     parser.add_argument('-train_data', type=str, default='./data/lmg/train.pkl', help='the directory of our training data')
     parser.add_argument('-dictionary_data', type=str, default='./data/lmg/dict.pkl', help='the directory of our dicitonary data')
 
+    # Update dictionary
+    parser.add_argument('-update_dict', action='store_true', help='Update dictionary')
+    parser.add_argument('-new_data_dir', type=str, default='', help='the directory of our data to extract data')
+    parser.add_argument('-my_dictionary_data', type=str, default='./data/lmg/dict.pkl', help='the directory of our dicitonary data')
+    
     # Predicting our data
     parser.add_argument('-predict', action='store_true', help='predicting testing data')
     parser.add_argument('-pred_data', type=str, help='the directory of our training data')        
@@ -53,6 +62,18 @@ if __name__ == '__main__':
         train_model(data=data, params=params)
         print('--------------------------------------------------------------------------------')
         print('--------------------------Finish the training process---------------------------')
+        print('--------------------------------------------------------------------------------')
+        exit()
+
+    elif params.update_dict is True:
+        old_dictionary = pickle.load(open(params.my_dictionary_data, 'rb'))
+        new_dictionary = update_dict(old_dictionary, params)
+
+        with open(params.my_dictionary_data, 'wb') as f:
+            pickle.dump(new_dictionary, f)
+
+        print('--------------------------------------------------------------------------------')
+        print('--------------------------Finish the updating dict---------------------------')
         print('--------------------------------------------------------------------------------')
         exit()
 
