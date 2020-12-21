@@ -8,7 +8,7 @@ from representation.code2vec.vocabularies import VocabType
 from representation.code2vec.config import Config
 from representation.code2vec.model_base import Code2VecModelBase
 
-MODEL_MODEL_LOAD_PATH = '/Users/abdoulkader.kabore/snt/PhD/01/PatchSimilarity/data/code2vec/models/java14_model/saved_model_iter8.release'
+MODEL_MODEL_LOAD_PATH = '/Users/haoye.tian/Documents/University/data/models/java14_model/saved_model_iter8.release'
 
 class Word2vector:
     def __init__(self, word2vec):
@@ -32,12 +32,17 @@ class Word2vector:
             from representation.code2vec.keras_model import Code2VecModel
         return Code2VecModel(config)
 
-    def convert(self, data_text):
+    def convert(self, test_name, data_text):
         if self.w2v == 'code2vec':
             test_vector = []
             for i in range(len(data_text)):
                 function = data_text[i]
-                vector = self.c2v.convert(function)
+                try:
+                    vector = self.c2v.convert(function)
+                except Exception as e:
+                    print('{} test_name:{} Exception:{}'.format(i, test_name[i], 'Wrong syntax'))
+                    continue
+                print('{} test_name:{}'.format(i, test_name[i]))
                 test_vector.append(vector)
             return test_vector
 

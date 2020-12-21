@@ -1,0 +1,15 @@
+JavaExtractor/FeatureExtractor.class
+JavaExtractor/FeaturesEntities/ProgramRelation.class
+JavaExtractor/Common/Common$3.class
+JavaExtractor/Visitors/FunctionVisitor.class
+JavaExtractor/App.class
+JavaExtractor/Common/Common$2.class
+JavaExtractor/Common/CommandLineValues.class
+JavaExtractor/Visitors/LeavesCollectorVisitor.class
+JavaExtractor/Common/Common.class
+JavaExtractor/Common/Common$1.class
+JavaExtractor/ExtractFeaturesTask.class
+JavaExtractor/Common/MethodContent.class
+JavaExtractor/FeaturesEntities/Property.class
+JavaExtractor/FeaturesEntities/ProgramFeatures.class
+JavaExtractor/FeaturesEntities/ProgramNode.class

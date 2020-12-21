@@ -5,7 +5,7 @@ import pickle
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
-from config import Config
+from experiment.config import Config
 from representation.word2vector import Word2vector
 import numpy as np
 from sklearn.cluster import KMeans
@@ -39,8 +39,9 @@ class Experiment:
     def test2vector(self, word2v='code2vec'):
         w2v = Word2vector(word2v)
         test_function = self.test_data[3]
-        self.test_vector = w2v.convert(test_function)
-        print(self.test_vector)
+        test_name = self.test_data[0]
+        self.test_vector = w2v.convert(test_name, test_function)
+        print('test vector done')
 
     def patch2vector(self, word2v='cc2vec'):
         w2v = Word2vector(word2v)
@@ -48,10 +49,10 @@ class Experiment:
 
     def cal_all_simi(self, test_vector):
         test_vector = np.array(test_vector)
-        center = np.mean(test_vector)
+        center = np.mean(test_vector, axis=0)
         dists = [np.linalg.norm(vec - center) for vec in test_vector]
         average = np.array(dists).mean()
-        print('average: {}'.format(average))
+        print('one cluster average distance: {}'.format(average))
 
     def cluster_dist(self, test_vector):
         self.cluster(test_vector)
