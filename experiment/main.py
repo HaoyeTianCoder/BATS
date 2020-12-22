@@ -34,9 +34,14 @@ class Experiment:
         self.test2vector(word2v='code2vec')
         # self.patch2vector(word2v='cc2vec')
 
-        dists_one = self.cal_all_simi(self.test_vector)
+        # dists_one = self.cal_all_simi(self.test_vector)
+        dists_one, dist0, dist1, dist2, dist3 = self.cluster_dist(self.test_vector)
+        plt.boxplot([dists_one, dist0, dist1, dist2, dist3],labels=['Original','Cluster1','Cluster2','Cluster3','Cluster4'] )
+        plt.boxplot([dists_one, dist0, dist1, dist2, ], labels=['Original', 'Cluster1', 'Cluster2', 'Cluster3'])
+        plt.xlabel('Cluster')
+        plt.ylabel('Distance to Center')
 
-        self.cluster_dist(self.test_vector)
+
 
     def test2vector(self, word2v='code2vec'):
         w2v = Word2vector(word2v)
@@ -50,32 +55,55 @@ class Experiment:
         self.patch_vector = w2v.convert(self.patch_data)
 
     def cal_all_simi(self, test_vector):
-        test_vector = np.array(test_vector)
-        center = np.mean(test_vector, axis=0)
-        dists = [np.linalg.norm(vec - center) for vec in test_vector]
-        average = np.array(dists).mean()
-        print('one cluster average distance: {}'.format(average))
+        scaler = StandardScaler()
+        X = pd.DataFrame(scaler.fit_transform(test_vector))
+
+        center = np.mean(X, axis=0)
+        dists_one = [np.linalg.norm(vec - center) for vec in np.array(X)]
+        # average = np.array(dists).mean()
+        # print('one cluster average distance: {}'.format(average))
         # plt.boxplot(dists,)
         # ax = sns.boxplot(x="all", y="distance", data=dists)
 
-        return dists
+        return dists_one
+
+    # def cluster_dist(self, test_vector):
+    #     dist0, dist1, dist2 = self.cluster(test_vector)
+    #     return dist0, dist1, dist2
 
     def cluster_dist(self, test_vector):
-        self.cluster(test_vector)
-
-    def cluster(self, test_vector):
         scaler = StandardScaler()
         X = pd.DataFrame(scaler.fit_transform(test_vector))
+
+        # one cluster
+        center = np.mean(X, axis=0)
+        dists_one = [np.linalg.norm(vec - center) for vec in np.array(X)]
 
         kmeans = KMeans(n_clusters=4)
         # kmeans.fit(np.array(test_vector))
         clusters = kmeans.fit_predict(X)
-
         X["Cluster"] = clusters
-        v = Visual('PCA')
-        # v = Visual('TSNE')
-        v.visualize(clusters, plotX=X)
 
+        # v = Visual('PCA')
+        # v.visualize(clusters, plotX=X)
+
+        cluster0 = X[X["Cluster"] == 0].drop(["Cluster"], axis=1)
+        center0 = np.mean(cluster0, axis=0)
+        dist0 = [np.linalg.norm(vec - center0) for vec in np.array(cluster0)]
+
+        cluster1 = X[X["Cluster"] == 1].drop(["Cluster"], axis=1)
+        center1 = np.mean(cluster1, axis=0)
+        dist1 = [np.linalg.norm(vec - center1) for vec in np.array(cluster1)]
+
+        cluster2 = X[X["Cluster"] == 2].drop(["Cluster"], axis=1)
+        center2 = np.mean(cluster2, axis=0)
+        dist2 = [np.linalg.norm(vec - center2) for vec in np.array(cluster2)]
+
+        cluster3 = X[X["Cluster"] == 3].drop(["Cluster"], axis=1)
+        center3 = np.mean(cluster3, axis=0)
+        dist3 = [np.linalg.norm(vec - center3) for vec in np.array(cluster3)]
+
+        return dists_one, dist0, dist1, dist2, dist3
 
 
 
