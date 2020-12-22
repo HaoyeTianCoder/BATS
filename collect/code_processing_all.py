@@ -288,6 +288,7 @@ def get_all(PATH_PROJECTS, NAME_LIST):
     output = open('../data/test_case_all.pkl', 'wb')
     pickle.dump(res, output)
 
+    return res
 
 def main():
 
