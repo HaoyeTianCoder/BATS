@@ -541,7 +541,7 @@
 
     "#": "multiple tests to same",
     "JxPath_21-org.apache.commons.jxpath.ri.model.JXPath151Test::testMapValueEquality": ["JxPath_21_1"],
-    "JxPath_21-org.apache.commons.jxpath.ri.model.MixedModelTest::testNull": ["JxPath_21_1"],
+    "JxPath_21-org.apache.commons.jxpath.ri.model.MixedModelTest::testNull": ["JxPath_21_1"]
     
 
 }
