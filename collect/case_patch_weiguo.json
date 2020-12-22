@@ -1,0 +1,547 @@
+{   
+    "#": "multiple tests to same",
+    "Cli_4-org.apache.commons.cli.OptionsTest::testMissingOptionsException": ["Cli_4_1"],
+    "Cli_4-org.apache.commons.cli.OptionsTest::testMissingOptionException": ["Cli_4_1"],
+
+    "#": "multiple tests to same",
+    "Cli_5-org.apache.commons.cli.UtilTest::testStripLeadingHyphens": ["Cli_5_1"],
+    "Cli_5-org.apache.commons.cli.bug.BugCLI133Test::testOrder": ["Cli_5_1"],
+
+    "#": "multiple tests to same",
+    "Cli_9-org.apache.commons.cli.OptionsTest::testMissingOptionsException": ["Cli_9_1"],
+    "Cli_9-org.apache.commons.cli.ParseRequiredTest::testMissingRequiredOptions": ["Cli_9_1"],
+
+    "#": "multiple tests to same",
+    "Cli_12-org.apache.commons.cli.GnuParserTest::testShortWithEqual": ["Cli_12-1"],
+    "Cli_12-org.apache.commons.cli.GnuParserTest::testLongWithEqualSingleDash": ["Cli_12-1"],
+    "Cli_12-org.apache.commons.cli.GnuParserTest::testLongWithEqual": ["Cli_12-1"],
+
+    "#": "multiple tests to same",
+    "Cli_15-org.apache.commons.cli2.bug.BugCLI158Test::testSingleOptionSingleArgument": ["Cli_15_1"],
+    "Cli_15-org.apache.commons.cli2.bug.BugCLI158Test::testSingleOptionMaximumNumberOfArgument": ["Cli_15_1"],
+
+    "#": "multiple tests to same",
+    "Cli_16-org.apache.commons.cli2.bug.BugCLI123Test::testMultipleChildOptions": ["Cli_16_1", "Cli_16_2", "Cli_16_3", "Cli_16_4", "Cli_16_5", "Cli_16_6"],
+    "Cli_16-org.apache.commons.cli2.bug.BugCLI123Test::testParentOptionAndChildOption": ["Cli_16_1", "Cli_16_2", "Cli_16_3", "Cli_16_4", "Cli_16_5", "Cli_16_6"],
+    "Cli_16-org.apache.commons.cli2.bug.BugCLI123Test::testSingleChildOption": ["Cli_16_1", "Cli_16_2", "Cli_16_3", "Cli_16_4", "Cli_16_5", "Cli_16_6"],
+    "Cli_16-org.apache.commons.cli2.commandline.DefaultingCommandLineTest::testGetOptions_Order": ["Cli_16_1", "Cli_16_2", "Cli_16_3", "Cli_16_4", "Cli_16_5", "Cli_16_6"],
+    "Cli_16-org.apache.commons.cli2.commandline.PreferencesCommandLineTest::testGetOptions_Order": ["Cli_16_1", "Cli_16_2", "Cli_16_3", "Cli_16_4", "Cli_16_5", "Cli_16_6"],
+    "Cli_16-org.apache.commons.cli2.commandline.PropertiesCommandLineTest::testGetOptions_Order": ["Cli_16_1", "Cli_16_2", "Cli_16_3", "Cli_16_4", "Cli_16_5", "Cli_16_6"],
+    "Cli_16-org.apache.commons.cli2.commandline.WriteableCommandLineImplTest::testGetOptions_Order": ["Cli_16_1", "Cli_16_2", "Cli_16_3", "Cli_16_4", "Cli_16_5", "Cli_16_6"],
+
+    "#": "multiple tests to same",
+    "Cli_22-org.apache.commons.cli.ApplicationTest::testGroovy": ["Cli_22_1", "Cli_22_2", "Cli_22_3", "Cli_22_4", "Cli_22_5", "Cli_22_6", "Cli_22_7"],
+    "Cli_22-org.apache.commons.cli.PosixParserTest::testStopAtExpectedArg": ["Cli_22_1", "Cli_22_2", "Cli_22_3", "Cli_22_4", "Cli_22_5", "Cli_22_6", "Cli_22_7"],
+
+    "#": "multiple tests to same",
+    "Cli_23-org.apache.commons.cli.bug.BugCLI162Test::testInfiniteLoop": ["Cli_23_2"],
+    "Cli_23-org.apache.commons.cli.bug.BugCLI162Test::testPrintHelpLongLines": ["Cli_23_2"],
+
+    "#": "multiple tests to same",
+    "Cli_27-org.apache.commons.cli.BasicParserTest::testOptionGroupLong": ["Cli_27_1"],
+    "Cli_27-org.apache.commons.cli.GnuParserTest::testOptionGroupLong": ["Cli_27_1"],
+    "Cli_27-org.apache.commons.cli.PosixParserTest::testOptionGroupLong": ["Cli_27_1"],
+
+    "#": "multiple tests to same",
+    "Cli_30-org.apache.commons.cli.DefaultParserTest::testPropertyOptionGroup": ["Cli_30_1"],
+    "Cli_30-org.apache.commons.cli.DefaultParserTest::testPropertyOptionUnexpected": ["Cli_30_1"],
+    "#": "multiple tests to same",
+    "Cli_30-org.apache.commons.cli.BasicParserTest::testPropertyOptionGroup": ["Cli_30_2"],
+    "Cli_30-org.apache.commons.cli.BasicParserTest::testPropertyOptionUnexpected": ["Cli_30_2"],
+    "Cli_30-org.apache.commons.cli.GnuParserTest::testPropertyOptionGroup": ["Cli_30_2"],
+    "Cli_30-org.apache.commons.cli.GnuParserTest::testPropertyOptionUnexpected": ["Cli_30_2"],
+    "Cli_30-org.apache.commons.cli.OptionGroupTest::testTwoOptionsFromGroupWithProperties": ["Cli_30_2"],
+    "Cli_30-org.apache.commons.cli.PosixParserTest::testPropertyOptionGroup": ["Cli_30_2"],
+    "Cli_30-org.apache.commons.cli.PosixParserTest::testPropertyOptionUnexpected": ["Cli_30_2"],
+
+    "#": "multiple tests to same",
+    "Cli_32-org.apache.commons.cli.HelpFormatterTest::testRenderWrappedTextWordCut": ["Cli_32_1"],
+    "Cli_32-org.apache.commons.cli.HelpFormatterTest::testFindWrapPos": ["Cli_32_1"],
+
+    "#": "multiple tests to same",
+    "Cli_34-org.apache.commons.cli.CommandLineTest::testGetParsedOptionValue": ["Cli_34_2"],
+    "Cli_34-org.apache.commons.cli.OptionBuilderTest::testTwoCompleteOptions": ["Cli_34_2"],
+
+    "#": "multiple tests to same",
+    "Cli_39-org.apache.commons.cli.PatternOptionBuilderTest::testExistingFilePattern": ["Cli_39_1", "Cli_39_2"],
+    "Cli_39-org.apache.commons.cli.PatternOptionBuilderTest::testExistingFilePatternFileNotExist": ["Cli_39_1", "Cli_39_2"],
+
+    "Codec_1-org.apache.commons.codec.language.CaverphoneTest::testLocaleIndependence": ["Codec_1_1"],
+    "#": "multiple tests to same",
+    "Codec_1-org.apache.commons.codec.language.DoubleMetaphoneTest::testLocaleIndependence": ["Codec_1_2"],
+    "Codec_1-org.apache.commons.codec.language.MetaphoneTest::testLocaleIndependence": ["Codec_1_2"],
+    "#": "multiple tests to same",
+    "Codec_1-org.apache.commons.codec.language.RefinedSoundexTest::testLocaleIndependence": ["Codec_1_3"],
+    "Codec_1-org.apache.commons.codec.language.SoundexTest::testLocaleIndependence": ["Codec_1_3"],
+
+    "#": "multiple tests to same",
+    "Codec_2-org.apache.commons.codec.binary.Base64InputStreamTest::testBase64EmptyInputStream": ["Codec_2_1"],
+    "Codec_2-org.apache.commons.codec.binary.Base64OutputStreamTest::testBase64EmptyOutputStream": ["Codec_2_1"],
+
+    "#": "multiple tests to same",
+    "Codec_4-org.apache.commons.codec.binary.Base64Codec13Test::testEncoder": ["Codec_4_1"],
+    "Codec_4-org.apache.commons.codec.binary.Base64Codec13Test::testBinaryEncoder": ["Codec_4_1"],
+
+    "#": "multiple tests to same",
+    "Codec_5-org.apache.commons.codec.binary.Base64InputStreamTest::testCodec98NPE": ["Codec_5_1"],
+    "Codec_5-org.apache.commons.codec.binary.Base64OutputStreamTest::testCodec98NPE": ["Codec_5_1"],
+
+    "#": "multiple tests to same",
+    "Codec_7-org.apache.commons.codec.binary.Base64Test::testByteToStringVariations": ["Codec_7_1"],
+    "Codec_7-org.apache.commons.codec.binary.Base64Test::testRfc4648Section10Encode": ["Codec_7_1"],
+
+    "#": "multiple tests to same",
+    "Codec_11-org.apache.commons.codec.net.QuotedPrintableCodecTest::testUltimateSoftBreak": ["Codec_11_1", "Codec_11_2", "Codec_11_3", "Codec_11_4", "Codec_11_5", "Codec_11_6"],
+    "Codec_11-org.apache.commons.codec.net.QuotedPrintableCodecTest::testTrailingSpecial": ["Codec_11_1", "Codec_11_2", "Codec_11_3", "Codec_11_4", "Codec_11_5", "Codec_11_6"],
+    "#": "multiple tests to same",
+    "Codec_11-org.apache.commons.codec.net.QuotedPrintableCodecTest::testSkipNotEncodedCRLF": ["Codec_11_1", "Codec_11_2", "Codec_11_3", "Codec_11_4", "Codec_11_5", "Codec_11_6", "Codec_11_7"],
+    "Codec_11-org.apache.commons.codec.net.QuotedPrintableCodecTest::testSoftLineBreakDecode": ["Codec_11_1", "Codec_11_2", "Codec_11_3", "Codec_11_4", "Codec_11_5", "Codec_11_6", "Codec_11_7"],
+    "Codec_11-org.apache.commons.codec.net.QuotedPrintableCodecTest::testSoftLineBreakEncode": ["Codec_11_1", "Codec_11_2", "Codec_11_3", "Codec_11_4", "Codec_11_5", "Codec_11_6", "Codec_11_7"],
+
+    "#": "multiple tests to same",
+    "Codec_12-org.apache.commons.codec.binary.Base32InputStreamTest::testSkipToEnd": ["Codec_12_1"],
+    "Codec_12-org.apache.commons.codec.binary.Base32InputStreamTest::testCodec130": ["Codec_12_1"],
+    "Codec_12-org.apache.commons.codec.binary.Base32InputStreamTest::testSkipWrongArgument": ["Codec_12_1"],
+    "Codec_12-org.apache.commons.codec.binary.Base32InputStreamTest::testSkipPastEnd": ["Codec_12_1"],
+    "Codec_12-org.apache.commons.codec.binary.Base32InputStreamTest::testSkipBig": ["Codec_12_1"],
+    "Codec_12-org.apache.commons.codec.binary.Base64InputStreamTest::testSkipToEnd": ["Codec_12_1"],
+    "Codec_12-org.apache.commons.codec.binary.Base64InputStreamTest::testCodec130": ["Codec_12_1"],
+    "Codec_12-org.apache.commons.codec.binary.Base64InputStreamTest::testSkipWrongArgument": ["Codec_12_1"],
+    "Codec_12-org.apache.commons.codec.binary.Base64InputStreamTest::testSkipPastEnd": ["Codec_12_1"],
+    "Codec_12-org.apache.commons.codec.binary.Base64InputStreamTest::testSkipBig": ["Codec_12_1"],
+    "#": "multiple tests to same",
+    "Codec_12-org.apache.commons.codec.binary.Base32InputStreamTest::testAvailable": ["Codec_12_1", "Codec_12_2"],
+    "Codec_12-org.apache.commons.codec.binary.Base64InputStreamTest::testAvailable": ["Codec_12_1", "Codec_12_2"],
+
+    "#": "multiple tests to same",
+    "Codec_13-org.apache.commons.codec.language.DoubleMetaphoneTest::testIsDoubleMetaphoneEqualBasic": ["Codec_13_1", "Codec_13_2", "Codec_13_3", "Codec_13_4"],
+    "Codec_13-org.apache.commons.codec.language.DoubleMetaphoneTest::testCodec184": ["Codec_13_1", "Codec_13_2", "Codec_13_3", "Codec_13_4"],
+
+    "#": "multiple tests to same",
+    "Codec_18-org.apache.commons.codec.binary.StringUtilsTest::testEqualsCS1": ["Codec_18_1"],
+    "Codec_18-org.apache.commons.codec.binary.StringUtilsTest::testEqualsCS2": ["Codec_18_1"],
+
+    "#": "multiple tests to same",
+    "Compress_4-org.apache.commons.compress.archivers.jar.JarArchiveOutputStreamTest::testJarMarker": ["Compress_4_3"],
+    "Compress_4-org.apache.commons.compress.archivers.zip.UTF8ZipFilesTest::testCP437FileRoundtripImplicitUnicodeExtra": ["Compress_4_3"],
+    "Compress_4-org.apache.commons.compress.archivers.zip.UTF8ZipFilesTest::testUtf8FileRoundtripImplicitUnicodeExtra": ["Compress_4_3"],
+    "Compress_4-org.apache.commons.compress.archivers.zip.UTF8ZipFilesTest::testCP437FileRoundtripExplicitUnicodeExtra": ["Compress_4_3"],
+    "Compress_4-org.apache.commons.compress.archivers.zip.UTF8ZipFilesTest::testUtf8FileRoundtripExplicitUnicodeExtra": ["Compress_4_3"],
+    "Compress_4-org.apache.commons.compress.archivers.zip.UTF8ZipFilesTest::testASCIIFileRoundtripImplicitUnicodeExtra": ["Compress_4_3"],
+    "Compress_4-org.apache.commons.compress.archivers.zip.UTF8ZipFilesTest::testUtf8FileRoundtripNoEFSImplicitUnicodeExtra": ["Compress_4_3"],
+    "Compress_4-org.apache.commons.compress.archivers.zip.UTF8ZipFilesTest::testZipArchiveInputStreamReadsUnicodeFields": ["Compress_4_3"],
+    "Compress_4-org.apache.commons.compress.archivers.zip.UTF8ZipFilesTest::testASCIIFileRoundtripExplicitUnicodeExtra": ["Compress_4_3"],
+    "Compress_4-org.apache.commons.compress.archivers.zip.UTF8ZipFilesTest::testUtf8FileRoundtripNoEFSExplicitUnicodeExtra": ["Compress_4_3"],
+
+
+    "#": "multiple tests to same",
+    "Compress_13-org.apache.commons.compress.archivers.zip.ZipArchiveInputStreamTest::winzipBackSlashWorkaround": ["Compress_13_1"],
+    "Compress_13-org.apache.commons.compress.archivers.zip.ZipFileTest::testWinzipBackSlashWorkaround": ["Compress_13_1"],
+    
+    "#": "multiple tests to same",
+    "Compress_21-org.apache.commons.compress.archivers.sevenz.SevenZOutputFileTest::testSevenEmptyFiles": ["Compress_21_1"],
+    "Compress_21-org.apache.commons.compress.archivers.sevenz.SevenZOutputFileTest::testEightFilesSomeNotEmpty": ["Compress_21_1"],
+    "Compress_21-org.apache.commons.compress.archivers.sevenz.SevenZOutputFileTest::testSixEmptyFiles": ["Compress_21_1"],
+    "Compress_21-org.apache.commons.compress.archivers.sevenz.SevenZOutputFileTest::testEightEmptyFiles": ["Compress_21_1"],
+    "Compress_21-org.apache.commons.compress.archivers.sevenz.SevenZOutputFileTest::testNineEmptyFiles": ["Compress_21_1"],
+    "Compress_21-org.apache.commons.compress.archivers.sevenz.SevenZOutputFileTest::testSixFilesSomeNotEmpty": ["Compress_21_1"],
+    "Compress_21-org.apache.commons.compress.archivers.sevenz.SevenZOutputFileTest::testNineFilesSomeNotEmpty": ["Compress_21_1"],
+    "Compress_21-org.apache.commons.compress.archivers.sevenz.SevenZOutputFileTest::testSevenFilesSomeNotEmpty": ["Compress_21_1"],
+
+    "#": "multiple tests to same",
+    "Compress_26-org.apache.commons.compress.utils.IOUtilsTest::skipUsingRead": ["Compress_26_1"],
+    "Compress_26-org.apache.commons.compress.utils.IOUtilsTest::skipUsingSkipAndRead": ["Compress_26_1"],
+
+    "Compress_29-org.apache.commons.compress.archivers.ArchiveStreamFactoryTest::testEncodingOutputStream": ["Compress_29_1", "Compress_29_2", "Compress_29_3", "Compress_29_4", "Compress_29_5", "Compress_29_6", "Compress_29_7", "Compress_29_8", "Compress_29_9", "Compress_29_10", "Compress_29_11", "Compress_29_12", "Compress_29_13", "Compress_29_14"],
+    "#": "multiple tests to same",
+    "Compress_29-org.apache.commons.compress.archivers.ArchiveStreamFactoryTest::testEncodingInputStream": ["Compress_29_1", "Compress_29_2", "Compress_29_3", "Compress_29_4", "Compress_29_7", "Compress_29_8", "Compress_29_9", "Compress_29_10", "Compress_29_13", "Compress_29_14"],
+    "Compress_29-org.apache.commons.compress.archivers.ArchiveStreamFactoryTest::testEncodingInputStreamAutodetect": ["Compress_29_1", "Compress_29_2", "Compress_29_3", "Compress_29_4", "Compress_29_7", "Compress_29_8", "Compress_29_9", "Compress_29_10", "Compress_29_13", "Compress_29_14"],
+
+    "#": "multiple tests to same",
+    "Compress_31-org.apache.commons.compress.archivers.TarTestCase::testCOMPRESS178": ["Compress_31_1"],
+    "Compress_31-org.apache.commons.compress.archivers.tar.TarUtilsTest::testParseOctalInvalid": ["Compress_31_1"],
+
+    "#": "multiple tests to same",
+    "Compress_40-org.apache.commons.compress.utils.BitInputStreamTest::littleEndianWithOverflow": ["Compress_40_1", "Compress_40_2", "Compress_40_3"],
+    "Compress_40-org.apache.commons.compress.utils.BitInputStreamTest::bigEndianWithOverflow": ["Compress_40_1", "Compress_40_2", "Compress_40_3"],
+
+    "#": "multiple tests to same",
+    "Compress_41-org.apache.commons.compress.archivers.ZipTestCase::testListAllFilesWithNestedArchive": ["Compress_41_1"],
+    "Compress_41-org.apache.commons.compress.archivers.zip.ZipArchiveInputStreamTest::testThrowOnInvalidEntry": ["Compress_41_1"],
+
+    "#": "multiple tests to same",
+    "Compress_44-org.apache.commons.compress.utils.ChecksumCalculatingInputStreamTest::testClassInstantiationWithParameterBeingNullThrowsNullPointerExceptionOne": ["Compress_44_1"],
+    "Compress_44-org.apache.commons.compress.utils.ChecksumCalculatingInputStreamTest::testClassInstantiationWithParameterBeingNullThrowsNullPointerExceptionTwo": ["Compress_44_1"],
+    "Compress_44-org.apache.commons.compress.utils.ChecksumCalculatingInputStreamTest::testClassInstantiationWithParameterBeingNullThrowsNullPointerExceptionThree": ["Compress_44_1"],
+
+    "#": "multiple tests to same",
+    "Csv_3-org.apache.commons.csv.CSVLexerTest::testEscapedMySqlNullValue": ["Csv_3_1"],
+    "Csv_3-org.apache.commons.csv.CSVLexerTest::testEscapedCharacter": ["Csv_3_1"],
+    "Csv_3-org.apache.commons.csv.CSVParserTest::testBackslashEscaping": ["Csv_3_1"],
+
+    "Csv_13-org.apache.commons.csv.CSVPrinterTest::testMySqlNullStringDefault": ["Csv_13_1"],
+    "Csv_13-org.apache.commons.csv.CSVPrinterTest::testMySqlNullOutput": ["Csv_13_1", "Csv_13_2"],
+
+    "#": "multiple tests to same",
+    "Csv_14-org.apache.commons.csv.CSVPrinterTest::testEscapeNull1": ["Csv_14_1"],
+    "Csv_14-org.apache.commons.csv.CSVPrinterTest::testEscapeNull4": ["Csv_14_1"],
+    "Csv_14-org.apache.commons.csv.CSVPrinterTest::testEscapeNull5": ["Csv_14_1"],
+    "Csv_14-org.apache.commons.csv.CSVPrinterTest::testEscapeBackslash1": ["Csv_14_1"],
+    "Csv_14-org.apache.commons.csv.CSVPrinterTest::testEscapeBackslash4": ["Csv_14_1"],
+    "Csv_14-org.apache.commons.csv.CSVPrinterTest::testEscapeBackslash5": ["Csv_14_1"],
+
+    "#": "multiple tests to same",
+    "Gson_3-com.google.gson.functional.MapTest::testConcurrentMap": ["Gson_3_1", "Gson_3_2"],
+    "Gson_3-com.google.gson.functional.MapTest::testConcurrentNavigableMap": ["Gson_3_1", "Gson_3_2"],
+
+    "Gson_4-com.google.gson.stream.JsonWriterTest::testTopLevelValueTypes": ["Gson_4_3", "Gson_4_4", "Gson_4_5", "Gson_4_6", "Gson_4_7", "Gson_4_8", "Gson_4_9", "Gson_4_10", "Gson_4_11", "Gson_4_12"],
+    "#": "multiple tests to same",
+    "Gson_4-com.google.gson.stream.JsonReaderTest::testTopLevelValueTypeWithSkipValue": ["Gson_4_1", "Gson_4_2"],
+    "Gson_4-com.google.gson.stream.JsonReaderTest::testTopLevelValueTypes": ["Gson_4_1", "Gson_4_2"],
+
+    "#": "multiple tests to same",
+    "Gson_6-com.google.gson.regression.JsonAdapterNullSafeTest::testNullSafeBugDeserialize": ["Gson_6_1"],
+    "Gson_6-com.google.gson.regression.JsonAdapterNullSafeTest::testNullSafeBugSerialize": ["Gson_6_1"],
+
+    "Gson_7-com.google.gson.functional.MapTest::testMapDeserializationWithUnquotedLongKeys": ["Gson_7_1"],
+    "#": "multiple tests to same",
+    "Gson_7-com.google.gson.functional.MapTest::testMapDeserializationWithUnquotedIntegerKeys": ["Gson_7_2"],
+    "Gson_7-com.google.gson.stream.JsonReaderTest::testPeekingUnquotedStringsPrefixedWithIntegers": ["Gson_7_2"],
+
+    "#": "multiple tests to same",
+    "Gson_8-com.google.gson.internal.UnsafeAllocatorInstantiationTest::testInterfaceInstantiation": ["Gson_8_1", "Gson_8_2", "Gson_8_3", "Gson_8_4", "Gson_8_5"],
+    "Gson_8-com.google.gson.internal.UnsafeAllocatorInstantiationTest::testAbstractClassInstantiation": ["Gson_8_1", "Gson_8_2", "Gson_8_3", "Gson_8_4", "Gson_8_5"],
+
+    "#": "multiple tests to same",
+    "Gson_12-com.google.gson.internal.bind.JsonTreeReaderTest::testSkipValue_filledJsonObject": ["Gson_12_1"],
+    "Gson_12-com.google.gson.internal.bind.JsonTreeReaderTest::testSkipValue_emptyJsonObject": ["Gson_12_1"],
+
+    "#": "multiple tests to same",
+    "Gson_14-com.google.gson.internal.bind.RecursiveTypesResolveTest::testIssue440WeakReference": ["Gson_14_1"],
+    "Gson_14-com.google.gson.internal.bind.RecursiveTypesResolveTest::testSubSupertype": ["Gson_14_1"],
+    "Gson_14-com.google.gson.internal.bind.RecursiveTypesResolveTest::testDoubleSubtype": ["Gson_14_1"],
+    "Gson_14-com.google.gson.internal.bind.RecursiveTypesResolveTest::testIssue603PrintStream": ["Gson_14_1"],
+    "#": "multiple tests to same",
+    "Gson_14-com.google.gson.internal.bind.RecursiveTypesResolveTest::testDoubleSupertype": ["Gson_14_2"],
+    "Gson_14-com.google.gson.internal.bind.RecursiveTypesResolveTest::testSuperSubtype": ["Gson_14_2"],
+    "Gson_14-com.google.gson.internal.bind.RecursiveTypesResolveTest::testRecursiveResolveSimple": ["Gson_14_2"],
+
+    "#": "multiple tests to same",
+    "Gson_16-com.google.gson.internal.bind.RecursiveTypesResolveTest::testRecursiveTypeVariablesResolve12": ["Gson_16_1"],
+    "Gson_16-com.google.gson.internal.bind.RecursiveTypesResolveTest::testRecursiveTypeVariablesResolve1": ["Gson_16_1"],
+
+    "#": "multiple tests to same",
+    "Gson_17-com.google.gson.DefaultDateTypeAdapterTest::testUnexpectedToken": ["Gson_17_1"],
+    "Gson_17-com.google.gson.DefaultDateTypeAdapterTest::testNullValue": ["Gson_17_1"],
+
+    "JacksonCore_2-com.fasterxml.jackson.core.json.TestParserErrorHandling::testMangledNumbersChars": ["JacksonCore_2_1", "JacksonCore_2_2", "JacksonCore_2_3"],
+    "JacksonCore_2-com.fasterxml.jackson.core.json.TestParserErrorHandling::testMangledNumbersBytes": ["JacksonCore_2_4", "JacksonCore_2_5", "JacksonCore_2_6", "JacksonCore_2_7", "JacksonCore_2_8"],
+
+    "#": "multiple tests to same",
+    "JacksonCore_7-com.fasterxml.jackson.core.json.GeneratorFailTest::testFailOnWritingStringNotFieldNameBytes": ["JacksonCore_7_1"],
+    "JacksonCore_7-com.fasterxml.jackson.core.json.GeneratorFailTest::testFailOnWritingStringNotFieldNameChars": ["JacksonCore_7_1"],
+
+    "#": "multiple tests to same",
+    "JacksonCore_9-com.fasterxml.jackson.core.json.TestJsonParser::testGetValueAsTextBytes": ["JacksonCore_9_1", "JacksonCore_9_2"],
+    "JacksonCore_9-com.fasterxml.jackson.core.json.TestJsonParser::testGetValueAsTextChars": ["JacksonCore_9_1", "JacksonCore_9_2"],
+
+    "#": "multiple tests to same",
+    "JacksonCore_10-com.fasterxml.jackson.core.sym.TestByteBasedSymbols::testIssue207": ["JacksonCore_10_2"],
+    "JacksonCore_10-com.fasterxml.jackson.core.sym.TestSymbolTables::testCollisionsWithBytesNew187b": ["JacksonCore_10_2"],
+    "JacksonCore_10-com.fasterxml.jackson.core.sym.TestSymbolTables::testSyntheticWithBytesNew": ["JacksonCore_10_2"],
+    "JacksonCore_10-com.fasterxml.jackson.core.sym.TestSymbolTables::testShortNameCollisionsDirectNew": ["JacksonCore_10_2"],
+
+    "#": "multiple tests to same",
+    "JacksonCore_20-com.fasterxml.jackson.core.base64.Base64GenerationTest::testBinaryAsEmbeddedObject": ["JacksonCore_20_1"],
+    "JacksonCore_20-com.fasterxml.jackson.core.main.TestGeneratorMisc::testAsEmbedded": ["JacksonCore_20_1"],
+
+    "#": "multiple tests to same",
+    "JacksonCore_21-com.fasterxml.jackson.core.filter.TokenVerifyingParserFiltering330Test::testTokensSingleMatchWithPath": ["JacksonCore_21_1", "JacksonCore_21_2"],
+    "JacksonCore_21-com.fasterxml.jackson.core.filter.TokenVerifyingParserFiltering330Test::testBasicSingleMatchFilteringWithPath": ["JacksonCore_21_1", "JacksonCore_21_2"],
+    "JacksonCore_21-com.fasterxml.jackson.core.filter.TokenVerifyingParserFiltering330Test::testSkippingForSingleWithPath": ["JacksonCore_21_1", "JacksonCore_21_2"],
+
+    "JacksonCore_22-com.fasterxml.jackson.core.filter.BasicParserFilteringTest::testNotAllowMultipleMatchesWithoutPath2": ["JacksonCore_22_4", "JacksonCore_22_7"],
+    "#": "multiple tests to same",
+    "JacksonCore_22-com.fasterxml.jackson.core.filter.BasicParserFilteringTest::testSingleMatchFilteringWithoutPath": ["JacksonCore_22_3", "JacksonCore_22_7"],
+    "JacksonCore_22-com.fasterxml.jackson.core.filter.BasicParserFilteringTest::testNotAllowMultipleMatchesWithoutPath1": ["JacksonCore_22_3", "JacksonCore_22_7"],
+    "JacksonCore_22-com.fasterxml.jackson.core.filter.BasicParserFilteringTest::testAllowMultipleMatchesWithoutPath": ["JacksonCore_22_3", "JacksonCore_22_7"],
+    "#": "multiple tests to same",
+    "JacksonCore_22-com.fasterxml.jackson.core.filter.BasicParserFilteringTest::testSingleMatchFilteringWithPath": ["JacksonCore_22_5", "JacksonCore_22_7"],
+    "JacksonCore_22-com.fasterxml.jackson.core.filter.BasicParserFilteringTest::testMultipleMatchFilteringWithPath1": ["JacksonCore_22_5", "JacksonCore_22_7"],
+    "JacksonCore_22-com.fasterxml.jackson.core.filter.BasicParserFilteringTest::testMultipleMatchFilteringWithPath3": ["JacksonCore_22_5", "JacksonCore_22_7"],
+    "#": "multiple tests to same",
+    "JacksonCore_22-com.fasterxml.jackson.core.filter.BasicParserFilteringTest::testAllowMultipleMatchesWithPath2": ["JacksonCore_22_6", "JacksonCore_22_7"],
+    "JacksonCore_22-com.fasterxml.jackson.core.filter.BasicParserFilteringTest::testIndexMatchWithPath1": ["JacksonCore_22_6", "JacksonCore_22_7"],
+    "#": "multiple tests to same",
+    "JacksonCore_22-com.fasterxml.jackson.core.filter.BasicParserFilteringTest::testAllowMultipleMatchesWithPath1": ["JacksonCore_22_1", "JacksonCore_22_2", "JacksonCore_22_3", "JacksonCore_22_4", "JacksonCore_22_5", "JacksonCore_22_6", "JacksonCore_22_7"],
+    "JacksonCore_22-com.fasterxml.jackson.core.filter.BasicParserFilteringTest::testMultipleMatchFilteringWithPath2": ["JacksonCore_22_1", "JacksonCore_22_2", "JacksonCore_22_3", "JacksonCore_22_4", "JacksonCore_22_5", "JacksonCore_22_6", "JacksonCore_22_7"],
+    "JacksonCore_22-com.fasterxml.jackson.core.filter.BasicParserFilteringTest::testIndexMatchWithPath2":["JacksonCore_22_1", "JacksonCore_22_2", "JacksonCore_22_3", "JacksonCore_22_4", "JacksonCore_22_5", "JacksonCore_22_6", "JacksonCore_22_7"],
+
+
+    "JacksonCore_24-com.fasterxml.jackson.core.read.NumberOverflowTest::testMaliciousIntOverflow": ["JacksonCore_24_1", "JacksonCore_24_3"],
+    "#": "multiple tests to same",
+    "JacksonCore_24-com.fasterxml.jackson.core.json.async.AsyncNumberCoercionTest::testToLongFailing": ["JacksonCore_24_4"],
+    "JacksonCore_24-com.fasterxml.jackson.core.read.NumberCoercionTest::testToLongFailing": ["JacksonCore_24_4"],
+    "#": "multiple tests to same",
+    "JacksonCore_24-com.fasterxml.jackson.core.read.NumberOverflowTest::testMaliciousLongOverflow": ["JacksonCore_24_1", "JacksonCore_24_4"],
+    "JacksonCore_24-com.fasterxml.jackson.core.read.NumberOverflowTest::testSimpleLongOverflow": ["JacksonCore_24_1", "JacksonCore_24_4"],
+    "#": "multiple tests to same",
+    "JacksonCore_24-com.fasterxml.jackson.core.json.async.AsyncNumberCoercionTest::testToIntFailing": ["JacksonCore_24_2", "JacksonCore_24_3"],
+    "JacksonCore_24-com.fasterxml.jackson.core.read.NumberCoercionTest::testToIntFailing": ["JacksonCore_24_2", "JacksonCore_24_3"],
+    "JacksonCore_24-com.fasterxml.jackson.core.read.NumberParsingTest::testSimpleLong": ["JacksonCore_24_2", "JacksonCore_24_3"],
+
+    "#": "multiple tests to same",
+    "JacksonDatabind_6-com.fasterxml.jackson.databind.deser.TestDateDeserialization::testISO8601MissingSeconds": ["JacksonDatabind_6_1"],
+    "JacksonDatabind_6-com.fasterxml.jackson.databind.deser.TestDateDeserialization::testISO8601PartialMilliseconds": ["JacksonDatabind_6_1"],
+
+    "#": "multiple tests to same",
+    "JacksonDatabind_11-com.fasterxml.jackson.databind.type.TestJavaType::testLocalType728" :["JacksonDatabind_11_1"],
+    "JacksonDatabind_11-com.fasterxml.jackson.databind.type.TestLocalType609::testLocalPartialType609" :["JacksonDatabind_11_1"],
+
+    "#": "multiple tests to same",
+    "JacksonDatabind_18-com.fasterxml.jackson.databind.seq.ReadRecoveryTest::testSimpleRootRecovery":["JacksonDatabind_18_1", "JacksonDatabind_18_2", "JacksonDatabind_18_3", "JacksonDatabind_18_4", "JacksonDatabind_18_5", "JacksonDatabind_18_6", "JacksonDatabind_18_7", "JacksonDatabind_18_8", "JacksonDatabind_18_9"],
+    "JacksonDatabind_18-com.fasterxml.jackson.databind.seq.ReadRecoveryTest::testRootBeans":["JacksonDatabind_18_1", "JacksonDatabind_18_2", "JacksonDatabind_18_3", "JacksonDatabind_18_4", "JacksonDatabind_18_5", "JacksonDatabind_18_6", "JacksonDatabind_18_7", "JacksonDatabind_18_8", "JacksonDatabind_18_9"],
+    "JacksonDatabind_18-com.fasterxml.jackson.databind.seq.ReadRecoveryTest::testSimpleArrayRecovery":["JacksonDatabind_18_1", "JacksonDatabind_18_2", "JacksonDatabind_18_3", "JacksonDatabind_18_4", "JacksonDatabind_18_5", "JacksonDatabind_18_6", "JacksonDatabind_18_7", "JacksonDatabind_18_8", "JacksonDatabind_18_9"],
+
+    "#": "multiple tests to same",
+    "JacksonDatabind_19-com.fasterxml.jackson.databind.convert.TestMapConversions::testMapToProperties": ["JacksonDatabind_19_1"],
+    "JacksonDatabind_19-com.fasterxml.jackson.databind.deser.TestMapDeserialization::testReadProperties": ["JacksonDatabind_19_1"],
+    "JacksonDatabind_19-com.fasterxml.jackson.databind.type.TestTypeFactory::testProperties": ["JacksonDatabind_19_1"],
+
+    "JacksonDatabind_38-com.fasterxml.jackson.databind.interop.DeprecatedTypeHandling1102Test::testExplicitCollectionType": ["JacksonDatabind_38_1", "JacksonDatabind_38_2"],
+    "JacksonDatabind_38-com.fasterxml.jackson.databind.interop.DeprecatedTypeHandling1102Test::testExplicitMapType": ["JacksonDatabind_38_3", "JacksonDatabind_38_4"],
+    "JacksonDatabind_38-com.fasterxml.jackson.databind.interop.DeprecatedTypeHandling1102Test::testPOJOSubType": ["JacksonDatabind_38_5", "JacksonDatabind_38_6"],
+
+    "#": "multiple tests to same",
+    "JacksonDatabind_47-com.fasterxml.jackson.databind.ser.TestJsonSerialize::testBrokenAnnotation": ["JacksonDatabind_47_1"],
+    "JacksonDatabind_47-com.fasterxml.jackson.databind.ser.TestJsonSerializeAs::testSpecializedAsIntermediate": ["JacksonDatabind_47_1"],
+
+    "#": "multiple tests to same",
+    "JacksonDatabind_60-com.fasterxml.jackson.databind.jsontype.TestDefaultWithCreators::testWithCreatorAndJsonValue": ["JacksonDatabind_60_1", "JacksonDatabind_60_2", "JacksonDatabind_60_3", "JacksonDatabind_60_4"],
+    "JacksonDatabind_60-com.fasterxml.jackson.databind.jsontype.ext.ExternalTypeIdTest::testWithAsValue": ["JacksonDatabind_60_1", "JacksonDatabind_60_2", "JacksonDatabind_60_3", "JacksonDatabind_60_4"],
+
+    "#": "multiple tests to same",
+    "JacksonDatabind_63-com.fasterxml.jackson.databind.deser.exc.ExceptionPathTest::testReferenceChainForInnerClass": ["JacksonDatabind_63_2"],
+    "JacksonDatabind_63-com.fasterxml.jackson.databind.deser.exc.TestExceptionHandlingWithDefaultDeserialization::testShouldThrowJsonMappingExceptionWithPathReference": ["JacksonDatabind_63_2"],
+    "JacksonDatabind_63-com.fasterxml.jackson.databind.deser.exc.TestExceptionHandlingWithJsonCreatorDeserialization::testShouldThrowJsonMappingExceptionWithPathReference": ["JacksonDatabind_63_2"],
+
+    "JacksonDatabind_68-com.fasterxml.jackson.databind.struct.SingleValueAsArrayTest::testSuccessfulDeserializationOfObjectWithChainedArrayCreators": ["JacksonDatabind_68_1", "JacksonDatabind_68_10"],
+    "JacksonDatabind_68-com.fasterxml.jackson.databind.struct.SingleValueAsArrayTest::testWithSingleString": ["JacksonDatabind_68_5", "JacksonDatabind_68_10"],
+
+    "#": "multiple tests to same",
+    "JacksonDatabind_73-com.fasterxml.jackson.databind.deser.ReadOrWriteOnlyTest::testReadOnlyAndWriteOnly": ["JacksonDatabind_73_1", "JacksonDatabind_73_2", "JacksonDatabind_73_3", "JacksonDatabind_73_4"],
+    "JacksonDatabind_73-com.fasterxml.jackson.databind.deser.ReadOrWriteOnlyTest::testReadOnly935": ["JacksonDatabind_73_1", "JacksonDatabind_73_2", "JacksonDatabind_73_3", "JacksonDatabind_73_4"],
+
+    "#": "multiple tests to same",
+    "JacksonDatabind_76-com.fasterxml.jackson.databind.deser.builder.BuilderWithUnwrappedTest::testWithUnwrappedAndCreatorSingleParameterAtBeginning": ["JacksonDatabind_76_1"],
+    "JacksonDatabind_76-com.fasterxml.jackson.databind.deser.builder.BuilderWithUnwrappedTest::testWithUnwrappedAndCreatorMultipleParametersAtBeginning": ["JacksonDatabind_76_1"],
+    "JacksonDatabind_76-com.fasterxml.jackson.databind.deser.builder.BuilderWithUnwrappedTest::testWithUnwrappedAndCreatorSingleParameterInMiddle": ["JacksonDatabind_76_1"],
+    "JacksonDatabind_76-com.fasterxml.jackson.databind.deser.builder.BuilderWithUnwrappedTest::testWithUnwrappedAndCreatorMultipleParametersInMiddle": ["JacksonDatabind_76_1"],
+
+    "#": "multiple tests to same",
+    "JacksonDatabind_86-com.fasterxml.jackson.databind.type.RecursiveTypeTest::testSuperClassWithReferencedJavaType": ["JacksonDatabind_86_1"],
+    "JacksonDatabind_86-com.fasterxml.jackson.databind.type.TestTypeFactoryWithRecursiveTypes::testBasePropertiesIncludedWhenSerializingSubWhenSubTypeLoadedAfterBaseType": ["JacksonDatabind_86_1"],
+
+    "JacksonDatabind_104-com.fasterxml.jackson.databind.ser.jdk.DateSerializationTest::testDateISO8601_BCE": ["JacksonDatabind_104_1", "JacksonDatabind_104_2"],
+    "JacksonDatabind_104-com.fasterxml.jackson.databind.ser.jdk.DateSerializationTest::testDateISO8601_10k": ["JacksonDatabind_104_1", "JacksonDatabind_104_2", "JacksonDatabind_104_3"],
+
+    "#": "multiple tests to same",
+    "JacksonDatabind_106-com.fasterxml.jackson.databind.node.TestTreeTraversingParser::testNumberOverflowLong": ["JacksonDatabind_106_1"],
+    "JacksonDatabind_106-com.fasterxml.jackson.databind.node.TestTreeTraversingParser::testNumberOverflowInt": ["JacksonDatabind_106_1"],
+
+    "JacksonXml_1-com.fasterxml.jackson.dataformat.xml.lists.NestedUnwrappedLists180Test::testNestedUnwrappedLists180": ["JacksonXml_1_1"],
+    "#": "multiple tests to same",
+    "JacksonXml_1-com.fasterxml.jackson.dataformat.xml.lists.NestedUnwrappedListsTest::testNestedWithEmpty2": ["JacksonXml_1_2"],
+    "JacksonXml_1-com.fasterxml.jackson.dataformat.xml.lists.NestedUnwrappedListsTest::testNestedWithEmpty": ["JacksonXml_1_2"],
+
+    "#": "multiple tests to same",
+    "JacksonXml_6-com.fasterxml.jackson.dataformat.xml.ser.TestBinaryStreamToXMLSerialization::testWith0Bytes": ["JacksonXml_6_1", "JacksonXml_6_2"],
+    "JacksonXml_6-com.fasterxml.jackson.dataformat.xml.ser.TestBinaryStreamToXMLSerialization::testWith2Bytes": ["JacksonXml_6_1", "JacksonXml_6_2"],
+    "JacksonXml_6-com.fasterxml.jackson.dataformat.xml.ser.TestBinaryStreamToXMLSerialization::testWith3Bytes": ["JacksonXml_6_1", "JacksonXml_6_2"],
+    "JacksonXml_6-com.fasterxml.jackson.dataformat.xml.ser.TestBinaryStreamToXMLSerialization::testWith4Bytes": ["JacksonXml_6_1", "JacksonXml_6_2"],
+    "JacksonXml_6-com.fasterxml.jackson.dataformat.xml.ser.TestBinaryStreamToXMLSerialization::testWith1Byte": ["JacksonXml_6_1", "JacksonXml_6_2"],
+
+    "Jsoup_3-org.jsoup.parser.ParserTest::handlesNestedImplicitTable": ["Jsoup_3_4", "Jsoup_3_5", "Jsoup_3_6", "Jsoup_3_7", "Jsoup_3_8", "Jsoup_3_9", "Jsoup_3_10", "Jsoup_3_11", "Jsoup_3_12", "Jsoup_3_13"],
+    "#": "multiple tests to same",
+    "Jsoup_3-org.jsoup.nodes.ElementTest::testAppendRowToTable": ["Jsoup_3_1", "Jsoup_3_2", "Jsoup_3_3", "Jsoup_3_4", "Jsoup_3_5", "Jsoup_3_6", "Jsoup_3_7", "Jsoup_3_8", "Jsoup_3_9", "Jsoup_3_10", "Jsoup_3_11", "Jsoup_3_12", "Jsoup_3_13"],
+    "Jsoup_3-org.jsoup.nodes.ElementTest::testPrependRowToTable": ["Jsoup_3_1", "Jsoup_3_2", "Jsoup_3_3", "Jsoup_3_4", "Jsoup_3_5", "Jsoup_3_6", "Jsoup_3_7", "Jsoup_3_8", "Jsoup_3_9", "Jsoup_3_10", "Jsoup_3_11", "Jsoup_3_12", "Jsoup_3_13"],
+
+    "Jsoup_4-org.jsoup.nodes.EntitiesTest::escape": ["Jsoup_4_2"],
+    "Jsoup_4-org.jsoup.nodes.EntitiesTest::caseSensitive": ["Jsoup_4_1", "Jsoup_4_2"],
+
+    "#": "multiple tests to same",
+    "Jsoup_6-org.jsoup.integration.ParseTest::testYahooArticle": ["Jsoup_6_1"],
+    "Jsoup_6-org.jsoup.nodes.EntitiesTest::quoteReplacements": ["Jsoup_6_1"],
+
+    "Jsoup_11-org.jsoup.select.SelectorTest::testPseudoHas": ["Jsoup_11_1"],
+    "Jsoup_11-org.jsoup.select.SelectorTest::notParas": ["Jsoup_11_1", "Jsoup_11_2", "Jsoup_11_3", "Jsoup_11_4"],
+    "#": "multiple tests to same",
+    "Jsoup_11-org.jsoup.select.SelectorTest::notAll": ["Jsoup_11_2", "Jsoup_11_3", "Jsoup_11_4"],
+    "Jsoup_11-org.jsoup.select.SelectorTest::notClass": ["Jsoup_11_2", "Jsoup_11_3", "Jsoup_11_4"],
+
+    "#": "multiple tests to same",
+    "Jsoup_13-org.jsoup.nodes.NodeTest::handlesAbsPrefixOnHasAttr": ["Jsoup_13_1"],
+    "Jsoup_13-org.jsoup.nodes.NodeTest::handlesAbsPrefix": ["Jsoup_13_1"],
+    "Jsoup_13-org.jsoup.select.ElementsTest::absAttr": ["Jsoup_13_1"],
+    "Jsoup_13-org.jsoup.select.ElementsTest::hasAbsAttr": ["Jsoup_13_1"],
+
+    "#": "multiple tests to same",
+    "Jsoup_14-org.jsoup.parser.ParserTest::parsesUnterminatedTextarea": ["Jsoup_14_1", "Jsoup_14_2"],
+    "Jsoup_14-org.jsoup.parser.ParserTest::handlesUnclosedTitle": ["Jsoup_14_1", "Jsoup_14_2"],
+
+    "Jsoup_16-org.jsoup.nodes.DocumentTypeTest::outerHtmlGeneration": ["Jsoup_16_3"],
+    "org.jsoup.nodes.DocumentTypeTest::constructorValidationThrowsExceptionOnBlankName": ["Jsoup_16_1", "Jsoup_16_2"],
+
+    "Jsoup_18-org.jsoup.parser.ParserTest::handlesNewlinesAndWhitespaceInTag": ["Jsoup_18_1"],
+    "Jsoup_18-org.jsoup.parser.CharacterReaderTest::consumeToEnd": ["Jsoup_18_2"],
+    "Jsoup_18-org.jsoup.parser.CharacterReaderTest::handleCarriageReturnAsLineFeed": ["Jsoup_18_1", "Jsoup_18_2"],
+
+    "#": "multiple tests to same",
+    "Jsoup_21-org.jsoup.select.SelectorTest::handlesCommasInSelector": ["Jsoup_21_1", "Jsoup_21_2", "Jsoup_21_3"],
+    "Jsoup_21-org.jsoup.select.SelectorTest::mixCombinatorGroup": ["Jsoup_21_1", "Jsoup_21_2", "Jsoup_21_3"],
+
+    "Jsoup_22-org.jsoup.nodes.NodeTest::nodeIsNotASiblingOfItself": ["Jsoup_22_4", "Jsoup_22_5"],
+    "Jsoup_22-org.jsoup.nodes.ElementTest::elementIsNotASiblingOfItself": ["Jsoup_22_1", "Jsoup_22_2", "Jsoup_22_3", "Jsoup_22_6"],
+    "Jsoup_22-org.jsoup.nodes.NodeTest::orphanNodeReturnsNullForSiblingElements": ["Jsoup_22_1", "Jsoup_22_2", "Jsoup_22_3", "Jsoup_22_4", "Jsoup_22_5", "Jsoup_22_6"],
+
+    "#": "multiple tests to same",
+    "Jsoup_27-org.jsoup.helper.DataUtilTest::testCharset": ["Jsoup_27_1"],
+    "Jsoup_27-org.jsoup.helper.DataUtilTest::testQuotedCharset": ["Jsoup_27_1"],
+
+    "#": "multiple tests to same",
+    "Jsoup_28-org.jsoup.nodes.EntitiesTest::unescape": ["Jsoup_28_1", "Jsoup_28_2", "Jsoup_28_3", "Jsoup_28_4", "Jsoup_28_5", "Jsoup_28_6"],
+    "Jsoup_28-org.jsoup.nodes.EntitiesTest::noSpuriousDecodes": ["Jsoup_28_1", "Jsoup_28_2", "Jsoup_28_3", "Jsoup_28_4", "Jsoup_28_5", "Jsoup_28_6"],
+    "Jsoup_28-org.jsoup.parser.AttributeParseTest::moreAttributeUnescapes": ["Jsoup_28_1", "Jsoup_28_2", "Jsoup_28_3", "Jsoup_28_4", "Jsoup_28_5", "Jsoup_28_6"],
+    "Jsoup_28-org.jsoup.parser.AttributeParseTest::strictAttributeUnescapes": ["Jsoup_28_1", "Jsoup_28_2", "Jsoup_28_3", "Jsoup_28_4", "Jsoup_28_5", "Jsoup_28_6"],
+    "Jsoup_28-org.jsoup.parser.HtmlParserTest::doesNotFindShortestMatchingEntity": ["Jsoup_28_1", "Jsoup_28_2", "Jsoup_28_3", "Jsoup_28_4", "Jsoup_28_5", "Jsoup_28_6"],
+    "Jsoup_28-org.jsoup.parser.HtmlParserTest::relaxedBaseEntityMatchAndStrictExtendedMatch": ["Jsoup_28_1", "Jsoup_28_2", "Jsoup_28_3", "Jsoup_28_4", "Jsoup_28_5", "Jsoup_28_6"],
+
+    "#": "multiple tests to same",
+    "Jsoup_34-org.jsoup.parser.CharacterReaderTest::nextIndexOfUnmatched": ["Jsoup_34_1"],
+    "Jsoup_34-org.jsoup.parser.HtmlParserTest::handlesUnclosedCdataAtEOF": ["Jsoup_34_1"],
+
+    "Jsoup_36-org.jsoup.integration.ParseTest::testBrokenHtml5CharsetWithASingleDoubleQuote": ["Jsoup_36_1", "Jsoup_36_3"],
+    "#": "multiple tests to same",
+    "Jsoup_36-org.jsoup.helper.DataUtilTest::testQuotedCharset": ["Jsoup_36_2"],
+    "Jsoup_36-org.jsoup.helper.DataUtilTest::shouldSelectFirstCharsetOnWeirdMultileCharsetsInMetaTags": ["Jsoup_36_2"],
+    "#": "multiple tests to same",
+    "Jsoup_36-org.jsoup.helper.DataUtilTest::shouldCorrectCharsetForDuplicateCharsetString": ["Jsoup_36_1", "Jsoup_36_4"],
+    "Jsoup_36-org.jsoup.helper.DataUtilTest::shouldNotThrowExceptionOnEmptyCharset": ["Jsoup_36_1", "Jsoup_36_4"],
+    "Jsoup_36-org.jsoup.helper.DataUtilTest::shouldReturnNullForIllegalCharsetNames": ["Jsoup_36_1", "Jsoup_36_4"],
+
+    "#": "multiple tests to same",
+    "Jsoup_40-org.jsoup.nodes.DocumentTypeTest::constructorValidationOkWithBlankName": ["Jsouo_40_1"],
+    "Jsoup_40-org.jsoup.parser.HtmlParserTest::handlesInvalidDoctypes": ["Jsouo_40_1"],
+
+    "Jsoup_42-org.jsoup.nodes.FormElementTest::usesOnForCheckboxValueIfNoValueSet": ["Jsoup_42_2"],
+    "Jsoup_42-org.jsoup.nodes.FormElementTest::createsFormData": ["Jsoup_42_1", "Jsoup_42_2"],
+
+    "#": "multiple tests to same",
+    "Jsoup_43-org.jsoup.nodes.ElementTest::testElementSiblingIndexSameContent": ["Jsoup_43_1"],
+    "Jsoup_43-org.jsoup.nodes.ElementTest::testGetSiblingsWithDuplicateContent": ["Jsoup_43_1"],
+
+    "#": "multiple tests to same",
+    "Jsoup_52-org.jsoup.nodes.DocumentTest::testMetaCharsetUpdateXmlNoCharset": ["Jsoup_52_2"],
+    "Jsoup_52-org.jsoup.nodes.DocumentTest::testMetaCharsetUpdateXmlIso8859": ["Jsoup_52_2"],
+    "Jsoup_52-org.jsoup.nodes.DocumentTest::testMetaCharsetUpdateXmlUtf8": ["Jsoup_52_2"],
+    "Jsoup_52-org.jsoup.nodes.DocumentTest::testMetaCharsetUpdateXmlDisabledNoChanges": ["Jsoup_52_2"],
+    "#": "multiple tests to same",
+    "Jsoup_52-org.jsoup.parser.XmlTreeBuilderTest::handlesXmlDeclarationAsDeclaration": ["Jsoup_52_2", "Jsoup_52_3", "Jsoup_52_4"],
+    "Jsoup_52-org.jsoup.parser.XmlTreeBuilderTest::testDetectCharsetEncodingDeclaration": ["Jsoup_52_2", "Jsoup_52_3", "Jsoup_52_4"],
+    "Jsoup_52-org.jsoup.parser.XmlTreeBuilderTest::testParseDeclarationAttributes": ["Jsoup_52_2", "Jsoup_52_3", "Jsoup_52_4"],
+
+    "Jsoup_58-org.jsoup.safety.CleanerTest::testIsValidDocument": ["Jsoup_58_2", "Jsoup_58_3", "Jsoup_58_4"],
+    "Jsoup_58-org.jsoup.safety.CleanerTest::testIsValidBodyHtml": ["Jsoup_58_1", "Jsoup_58_2", "Jsoup_58_3", "Jsoup_58_4"],
+
+    "#": "multiple tests to same",
+    "Jsoup_59-org.jsoup.parser.HtmlParserTest::handlesControlCodeInAttributeName": ["Jsoup_59_1", "Jsoup_59_2"],
+    "Jsoup_59-org.jsoup.safety.CleanerTest::handlesControlCharactersAfterTagName": ["Jsoup_59_1", "Jsoup_59_2"],
+
+    "Jsoup_60-org.jsoup.select.QueryParserTest::exceptionOnUncloseAttribute": ["Jsoup_60_2"],
+    "Jsoup_60-org.jsoup.select.QueryParserTest::testParsesSingleQuoteInContains": ["Jsoup_60_1", "Jsoup_60_2"],
+
+    "#": "multiple tests to same",
+    "Jsoup_61-org.jsoup.select.ElementsTest::hasClassCaseInsensitive": ["Jsoup_61_1"],
+    "Jsoup_61-org.jsoup.select.SelectorTest::testByClassCaseInsensitive": ["Jsoup_61_1"],
+
+    "Jsoup_63-org.jsoup.parser.HtmlParserTest::selfClosingVoidIsNotAnError": ["Jsoup_63_4"],
+    "#": "multiple tests to same",
+    "Jsoup_63-org.jsoup.parser.HtmlParserTest::selfClosingOnNonvoidIsError": ["Jsoup_63_1", "Jsoup_63_4"],
+    "Jsoup_63-org.jsoup.parser.HtmlParserTest::tracksErrorsWhenRequested": ["Jsoup_63_1", "Jsoup_63_4"],
+
+    "#": "multiple tests to same",
+    "Jsoup_64-org.jsoup.parser.HtmlParserTest::handlesKnownEmptyStyle": ["Jsoup_64_1"],
+    "Jsoup_64-org.jsoup.parser.HtmlParserTest::handlesKnownEmptyNoFrames": ["Jsoup_64_1"],
+
+    "Jsoup_71-org.jsoup.integration.ConnectTest::multiCookieSet": ["Jsoup_71_2", "Jsoup_71_3"],
+    "#": "multiple tests to same",
+    "Jsoup_71-org.jsoup.select.SelectorTest::splitOnBr": ["Jsoup_71_2", "Jsoup_71_3", "Jsoup_71_4"],
+    "Jsoup_71-org.jsoup.select.SelectorTest::textAsElements": ["Jsoup_71_2", "Jsoup_71_3", "Jsoup_71_4"],
+
+    "#": "multiple tests to same",
+    "Jsoup_72-org.jsoup.integration.ConnectTest::multiCookieSet": ["Jsoup_72_1"],
+    "Jsoup_72-org.jsoup.parser.CharacterReaderTest::consumeToNonexistentEndWhenAtAnd": ["Jsoup_72_1"],
+    "Jsoup_72-org.jsoup.parser.HtmlParserTest::commentAtEnd": ["Jsoup_72_1"],
+
+    "Jsoup_83-org.jsoup.parser.HtmlParserTest::parsesQuiteRoughAttributes": ["Jsoup_83_3", "Jsoup_83_4"],
+    "Jsoup_83-org.jsoup.integration.ConnectTest::multiCookieSet": ["Jsoup_83_1", "Jsoup_83_3", "Jsoup_83_4"],
+    "Jsoup_83-org.jsoup.parser.TokeniserStateTest::handlesLessInTagThanAsNewTag": ["Jsoup_83_1", "Jsoup_83_2", "Jsoup_83_3", "Jsoup_83_4"],
+
+    "Jsoup_91-org.jsoup.integration.ConnectTest::multiCookieSet": ["Jsoup_91_1"],
+    "#": "multiple tests to same",
+    "Jsoup_91-org.jsoup.integration.ConnectTest::testBinaryThrowsExceptionWhenTypeIgnored": ["Jsoup_91_1", "Jsoup_91_2", "Jsoup_91_3"],
+    "Jsoup_91-org.jsoup.integration.ConnectTest::testBinaryResultThrows": ["Jsoup_91_1", "Jsoup_91_2", "Jsoup_91_3"],
+    "Jsoup_91-org.jsoup.integration.ParseTest::testBinaryThrowsException": ["Jsoup_91_1", "Jsoup_91_2", "Jsoup_91_3"],
+
+    "Jsoup_92-org.jsoup.integration.ConnectTest::multiCookieSet": ["Jsoup_92_1", "Jsoup_92_2", "Jsoup_92_3", "Jsoup92_4", "Jsoup_92_7"],
+    "Jsoup_92-org.jsoup.parser.XmlTreeBuilderTest::dropsDuplicateAttributes": ["Jsoup_92_1", "Jsoup_92_2", "Jsoup_92_3", "Jsoup92_4", "Jsoup_92_6", "Jsoup_92_7", "Jsoup_92_8"],
+    "#": "multiple tests to same",
+    "Jsoup_92-org.jsoup.parser.HtmlParserTest::retainsAttributesOfDifferentCaseIfSensitive": ["Jsoup_92_1", "Jsoup_92_2", "Jsoup_92_3", "Jsoup92_4", "Jsoup_92_5", "Jsoup_92_6", "Jsoup_92_7"],
+    "Jsoup_92-org.jsoup.parser.HtmlParserTest::dropsDuplicateAttributes": ["Jsoup_92_1", "Jsoup_92_2", "Jsoup_92_3", "Jsoup92_4", "Jsoup_92_5", "Jsoup_92_6", "Jsoup_92_7"],
+
+    "#": "multiple tests to same",
+    "Jsoup_92-org.jsoup.integration.ConnectTest::multiCookieSet": ["Jsoup_93_1"],
+    "Jsoup_92-org.jsoup.nodes.FormElementTest::createsFormData": ["Jsoup_93_1"],
+
+    "JxPath_1-org.apache.commons.jxpath.ri.model.dom.DOMModelTest::testGetNode": ["JxPath_1_1"],
+    "JxPath_1-org.apache.commons.jxpath.ri.model.jdom.JDOMModelTest::testGetNode": ["JxPath_1_2"],
+
+    "#": "multiple tests to same",
+    "JxPath_4-org.apache.commons.jxpath.ri.model.XMLSpaceTest::testPreserveDOM": ["JxPath_4_1", "JxPath_4_2", "JxPath_4_3"],
+    "JxPath_4-org.apache.commons.jxpath.ri.model.XMLSpaceTest::testNestedDOM": ["JxPath_4_1", "JxPath_4_2", "JxPath_4_3"],
+    "JxPath_4-org.apache.commons.jxpath.ri.model.XMLSpaceTest::testNestedWithCommentsDOM": ["JxPath_4_1", "JxPath_4_2", "JxPath_4_3"],
+    "#": "multiple tests to same",
+    "JxPath_4-org.apache.commons.jxpath.ri.model.XMLSpaceTest::testNestedJDOM": ["JxPath_4_1", "JxPath_4_2", "JxPath_4_3", "JxPath_4_4", "JxPath_4_5", "JxPath_4_6"],
+    "JxPath_4-org.apache.commons.jxpath.ri.model.XMLSpaceTest::testNestedWithCommentsJDOM": ["JxPath_4_1", "JxPath_4_2", "JxPath_4_3", "JxPath_4_4", "JxPath_4_5", "JxPath_4_6"],
+    "JxPath_4-org.apache.commons.jxpath.ri.model.XMLSpaceTest::testPreserveJDOM": ["JxPath_4_1", "JxPath_4_2", "JxPath_4_3", "JxPath_4_4", "JxPath_4_5", "JxPath_4_6"],
+
+    "JxPath_11-org.apache.commons.jxpath.ri.model.dom.DOMModelTest::testNamespaceMapping": ["JxPath_11_1", "JxPath_11_2"],
+    "JxPath_11-org.apache.commons.jxpath.ri.model.jdom.JDOMModelTest::testNamespaceMapping": ["JxPath_11_3", "JxPath_11_4"],
+
+    "#": "multiple tests to same",
+    "JxPath_15-org.apache.commons.jxpath.ri.model.dom.DOMModelTest::testUnion": ["JxPath_15_1", "JxPath_15_2"],
+    "JxPath_15-org.apache.commons.jxpath.ri.model.jdom.JDOMModelTest::testUnion": ["JxPath_15_1", "JxPath_15_2"],
+
+    "#": "multiple tests to same",
+    "JxPath_16-org.apache.commons.jxpath.ri.model.dom.DOMModelTest::testAxisFollowing": ["JxPath_16_1"],
+    "JxPath_16-org.apache.commons.jxpath.ri.model.dom.DOMModelTest::testAxisPreceding": ["JxPath_16_1"],
+    "#": "multiple tests to same",
+    "JxPath_16-org.apache.commons.jxpath.ri.model.jdom.JDOMModelTest::testAxisFollowing": ["JxPath_16_2"],
+    "JxPath_16-org.apache.commons.jxpath.ri.model.jdom.JDOMModelTest::testAxisPreceding": ["JxPath_16_2"],
+
+    "JxPath_17-org.apache.commons.jxpath.ri.model.dom.DOMModelTest::testAxisAttribute": ["JxPath_17_1"],
+    "JxPath_17-org.apache.commons.jxpath.ri.model.jdom.JDOMModelTest::testAxisAttribute": ["JxPath_17_4"],
+
+    "#": "multiple tests to same",
+    "JxPath_18-org.apache.commons.jxpath.ri.model.dom.DOMModelTest::testAxisAttribute": ["JxPath_18_1", "JxPath_18_2", "JxPath_18_3"],
+    "JxPath_18-org.apache.commons.jxpath.ri.model.jdom.JDOMModelTest::testAxisAttribute": ["JxPath_18_1", "JxPath_18_2", "JxPath_18_3"],
+
+    "JxPath_19-org.apache.commons.jxpath.ri.model.AliasedNamespaceIterationTest::testIterateDOM": ["JxPath_19_1"],
+    "JxPath_19-org.apache.commons.jxpath.ri.model.AliasedNamespaceIterationTest::testIterateJDOM": ["JxPath_19_2", "JxPath_19_3"],
+
+    "#": "multiple tests to same",
+    "JxPath_21-org.apache.commons.jxpath.ri.model.JXPath151Test::testMapValueEquality": ["JxPath_21_1"],
+    "JxPath_21-org.apache.commons.jxpath.ri.model.MixedModelTest::testNull": ["JxPath_21_1"],
+    
+
+}
