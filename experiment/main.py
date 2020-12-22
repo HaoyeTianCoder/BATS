@@ -1,14 +1,16 @@
 import sys, os
 sys.path.append(os.path.abspath(os.path.join('..', '.')))
-
+# import seaborn as sns
 import pickle
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
-
+import matplotlib.pyplot as plt
+from matplotlib.pyplot import boxplot
 from experiment.config import Config
 from representation.word2vector import Word2vector
 import numpy as np
 from sklearn.cluster import KMeans
+from visualize import Visual
 
 class Experiment:
     def __init__(self, path_test, path_patch):
@@ -32,7 +34,7 @@ class Experiment:
         self.test2vector(word2v='code2vec')
         # self.patch2vector(word2v='cc2vec')
 
-        self.cal_all_simi(self.test_vector)
+        dists_one = self.cal_all_simi(self.test_vector)
 
         self.cluster_dist(self.test_vector)
 
@@ -53,6 +55,10 @@ class Experiment:
         dists = [np.linalg.norm(vec - center) for vec in test_vector]
         average = np.array(dists).mean()
         print('one cluster average distance: {}'.format(average))
+        # plt.boxplot(dists,)
+        # ax = sns.boxplot(x="all", y="distance", data=dists)
+
+        return dists
 
     def cluster_dist(self, test_vector):
         self.cluster(test_vector)
@@ -63,9 +69,16 @@ class Experiment:
 
         kmeans = KMeans(n_clusters=4)
         # kmeans.fit(np.array(test_vector))
-        clusters = kmeans.fit_predict(test_vector)
+        clusters = kmeans.fit_predict(X)
 
         X["Cluster"] = clusters
+        v = Visual('PCA')
+        # v = Visual('TSNE')
+        v.visualize(clusters, plotX=X)
+
+
+
+
 
 if __name__ == '__main__':
     config = Config()
