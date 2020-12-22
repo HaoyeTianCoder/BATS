@@ -141,7 +141,7 @@ class Visual():
         cluster0 = plotX[plotX["Cluster"] == 0]
         cluster1 = plotX[plotX["Cluster"] == 1]
         cluster2 = plotX[plotX["Cluster"] == 2]
-        cluster3 = plotX[plotX["Cluster"] == 3]
+        # cluster3 = plotX[plotX["Cluster"] == 3]
 
         # init_notebook_mode(connected=True)
 
@@ -173,15 +173,16 @@ class Visual():
             text=None)
 
         # trace4 is for 'Cluster 3'
-        trace4 = go.Scatter(
-            x=cluster3["PC1_2d"],
-            y=cluster3["PC2_2d"],
-            mode="markers",
-            name="Cluster 3",
-            marker=dict(color='rgba(0, 200, 255, 0.8)'),
-            text=None)
+        # trace4 = go.Scatter(
+        #     x=cluster3["PC1_2d"],
+        #     y=cluster3["PC2_2d"],
+        #     mode="markers",
+        #     name="Cluster 3",
+        #     marker=dict(color='rgba(0, 200, 255, 0.8)'),
+        #     text=None)
 
-        data = [trace1, trace2, trace3, trace4]
+        # data = [trace1, trace2, trace3, trace4]
+        data = [trace1, trace2, trace3,]
 
         title = "Visualizing Clusters in Two Dimensions Using PCA"
 
