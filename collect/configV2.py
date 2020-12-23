@@ -25,3 +25,8 @@ dic_buggy_path = {
     'JacksonXml': '/Users/lyh/Documents/thy/similarity/V2/defects4j_buggy/JacksonXml/src/test/java/',
     'JxPath': '/Users/lyh/Documents/thy/similarity/V2/defects4j_buggy/JxPath/src/test/'
 }
+
+
+path_haoye = 'case_patch_haoye.json'
+path_yinghua = 'case_patch_yinghua.json'
+path_weiguo = 'case_patch_weiguo.json'
