@@ -1,6 +1,3 @@
-import sys, os
-sys.path.append(os.path.abspath(os.path.join('.', '.')))
-
 import argparse
 from representation.CC2Vec.lmg_padding import processing_data
 import pickle
