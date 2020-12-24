@@ -7,7 +7,7 @@
 	"Lang_12-org.apache.commons.lang3.RandomStringUtilsTest::testExceptions": ["Lang_12_1"],
 	"Lang_12-org.apache.commons.lang3.RandomStringUtilsTest::testLANG805": ["Lang_12_1"],
 
-	"Lang_15-org.apache.commons.lang3.reflect.TypeUtilsTest::testIsAssignable": ["Lang_15_1, Lang_15_2"],
+	"Lang_15-org.apache.commons.lang3.reflect.TypeUtilsTest::testIsAssignable": ["Lang_15_1", "Lang_15_2"],
 	"Lang_15-org.apache.commons.lang3.reflect.TypeUtilsTest::testGetTypeArguments": ["Lang_15_2"],
 
 	"Lang_19-org.apache.commons.lang3.text.translate.NumericEntityUnescaperTest::testOutOfBounds": ["Lang_19_1", "Lang_19_2"],
