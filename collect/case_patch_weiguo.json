@@ -493,11 +493,11 @@
     "Jsoup_91-org.jsoup.integration.ConnectTest::testBinaryResultThrows": ["Jsoup_91_1", "Jsoup_91_2", "Jsoup_91_3"],
     "Jsoup_91-org.jsoup.integration.ParseTest::testBinaryThrowsException": ["Jsoup_91_1", "Jsoup_91_2", "Jsoup_91_3"],
 
-    "Jsoup_92-org.jsoup.integration.ConnectTest::multiCookieSet": ["Jsoup_92_1", "Jsoup_92_2", "Jsoup_92_3", "Jsoup92_4", "Jsoup_92_7"],
-    "Jsoup_92-org.jsoup.parser.XmlTreeBuilderTest::dropsDuplicateAttributes": ["Jsoup_92_1", "Jsoup_92_2", "Jsoup_92_3", "Jsoup92_4", "Jsoup_92_6", "Jsoup_92_7", "Jsoup_92_8"],
+    "Jsoup_92-org.jsoup.integration.ConnectTest::multiCookieSet": ["Jsoup_92_1", "Jsoup_92_2", "Jsoup_92_3", "Jsoup_92_4", "Jsoup_92_7"],
+    "Jsoup_92-org.jsoup.parser.XmlTreeBuilderTest::dropsDuplicateAttributes": ["Jsoup_92_1", "Jsoup_92_2", "Jsoup_92_3", "Jsoup_92_4", "Jsoup_92_6", "Jsoup_92_7", "Jsoup_92_8"],
     "#": "multiple tests to same",
-    "Jsoup_92-org.jsoup.parser.HtmlParserTest::retainsAttributesOfDifferentCaseIfSensitive": ["Jsoup_92_1", "Jsoup_92_2", "Jsoup_92_3", "Jsoup92_4", "Jsoup_92_5", "Jsoup_92_6", "Jsoup_92_7"],
-    "Jsoup_92-org.jsoup.parser.HtmlParserTest::dropsDuplicateAttributes": ["Jsoup_92_1", "Jsoup_92_2", "Jsoup_92_3", "Jsoup92_4", "Jsoup_92_5", "Jsoup_92_6", "Jsoup_92_7"],
+    "Jsoup_92-org.jsoup.parser.HtmlParserTest::retainsAttributesOfDifferentCaseIfSensitive": ["Jsoup_92_1", "Jsoup_92_2", "Jsoup_92_3", "Jsoup_92_4", "Jsoup_92_5", "Jsoup_92_6", "Jsoup_92_7"],
+    "Jsoup_92-org.jsoup.parser.HtmlParserTest::dropsDuplicateAttributes": ["Jsoup_92_1", "Jsoup_92_2", "Jsoup_92_3", "Jsoup_92_4", "Jsoup_92_5", "Jsoup_92_6", "Jsoup_92_7"],
 
     "#": "multiple tests to same",
     "Jsoup_92-org.jsoup.integration.ConnectTest::multiCookieSet": ["Jsoup_93_1"],
