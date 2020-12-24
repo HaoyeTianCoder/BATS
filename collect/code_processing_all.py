@@ -67,7 +67,6 @@ def count_error_number(trigger_path_list):
     json.dump(new_dic_name_number, open('test_case_name_numberV2.json', 'w'), sort_keys=True, indent=4)
 
 
-
 def get_buggy_path(error_path):
     """
     return list buggy path.
@@ -113,6 +112,7 @@ def get_name_func(error_path):
             name_func_list.append(func)
 
     return name_func_list
+
 
 def get_single_func(name_func_list):
     """
@@ -289,6 +289,7 @@ def get_all(PATH_PROJECTS, NAME_LIST):
     pickle.dump(res, output)
 
     return res
+
 
 def main():
 

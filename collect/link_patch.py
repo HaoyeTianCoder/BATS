@@ -34,13 +34,14 @@ def get_link_patch():
             error_message_list.append(four_list[2][ind])
             func_message_list.append(four_list[3][ind])
             patch_list.append(dic_all[four_list[0][ind]])
+        else:
+            patch_list.append([four_list[0][ind].split('-')[0] + '-one'])
 
     res = [name_number_func_list, error_title_list, error_message_list, func_message_list, patch_list]
 
     output = open('../data/test_case_all_five.pkl', 'wb')
 
     pickle.dump(res, output)
-    print(len(patch_list))
 
 
 if __name__ == '__main__':
