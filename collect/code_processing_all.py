@@ -187,7 +187,7 @@ def get_func_message(func, buggy_path):
     flag = 0
     for ind in range(ind_start, len(lines)):
         for s in lines[ind]:
-            if s == '{' and '"{" around' not in lines[ind] and "'{';" not in lines[ind]:  # Closure_173, JacksonCore_25 special handling
+            if s == '{' and '"{" around' not in lines[ind] and "'{';" not in lines[ind] and '{}}")' not in lines[ind]:  # Closure_173, JacksonCore_25 special handling
                 left += 1
             elif s == '}':
                 left -= 1

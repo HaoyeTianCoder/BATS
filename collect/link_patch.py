@@ -28,11 +28,11 @@ def get_link_patch():
     patch_list = []
 
     for ind in range(len(four_list[0])):
+        name_number_func_list.append(four_list[0][ind])
+        error_title_list.append(four_list[1][ind])
+        error_message_list.append(four_list[2][ind])
+        func_message_list.append(four_list[3][ind])
         if four_list[0][ind] in dic_all:
-            name_number_func_list.append(four_list[0][ind])
-            error_title_list.append(four_list[1][ind])
-            error_message_list.append(four_list[2][ind])
-            func_message_list.append(four_list[3][ind])
             patch_list.append(dic_all[four_list[0][ind]])
         else:
             patch_list.append([four_list[0][ind].split('-')[0] + '-one'])
