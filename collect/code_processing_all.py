@@ -179,14 +179,20 @@ def get_func_message(func, buggy_path):
     ind_end = 0
 
     for ind in range(len(lines)):
-
+        # 141
         if 'void ' + func + '()' == 'void testSyntaxError1()':
             return 'public void testSyntaxError1() { \n try { \n extractMessage("if (true) {}}"); \n fail("Expected exception"); \n } catch (RuntimeException e) { \n assertTrue(e.getMessage().contains("JSCompiler errors\n")); \nassertTrue(e.getMessage().contains( \n"testcode:1: ERROR - Parse error. syntax error\n")); \n assertTrue(e.getMessage().contains("if (true) {}}\n")); \n} \n }'
-
+        # 142
         if 'void ' + func + '()' == 'void testSyntaxError2()':
-
-            return 'public void testSyntaxError2() { \n try { \n extractMessage("", "if (true) {}}"); \n fail("Expected exception"); \n } catch (RuntimeException e) { \n assertTrue(e.getMessage().contains("JSCompiler errors\n")); \n assertTrue(e.getMessage().contains( \n "testcode:2: ERROR - Parse error. syntax error\n")); \n assertTrue(e.getMessage().contains("if (true) {}}\n")); \n } \n }'
-
+            return 'public void testSyntaxError2() {\n try {\n extractMessage("", "if (true) {}}"); \n fail("Expected exception"); \n } catch (RuntimeException e) { \n assertTrue(e.getMessage().contains("JSCompiler errors\n")); \n assertTrue(e.getMessage().contains( \n "testcode:2: ERROR - Parse error. syntax error\n")); \n assertTrue(e.getMessage().contains("if (true) {}}\n")); \n } \n }'
+        # 732
+        if 'void ' + func + '()' == 'testShouldThrowJsonMappingExceptionWithPathReference()':
+            return 'public void testShouldThrowJsonMappingExceptionWithPathReference() throws IOException {\n// given\nObjectMapper mapper = new ObjectMapper();\nString input = "{\"bar\":{\"baz\":{qux:\"quxValue\"))}";\nfinal String THIS = getClass().getName();\n// when\ntry {\nmapper.readValue(input, Foo.class);\nfail("Upsss! Exception has not been thrown.");\n} catch (JsonMappingException ex) {\n// then\nassertEquals(THIS+"$Foo[\"bar\"]->"+THIS+"$Bar[\"baz\"]",\nex.getPathReference());\n}\n}'
+        # 733
+        if 'void ' + func + '()' == 'testShouldThrowJsonMappingExceptionWithPathReference()':
+            return 'public void testShouldThrowJsonMappingExceptionWithPathReference() throws IOException {\n// given\nObjectMapper mapper = new ObjectMapper();\nString input = "{\"bar\":{\"baz\":{qux:\"quxValue\"))}";\nfinal String THIS = getClass().getName();\n// when\ntry {\nmapper.readValue(input, Foo.class);\nfail("Upsss! Exception has not been thrown.");\n} catch (JsonMappingException ex) {\n// then\nassertEquals(THIS+"$Foo[\"bar\"]->"+THIS+"$Bar[\"baz\"]",\nex.getPathReference());\n}\n}'
+        # 922 correct
+        # public void testCountriesByLanguage() {}
         if 'void ' + func + '()' in lines[ind]:
             ind_start = ind
             break
