@@ -12,9 +12,9 @@
     "Cli_9-org.apache.commons.cli.ParseRequiredTest::testMissingRequiredOptions": ["Cli_9_1"],
 
     "#": "multiple tests to same",
-    "Cli_12-org.apache.commons.cli.GnuParserTest::testShortWithEqual": ["Cli_12-1"],
-    "Cli_12-org.apache.commons.cli.GnuParserTest::testLongWithEqualSingleDash": ["Cli_12-1"],
-    "Cli_12-org.apache.commons.cli.GnuParserTest::testLongWithEqual": ["Cli_12-1"],
+    "Cli_12-org.apache.commons.cli.GnuParserTest::testShortWithEqual": ["Cli_12_1"],
+    "Cli_12-org.apache.commons.cli.GnuParserTest::testLongWithEqualSingleDash": ["Cli_12_1"],
+    "Cli_12-org.apache.commons.cli.GnuParserTest::testLongWithEqual": ["Cli_12_1"],
 
     "#": "multiple tests to same",
     "Cli_15-org.apache.commons.cli2.bug.BugCLI158Test::testSingleOptionSingleArgument": ["Cli_15_1"],
