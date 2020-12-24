@@ -430,8 +430,8 @@
     "Jsoup_36-org.jsoup.helper.DataUtilTest::shouldReturnNullForIllegalCharsetNames": ["Jsoup_36_1", "Jsoup_36_4"],
 
     "#": "multiple tests to same",
-    "Jsoup_40-org.jsoup.nodes.DocumentTypeTest::constructorValidationOkWithBlankName": ["Jsouo_40_1"],
-    "Jsoup_40-org.jsoup.parser.HtmlParserTest::handlesInvalidDoctypes": ["Jsouo_40_1"],
+    "Jsoup_40-org.jsoup.nodes.DocumentTypeTest::constructorValidationOkWithBlankName": ["Jsoup_40_1"],
+    "Jsoup_40-org.jsoup.parser.HtmlParserTest::handlesInvalidDoctypes": ["Jsoup_40_1"],
 
     "Jsoup_42-org.jsoup.nodes.FormElementTest::usesOnForCheckboxValueIfNoValueSet": ["Jsoup_42_2"],
     "Jsoup_42-org.jsoup.nodes.FormElementTest::createsFormData": ["Jsoup_42_1", "Jsoup_42_2"],
