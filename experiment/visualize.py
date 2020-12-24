@@ -7,16 +7,18 @@ import pandas as pd
 from sklearn.manifold import TSNE
 
 class Visual():
-    def __init__(self, method):
+    def __init__(self, method, number_cluster, algorithm):
         self.method = method
+        self.algorithm = algorithm
+        self.number_cluster = number_cluster
 
-    def visualize(self, clusters, plotX):
+    def visualize(self,  plotX):
         if self.method == 'PCA':
-            self.visualize_pca(clusters, plotX=plotX)
+            self.visualize_pca( plotX=plotX)
         elif self.method == 'TSNE':
-            self.visualize_tsne(clusters, plotX=plotX)
+            self.visualize_tsne( plotX=plotX)
 
-    def visualize_tsne(self, clusters, plotX):
+    def visualize_tsne(self, plotX):
         perplexity = 50
 
         # T-SNE with one dimension
@@ -105,7 +107,7 @@ class Visual():
         plot(fig)
         # iplot(fig)
 
-    def visualize_pca(self, clusters, plotX):
+    def visualize_pca(self, plotX):
         # PCA with one principal component
         pca_1d = PCA(n_components=1)
 
@@ -138,51 +140,26 @@ class Visual():
 
         plotX["dummy"] = 0
 
-        cluster0 = plotX[plotX["Cluster"] == 0]
-        cluster1 = plotX[plotX["Cluster"] == 1]
-        cluster2 = plotX[plotX["Cluster"] == 2]
-        # cluster3 = plotX[plotX["Cluster"] == 3]
+        clusters = []
+        traces = []
+        for i in range(self.number_cluster):
+            if self.algorithm == 'dbscan':
+                i -= 1
+            clusters.append(plotX[plotX["Cluster"] == i].drop(["Cluster"], axis=1))
 
         # init_notebook_mode(connected=True)
 
-        # trace1 is for 'Cluster 0'
-        trace1 = go.Scatter(
-            x=cluster0["PC1_2d"],
-            y=cluster0["PC2_2d"],
-            mode="markers",
-            name="Cluster 0",
-            marker=dict(color='rgba(255, 128, 255, 0.8)'),
-            text=None)
-
-        # trace2 is for 'Cluster 1'
-        trace2 = go.Scatter(
-            x=cluster1["PC1_2d"],
-            y=cluster1["PC2_2d"],
-            mode="markers",
-            name="Cluster 1",
-            marker=dict(color='rgba(255, 128, 2, 0.8)'),
-            text=None)
-
-        # trace3 is for 'Cluster 2'
-        trace3 = go.Scatter(
-            x=cluster2["PC1_2d"],
-            y=cluster2["PC2_2d"],
-            mode="markers",
-            name="Cluster 2",
-            marker=dict(color='rgba(0, 255, 200, 0.8)'),
-            text=None)
-
-        # trace4 is for 'Cluster 3'
-        # trace4 = go.Scatter(
-        #     x=cluster3["PC1_2d"],
-        #     y=cluster3["PC2_2d"],
-        #     mode="markers",
-        #     name="Cluster 3",
-        #     marker=dict(color='rgba(0, 200, 255, 0.8)'),
-        #     text=None)
-
-        # data = [trace1, trace2, trace3, trace4]
-        data = [trace1, trace2, trace3,]
+        colors = ['rgba(255, 128, 255, 0.8)', 'rgba(255, 128, 2, 0.8)', 'rgba(128,0, 0, 0.8)', 'rgba(2, 107, 155, 0.7)', 'rgba(27, 93, 3, 0.8)', 'rgba(255, 153, 0, 1)']
+        for i in range(self.number_cluster):
+            color = colors[i]
+            trace = go.Scatter(
+                x=clusters[i]["PC1_2d"],
+                y=clusters[i]["PC2_2d"],
+                mode="markers",
+                name="Cluster "+str(i),
+                marker=dict(color=color),
+                text=None)
+            traces.append(trace)
 
         title = "Visualizing Clusters in Two Dimensions Using PCA"
 
@@ -191,7 +168,7 @@ class Visual():
                       yaxis=dict(title='PC2', ticklen=5, zeroline=False)
                       )
 
-        fig = dict(data=data, layout=layout)
+        fig = dict(data=traces, layout=layout)
 
         plot(fig)
         # iplot(fig)
