@@ -71,7 +71,7 @@ class Word2vector:
                 multi_vector.append(list(learned_vector.flatten()))
             patch_vector = np.array(multi_vector).mean(axis=0)
         except Exception as e:
-            raise e
+            raise
 
         return test_vector, patch_vector
 
