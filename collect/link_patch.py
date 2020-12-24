@@ -37,7 +37,27 @@ def get_link_patch():
         else:
             patch_list.append([four_list[0][ind].split('-')[0] + '-one'])
 
-    res = [name_number_func_list, error_title_list, error_message_list, func_message_list, patch_list]
+    name_number = [i.split('-')[0].strip() for i in name_number_func_list]
+
+    re_name_number_func_list = []
+    re_error_title_list = []
+    re_error_message_list = []
+    re_func_message_list = []
+    re_patch_list = []
+
+    remove_list_1 = ['Cli_6', 'Closure_63', 'Closure_93', 'Lang_2', 'Time_21']
+    remove_list_2 = ['Collections_' + str(i) for i in range(1, 25)]
+    remove_list = remove_list_1 + remove_list_2
+
+    for i in range(len(name_number)):
+        if name_number[i] not in remove_list:
+            re_name_number_func_list.append(name_number_func_list[i])
+            re_error_title_list.append(error_title_list[i])
+            re_error_message_list.append(error_message_list[i])
+            re_func_message_list.append(func_message_list[i])
+            re_patch_list.append(patch_list[i])
+
+    res = [re_name_number_func_list, re_error_title_list, re_error_message_list, re_func_message_list, re_patch_list]
 
     output = open('../data/test_case_all_five.pkl', 'wb')
 

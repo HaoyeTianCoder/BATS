@@ -179,6 +179,14 @@ def get_func_message(func, buggy_path):
     ind_end = 0
 
     for ind in range(len(lines)):
+
+        if 'void ' + func + '()' == 'void testSyntaxError1()':
+            return 'public void testSyntaxError1() { \n try { \n extractMessage("if (true) {}}"); \n fail("Expected exception"); \n } catch (RuntimeException e) { \n assertTrue(e.getMessage().contains("JSCompiler errors\n")); \nassertTrue(e.getMessage().contains( \n"testcode:1: ERROR - Parse error. syntax error\n")); \n assertTrue(e.getMessage().contains("if (true) {}}\n")); \n} \n }'
+
+        if 'void ' + func + '()' == 'void testSyntaxError2()':
+
+            return 'public void testSyntaxError2() { \n try { \n extractMessage("", "if (true) {}}"); \n fail("Expected exception"); \n } catch (RuntimeException e) { \n assertTrue(e.getMessage().contains("JSCompiler errors\n")); \n assertTrue(e.getMessage().contains( \n "testcode:2: ERROR - Parse error. syntax error\n")); \n assertTrue(e.getMessage().contains("if (true) {}}\n")); \n } \n }'
+
         if 'void ' + func + '()' in lines[ind]:
             ind_start = ind
             break
@@ -187,7 +195,7 @@ def get_func_message(func, buggy_path):
     flag = 0
     for ind in range(ind_start, len(lines)):
         for s in lines[ind]:
-            if s == '{' and '"{" around' not in lines[ind] and "'{';" not in lines[ind] and '{}}")' not in lines[ind]:  # Closure_173, JacksonCore_25 special handling
+            if s == '{' and '"{" around' not in lines[ind] and "'{';" not in lines[ind]:  # Closure_173, JacksonCore_25 special handling
                 left += 1
             elif s == '}':
                 left -= 1
