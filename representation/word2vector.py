@@ -60,8 +60,8 @@ class Word2vector:
                 path_patch_ids = []
                 for name in patch_ids:
                     project = name.split('_')[0]
-                    id = name.split('_')[1].split('-')[1]
-                    patch_id = name.split('_')[1] + '.patch'
+                    id = name.split('_')[1]
+                    patch_id = name.split('_')[1] + '_' + name.split('_')[2] + '.patch'
                     path_patch = self.path_patch_root + project + '/' + id + '/'
                     path_patch_ids.append(os.path.join(path_patch, patch_id))
 
