@@ -3,7 +3,7 @@ sys.path.append(os.path.abspath(os.path.join('..', '.')))
 # import seaborn as sns
 import pickle
 import pandas as pd
-from sklearn.preprocessing import StandardScaler, Normalizer
+from sklearn.preprocessing import StandardScaler, Normalizer, MinMaxScaler
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import boxplot
 from experiment.config import Config
@@ -58,7 +58,7 @@ class Experiment:
             # patch_vector = self.patch2vector(word2v='cc2vec')
             all_test_vector, all_patch_vector = self.test_patch_2vector(test_w2v='code2vec', patch_w2v='cc2vec')
 
-            both_vector = np.array(list([all_test_vector, all_patch_vector]))
+            both_vector = list([all_test_vector, all_patch_vector])
             pickle.dump(both_vector, open(self.path_test_function_patch_vector, 'wb'))
             # np.save(self.path_test_function_patch_vector, both_vector)
 
@@ -66,16 +66,13 @@ class Experiment:
         self.load_test()
 
         # dists_one = self.cal_all_simi(self.test_vector)
-        result_cluster = self.cluster_dist(self.test_vector, method='dbscan')
-        plt.boxplot(result_cluster, labels=['Original']+['Cluster'+str(i) for i in range(len(result_cluster)-1)] )
-        # plt.boxplot([dists_one, dist0, dist1, dist2, ], labels=['Original', 'Cluster1', 'Cluster2', 'Cluster3'])
-        plt.xlabel('Cluster')
-        plt.ylabel('Distance to Center')
-        plt.show()
+        method_cluster = 'kmeans'
+        result_cluster = self.cluster_dist(self.test_vector, method=method_cluster)
+
 
     def test_patch_2vector(self, test_w2v='code2vec', patch_w2v='cc2vec'):
         all_test_vector, all_patch_vector = [], []
-        w2v = Word2vector(test_w2v='code2vec', patch_w2v='cc2vec', path_patch_root=self.path_patch_root)
+        w2v = Word2vector(test_w2v=test_w2v, patch_w2v=patch_w2v, path_patch_root=self.path_patch_root)
 
         test_name_list = self.test_data[0]
         test_function_list = self.test_data[3]
@@ -118,7 +115,7 @@ class Experiment:
         # np.save(self.path_patch_vector, self.patch_vector)
 
     def cal_all_simi(self, test_vector):
-        scaler = StandardScaler()
+        scaler = Normalizer()
         X = pd.DataFrame(scaler.fit_transform(test_vector))
 
         center = np.mean(X, axis=0)
@@ -139,20 +136,20 @@ class Experiment:
         X = pd.DataFrame(scaler.fit_transform(test_vector))
 
         # one cluster
-        center = np.mean(X, axis=0)
-        dists_one = [np.linalg.norm(vec - center) for vec in np.array(X)]
+        center_one = np.mean(X, axis=0)
+        dists_one = [np.linalg.norm(vec - np.array(center_one)) for vec in np.array(X)]
 
         if method == 'kmeans':
-            number_cluster = 4
-            kmeans = KMeans(n_clusters=number_cluster)
+            number_cluster =4
+            kmeans = KMeans(n_clusters=number_cluster, random_state=8)
             # kmeans.fit(np.array(test_vector))
             clusters = kmeans.fit_predict(X)
         elif method == 'dbscan':
-            db = DBSCAN(eps=1, min_samples=10)
+            db = DBSCAN(eps=0.1, min_samples=10)
             clusters = db.fit_predict(X)
             number_cluster = max(clusters)+2
         elif method == 'hier':
-            number_cluster = 3
+            number_cluster = 4
             hu = AgglomerativeClustering(n_clusters=number_cluster)
             clusters = hu.fit_predict(X)
         elif method == 'xmeans':
@@ -162,27 +159,31 @@ class Experiment:
         elif method == 'ap':
             # ap = AffinityPropagation(random_state=5)
             # clusters = ap.fit_predict(X)
-
-            APC = AffinityPropagation(verbose=True, max_iter=400, convergence_iter=25).fit(X)
+            APC = AffinityPropagation(verbose=True, max_iter=200, convergence_iter=25).fit(X)
             APC_res = APC.predict(X)
             clusters = APC.cluster_centers_indices_
         X["Cluster"] = clusters
 
         if number_cluster <= 6:
-            algorithm = 'dbscan'
-            v = Visual('PCA', number_cluster, algorithm=algorithm)
-            v.visualize(plotX=X)
+            v = Visual(algorithm='PCA', number_cluster=number_cluster, method=method)
+            # v.visualize(plotX=X)
 
-        result = [dists_one]
+        result_cluster = [dists_one]
         for i in range(number_cluster):
             if method == 'dbscan':
                 i -= 1
             cluster = X[X["Cluster"] == i].drop(["Cluster"], axis=1)
             center = np.mean(cluster, axis=0)
-            dist = [np.linalg.norm(vec - center) for vec in np.array(cluster)]
-            result.append(dist)
+            dist = [np.linalg.norm(vec - np.array(center)) for vec in np.array(cluster)]
+            result_cluster.append(dist)
 
-        return result
+        plt.boxplot(result_cluster, labels=['Original']+['Cluster'+str(i) for i in range(len(result_cluster)-1)] )
+        plt.xlabel('Cluster')
+        plt.ylabel('Distance to Center')
+        plt.show()
+        plt.savefig('../fig/box_{}.png'.format(method))
+
+        return cluster
 
 if __name__ == '__main__':
     config = Config()
