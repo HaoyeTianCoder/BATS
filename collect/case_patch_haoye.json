@@ -14,9 +14,11 @@
   "Chart_16-org.jfree.data.category.junit.DefaultIntervalCategoryDatasetTests::testGetColumnIndex":["Chart_16_1"],
   "Chart_16-org.jfree.data.category.junit.DefaultIntervalCategoryDatasetTests::testCloning2":["Chart_16_1"],
 
+  "#92": "multiple tests to same",
   "Chart_18-org.jfree.data.junit.DefaultKeyedValuesTests::testGetIndex2": ["Chart_18_1"],
+  "Chart_18-org.jfree.data.category.junit.DefaultCategoryDatasetTests::testBug1835955": ["Chart_18_1"],
   "#2": "multiple tests to same",
-  "Chart_18-org.jfree.data.category.junit.DefaultCategoryDatasetTests::testBug1835955": ["Chart_18_1","Chart_18_2","Chart_18_3"],
+  "Chart_18-org.jfree.data.junit.DefaultKeyedValuesTests::testRemoveValue": ["Chart_18_1","Chart_18_2","Chart_18_3"],
   "Chart_18-org.jfree.data.junit.DefaultKeyedValues2DTests::testRemoveColumnByKey": ["Chart_18_1","Chart_18_2","Chart_18_3"],
 
   "Chart_19-org.jfree.chart.plot.junit.CategoryPlotTests::testGetDomainAxisIndex": ["Chart_19_1"],
