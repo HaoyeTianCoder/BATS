@@ -7,15 +7,15 @@ import pandas as pd
 from sklearn.manifold import TSNE
 
 class Visual():
-    def __init__(self, method, number_cluster, algorithm):
+    def __init__(self, algorithm, number_cluster, method):
         self.method = method
         self.algorithm = algorithm
         self.number_cluster = number_cluster
 
     def visualize(self,  plotX):
-        if self.method == 'PCA':
+        if self.algorithm == 'PCA':
             self.visualize_pca( plotX=plotX)
-        elif self.method == 'TSNE':
+        elif self.algorithm == 'TSNE':
             self.visualize_tsne( plotX=plotX)
 
     def visualize_tsne(self, plotX):
@@ -103,8 +103,7 @@ class Visual():
                       )
 
         fig = dict(data=data, layout=layout)
-
-        plot(fig)
+        plot(figure_or_data=fig, filename='../fig/2D_cluster_{}.html'.format(self.method))
         # iplot(fig)
 
     def visualize_pca(self, plotX):
@@ -143,7 +142,7 @@ class Visual():
         clusters = []
         traces = []
         for i in range(self.number_cluster):
-            if self.algorithm == 'dbscan':
+            if self.method == 'dbscan':
                 i -= 1
             clusters.append(plotX[plotX["Cluster"] == i].drop(["Cluster"], axis=1))
 
@@ -169,6 +168,36 @@ class Visual():
                       )
 
         fig = dict(data=traces, layout=layout)
+        plot(figure_or_data=fig, filename='../fig/2D_cluster_{}.html'.format(self.method))
 
-        plot(fig)
         # iplot(fig)
+
+        # 3D visual
+        clusters = []
+        traces = []
+        for i in range(self.number_cluster):
+            if self.method == 'dbscan':
+                i -= 1
+            clusters.append(plotX[plotX["Cluster"] == i].drop(["Cluster"], axis=1))
+        colors = ['rgba(255, 128, 255, 0.8)', 'rgba(255, 128, 2, 0.8)', 'rgba(128,0, 0, 0.8)', 'rgba(2, 107, 155, 0.7)', 'rgba(27, 93, 3, 0.8)', 'rgba(255, 153, 0, 1)']
+        for i in range(self.number_cluster):
+            color = colors[i]
+            trace = go.Scatter3d(
+                x=clusters[i]["PC1_3d"],
+                y=clusters[i]["PC2_3d"],
+                z=clusters[i]["PC3_3d"],
+                mode="markers",
+                name="Cluster "+str(i),
+                marker=dict(color=color),
+                text=None)
+            traces.append(trace)
+
+        title = "Visualizing Clusters in Three Dimensions Using PCA"
+
+        layout = dict(title=title,
+                      xaxis=dict(title='PC1', ticklen=5, zeroline=False),
+                      yaxis=dict(title='PC2', ticklen=5, zeroline=False)
+                      )
+
+        fig = dict(data=traces, layout=layout)
+        plot(figure_or_data=fig, filename='../fig/3D_cluster_{}.html'.format(self.method))
