@@ -56,7 +56,7 @@ def get_patch_cc2v(patch):
                 if line == '+++':
                     newline = 'ppp <nl> '
                     lines += newline
-                elif line.startswith('---') or line.startswith('PATCH_DIFF_ORIG=---'):
+                elif (line.startswith('---') or line.startswith('PATCH_DIFF_ORIG=---')) and not line.startswith('-----'):
                     newline = re.split(pattern=p,string=line.split(' ')[1].strip())
                     newline = 'mmm ' + ' '.join(newline) + ' <nl> '
                     lines += newline
