@@ -1,6 +1,5 @@
 import os
 import json
-import pickle
 
 from collect.configV2 import *
 
@@ -298,17 +297,9 @@ def get_all(PATH_PROJECTS, NAME_LIST):
     # print(filter_re_func_message_list[110])
 
     res = [filter_re_name_number_func_list, filter_re_error_title_list, filter_re_error_message_list, filter_re_func_message_list]
-
-    output = open('../data/test_case_all.pkl', 'wb')
-    pickle.dump(res, output)
+    #
+    # output = open('../data/test_case_all.pkl', 'wb')
+    # pickle.dump(res, output)
 
     return res
 
-
-def main():
-
-    get_all(PATH_PROJECTS, NAME_LIST)
-
-
-if __name__ == '__main__':
-    main()
