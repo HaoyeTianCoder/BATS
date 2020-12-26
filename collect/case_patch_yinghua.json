@@ -183,6 +183,7 @@
 
 	"Math_6-org.apache.commons.math.stat.descriptive.SynchronizedSummaryStatisticsTest::testOverrideVarianceWithMathClass": ["Math_6_1", "Math_6_2", "Math_6_3"],
 	"#26": "multiple tests to same",
+	"Math_6-org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest::testTrivial": ["Math_6_1", "Math_6_2", "Math_6_3", "Math_6_4", "Math_6_5", "Math_6_6", "Math_6_7", "Math_6_8"],
 	"Math_6-org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest::testConstrainedRosen": ["Math_6_1", "Math_6_2", "Math_6_3", "Math_6_4", "Math_6_5", "Math_6_6", "Math_6_7", "Math_6_8"],
 	"Math_6-org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest::testElliRotated": ["Math_6_1", "Math_6_2", "Math_6_3", "Math_6_4", "Math_6_5", "Math_6_6", "Math_6_7", "Math_6_8"],
 	"Math_6-org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest::testEllipse": ["Math_6_1", "Math_6_2", "Math_6_3", "Math_6_4", "Math_6_5", "Math_6_6", "Math_6_7", "Math_6_8"],
@@ -382,6 +383,12 @@
 	"Mockito_9-org.mockitousage.constructor.CreatingMocksWithConstructorTest::testCallsRealInterfaceMethod": ["Mockito_9_1", "Mockito_9_2"],
 	"Mockito_9-org.mockitousage.constructor.CreatingMocksWithConstructorTest::abstractMethodReturnsDefault": ["Mockito_9_1", "Mockito_9_2"],
 
+	"#50": "multiple tests to same",
+	"Mockito_26-org.mockito.internal.progress.HandyReturnValuesTest::should_default_values_for_primitive": ["Mockito_26_1"],
+	"Mockito_26-org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValuesTest::should_return_primitive": ["Mockito_26_1"],
+	"Mockito_26-org.mockito.internal.stubbing.defaultanswers.ReturnsMocksTest::should_return_the_usual_default_values_for_primitives": ["Mockito_26_1"],
+	"Mockito_26-org.mockito.internal.stubbing.defaultanswers.ReturnsSmartNullsTest::should_return_the_usual_default_values_for_primitives": ["Mockito_26_1"],
+
 	"#51": "multiple tests to same",
 	"Time_10-org.joda.time.TestDays::testFactory_daysBetween_RPartial_MonthDay": ["Time_10_1", "Time_10_2"],
 	"Time_10-org.joda.time.TestMonths::testFactory_monthsBetween_RPartial_MonthDay": ["Time_10_1", "Time_10_2"],
@@ -457,13 +464,13 @@
 	"Time_5-org.joda.time.TestPeriod_Basics::testNormalizedStandard_periodType_monthsWeeks": ["Time_5_1"],
 
 	"Time_6-org.joda.time.chrono.TestGJDate::test_cutoverPreZero": ["Time_6_1"],
-	"#60": "multiple tests to same",
+	"#61": "multiple tests to same",
 	"Time_6-org.joda.time.chrono.TestGJDate::test_plusWeekyears_positiveToNegative_crossCutover": ["Time_6_2"],
 	"Time_6-org.joda.time.chrono.TestGJDate::test_plusYears_positiveToZero_crossCutover": ["Time_6_2"],
 	"Time_6-org.joda.time.chrono.TestGJDate::test_plusYears_positiveToNegative_crossCutover": ["Time_6_2"],
 	"Time_6-org.joda.time.chrono.TestGJDate::test_plusWeekyears_positiveToZero_crossCutover": ["Time_6_2"],
 
-	"#61": "multiple tests to same",
+	"#62": "multiple tests to same",
 	"Time_7-org.joda.time.format.TestDateTimeFormatter::testParseInto_monthDay_feb29_newYork_startOfYear": ["Time_7_1"],
 	"Time_7-org.joda.time.format.TestDateTimeFormatter::testParseInto_monthDay_feb29_tokyo_endOfYear": ["Time_7_1"]
 }
