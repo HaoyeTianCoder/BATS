@@ -390,7 +390,7 @@
     "Jsoup_14-org.jsoup.parser.ParserTest::handlesUnclosedTitle": ["Jsoup_14_1", "Jsoup_14_2"],
 
     "Jsoup_16-org.jsoup.nodes.DocumentTypeTest::outerHtmlGeneration": ["Jsoup_16_3"],
-    "org.jsoup.nodes.DocumentTypeTest::constructorValidationThrowsExceptionOnBlankName": ["Jsoup_16_1", "Jsoup_16_2"],
+    "Jsoup_16-org.jsoup.nodes.DocumentTypeTest::constructorValidationThrowsExceptionOnBlankName": ["Jsoup_16_1", "Jsoup_16_2"],
 
     "Jsoup_18-org.jsoup.parser.ParserTest::handlesNewlinesAndWhitespaceInTag": ["Jsoup_18_1"],
     "Jsoup_18-org.jsoup.parser.CharacterReaderTest::consumeToEnd": ["Jsoup_18_2"],
