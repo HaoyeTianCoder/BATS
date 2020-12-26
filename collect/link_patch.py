@@ -62,8 +62,15 @@ def get_link_patch():
             re_func_message_list.append(func_message_list[i])
             re_patch_list.append(patch_list[i])
 
-    res = [re_name_number_func_list, re_error_title_list, re_error_message_list, re_func_message_list, re_patch_list]
+    # remove 922
+    ind = re_name_number_func_list.index('Lang_57-org.apache.commons.lang.LocaleUtilsTest::testCountriesByLanguage')
+    re_name_number_func_list.pop(ind)
+    re_error_title_list.pop(ind)
+    re_error_message_list.pop(ind)
+    re_func_message_list.pop(ind)
+    re_patch_list.pop(ind)
 
+    res = [re_name_number_func_list, re_error_title_list, re_error_message_list, re_func_message_list, re_patch_list]
     # print missing data
     for i in range(len(re_patch_list)):
         if re_patch_list[i] == 'error':

@@ -58,8 +58,16 @@ def get_link_patch():
             re_func_message_list.append(func_message_list[i])
             re_patch_list.append(patch_list[i])
 
-    res = [re_name_number_func_list, re_error_title_list, re_error_message_list, re_func_message_list, re_patch_list]
+    # remove 922
+    if 'Lang_57-org.apache.commons.lang.LocaleUtilsTest::testCountriesByLanguage' in re_name_number_func_list:
+        ind = re_name_number_func_list.index('Lang_57-org.apache.commons.lang.LocaleUtilsTest::testCountriesByLanguage')
+        re_name_number_func_list.pop(ind)
+        re_error_title_list.pop(ind)
+        re_error_message_list.pop(ind)
+        re_func_message_list.pop(ind)
+        re_patch_list.pop(ind)
 
+    res = [re_name_number_func_list, re_error_title_list, re_error_message_list, re_func_message_list, re_patch_list]
 
     output = open('../data/test_one_case_all.pkl', 'wb')
 
