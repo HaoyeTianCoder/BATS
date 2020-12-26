@@ -21,6 +21,8 @@ def get_link_patch():
     dic_all.update(dic_yinghua)
     dic_all.update(dic_weiguo)
 
+    dic_case_one = get_data_json(path_one_error)
+
     name_number_func_list = []
     error_title_list = []
     error_message_list = []
@@ -34,8 +36,10 @@ def get_link_patch():
         func_message_list.append(four_list[3][ind])
         if four_list[0][ind] in dic_all:
             patch_list.append(dic_all[four_list[0][ind]])
+        elif four_list[0][ind] in dic_case_one:
+            patch_list.append(dic_case_one[four_list[0][ind]])
         else:
-            patch_list.append([four_list[0][ind].split('-')[0] + '-one'])
+            patch_list.append('error')
 
     name_number = [i.split('-')[0].strip() for i in name_number_func_list]
 
@@ -45,6 +49,7 @@ def get_link_patch():
     re_func_message_list = []
     re_patch_list = []
 
+    # remove Deprecated bug ids
     remove_list_1 = ['Cli_6', 'Closure_63', 'Closure_93', 'Lang_2', 'Time_21']
     remove_list_2 = ['Collections_' + str(i) for i in range(1, 25)]
     remove_list = remove_list_1 + remove_list_2
@@ -58,6 +63,11 @@ def get_link_patch():
             re_patch_list.append(patch_list[i])
 
     res = [re_name_number_func_list, re_error_title_list, re_error_message_list, re_func_message_list, re_patch_list]
+
+    # print missing data
+    for i in range(len(re_patch_list)):
+        if re_patch_list[i] == 'error':
+            print(re_name_number_func_list[i])
 
     output = open('../data/test_case_all_five.pkl', 'wb')
 
