@@ -33,7 +33,7 @@ def get_one_error(PATH_PROJECTS, NAME_LIST):
                 # name_number_func_list
                 name_number_func = name_number+'-' + name_func
 
-                dic[name_number_func] = name_number + '-one'
+                dic[name_number_func] = [name_number + '-one']
 
     json.dump(dic, open(path_one_error, 'w'), sort_keys=True, indent=4)
 
