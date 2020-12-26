@@ -181,16 +181,20 @@ def get_func_message(func, buggy_path):
     for ind in range(len(lines)):
         # 141
         if path == path_my+'Closure_56/test/com/google/javascript/jscomp/JsMessageExtractorTest.java':
-            return 'public void testSyntaxError1() { \n try { \n extractMessage("if (true) {}}"); \n fail("Expected exception"); \n } catch (RuntimeException e) { \n assertTrue(e.getMessage().contains("JSCompiler errors")); \nassertTrue(e.getMessage().contains( \n"testcode:1: ERROR - Parse error. syntax error")); \n assertTrue(e.getMessage().contains("if (true) {}}")); \n} \n }'
+            if 'void ' + func + '()' == 'void testSyntaxError1()':
+                return 'public void testSyntaxError1() { \n try { \n extractMessage("if (true) {}}"); \n fail("Expected exception"); \n } catch (RuntimeException e) { \n assertTrue(e.getMessage().contains("JSCompiler errors")); \nassertTrue(e.getMessage().contains( \n"testcode:1: ERROR - Parse error. syntax error")); \n assertTrue(e.getMessage().contains("if (true) {}}")); \n} \n }'
         # 142
         if path == path_my+'Closure_56/test/com/google/javascript/jscomp/JsMessageExtractorTest.java':
-            return 'public void testSyntaxError2() {\n try {\n extractMessage("", "if (true) {}}"); \n fail("Expected exception"); \n } catch (RuntimeException e) { \n assertTrue(e.getMessage().contains("JSCompiler errors")); \n assertTrue(e.getMessage().contains( \n "testcode:2: ERROR - Parse error. syntax error")); \n assertTrue(e.getMessage().contains("if (true) {}}")); \n } \n }'
+            if 'void ' + func + '()' == 'void testSyntaxError2()':
+                return 'public void testSyntaxError2() {\n try {\n extractMessage("", "if (true) {}}"); \n fail("Expected exception"); \n } catch (RuntimeException e) { \n assertTrue(e.getMessage().contains("JSCompiler errors")); \n assertTrue(e.getMessage().contains( \n "testcode:2: ERROR - Parse error. syntax error")); \n assertTrue(e.getMessage().contains("if (true) {}}")); \n } \n }'
         # 732
         if path == path_my+'JacksonDatabind_63/src/test/java/com/fasterxml/jackson/databind/deser/exc/TestExceptionHandlingWithDefaultDeserialization.java':
-            return 'public void testShouldThrowJsonMappingExceptionWithPathReference() throws IOException {\n// given\nObjectMapper mapper = new ObjectMapper();\nString input = "{bar:{baz:{qux:quxValue))}";\nfinal String THIS = getClass().getName();\n// when\ntry {\nmapper.readValue(input, Foo.class);\nfail("Upsss! Exception has not been thrown.");\n} catch (JsonMappingException ex) {\n// then\nassertEquals(THIS+"$Foo[bar]->"+THIS+"$Bar[baz]",\nex.getPathReference());\n}\n}'
+            if 'void ' + func + '()' == 'testShouldThrowJsonMappingExceptionWithPathReference()':
+                return 'public void testShouldThrowJsonMappingExceptionWithPathReference() throws IOException {\n// given\nObjectMapper mapper = new ObjectMapper();\nString input = "{bar:{baz:{qux:quxValue))}";\nfinal String THIS = getClass().getName();\n// when\ntry {\nmapper.readValue(input, Foo.class);\nfail("Upsss! Exception has not been thrown.");\n} catch (JsonMappingException ex) {\n// then\nassertEquals(THIS+"$Foo[bar]->"+THIS+"$Bar[baz]",\nex.getPathReference());\n}\n}'
         # 733
         if path == path_my+'JacksonDatabind_63/src/test/java/com/fasterxml/jackson/databind/deser/exc/TestExceptionHandlingWithJsonCreatorDeserialization.java':
-            return 'public void testShouldThrowJsonMappingExceptionWithPathReference() throws IOException {\n// given\nObjectMapper mapper = new ObjectMapper();\nString input = "{bar:{baz:{qux:quxValue))}";\nfinal String THIS = getClass().getName();\n// when\ntry {\nmapper.readValue(input, Foo.class);\nfail("Upsss! Exception has not been thrown.");\n} catch (JsonMappingException ex) {\n// then\nassertEquals(THIS+"$Foo[bar]->"+THIS+"$Bar[baz]",\nex.getPathReference());\n}\n}'
+            if 'void ' + func + '()' == 'testShouldThrowJsonMappingExceptionWithPathReference()':
+                return 'public void testShouldThrowJsonMappingExceptionWithPathReference() throws IOException {\n// given\nObjectMapper mapper = new ObjectMapper();\nString input = "{bar:{baz:{qux:quxValue))}";\nfinal String THIS = getClass().getName();\n// when\ntry {\nmapper.readValue(input, Foo.class);\nfail("Upsss! Exception has not been thrown.");\n} catch (JsonMappingException ex) {\n// then\nassertEquals(THIS+"$Foo[bar]->"+THIS+"$Bar[baz]",\nex.getPathReference());\n}\n}'
         # 922 correct
         # public void testCountriesByLanguage() {}
         if 'void ' + func + '()' in lines[ind]:
