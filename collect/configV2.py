@@ -30,3 +30,5 @@ dic_buggy_path = {
 path_haoye = 'case_patch_haoye.json'
 path_yinghua = 'case_patch_yinghua.json'
 path_weiguo = 'case_patch_weiguo.json'
+
+path_one_error = 'case_one.json'
