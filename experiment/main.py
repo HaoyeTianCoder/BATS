@@ -13,6 +13,7 @@ from sklearn.cluster import KMeans, DBSCAN, AgglomerativeClustering, AffinityPro
 from pyclustering.cluster.xmeans import xmeans
 import scipy.cluster.hierarchy as h
 from experiment.visualize import Visual
+from sklearn.metrics import silhouette_score ,calinski_harabasz_score,davies_bouldin_score
 
 class Experiment:
     def __init__(self, path_test, path_patch_root, path_test_function_patch_vector):
@@ -67,7 +68,10 @@ class Experiment:
 
         # dists_one = self.cal_all_simi(self.test_vector)
         method_cluster = 'kmeans'
-        result_cluster = self.cluster_dist(self.test_vector, method=method_cluster)
+        number_cluster = 40
+        clusters = self.cluster_dist(self.test_vector, method=method_cluster, number=number_cluster)
+
+        self.patch_dist(self.patch_vector, clusters, method_cluster, number_cluster)
 
 
     def test_patch_2vector(self, test_w2v='code2vec', patch_w2v='cc2vec'):
@@ -131,7 +135,7 @@ class Experiment:
     #     dist0, dist1, dist2 = self.cluster(test_vector)
     #     return dist0, dist1, dist2
 
-    def cluster_dist(self, test_vector, method):
+    def cluster_dist(self, test_vector, method, number):
         scaler = Normalizer()
         X = pd.DataFrame(scaler.fit_transform(test_vector))
 
@@ -140,22 +144,20 @@ class Experiment:
         dists_one = [np.linalg.norm(vec - np.array(center_one)) for vec in np.array(X)]
 
         if method == 'kmeans':
-            number_cluster =4
-            kmeans = KMeans(n_clusters=number_cluster, random_state=8)
+            kmeans = KMeans(n_clusters=number, random_state=8)
             # kmeans.fit(np.array(test_vector))
             clusters = kmeans.fit_predict(X)
         elif method == 'dbscan':
             db = DBSCAN(eps=0.1, min_samples=10)
             clusters = db.fit_predict(X)
-            number_cluster = max(clusters)+2
+            number = max(clusters)+2
         elif method == 'hier':
-            number_cluster = 4
-            hu = AgglomerativeClustering(n_clusters=number_cluster)
+            hu = AgglomerativeClustering(n_clusters=number)
             clusters = hu.fit_predict(X)
         elif method == 'xmeans':
             xmeans_instance = xmeans(X,)
             clusters = xmeans_instance.process().predict(X)
-            number_cluster = max(clusters)+1
+            number = max(clusters)+1
         elif method == 'ap':
             # ap = AffinityPropagation(random_state=5)
             # clusters = ap.fit_predict(X)
@@ -164,12 +166,20 @@ class Experiment:
             clusters = APC.cluster_centers_indices_
         X["Cluster"] = clusters
 
-        if number_cluster <= 6:
-            v = Visual(algorithm='PCA', number_cluster=number_cluster, method=method)
+        s1 = silhouette_score(X, clusters, metric='euclidean')
+        s2 = calinski_harabasz_score(X, clusters)
+        s3 = davies_bouldin_score(X, clusters)
+        print('TEST------')
+        print('Silhouette: {}'.format(s1))
+        print('CH: {}'.format(s2))
+        print('DBI: {}'.format(s3))
+
+        if number <= 6:
+            v = Visual(algorithm='PCA', number_cluster=number, method=method)
             # v.visualize(plotX=X)
 
         result_cluster = [dists_one]
-        for i in range(number_cluster):
+        for i in range(number):
             if method == 'dbscan':
                 i -= 1
             cluster = X[X["Cluster"] == i].drop(["Cluster"], axis=1)
@@ -183,7 +193,24 @@ class Experiment:
         plt.show()
         plt.savefig('../fig/box_{}.png'.format(method))
 
-        return cluster
+        return clusters
+
+    def patch_dist(self, patch_vector, clusters, method_cluster, number):
+        scaler = Normalizer()
+        P = pd.DataFrame(scaler.fit_transform(patch_vector))
+        P["Cluster"] = clusters
+
+        if number <= 6:
+            v = Visual(algorithm='PCA', number_cluster=number, method=method_cluster)
+            v.visualize(plotX=P)
+
+        s1 = silhouette_score(P, clusters, metric='euclidean')
+        s2 = calinski_harabasz_score(P, clusters)
+        s3 = davies_bouldin_score(P, clusters)
+        print('PATCH------')
+        print('Silhouette: {}'.format(s1))
+        print('CH: {}'.format(s2))
+        print('DBI: {}'.format(s3))
 
 if __name__ == '__main__':
     config = Config()
