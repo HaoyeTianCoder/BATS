@@ -69,7 +69,7 @@ def get_link_patch():
         if re_patch_list[i] == 'error':
             print(re_name_number_func_list[i])
 
-    output = open('../data/test_case_all_five.pkl', 'wb')
+    output = open('../data/test_case_all.pkl', 'wb')
 
     pickle.dump(res, output)
 
