@@ -27,6 +27,8 @@ class Experiment:
         self.test_data = None
         # self.patch_data = None
 
+        self.test_name = None
+        self.patch_name = None
         self.test_vector = None
         self.patch_vector = None
 
@@ -47,21 +49,27 @@ class Experiment:
         #
         #     self.patch2vector(word2v='cc2vec')
 
+        with open(self.path_test, 'rb') as f:
+            self.test_data = pickle.load(f)
         if os.path.exists(path_test_function_patch_vector):
             both_vector = pickle.load(open(self.path_test_function_patch_vector, 'rb'))
-            self.test_vector = both_vector[0]
-            self.patch_vector = both_vector[1]
+            self.test_name = both_vector[0]
+            self.patch_name = both_vector[1]
+            self.test_vector = both_vector[2]
+            self.patch_vector = both_vector[3]
         else:
-            with open(self.path_test, 'rb') as f:
-                self.test_data = pickle.load(f)
-
             # test_vector = self.test2vector(word2v='code2vec')
             # patch_vector = self.patch2vector(word2v='cc2vec')
-            all_test_vector, all_patch_vector = self.test_patch_2vector(test_w2v='code2vec', patch_w2v='cc2vec')
+            all_test_name, all_patch_name, all_test_vector, all_patch_vector = self.test_patch_2vector(test_w2v='code2vec', patch_w2v='cc2vec')
 
-            both_vector = list([all_test_vector, all_patch_vector])
+            both_vector = [all_test_name, all_patch_name, all_test_vector, all_patch_vector]
             pickle.dump(both_vector, open(self.path_test_function_patch_vector, 'wb'))
             # np.save(self.path_test_function_patch_vector, both_vector)
+
+            self.test_name = both_vector[0]
+            self.patch_name = both_vector[1]
+            self.test_vector = both_vector[2]
+            self.patch_vector = both_vector[3]
 
     def run(self):
         self.load_test()
@@ -75,7 +83,7 @@ class Experiment:
 
 
     def test_patch_2vector(self, test_w2v='code2vec', patch_w2v='cc2vec'):
-        all_test_vector, all_patch_vector = [], []
+        all_test_name, all_patch_name, all_test_vector, all_patch_vector = [], [], [], []
         w2v = Word2vector(test_w2v=test_w2v, patch_w2v=patch_w2v, path_patch_root=self.path_patch_root)
 
         test_name_list = self.test_data[0]
@@ -91,12 +99,14 @@ class Experiment:
                 print('{} test name:{} exception:{}'.format(i, name, e))
                 continue
             print('{} test name:{} success!'.format(i, name,))
+            all_test_name.append(name)
+            all_patch_name.append(ids)
             all_test_vector.append(test_vector)
             all_patch_vector.append(patch_vector)
             if len(all_test_vector) != len(all_patch_vector):
                 print('???')
 
-        return np.array(all_test_vector), np.array(all_patch_vector)
+        return all_test_name, all_patch_name, np.array(all_test_vector), np.array(all_patch_vector)
 
 
     def test2vector(self, word2v='code2vec'):
@@ -190,7 +200,6 @@ class Experiment:
         plt.boxplot(result_cluster, labels=['Original']+['Cluster'+str(i) for i in range(len(result_cluster)-1)] )
         plt.xlabel('Cluster')
         plt.ylabel('Distance to Center')
-        plt.show()
         plt.savefig('../fig/box_{}.png'.format(method))
 
         return clusters
@@ -211,6 +220,19 @@ class Experiment:
         print('Silhouette: {}'.format(s1))
         print('CH: {}'.format(s2))
         print('DBI: {}'.format(s3))
+
+        n = 6
+        index = np.where(clusters==n)
+        patch_name = np.array(self.patch_name)[index]
+        test_name = np.array(self.test_name)[index]
+        function_name = np.array(self.test_data[3])[index]
+
+        print('cluster {}'.format(n))
+        for i in range(len(test_name)):
+            print('test&patch:{}'.format(test_name[i]), end='    ')
+            print('{}'.format(patch_name[i]))
+
+            # print('function:{}'.format(function_name[i]))
 
 if __name__ == '__main__':
     config = Config()
