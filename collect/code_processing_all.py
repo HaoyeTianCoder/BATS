@@ -58,7 +58,6 @@ def count_error_number(trigger_path_list):
                     line = line.split('::')
                     dic_name_number[name_number].append(line[-1].strip())
 
-
     new_dict = {key: val for key, val in dic.items() if val != 0}
     json.dump(new_dict, open('test_case_numberV2.json', 'w'), sort_keys=True, indent=4)
 
@@ -172,7 +171,11 @@ def get_func_message(func, buggy_path):
             f = open(path, 'r', encoding="ISO-8859-1")
         except:
             path = buggy_path.replace('/test/', '/test/java/')
-            f = open(path, 'r', encoding="ISO-8859-1")
+            try:
+                f = open(path, 'r', encoding="ISO-8859-1")
+            except:
+                # print(path)
+                return '-1'
 
     lines = f.readlines()
     ind_start = 0
@@ -234,51 +237,45 @@ def get_all(PATH_PROJECTS, NAME_LIST):
     re_error_message_list = []
     re_func_message_list = []
 
-    error_list = []
     for trigger_path in trigger_path_list:
         error_path_list = get_error_path(trigger_path)
         for error_path in error_path_list:
-            try:
 
-                name = error_path.split('/')[-3]
-                number = error_path.split('/')[-1]
+            name = error_path.split('/')[-3]
+            number = error_path.split('/')[-1]
 
-                name_number = name + '_' + number
-                name_func_list = get_name_func(error_path)
-                name_single_func_list = get_single_func(name_func_list)
+            name_number = name + '_' + number
+            name_func_list = get_name_func(error_path)
+            name_single_func_list = get_single_func(name_func_list)
 
-                # name_number_func_list
-                name_number_func_list = [name_number+'-'+i for i in name_func_list]
+            # name_number_func_list
+            name_number_func_list = [name_number+'-'+i for i in name_func_list]
 
-                buggy_path = dic_buggy_path[name].replace(name, name_number)
-                code_buggy_path_list = get_buggy_path(error_path)
-                buggy_path_list = []
-                for path in code_buggy_path_list:
-                    tmp_buggy_path = buggy_path + path + '.java'
-                    buggy_path_list.append(tmp_buggy_path)
+            buggy_path = dic_buggy_path[name].replace(name, name_number)
+            code_buggy_path_list = get_buggy_path(error_path)
+            buggy_path_list = []
+            for path in code_buggy_path_list:
+                tmp_buggy_path = buggy_path + path + '.java'
+                buggy_path_list.append(tmp_buggy_path)
 
-                # error_title_list
-                error_title_list = get_error_title(error_path)
+            # error_title_list
+            error_title_list = get_error_title(error_path)
 
-                # error_message_list
-                error_message_list = get_error_message(error_path)
+            # error_message_list
+            error_message_list = get_error_message(error_path)
 
-                # func_message_list
-                func_message_list = []
-                for i in range(len(buggy_path_list)):
-                    tmp_func = name_single_func_list[i]
-                    tmp_buggy_path = buggy_path_list[i]
-                    tmp_func_message = get_func_message(tmp_func, tmp_buggy_path)
-                    func_message_list.append(tmp_func_message)
+            # func_message_list
+            func_message_list = []
+            for i in range(len(buggy_path_list)):
+                tmp_func = name_single_func_list[i]
+                tmp_buggy_path = buggy_path_list[i]
+                tmp_func_message = get_func_message(tmp_func, tmp_buggy_path)
+                func_message_list.append(tmp_func_message)
 
-                re_name_number_func_list += name_number_func_list
-                re_error_title_list += error_title_list
-                re_error_message_list += error_message_list
-                re_func_message_list += func_message_list
-
-            except:
-                error_list.append(error_path)
-
+            re_name_number_func_list += name_number_func_list
+            re_error_title_list += error_title_list
+            re_error_message_list += error_message_list
+            re_func_message_list += func_message_list
 
     filter_re_name_number_func_list = []
     filter_re_error_title_list = []
@@ -306,11 +303,10 @@ def get_all(PATH_PROJECTS, NAME_LIST):
     #
     # output = open('../data/test_case_all.pkl', 'wb')
     # pickle.dump(res, output)
-    print(error_list)
-    print(len(error_list))
 
     return res
 
 
 if __name__ == '__main__':
+
     get_all(PATH_PROJECTS, NAME_LIST)

@@ -1,6 +1,7 @@
 import os
 import json
 from collect.configV2 import *
+from collect.code_processing_all import get_buggy_path
 
 
 def get_trigger_path(path_projects, name_list):
@@ -44,7 +45,7 @@ def count_error_number(trigger_path_list):
             number = error_path.split('/')[-1]
             name_number = name + '_' + number
 
-            if name_number not in remove_list:
+            if name_number not in missing_name_number and name_number not in remove_list:
 
                 f = open(error_path, 'r')
                 lines = f.readlines()
@@ -61,13 +62,14 @@ def count_error_number(trigger_path_list):
                         line = lines[ind]
                         line = line.split('::')
                         dic_name_number[name_number].append(line[-1].strip())
+
     # Math_41-org.apache.commons.math.stat.descriptive.moment.VarianceTest::testEvaluateArraySegmentWeighted, no function
     new_dict = {key: val for key, val in dic.items() if val != 0}
     json.dump(new_dict, open('test_case_numberV2.json', 'w'), sort_keys=True, indent=4)
 
 
-    # new_dic_name_number = {key: val for key, val in dic_name_number.items() if len(val) > 1}
-    # json.dump(new_dic_name_number, open('test_case_name_numberV2.json', 'w'), sort_keys=True, indent=4)
+    new_dic_name_number = {key: val for key, val in dic_name_number.items() if len(val) > 1}
+    json.dump(new_dic_name_number, open('test_case_name_numberV2.json', 'w'), sort_keys=True, indent=4)
 
 if __name__ == '__main__':
     trigger_path_list = get_trigger_path(PATH_PROJECTS, NAME_LIST)

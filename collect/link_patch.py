@@ -80,6 +80,10 @@ def get_link_patch():
 
     pickle.dump(res, output)
 
+    # print(re_name_number_func_list[1200])
+    # print(re_func_message_list[1200])
+    # print(re_patch_list[1200])
+
 
 if __name__ == '__main__':
     get_link_patch()

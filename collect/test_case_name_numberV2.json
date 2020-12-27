@@ -157,11 +157,6 @@
         "testStripLeadingHyphens",
         "testOrder"
     ],
-    "Cli_6": [
-        "test19383",
-        "testPrintUsage",
-        "testAutomaticUsage"
-    ],
     "Cli_9": [
         "testMissingOptionsException",
         "testMissingRequiredOptions"
@@ -695,10 +690,6 @@
         "testFormatErrorSpaceEndOfLine1",
         "testFormatErrorSpaceEndOfLine2"
     ],
-    "Closure_63": [
-        "testFormatErrorSpaceEndOfLine1",
-        "testFormatErrorSpaceEndOfLine2"
-    ],
     "Closure_66": [
         "testGetTypedPercent5",
         "testGetTypedPercent6"
@@ -850,34 +841,6 @@
     "Codec_7": [
         "testByteToStringVariations",
         "testRfc4648Section10Encode"
-    ],
-    "Collections_1": [
-        "testEntryIteratorSetValue2",
-        "testEntryIteratorSetValue3",
-        "testMapIteratorSetValue2",
-        "testMapIteratorSetValue3"
-    ],
-    "Collections_10": [
-        "testEmptyMapCompatibility",
-        "testFullMapCompatibility"
-    ],
-    "Collections_23": [
-        "testUnmodifiableTrie",
-        "testDecorateFactory"
-    ],
-    "Collections_24": [
-        "testDecorateFactory",
-        "testUnmodifiable"
-    ],
-    "Collections_4": [
-        "testPutWithList",
-        "testPutAll_KeyCollection",
-        "testPutWithSet"
-    ],
-    "Collections_7": [
-        "testKeySet2",
-        "testKeySet3",
-        "testKeySet4"
     ],
     "Compress_13": [
         "winzipBackSlashWorkaround",
@@ -1727,10 +1690,6 @@
         "testParseInto_monthDay_withDefaultYear_feb29",
         "testParseInto_monthDay_feb29",
         "testParseInto_monthOnly_parseEndYear"
-    ],
-    "Time_21": [
-        "testGetName_berlin",
-        "testGetShortName_berlin"
     ],
     "Time_22": [
         "testToPeriod_fixedZone",
