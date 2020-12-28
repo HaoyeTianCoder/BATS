@@ -71,16 +71,6 @@ class Experiment:
             self.test_vector = both_vector[2]
             self.patch_vector = both_vector[3]
 
-    def run(self):
-        self.load_test()
-
-        # dists_one = self.cal_all_simi(self.test_vector)
-        method_cluster = 'kmeans'
-        number_cluster = 40
-        clusters = self.cluster_dist(self.test_vector, method=method_cluster, number=number_cluster)
-
-        self.patch_dist(self.patch_vector, clusters, method_cluster, number_cluster)
-
 
     def test_patch_2vector(self, test_w2v='code2vec', patch_w2v='cc2vec'):
         all_test_name, all_patch_name, all_test_vector, all_patch_vector = [], [], [], []
@@ -145,7 +135,7 @@ class Experiment:
     #     dist0, dist1, dist2 = self.cluster(test_vector)
     #     return dist0, dist1, dist2
 
-    def cluster_dist(self, test_vector, method, number):
+    def cluster_test_dist(self, test_vector, method, number):
         scaler = Normalizer()
         X = pd.DataFrame(scaler.fit_transform(test_vector))
 
@@ -154,18 +144,18 @@ class Experiment:
         dists_one = [np.linalg.norm(vec - np.array(center_one)) for vec in np.array(X)]
 
         if method == 'kmeans':
-            kmeans = KMeans(n_clusters=number, random_state=8)
+            kmeans = KMeans(n_clusters=number, random_state=1)
             # kmeans.fit(np.array(test_vector))
             clusters = kmeans.fit_predict(X)
         elif method == 'dbscan':
-            db = DBSCAN(eps=0.1, min_samples=10)
+            db = DBSCAN(eps=0.5, min_samples=10)
             clusters = db.fit_predict(X)
             number = max(clusters)+2
         elif method == 'hier':
             hu = AgglomerativeClustering(n_clusters=number)
             clusters = hu.fit_predict(X)
         elif method == 'xmeans':
-            xmeans_instance = xmeans(X,)
+            xmeans_instance = xmeans(X, random_state=1)
             clusters = xmeans_instance.process().predict(X)
             number = max(clusters)+1
         elif method == 'ap':
@@ -186,7 +176,7 @@ class Experiment:
 
         if number <= 6:
             v = Visual(algorithm='PCA', number_cluster=number, method=method)
-            # v.visualize(plotX=X)
+            v.visualize(plotX=X)
 
         result_cluster = [dists_one]
         for i in range(number):
@@ -197,7 +187,7 @@ class Experiment:
             dist = [np.linalg.norm(vec - np.array(center)) for vec in np.array(cluster)]
             result_cluster.append(dist)
 
-        plt.boxplot(result_cluster, labels=['Original']+['Cluster'+str(i) for i in range(len(result_cluster)-1)] )
+        plt.boxplot(result_cluster, labels=['Original']+[str(i) for i in range(len(result_cluster)-1)] )
         plt.xlabel('Cluster')
         plt.ylabel('Distance to Center')
         plt.savefig('../fig/box_{}.png'.format(method))
@@ -221,7 +211,7 @@ class Experiment:
         print('CH: {}'.format(s2))
         print('DBI: {}'.format(s3))
 
-        n = 6
+        n = 1
         index = np.where(clusters==n)
         patch_name = np.array(self.patch_name)[index]
         test_name = np.array(self.test_name)[index]
@@ -232,7 +222,61 @@ class Experiment:
             print('test&patch:{}'.format(test_name[i]), end='    ')
             print('{}'.format(patch_name[i]))
 
-            # print('function:{}'.format(function_name[i]))
+            print('function:{}'.format(function_name[i]))
+
+    def predict(self, failed_test_index, new_patch):
+        scaler = Normalizer()
+        all_test_vector = scaler.fit_transform(self.test_vector)
+        all_patch_vector = scaler.fit_transform(self.patch_vector)
+
+        k = 10
+        dataset_test = np.delete(all_test_vector, failed_test_index, axis=0)
+        dataset_patch = np.delete(all_patch_vector, failed_test_index, axis=0)
+        for i in failed_test_index:
+            failed_test_vector = all_test_vector[i]
+            dists = []
+            # find the k most closest test vector
+            for i in range(len(dataset_test)):
+                simi_test_vec = dataset_test[i]
+                dist = np.linalg.norm(simi_test_vec - failed_test_vector)
+                dists.append([i, dist])
+            k_index = sorted(dists, key=lambda x:int(x[1]), reverse=False)[:k]
+            k_index = np.array([v[0] for v in k_index])
+
+            k_patch_vector = dataset_patch[k_index]
+            dist_k = []
+            for i in range(len(k_patch_vector)):
+                vec = k_patch_vector[i]
+                dist = np.linalg.norm(vec - new_patch)
+                dist_k.append(dist)
+
+            dist_mean = np.array(dist_k).mean()
+            dist_min = np.array(dist_k).min()
+
+            print('mean:{}  min:{}'.format(dist_mean, dist_min))
+
+
+
+
+
+    def run(self):
+        # load data and vector
+        self.load_test()
+
+        '''
+        # validate hypothesis
+        method_cluster = 'kmeans'
+        number_cluster = 40
+        clusters = self.cluster_test_dist(self.test_vector, method=method_cluster, number=number_cluster)
+        self.patch_dist(self.patch_vector, clusters, method_cluster, number_cluster)
+        '''
+
+        # predict
+        project_id = 'Closure_49'
+        failed_test_index = [i for i in range(len(self.test_name)) if self.test_name[i].startswith(project_id)]
+        new_patch = '/Users/haoye.tian/Documents/University/data/PatchCollectingV1/ConFix/Incorrect/Math/56'
+        label = 'Correct'
+        self.predict(failed_test_index, new_patch)
 
 if __name__ == '__main__':
     config = Config()
