@@ -4,6 +4,10 @@ from representation.code2vector import Code2vector
 import pickle
 from representation.CC2Vec import lmg_cc2ftr_interface
 import os
+from bert_serving.client import BertClient
+from gensim.models import word2vec,Doc2Vec
+from nltk.tokenize import word_tokenize
+from sklearn.metrics.pairwise import *
 # Imports and method code2vec
 from representation.code2vector import Code2vector
 from representation.code2vec.vocabularies import VocabType
@@ -15,7 +19,7 @@ MODEL_MODEL_LOAD_PATH = '/Users/haoye.tian/Documents/University/data/models/java
 MODEL_CC2Vec = '../representation/CC2Vec/'
 
 class Word2vector:
-    def __init__(self, test_w2v, patch_w2v, path_patch_root=None):
+    def __init__(self, test_w2v=None, patch_w2v=None, path_patch_root=None):
         # self.w2v = word2vec
         self.test_w2v = test_w2v
         self.patch_w2v = patch_w2v
@@ -32,6 +36,9 @@ class Word2vector:
             # =======================
         if self.patch_w2v == 'cc2vec':
             self.dictionary = pickle.load(open(MODEL_CC2Vec+'dict.pkl', 'rb'))
+        elif self.patch_w2v == 'bert':
+            self.m = BertClient(check_length=False, check_version=False)
+
 
     @staticmethod
     def load_model_code2vec_dynamically(config: Config) -> Code2VecModelBase:
@@ -67,8 +74,12 @@ class Word2vector:
 
             multi_vector = []
             for path_patch_id in path_patch_ids:
-                learned_vector = lmg_cc2ftr_interface.learned_feature(path_patch_id, load_model=MODEL_CC2Vec + 'cc2ftr.pt', dictionary=self.dictionary)
-                multi_vector.append(list(learned_vector.flatten()))
+                if self.patch_w2v == 'cc2vec':
+                    learned_vector = lmg_cc2ftr_interface.learned_feature(path_patch_id, load_model=MODEL_CC2Vec + 'cc2ftr.pt', dictionary=self.dictionary)
+                    learned_vector = list(learned_vector.flatten())
+                elif self.patch_w2v == 'bert':
+                    learned_vector = self.learned_feature(path_patch_id, self.patch_w2v)
+                multi_vector.append(learned_vector)
             patch_vector = np.array(multi_vector).mean(axis=0)
         except Exception as e:
             raise
@@ -116,3 +127,153 @@ class Word2vector:
                 combined_vector = np.array(multi_vector).mean(axis=0)
                 patch_vector.append(combined_vector)
             return patch_vector
+
+    def convert_single_patch(self, path_patch):
+        multi_vector = []
+        patch = os.listdir(path_patch)
+        for part in patch:
+            p = os.path.join(path_patch, part)
+            learned_vector = lmg_cc2ftr_interface.learned_feature(p, load_model=MODEL_CC2Vec + 'cc2ftr.pt', dictionary=self.dictionary)
+            multi_vector.append(list(learned_vector.flatten()))
+
+        combined_vector = np.array(multi_vector).mean(axis=0)
+        return combined_vector
+
+    def learned_feature(self, path_patch, w2v):
+        try:
+            bugy_all = self.get_diff_files_frag(path_patch, type='patched')
+            patched_all = self.get_diff_files_frag(path_patch, type='buggy')
+        except Exception as e:
+            print('name: {}, exception: {}'.format(path_patch, e))
+            return []
+
+        # tokenize word
+        bugy_all_token = word_tokenize(bugy_all)
+        patched_all_token = word_tokenize(patched_all)
+
+        try:
+            bug_vec, patched_vec = self.output_vec(w2v, bugy_all_token, patched_all_token)
+        except Exception as e:
+            print('name: {}, exception: {}'.format(path_patch, e))
+            return []
+
+        bug_vec = bug_vec.reshape((1, -1))
+        patched_vec = patched_vec.reshape((1, -1))
+
+        # embedding feature cross
+        subtract, multiple, cos, euc = self.multi_diff_features(bug_vec, patched_vec)
+        # embedding = subtract
+
+        embedding = np.hstack((subtract, multiple, cos, euc,))
+
+        return list(embedding.flatten())
+
+    def subtraction(self, buggy, patched):
+        return buggy - patched
+
+    def multiplication(self, buggy, patched):
+        return buggy * patched
+
+    def cosine_similarity(self, buggy, patched):
+        return paired_cosine_distances(buggy, patched)
+
+    def euclidean_similarity(self, buggy, patched):
+        return paired_euclidean_distances(buggy, patched)
+
+    def multi_diff_features(self, buggy, patched):
+        subtract = self.subtraction(buggy, patched)
+        multiple = self.multiplication(buggy, patched)
+        cos = self.cosine_similarity(buggy, patched).reshape((1, 1))
+        euc = self.euclidean_similarity(buggy, patched).reshape((1, 1))
+
+        return subtract, multiple, cos, euc
+
+    def output_vec(self, w2v, bugy_all_token, patched_all_token):
+
+        if w2v == 'Bert':
+            bug_vec = self.m.encode([bugy_all_token], is_tokenized=True)
+            patched_vec = self.m.encode([patched_all_token], is_tokenized=True)
+        elif w2v == 'Doc':
+            # m = Doc2Vec.load('../model/doc_file_64d.model')
+            m = Doc2Vec.load('../model/Doc_frag_ASE.model')
+            bug_vec = m.infer_vector(bugy_all_token, alpha=0.025, steps=300)
+            patched_vec = m.infer_vector(patched_all_token, alpha=0.025, steps=300)
+        else:
+            print('wrong model')
+            raise
+
+        return bug_vec, patched_vec
+
+    def get_diff_files_frag(self, path_patch, type):
+        with open(path_patch, 'r') as file:
+            lines = ''
+            p = r"([^\w_])"
+            flag = True
+            # try:
+            for line in file:
+                line = line.strip()
+                if '*/' in line:
+                    flag = True
+                    continue
+                if flag == False:
+                    continue
+                if line != '':
+                    if line.startswith('@@') or line.startswith('diff') or line.startswith('index'):
+                        continue
+                    if line.startswith('Index') or line.startswith('==='):
+                        continue
+                    elif '/*' in line:
+                        flag = False
+                        continue
+                    elif type == 'buggy':
+                        if line.startswith('---') or line.startswith('PATCH_DIFF_ORIG=---'):
+                            continue
+                            # line = re.split(pattern=p, string=line.split(' ')[1].strip())
+                            # lines += ' '.join(line) + ' '
+                        elif line.startswith('-'):
+                            if line[1:].strip().startswith('//'):
+                                continue
+                            line = re.split(pattern=p, string=line[1:].strip())
+                            line = [x.strip() for x in line]
+                            while '' in line:
+                                line.remove('')
+                            line = ' '.join(line)
+                            lines += line.strip() + ' '
+                        elif line.startswith('+'):
+                            # do nothing
+                            pass
+                        else:
+                            line = re.split(pattern=p, string=line.strip())
+                            line = [x.strip() for x in line]
+                            while '' in line:
+                                line.remove('')
+                            line = ' '.join(line)
+                            lines += line.strip() + ' '
+                    elif type == 'patched':
+                        if line.startswith('+++'):
+                            continue
+                            # line = re.split(pattern=p, string=line.split(' ')[1].strip())
+                            # lines += ' '.join(line) + ' '
+                        elif line.startswith('+'):
+                            if line[1:].strip().startswith('//'):
+                                continue
+                            line = re.split(pattern=p, string=line[1:].strip())
+                            line = [x.strip() for x in line]
+                            while '' in line:
+                                line.remove('')
+                            line = ' '.join(line)
+                            lines += line.strip() + ' '
+                        elif line.startswith('-'):
+                            # do nothing
+                            pass
+                        else:
+                            line = re.split(pattern=p, string=line.strip())
+                            line = [x.strip() for x in line]
+                            while '' in line:
+                                line.remove('')
+                            line = ' '.join(line)
+                            lines += line.strip() + ' '
+            # except Exception:
+            #     print(Exception)
+            #     return 'Error'
+            return lines
