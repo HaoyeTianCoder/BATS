@@ -123,6 +123,27 @@ def get_single_func(name_func_list):
     return name_single_func
 
 
+def get_single_error_message(error_list, ind):
+    """
+    return single error log.
+    """
+    for i in range(ind, len(error_list)):
+        if error_list[i].startswith('at'):
+            ind_start = i
+            break
+    for i in range(ind_start+1, len(error_list)):
+        if i == len(error_list) - 1:
+            ind_end = i+1
+            break
+        if error_list[i].startswith('at'):
+            continue
+        else:
+            ind_end = i
+            break
+    error_message = error_list[ind_start: ind_end][::-1]
+    return error_message
+
+
 def get_error_message(error_path):
     """
     return error message list.
@@ -131,31 +152,14 @@ def get_error_message(error_path):
     f = open(error_path, 'r')
     lines = f.readlines()
 
-    ind_start = 0
     ind_list = [i for i in range(len(lines)) if '---' in lines[i]]
-    if len(ind_list) == 1:
-        ind_start = ind_start + 2
-        error_message = lines[ind_start:]
-        error_message_ = [message.strip() for message in error_message]
-        error_message = error_message_[::-1]
-        error_message_list.append(error_message)
-        return error_message_list
-    elif len(ind_list) > 1:
-        for i in range(1, len(ind_list)):
-            ind_start = ind_start + 2
-            ind_end = ind_list[i]
-            error_message = lines[ind_start: ind_end]
-            error_message_ = [message.strip() for message in error_message]
-            error_message = error_message_[::-1]
-            error_message_list.append(error_message)
-            ind_start = ind_end
-        ind_start = ind_start+2
-        error_message = lines[ind_start:]
-        error_message_ = [message.strip() for message in error_message]
-        error_message = error_message_[::-1]
-        error_message_list.append(error_message)
+    error_message = [message.strip() for message in lines]
 
-        return error_message_list
+    for ind in ind_list:
+        error_log = get_single_error_message(error_message, ind)
+        error_message_list.append(error_log)
+
+    return error_message_list
 
 
 def get_func_message(func, buggy_path):
