@@ -14,15 +14,17 @@ from pyclustering.cluster.xmeans import xmeans
 import scipy.cluster.hierarchy as h
 from experiment.visualize import Visual
 from sklearn.metrics import silhouette_score ,calinski_harabasz_score,davies_bouldin_score
+from scipy.spatial import distance
 
 class Experiment:
-    def __init__(self, path_test, path_patch_root, path_test_function_patch_vector):
+    def __init__(self, path_test, path_patch_root, path_test_function_patch_vector, patch_w2v):
         self.path_test = path_test
         # self.path_test_vector = path_test_vector
         # self.path_patch_vector = path_patch_vector
         self.path_patch_root = path_patch_root
 
         self.path_test_function_patch_vector = path_test_function_patch_vector
+        self.patch_w2v = patch_w2v
 
         self.test_data = None
         # self.patch_data = None
@@ -60,7 +62,7 @@ class Experiment:
         else:
             # test_vector = self.test2vector(word2v='code2vec')
             # patch_vector = self.patch2vector(word2v='cc2vec')
-            all_test_name, all_patch_name, all_test_vector, all_patch_vector = self.test_patch_2vector(test_w2v='code2vec', patch_w2v='cc2vec')
+            all_test_name, all_patch_name, all_test_vector, all_patch_vector = self.test_patch_2vector(test_w2v='code2vec', patch_w2v=self.patch_w2v)
 
             both_vector = [all_test_name, all_patch_name, all_test_vector, all_patch_vector]
             pickle.dump(both_vector, open(self.path_test_function_patch_vector, 'wb'))
@@ -100,7 +102,7 @@ class Experiment:
 
 
     def test2vector(self, word2v='code2vec'):
-        w2v = Word2vector(word2v, self.path_patch_root)
+        w2v = Word2vector(test_w2v=word2v, path_patch_root=self.path_patch_root)
         test_function = self.test_data[3]
         test_name = self.test_data[0]
         self.test_vector = w2v.convert(test_name, test_function)
@@ -109,7 +111,7 @@ class Experiment:
         # np.save(self.path_test_vector, self.test_vector)
 
     def patch2vector(self, word2v='cc2vec'):
-        w2v = Word2vector(word2v, self.path_patch_root)
+        w2v = Word2vector(patch_w2v=word2v, path_patch_root=self.path_patch_root)
         # find corresponding patch id through test case pickle
         test_name = self.test_data[0]
         patch_id = self.test_data[4]
@@ -224,40 +226,158 @@ class Experiment:
 
             print('function:{}'.format(function_name[i]))
 
-    def predict(self, failed_test_index, new_patch):
+    def get_patch_list(self, failed_test_index, k=10):
         scaler = Normalizer()
         all_test_vector = scaler.fit_transform(self.test_vector)
-        all_patch_vector = scaler.fit_transform(self.patch_vector)
 
-        k = 10
+        scaler_patch = scaler.fit(self.patch_vector)
+        all_patch_vector = scaler_patch.transform(self.patch_vector)
+
         dataset_test = np.delete(all_test_vector, failed_test_index, axis=0)
         dataset_patch = np.delete(all_patch_vector, failed_test_index, axis=0)
+        dataset_name = np.delete(self.test_name, failed_test_index, axis=0)
+        patch_list = []
         for i in failed_test_index:
+            # k = 10
             failed_test_vector = all_test_vector[i]
             dists = []
             # find the k most closest test vector
-            for i in range(len(dataset_test)):
-                simi_test_vec = dataset_test[i]
-                dist = np.linalg.norm(simi_test_vec - failed_test_vector)
-                dists.append([i, dist])
-            k_index = sorted(dists, key=lambda x:int(x[1]), reverse=False)[:k]
+            for j in range(len(dataset_test)):
+                simi_test_vec = dataset_test[j]
+                # dist = np.linalg.norm(simi_test_vec - failed_test_vector)
+                dist = distance.cosine(simi_test_vec, failed_test_vector)
+                dists.append([j, dist])
+            k_index = sorted(dists, key=lambda x:float(x[1]), reverse=False)[:k]
             k_index = np.array([v[0] for v in k_index])
 
+            # check
+            print('{}'.format(self.test_name[i]))
+            print('similar test case:')
+            k_simi_test = dataset_name[k_index]
+            for t in k_simi_test:
+                print('{}'.format(t))
+            print('--------------')
+
             k_patch_vector = dataset_patch[k_index]
+            patch_list.append(k_patch_vector)
+        return patch_list, scaler_patch
+
+    def predict(self, patch_list, new_patch, scaler_patch):
+        new_patch = scaler_patch.transform(new_patch.reshape((1, -1)))
+        dist_final = []
+        # patch list includes multiple patches for multi failed test cases
+        for y in range(len(patch_list)):
+            patches = patch_list[y]
             dist_k = []
-            for i in range(len(k_patch_vector)):
-                vec = k_patch_vector[i]
-                dist = np.linalg.norm(vec - new_patch)
+            for z in range(len(patches)):
+                vec = patches[z]
+                # dist = np.linalg.norm(vec - new_patch)
+                dist = distance.cosine(vec, new_patch)
                 dist_k.append(dist)
 
             dist_mean = np.array(dist_k).mean()
             dist_min = np.array(dist_k).min()
 
-            print('mean:{}  min:{}'.format(dist_mean, dist_min))
+            # print('mean:{}  min:{}'.format(dist_mean, dist_min))
+            dist_final.append(dist_mean)
 
+        dist_final = np.array(dist_final).mean()
+        return dist_final
 
+    def predict_projects(self, ):
+        projects = {'Chart': 26, 'Lang': 65, 'Time': 27, 'Closure': 176,  'Math': 106}
+        projects = {'Chart': 26}
+        for project, number in projects.items():
+            print('Testing {}'.format(project))
+            for id in range(1, number + 1):
+                recommend_list = []
+                print('{}_{} ------'.format(project, id))
+                # extract failed test index according to bug_id
+                project_id = '_'.join([project, str(id)])
+                failed_test_index = [i for i in range(len(self.test_name)) if self.test_name[i].startswith(project_id+'-')]
+                if failed_test_index == []:
+                    print('No failed tests of this bugid found:{}'.format(project_id))
+                    continue
+                # find corresponding patches generated by tools
+                path_patch_sliced = '/Users/haoye.tian/Documents/University/data/PatchCollectingV1ISSTA_sliced'
+                available_path_patch = self.find_path_patch(path_patch_sliced, project_id)
+                if available_path_patch == []:
+                    print('No tool patches found:{}'.format(project_id))
+                    continue
 
+                # get patch list for failed test case
+                patch_list, scaler_patch = self.get_patch_list(failed_test_index, k=5)
 
+                # return vector for path patch
+                name_list, label_list, vector_list = self.vector4patch(available_path_patch)
+
+                for i in range(len(name_list)):
+                    name = name_list[i]
+                    label = label_list[i]
+                    vector_new_patch = vector_list[i]
+                    dist = self.predict(patch_list, vector_new_patch, scaler_patch)
+                    score = 1 - dist
+                    # record
+                    recommend_list.append([name, label, score])
+                print('{} recommend list:'.format(project))
+                recommend_list = pd.DataFrame(sorted(recommend_list, key=lambda x: x[2], reverse=True))
+                Correct = recommend_list[recommend_list[1] == 1]
+                Incorrect = recommend_list[recommend_list[1] == 0]
+                plt.bar(Correct[:].index.tolist(), Correct[:][2], color="red")
+                plt.bar(Incorrect[:].index.tolist(), Incorrect[:][2], color="lightgrey")
+                plt.xticks(recommend_list[:].index.tolist(), recommend_list[:][0].tolist())
+                plt.xlabel('patchid by tool')
+                plt.ylabel('Score of patch')
+                # plt.savefig('../fig/recommend_{}'.format(project_id))
+                plt.cla()
+                plt.close()
+                # plt.show()
+
+    def find_path_patch(self, path_patch_sliced, project_id):
+        available_path_patch = []
+
+        project = project_id.split('_')[0]
+        id = project_id.split('_')[1]
+
+        tools = os.listdir(path_patch_sliced)
+        for label in ['Correct', 'Incorrect']:
+            for tool in tools:
+                path_bugid = os.path.join(path_patch_sliced, tool, label, project, id)
+                if os.path.exists(path_bugid):
+                    patches = os.listdir(path_bugid)
+                    for p in patches:
+                        path_patch = os.path.join(path_bugid, p)
+                        available_path_patch.append(path_patch)
+        return available_path_patch
+
+    def vector4patch(self, available_path_patch):
+        w2v = Word2vector(patch_w2v=self.patch_w2v,)
+        vector_list = []
+        label_list = []
+        name_list = []
+        for p in available_path_patch:
+            # label
+            if 'Correct' in p:
+                label_list.append(1)
+                label = 'Correct'
+            elif 'Incorrect' in p:
+                label_list.append(0)
+                label = 'Incorrect'
+            else:
+                raise Exception('wrong label')
+
+            # name
+            tool = p.split('/')[-5]
+            patchid = p.split('/')[-1]
+            # name = tool + '-' + label + '-' + patchid
+            name = tool[:3] + patchid.replace('patch','')
+            name_list.append(name)
+
+            # vector
+            vector = w2v.convert_single_patch(p)
+            vector_list.append(vector)
+
+        return name_list, label_list, vector_list
 
     def run(self):
         # load data and vector
@@ -272,21 +392,16 @@ class Experiment:
         '''
 
         # predict
-        project_id = 'Closure_49'
-        failed_test_index = [i for i in range(len(self.test_name)) if self.test_name[i].startswith(project_id)]
-        new_patch = '/Users/haoye.tian/Documents/University/data/PatchCollectingV1/ConFix/Incorrect/Math/56'
-        label = 'Correct'
-        self.predict(failed_test_index, new_patch)
+        self.predict_projects()
+
 
 if __name__ == '__main__':
     config = Config()
     path_test = config.path_test
-    # path_test_vector = config.path_test_vector
-
     path_patch_root = config.path_patch_root
-    # path_patch_vector = config.path_patch_vector
+    patch_w2v = config.patch_w2v
 
     path_test_function_patch_vector = config.path_test_function_patch_vector
 
-    e = Experiment(path_test, path_patch_root, path_test_function_patch_vector)
+    e = Experiment(path_test, path_patch_root, path_test_function_patch_vector, patch_w2v)
     e.run()
