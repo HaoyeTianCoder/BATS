@@ -5,7 +5,7 @@ import pickle
 from representation.CC2Vec import lmg_cc2ftr_interface
 import os
 from bert_serving.client import BertClient
-from gensim.models import word2vec,Doc2Vec
+# from gensim.models import word2vec, Doc2Vec
 from nltk.tokenize import word_tokenize
 from sklearn.metrics.pairwise import *
 # Imports and method code2vec
@@ -14,6 +14,7 @@ from representation.code2vec.vocabularies import VocabType
 from representation.code2vec.config import Config
 from representation.code2vec.model_base import Code2VecModelBase
 import numpy as np
+import re
 
 MODEL_MODEL_LOAD_PATH = '/Users/haoye.tian/Documents/University/data/models/java14_model/saved_model_iter8.release'
 MODEL_CC2Vec = '../representation/CC2Vec/'
@@ -82,9 +83,9 @@ class Word2vector:
                 multi_vector.append(learned_vector)
             patch_vector = np.array(multi_vector).mean(axis=0)
         except Exception as e:
-            raise
+            raise e
 
-        return test_vector, patch_vector
+        return list(test_vector), list(patch_vector)
 
     def convert(self, test_name, data_text):
         if self.test_w2v == 'code2vec':
@@ -129,23 +130,34 @@ class Word2vector:
             return patch_vector
 
     def convert_single_patch(self, path_patch):
-        multi_vector = []
-        patch = os.listdir(path_patch)
-        for part in patch:
-            p = os.path.join(path_patch, part)
-            learned_vector = lmg_cc2ftr_interface.learned_feature(p, load_model=MODEL_CC2Vec + 'cc2ftr.pt', dictionary=self.dictionary)
-            multi_vector.append(list(learned_vector.flatten()))
+        if self.patch_w2v == 'cc2vec':
+            multi_vector = []
+            patch = os.listdir(path_patch)
+            for part in patch:
+                p = os.path.join(path_patch, part)
+                learned_vector = lmg_cc2ftr_interface.learned_feature(p, load_model=MODEL_CC2Vec + 'cc2ftr.pt', dictionary=self.dictionary)
+                multi_vector.append(list(learned_vector.flatten()))
 
-        combined_vector = np.array(multi_vector).mean(axis=0)
-        return combined_vector
+            combined_vector = np.array(multi_vector).mean(axis=0)
+            return combined_vector
+        elif self.patch_w2v == 'bert':
+            multi_vector = []
+            patch = os.listdir(path_patch)
+            for part in patch:
+                p = os.path.join(path_patch, part)
+                learned_vector = self.learned_feature(p, self.patch_w2v)
+                multi_vector.append(learned_vector)
+
+            combined_vector = np.array(multi_vector).mean(axis=0)
+            return combined_vector
 
     def learned_feature(self, path_patch, w2v):
         try:
             bugy_all = self.get_diff_files_frag(path_patch, type='patched')
             patched_all = self.get_diff_files_frag(path_patch, type='buggy')
         except Exception as e:
-            print('name: {}, exception: {}'.format(path_patch, e))
-            return []
+            print('patch: {}, exception: {}'.format(path_patch, e))
+            raise e
 
         # tokenize word
         bugy_all_token = word_tokenize(bugy_all)
@@ -154,8 +166,8 @@ class Word2vector:
         try:
             bug_vec, patched_vec = self.output_vec(w2v, bugy_all_token, patched_all_token)
         except Exception as e:
-            print('name: {}, exception: {}'.format(path_patch, e))
-            return []
+            print('patch: {}, exception: {}'.format(path_patch, e))
+            raise e
 
         bug_vec = bug_vec.reshape((1, -1))
         patched_vec = patched_vec.reshape((1, -1))
@@ -190,10 +202,10 @@ class Word2vector:
 
     def output_vec(self, w2v, bugy_all_token, patched_all_token):
 
-        if w2v == 'Bert':
+        if w2v == 'bert':
             bug_vec = self.m.encode([bugy_all_token], is_tokenized=True)
             patched_vec = self.m.encode([patched_all_token], is_tokenized=True)
-        elif w2v == 'Doc':
+        elif w2v == 'doc':
             # m = Doc2Vec.load('../model/doc_file_64d.model')
             m = Doc2Vec.load('../model/Doc_frag_ASE.model')
             bug_vec = m.infer_vector(bugy_all_token, alpha=0.025, steps=300)
