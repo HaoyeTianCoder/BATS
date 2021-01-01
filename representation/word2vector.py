@@ -210,10 +210,10 @@ class Word2vector:
         patched_vec = patched_vec.reshape((1, -1))
 
         # embedding feature cross
-        subtract, multiple, cos, euc = self.multi_diff_features(bug_vec, patched_vec)
+        # subtract, multiple, cos, euc = self.multi_diff_features(bug_vec, patched_vec)
+        # embedding = np.hstack((subtract, multiple, cos, euc,))
 
         embedding = self.subtraction(bug_vec, patched_vec)
-        # embedding = np.hstack((subtract, multiple, cos, euc,))
 
         return list(embedding.flatten())
 
