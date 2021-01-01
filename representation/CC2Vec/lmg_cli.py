@@ -56,26 +56,41 @@ def get_patch_cc2v(patch):
                 if line == '+++':
                     newline = 'ppp <nl> '
                     lines += newline
-                elif (line.startswith('---') or line.startswith('PATCH_DIFF_ORIG=---')) and not line.startswith('-----'):
+                elif (line.startswith('--- ') or line.startswith('-- ') or line.startswith('PATCH_DIFF_ORIG=---')) and not line.startswith('-----'):
                     # newline = re.split(pattern=p,string=line.split(' ')[1].strip())
                     # newline = 'mmm ' + ' '.join(newline) + ' <nl> '
 
                     # set null
                     newline = 'mmm <nl> '
                     lines += newline
-                elif line.startswith('+++'):
+                elif line.startswith('+++ ') or line.startswith('++ '):
                     # newline = re.split(pattern=p, string=line.split(' ')[1].strip())
                     # newline = 'ppp ' + ' '.join(newline) + ' <nl> '
 
                     # set null
                     newline = 'ppp <nl> '
                     lines += newline
+                elif (line.startswith('-') or line.startswith('+')) and line[1:].strip() == '':
+                    # delete meaningless changes
+                        continue
                 else:
                     newline = re.split(pattern=p, string=line.strip())
-                    newline = [x.strip() for x in newline]
-                    while '' in newline:
-                        newline.remove('')
-                    newline = ' '.join(newline) + ' <nl> '
+                    final = []
+                    for s in newline:
+                        s = s.strip()
+                        if s == '' or s == ' ':
+                            continue
+                        # CamelCase to underscore_case
+                        cases = re.split(pattern='(?=[A-Z0-9])', string=s)
+                        for c in cases:
+                            if c == '' or c == ' ':
+                                continue
+                            final.append(c)
+
+                    # newline = [x.strip() for x in newline]
+                    # while '' in newline:
+                    #     newline.remove('')
+                    newline = ' '.join(final) + ' <nl> '
                     lines += newline
         return lines
 

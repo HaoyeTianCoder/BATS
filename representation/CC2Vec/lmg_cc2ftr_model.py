@@ -179,7 +179,8 @@ class HierachicalRNN(nn.Module):
         nn = self.standard_neural_network_layer(added_code=x_added_code, removed_code=x_removed_code)
         ntn = self.neural_network_tensor_layer(added_code=x_added_code, removed_code=x_removed_code)
 
-        x_diff_code = torch.cat((subtract, multiple, cos, euc, nn, ntn), dim=1)
+        # x_diff_code = torch.cat((subtract, multiple, cos, euc, nn, ntn), dim=1)
+        x_diff_code = torch.cat((subtract,), dim=1)
         return x_diff_code
 
     def forward_commit_embeds(self, added_code, removed_code, hid_state_hunk, hid_state_sent, hid_state_word):

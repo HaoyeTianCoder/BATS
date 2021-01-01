@@ -192,17 +192,15 @@ class Word2vector:
 
     def learned_feature(self, path_patch, w2v):
         try:
-            bugy_all = self.get_diff_files_frag(path_patch, type='buggy')
-            patched_all = self.get_diff_files_frag(path_patch, type='patched')
-        except Exception as e:
-            # print('patch: {}, exception: {}'.format(path_patch, e))
-            raise e
+            # bugy_all = self.get_diff_files_frag(path_patch, type='buggy')
+            # patched_all = self.get_diff_files_frag(path_patch, type='patched')
+            bugy_all = self.get_only_change(path_patch, type='buggy')
+            patched_all = self.get_only_change(path_patch, type='patched')
 
-        # tokenize word
-        bugy_all_token = word_tokenize(bugy_all)
-        patched_all_token = word_tokenize(patched_all)
+            # tokenize word
+            bugy_all_token = word_tokenize(bugy_all)
+            patched_all_token = word_tokenize(patched_all)
 
-        try:
             bug_vec, patched_vec = self.output_vec(w2v, bugy_all_token, patched_all_token)
         except Exception as e:
             # print('patch: {}, exception: {}'.format(path_patch, e))
@@ -213,9 +211,9 @@ class Word2vector:
 
         # embedding feature cross
         subtract, multiple, cos, euc = self.multi_diff_features(bug_vec, patched_vec)
-        # embedding = subtract
 
-        embedding = np.hstack((subtract, multiple, cos, euc,))
+        embedding = self.subtraction(bug_vec, patched_vec)
+        # embedding = np.hstack((subtract, multiple, cos, euc,))
 
         return list(embedding.flatten())
 
@@ -242,8 +240,15 @@ class Word2vector:
     def output_vec(self, w2v, bugy_all_token, patched_all_token):
 
         if w2v == 'bert':
-            bug_vec = self.m.encode([bugy_all_token], is_tokenized=True)
-            patched_vec = self.m.encode([patched_all_token], is_tokenized=True)
+            if bugy_all_token == []:
+                bug_vec = np.zeros((1, 1024))
+            else:
+                bug_vec = self.m.encode([bugy_all_token], is_tokenized=True)
+
+            if patched_all_token == []:
+                patched_vec = np.zeros((1, 1024))
+            else:
+                patched_vec = self.m.encode([patched_all_token], is_tokenized=True)
         elif w2v == 'doc':
             # m = Doc2Vec.load('../model/doc_file_64d.model')
             m = Doc2Vec.load('../model/Doc_frag_ASE.model')
@@ -274,10 +279,20 @@ class Word2vector:
                             if line[1:].strip().startswith('//'):
                                 continue
                             line = re.split(pattern=p, string=line[1:].strip())
-                            line = [x.strip() for x in line]
-                            while '' in line:
-                                line.remove('')
-                            line = ' '.join(line)
+
+                            final = []
+                            for s in line:
+                                s = s.strip()
+                                if s == '' or s == ' ':
+                                    continue
+                                # CamelCase to underscore_case
+                                cases = re.split(pattern='(?=[A-Z0-9])', string=s)
+                                for c in cases:
+                                    if c == '' or c == ' ':
+                                        continue
+                                    final.append(c)
+
+                            line = ' '.join(final)
                             lines += line.strip() + ' '
                         else:
                             # do nothing
@@ -293,10 +308,18 @@ class Word2vector:
                             if line[1:].strip().startswith('//'):
                                 continue
                             line = re.split(pattern=p, string=line[1:].strip())
-                            line = [x.strip() for x in line]
-                            while '' in line:
-                                line.remove('')
-                            line = ' '.join(line)
+                            final = []
+                            for s in line:
+                                s = s.strip()
+                                if s == '' or s == ' ':
+                                    continue
+                                # CamelCase to underscore_case
+                                cases = re.split(pattern='(?=[A-Z0-9])', string=s)
+                                for c in cases:
+                                    if c == '' or c == ' ':
+                                        continue
+                                    final.append(c)
+                            line = ' '.join(final)
                             lines += line.strip() + ' '
                         else:
                             # do nothing
@@ -335,20 +358,36 @@ class Word2vector:
                             if line[1:].strip().startswith('//'):
                                 continue
                             line = re.split(pattern=p, string=line[1:].strip())
-                            line = [x.strip() for x in line]
-                            while '' in line:
-                                line.remove('')
-                            line = ' '.join(line)
+                            final = []
+                            for s in line:
+                                s = s.strip()
+                                if s == '' or s == ' ':
+                                    continue
+                                # CamelCase to underscore_case
+                                cases = re.split(pattern='(?=[A-Z0-9])', string=s)
+                                for c in cases:
+                                    if c == '' or c == ' ':
+                                        continue
+                                    final.append(c)
+                            line = ' '.join(final)
                             lines += line.strip() + ' '
                         elif line.startswith('+'):
                             # do nothing
                             pass
                         else:
                             line = re.split(pattern=p, string=line.strip())
-                            line = [x.strip() for x in line]
-                            while '' in line:
-                                line.remove('')
-                            line = ' '.join(line)
+                            final = []
+                            for s in line:
+                                s = s.strip()
+                                if s == '' or s == ' ':
+                                    continue
+                                # CamelCase to underscore_case
+                                cases = re.split(pattern='(?=[A-Z0-9])', string=s)
+                                for c in cases:
+                                    if c == '' or c == ' ':
+                                        continue
+                                    final.append(c)
+                            line = ' '.join(final)
                             lines += line.strip() + ' '
                     elif type == 'patched':
                         if line.startswith('+++ ') or line.startswith('++ '):
@@ -361,20 +400,36 @@ class Word2vector:
                             if line[1:].strip().startswith('//'):
                                 continue
                             line = re.split(pattern=p, string=line[1:].strip())
-                            line = [x.strip() for x in line]
-                            while '' in line:
-                                line.remove('')
-                            line = ' '.join(line)
+                            final = []
+                            for s in line:
+                                s = s.strip()
+                                if s == '' or s == ' ':
+                                    continue
+                                # CamelCase to underscore_case
+                                cases = re.split(pattern='(?=[A-Z0-9])', string=s)
+                                for c in cases:
+                                    if c == '' or c == ' ':
+                                        continue
+                                    final.append(c)
+                            line = ' '.join(final)
                             lines += line.strip() + ' '
                         elif line.startswith('-'):
                             # do nothing
                             pass
                         else:
                             line = re.split(pattern=p, string=line.strip())
-                            line = [x.strip() for x in line]
-                            while '' in line:
-                                line.remove('')
-                            line = ' '.join(line)
+                            final = []
+                            for s in line:
+                                s = s.strip()
+                                if s == '' or s == ' ':
+                                    continue
+                                # CamelCase to underscore_case
+                                cases = re.split(pattern='(?=[A-Z0-9])', string=s)
+                                for c in cases:
+                                    if c == '' or c == ' ':
+                                        continue
+                                    final.append(c)
+                            line = ' '.join(final)
                             lines += line.strip() + ' '
             # except Exception:
             #     print(Exception)
