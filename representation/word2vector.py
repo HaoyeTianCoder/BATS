@@ -80,12 +80,28 @@ class Word2vector:
                     learned_vector = list(learned_vector.flatten())
                 elif self.patch_w2v == 'bert':
                     learned_vector = self.learned_feature(path_patch_id, self.patch_w2v)
+                elif self.patch_w2v == 'str':
+                    learned_vector = self.extract_text(path_patch_id, )
                 multi_vector.append(learned_vector)
-            patch_vector = np.array(multi_vector).mean(axis=0)
+            # patch_vector = np.array(multi_vector).mean(axis=0)
+            if self.patch_w2v == 'str':
+                patch_vector = ''
+                for s in multi_vector:
+                    patch_vector += s
+                patch_vector = [patch_vector]
+            else:
+                patch_vector = np.array(multi_vector).sum(axis=0)
         except Exception as e:
             raise e
 
-        return list(test_vector), list(patch_vector)
+        if self.patch_w2v == 'str':
+            if patch_vector == ['']:
+                raise Exception('null patch string')
+            return test_vector, patch_vector
+        else:
+            if test_vector.size == 0 or patch_vector.size == 0:
+                raise Exception('null vector')
+            return test_vector, patch_vector
 
     def convert(self, test_name, data_text):
         if self.test_w2v == 'code2vec':
@@ -130,33 +146,56 @@ class Word2vector:
             return patch_vector
 
     def convert_single_patch(self, path_patch):
-        if self.patch_w2v == 'cc2vec':
-            multi_vector = []
-            patch = os.listdir(path_patch)
-            for part in patch:
-                p = os.path.join(path_patch, part)
-                learned_vector = lmg_cc2ftr_interface.learned_feature(p, load_model=MODEL_CC2Vec + 'cc2ftr.pt', dictionary=self.dictionary)
-                multi_vector.append(list(learned_vector.flatten()))
+        try:
+            if self.patch_w2v == 'cc2vec':
+                multi_vector = []
+                patch = os.listdir(path_patch)
+                for part in patch:
+                    p = os.path.join(path_patch, part)
+                    learned_vector = lmg_cc2ftr_interface.learned_feature(p, load_model=MODEL_CC2Vec + 'cc2ftr.pt', dictionary=self.dictionary)
+                    multi_vector.append(list(learned_vector.flatten()))
+                combined_vector = np.array(multi_vector).sum(axis=0)
 
-            combined_vector = np.array(multi_vector).mean(axis=0)
-            return combined_vector
-        elif self.patch_w2v == 'bert':
-            multi_vector = []
-            patch = os.listdir(path_patch)
-            for part in patch:
-                p = os.path.join(path_patch, part)
-                learned_vector = self.learned_feature(p, self.patch_w2v)
-                multi_vector.append(learned_vector)
+            elif self.patch_w2v == 'bert':
+                multi_vector = []
+                patch = os.listdir(path_patch)
+                for part in patch:
+                    p = os.path.join(path_patch, part)
+                    learned_vector = self.learned_feature(p, self.patch_w2v)
+                    multi_vector.append(learned_vector)
+                combined_vector = np.array(multi_vector).sum(axis=0)
 
-            combined_vector = np.array(multi_vector).mean(axis=0)
+            elif self.patch_w2v == 'str':
+                multi_vector = []
+                patch = os.listdir(path_patch)
+                for part in patch:
+                    p = os.path.join(path_patch, part)
+                    learned_vector = self.extract_text(p, )
+                    multi_vector.append(learned_vector)
+                combined_vector = ''
+                for s in multi_vector:
+                    combined_vector += s
+                combined_vector = [combined_vector]
+            # combined_vector = np.array(multi_vector).mean(axis=0)
             return combined_vector
+        except Exception as e:
+            raise e
+
+    def extract_text(self, path_patch, ):
+        try:
+            bugy_all = self.get_only_change(path_patch, type='buggy')
+            patched_all = self.get_only_change(path_patch, type='patched')
+        except Exception as e:
+            # print('patch: {}, exception: {}'.format(path_patch, e))
+            raise e
+        return bugy_all + patched_all
 
     def learned_feature(self, path_patch, w2v):
         try:
-            bugy_all = self.get_diff_files_frag(path_patch, type='patched')
-            patched_all = self.get_diff_files_frag(path_patch, type='buggy')
+            bugy_all = self.get_diff_files_frag(path_patch, type='buggy')
+            patched_all = self.get_diff_files_frag(path_patch, type='patched')
         except Exception as e:
-            print('patch: {}, exception: {}'.format(path_patch, e))
+            # print('patch: {}, exception: {}'.format(path_patch, e))
             raise e
 
         # tokenize word
@@ -166,7 +205,7 @@ class Word2vector:
         try:
             bug_vec, patched_vec = self.output_vec(w2v, bugy_all_token, patched_all_token)
         except Exception as e:
-            print('patch: {}, exception: {}'.format(path_patch, e))
+            # print('patch: {}, exception: {}'.format(path_patch, e))
             raise e
 
         bug_vec = bug_vec.reshape((1, -1))
@@ -216,6 +255,54 @@ class Word2vector:
 
         return bug_vec, patched_vec
 
+    def get_only_change(self, path_patch, type='patched'):
+        with open(path_patch, 'r+') as file:
+            lines = ''
+            p = r"([^\w_])"
+            # try:
+            for line in file:
+                line = line.strip()
+                if line != '':
+                    if line.startswith('@@') or line.startswith('diff') or line.startswith('index'):
+                        continue
+                    elif type == 'buggy':
+                        if line.startswith('--- ') or line.startswith('-- ') or line.startswith('PATCH_DIFF_ORIG=---'):
+                            continue
+                        elif line.startswith('-'):
+                            if line[1:].strip() == '':
+                                continue
+                            if line[1:].strip().startswith('//'):
+                                continue
+                            line = re.split(pattern=p, string=line[1:].strip())
+                            line = [x.strip() for x in line]
+                            while '' in line:
+                                line.remove('')
+                            line = ' '.join(line)
+                            lines += line.strip() + ' '
+                        else:
+                            # do nothing
+                            pass
+                    elif type == 'patched':
+                        if line.startswith('+++ ') or line.startswith('++ '):
+                            continue
+                            # line = re.split(pattern=p, string=line.split(' ')[1].strip())
+                            # lines += ' '.join(line) + ' '
+                        elif line.startswith('+'):
+                            if line[1:].strip() == '':
+                                continue
+                            if line[1:].strip().startswith('//'):
+                                continue
+                            line = re.split(pattern=p, string=line[1:].strip())
+                            line = [x.strip() for x in line]
+                            while '' in line:
+                                line.remove('')
+                            line = ' '.join(line)
+                            lines += line.strip() + ' '
+                        else:
+                            # do nothing
+                            pass
+        return lines
+
     def get_diff_files_frag(self, path_patch, type):
         with open(path_patch, 'r') as file:
             lines = ''
@@ -238,11 +325,13 @@ class Word2vector:
                         flag = False
                         continue
                     elif type == 'buggy':
-                        if line.startswith('---') or line.startswith('PATCH_DIFF_ORIG=---'):
+                        if line.startswith('--- ') or line.startswith('-- ') or line.startswith('PATCH_DIFF_ORIG=---'):
                             continue
                             # line = re.split(pattern=p, string=line.split(' ')[1].strip())
                             # lines += ' '.join(line) + ' '
                         elif line.startswith('-'):
+                            if line[1:].strip() == '':
+                                continue
                             if line[1:].strip().startswith('//'):
                                 continue
                             line = re.split(pattern=p, string=line[1:].strip())
@@ -262,11 +351,13 @@ class Word2vector:
                             line = ' '.join(line)
                             lines += line.strip() + ' '
                     elif type == 'patched':
-                        if line.startswith('+++'):
+                        if line.startswith('+++ ') or line.startswith('++ '):
                             continue
                             # line = re.split(pattern=p, string=line.split(' ')[1].strip())
                             # lines += ' '.join(line) + ' '
                         elif line.startswith('+'):
+                            if line[1:].strip() == '':
+                                continue
                             if line[1:].strip().startswith('//'):
                                 continue
                             line = re.split(pattern=p, string=line[1:].strip())
