@@ -6,11 +6,11 @@ from representation.word2vector import Word2vector
 
 path_patch_sliced = '/Users/haoye.tian/Documents/University/data/PatchCollectingV1ISSTA_sliced/'
 
-def patch_bert_vector():
+def patch_bert():
     w2v = Word2vector(patch_w2v='bert', )
+    cnt = 0
     projects = {'Chart': 26, 'Lang': 65, 'Time': 27, 'Closure': 176, 'Math': 106}
     # projects = {'Time': 2,}
-    # with open('../data/patch_vector.pickle', 'w+') as f:
     for project, number in projects.items():
         print('Berting {}'.format(project))
         for id in range(1, number + 1):
@@ -25,16 +25,28 @@ def patch_bert_vector():
                             # json_key = '-'.join([path_patch.split('/')[-5], path_patch.split('/')[-4], path_patch.split('/')[-3], path_patch.split('/')[-2], path_patch.split('/')[-1]])
                             if not os.path.isdir(path_patch):
                                 continue
-                            vector = w2v.convert_single_patch(path_patch)
+
+                            cnt += 1
+
+                            json_key = path_patch + '_.json'
+                            if os.path.exists(json_key):
+                                print('exists!')
+                                continue
+
+                            try:
+                                vector = w2v.convert_single_patch(path_patch)
+                            except Exception as e:
+                                print('error bert vector: {}'.format(e))
+                                continue
                             vector_list = list(vector)
                             vector_list = list(map(str, vector_list))
 
-                            json_key = path_patch + '_.json'
-                            print('json_key: {}'.format(json_key))
                             with open(json_key, 'w+') as f:
                                 jsonstr = json.dumps(vector_list, )
                                 f.write(jsonstr)
+                            print('{} json_key: {}'.format(cnt, json_key))
         # pickle.dump(dict, f)
         # f.write(jsonstr)
 
-patch_bert_vector()
+if __name__ == '__main__':
+    patch_bert()
