@@ -137,3 +137,5 @@ dist/
 logs/*.log
 .DS_Store
 models/java14_model
+*.png
+*.html
