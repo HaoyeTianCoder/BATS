@@ -109,6 +109,7 @@ def slice_patch2(path):
                 with open(os.path.join(new_path, new_name), 'w+') as f:
                     f.write(minus_line + plus_line + patch)
 
+# combine previous wrong split
 def combine_patch(path):
     cnt = 0
     for root, dirs, files in os.walk(path):
