@@ -168,7 +168,7 @@ class Visual():
                       )
 
         fig = dict(data=traces, layout=layout)
-        plot(figure_or_data=fig, filename='../fig/2D_cluster_{}.html'.format(self.method))
+        plot(figure_or_data=fig, filename='../fig/RQ1/2D_cluster_{}.html'.format(self.method))
 
         # iplot(fig)
 
@@ -200,4 +200,4 @@ class Visual():
                       )
 
         fig = dict(data=traces, layout=layout)
-        plot(figure_or_data=fig, filename='../fig/3D_cluster_{}.html'.format(self.method))
+        plot(figure_or_data=fig, filename='../fig/RQ1/3D_cluster_{}.html'.format(self.method))
