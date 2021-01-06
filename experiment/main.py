@@ -10,9 +10,10 @@ from experiment.config import Config
 from representation.word2vector import Word2vector
 import numpy as np
 from sklearn.cluster import KMeans, DBSCAN, AgglomerativeClustering, AffinityPropagation
-from pyclustering.cluster.xmeans import xmeans
+from pyclustering.cluster.xmeans import xmeans, splitting_type
 import scipy.cluster.hierarchy as h
 from experiment.visualize import Visual
+from experiment.clustering import biKmeans
 from sklearn.metrics import silhouette_score ,calinski_harabasz_score,davies_bouldin_score
 from scipy.spatial import distance
 import json
@@ -151,9 +152,7 @@ class Experiment:
 
         return dists_one
 
-    # def cluster_dist(self, test_vector):
-    #     dist0, dist1, dist2 = self.cluster(test_vector)
-    #     return dist0, dist1, dist2
+
 
     def cluster_test_dist(self, test_vector, method, number):
         scaler = Normalizer()
@@ -175,9 +174,13 @@ class Experiment:
             hu = AgglomerativeClustering(n_clusters=number)
             clusters = hu.fit_predict(X)
         elif method == 'xmeans':
-            xmeans_instance = xmeans(X, random_state=1)
+            xmeans_instance = xmeans(X, kmax=200, splitting_type=splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH)
             clusters = xmeans_instance.process().predict(X)
+            # clusters = xmeans_instance.process().get_clusters()
             number = max(clusters)+1
+        elif method == 'biKmeans':
+            bk = biKmeans()
+            clusters = bk.biKmeans(dataSet=np.array(X), k=number)
         elif method == 'ap':
             # ap = AffinityPropagation(random_state=5)
             # clusters = ap.fit_predict(X)
@@ -210,7 +213,7 @@ class Experiment:
         plt.boxplot(result_cluster, labels=['Original']+[str(i) for i in range(len(result_cluster)-1)] )
         plt.xlabel('Cluster')
         plt.ylabel('Distance to Center')
-        plt.savefig('../fig/box_{}.png'.format(method))
+        plt.savefig('../fig/RQ1/box_{}.png'.format(method))
 
         return clusters
 
@@ -242,7 +245,7 @@ class Experiment:
             print('test&patch:{}'.format(test_name[i]), end='    ')
             print('{}'.format(patch_name[i]))
 
-            # print('function:{}'.format(function_name[i]))
+            print('function:{}'.format(function_name[i]))
 
     def find_path_patch(self, path_patch_sliced, project_id):
         available_path_patch = []
@@ -315,25 +318,24 @@ class Experiment:
         dataset_func = np.delete(self.test_data[3], failed_test_index, axis=0)
 
         patch_list = []
-        smallest_dist = []
+        closest_score = []
         for i in failed_test_index:
             failed_test_vector = all_test_vector[i]
             dists = []
             # find the k most closest test vector
             for j in range(len(dataset_test)):
                 simi_test_vec = dataset_test[j]
-                # dist = np.linalg.norm(simi_test_vec - failed_test_vector)
-                dist = distance.euclidean(simi_test_vec, failed_test_vector)
+                dist = distance.euclidean(simi_test_vec, failed_test_vector) / (1 + distance.euclidean(simi_test_vec, failed_test_vector))
                 # dist = distance.cosine(simi_test_vec, failed_test_vector)
                 dists.append([j, dist])
             k_index = sorted(dists, key=lambda x: float(x[1]), reverse=False)[:k]
 
-            print('the smallest dist is {}'.format(k_index[0][1]))
-            smallest_dist.append(k_index[0][1])
+            print('the closest test score is {}'.format(1-k_index[0][1]))
+            closest_score.append(1-k_index[0][1])
 
             if filt:
-                # skip the test case with dist > 0.4
-                k_index = np.array([v[0] for v in k_index if v[1] <= 0.5])
+                # keep the test case with simi score >= 0.6
+                k_index = np.array([v[0] for v in k_index if v[1] <= 0.01])
             else:
                 k_index = np.array([v[0] for v in k_index])
 
@@ -353,7 +355,7 @@ class Experiment:
 
             k_patch_vector = dataset_patch[k_index]
             patch_list.append(k_patch_vector)
-        return patch_list, scaler_patch, smallest_dist
+        return patch_list, scaler_patch, closest_score
 
     def get_patch_list4str(self, failed_test_index, k=10, filt=False):
         scaler = Normalizer()
@@ -367,7 +369,7 @@ class Experiment:
         dataset_func = np.delete(self.test_data[3], failed_test_index, axis=0)
 
         patch_list = []
-        smallest_dist = []
+        closest_score = []
         for i in failed_test_index:
             failed_test_vector = all_test_vector[i]
             dists = []
@@ -380,12 +382,12 @@ class Experiment:
                 dists.append([j, dist])
             k_index = sorted(dists, key=lambda x: float(x[1]), reverse=False)[:k]
 
-            print('the smallest dist is {}'.format(k_index[0][1]))
-            smallest_dist.append(k_index[0][1])
+            print('the closest test score is {}'.format(1-k_index[0][1]))
+            closest_score.append(1-k_index[0][1])
 
             if filt:
-                # skip the test case with dist > 0.5
-                k_index = np.array([v[0] for v in k_index if v[1] <= 0.5])
+                # keep the test case with simi score >= 0.6
+                k_index = np.array([v[0] for v in k_index if v[1] <= 0.4])
             else:
                 k_index = np.array([v[0] for v in k_index])
 
@@ -405,7 +407,7 @@ class Experiment:
 
             k_patch_vector = dataset_patch[k_index]
             patch_list.append(k_patch_vector)
-        return patch_list, None, smallest_dist
+        return patch_list, None, closest_score
 
     def predict(self, patch_list, new_patch, scaler_patch):
         if self.patch_w2v != 'str':
@@ -422,23 +424,23 @@ class Experiment:
                     dist = Levenshtein.distance(vec[0], new_patch[0])
                     dist_k.append(dist)
                 else:
-                    dist = distance.cosine(vec, new_patch)
-                    # dist = distance.euclidean(vec, new_patch)/(1 + distance.euclidean(vec, new_patch))
+                    # dist = distance.cosine(vec, new_patch)
+                    dist = distance.euclidean(vec, new_patch)/(1 + distance.euclidean(vec, new_patch))
                     dist_k.append(dist)
 
             dist_mean = np.array(dist_k).mean()
             dist_min = np.array(dist_k).min()
 
             # print('mean:{}  min:{}'.format(dist_mean, dist_min))
-            dist_final.append(dist_mean)
+            dist_final.append(dist_min)
 
         dist_final = np.array(dist_final).mean()
         return dist_final
 
     def evaluate_collected_projects(self, path_collected_patch):
-        projects = {'Chart': 26, 'Lang': 65, 'Time': 27, 'Closure': 176,  'Math': 106}
-        # projects = {'Chart': 26}
-        all_smallest_dist = []
+        projects = {'Chart': 26, 'Lang': 65, 'Time': 27, 'Closure': 176,  'Math': 106, 'Mockito': 38}
+        projects = {'Closure': 86}
+        all_closest_score = []
         for project, number in projects.items():
             recommend_list_project = []
             print('Testing {}'.format(project))
@@ -469,19 +471,19 @@ class Experiment:
 
                 # get patch list for failed test case
                 if self.patch_w2v == 'str':
-                    patch_list, scaler_patch, smallest_dist = self.get_patch_list4str(failed_test_index, k=5, filt=True)
+                    patch_list, scaler_patch, closest_score = self.get_patch_list4str(failed_test_index, k=1, filt=True)
                 else:
-                    patch_list, scaler_patch, smallest_dist = self.get_patch_list(failed_test_index, k=5, filt=True)
-                all_smallest_dist += smallest_dist
+                    patch_list, scaler_patch, closest_score = self.get_patch_list(failed_test_index, k=1, filt=False)
+                all_closest_score += closest_score
                 if patch_list == []:
                     print('no close test case found')
                     continue
 
                 # return vector for path patch
                 name_list, label_list, vector_list = self.vector4patch(available_path_patch)
-                if not 0 in label_list or not 1 in label_list:
-                    print('all same')
-                    continue
+                # if not 0 in label_list or not 1 in label_list:
+                #     print('all same')
+                #     continue
 
                 for i in range(len(name_list)):
                     name = name_list[i]
@@ -509,28 +511,40 @@ class Experiment:
                 plt.xticks(recommend_list[:].index.tolist(), recommend_list[:][0].tolist())
                 plt.xlabel('patchid by tool')
                 plt.ylabel('Score of patch')
-                plt.savefig('../fig/recommend_{}'.format(project_id))
+                plt.savefig('../fig/RQ3/recommend_{}'.format(project_id))
                 plt.cla()
                 plt.close()
                 # plt.show()
+
             print('{} recommend project:'.format(project))
+            if recommend_list_project == []:
+                continue
             recommend_list_project = pd.DataFrame(sorted(recommend_list_project, key=lambda x: x[2], reverse=True))
             Correct = recommend_list_project[recommend_list_project[1] == 1]
             Incorrect = recommend_list_project[recommend_list_project[1] == 0]
             filter_out_incorrect = recommend_list_project.shape[0] - Correct[:].index.tolist()[-1] - 1
-            print('{}: Incorrect filter rate: {}'.format(project, filter_out_incorrect/Incorrect.shape[0]))
+            if Incorrect.size != 0:
+                print('{}: Incorrect filter rate: {}'.format(project, filter_out_incorrect/Incorrect.shape[0]))
             plt.bar(Correct[:].index.tolist(), Correct[:][2], color="red")
             plt.bar(Incorrect[:].index.tolist(), Incorrect[:][2], color="lightgrey")
             # plt.xticks(recommend_list_project[:].index.tolist(), recommend_list_project[:][0].tolist())
             plt.xlabel('patchid by tool')
             plt.ylabel('Score of patch')
             plt.title('recommend for {}'.format(project))
-            plt.savefig('../fig/{}_recommend.png'.format(project))
+            plt.savefig('../fig/RQ3/{}_recommend.png'.format(project))
             plt.cla()
             plt.close()
-        plt.bar(range(len(all_smallest_dist)), all_smallest_dist,)
+        plt.bar(range(len(all_closest_score)), sorted(all_closest_score, reverse=True),)
+        plt.xlabel('the closest test case')
+        plt.ylabel('Similarity Score of the closest test case')
+        plt.title('Similarity of test case')
+        # plt.savefig('../fig/RQ3/Similarity_Test.png')
 
     def evaluate_defects4j_projects(self, ):
+        scaler = Normalizer()
+        all_test_vector = scaler.fit_transform(self.test_vector)
+        scaler_patch = scaler.fit(self.patch_vector)
+        all_patch_vector = scaler_patch.transform(self.patch_vector)
         projects = {'Chart': 26, 'Lang': 65, 'Time': 27, 'Closure': 176, 'Math': 106, 'Cli': 40, 'Codec': 18, 'Collections': 28, 'Compress': 47, 'Csv': 16, 'Gson': 18, 'JacksonCore': 26, 'JacksonDatabind': 112, 'JacksonXml': 6, 'Jsoup': 93, 'JxPath': 22, 'Mockito': 38}
         for project, number in projects.items():
             project_list = []
@@ -538,28 +552,44 @@ class Experiment:
             for i in range(len(self.test_name)):
                 if not self.test_name[i].startswith(project):
                     continue
+                project = self.test_name[i].split('-')[0].split('_')[0]
+                id = self.test_name[i].split('-')[0].split('_')[1]
                 print('{}'.format(self.test_name[i]))
-                this_test = self.test_vector[i]
-                this_patch = self.patch_vector[i]
+                this_test = all_test_vector[i]
+                this_patch = all_patch_vector[i]
 
                 dist_min_index = None
                 dist_min = 9999
-                for j in range(len(self.test_vector)):
+                for j in range(len(all_test_vector)):
                     if j == i:
                         continue
-                    dist = distance.euclidean(this_test, self.test_vector[j])
+                    # whether skip current project
+                    if self.test_name[j].startswith(project+'_'+id+'-'):
+                        continue
+                    dist = distance.euclidean(this_test, all_test_vector[j])/(1 + distance.euclidean(this_test, all_test_vector[j]))
                     if dist < dist_min:
                         dist_min = dist
                         dist_min_index = j
-                closest_patch = self.patch_vector[dist_min_index]
-                distance_patch = distance.euclidean(this_patch, closest_patch)/(1 + distance.euclidean(this_patch, closest_patch))
-                project_list.append([self.test_name[i], distance_patch])
-            recommend_list_project = pd.DataFrame(sorted(project_list, key=lambda x: x[1], reverse=False))
-            plt.bar(recommend_list_project.index.tolist(), recommend_list_project[:][1], )
+                print('the closest test: {}'.format(self.test_name[dist_min_index]))
+                closest_patch = all_patch_vector[dist_min_index]
+
+                distance_patch = distance.euclidean(closest_patch, this_patch)/(1 + distance.euclidean(closest_patch, this_patch))
+                # distance_patch = distance.cosine(closest_patch, this_patch)
+
+                score_patch = 1 - distance_patch
+                if math.isnan(score_patch):
+                    continue
+                project_list.append([self.test_name[i], score_patch])
+            recommend_list_project = pd.DataFrame(sorted(project_list, key=lambda x: x[1], reverse=True))
+            plt.bar(recommend_list_project.index.tolist(), recommend_list_project[:][1], color='chocolate')
+            # plt.bar(recommend_list_project.index.tolist(), recommend_list_project[:][1], color='steelblue')
             plt.xlabel('failed test cases')
-            plt.ylabel('distance of patch from the closest test case')
-            plt.savefig('../fig/distance_patch_{}'.format(project))
+            plt.ylabel('score of patch from the closest test case')
+            plt.title('score distribution of {}'.format(project))
+            plt.savefig('../fig/RQ2/distance_patch_{}'.format(project))
             plt.cla()
+
+    # def evaluate_patch_sim(self, testdata):
 
     def run(self):
 
@@ -571,8 +601,8 @@ class Experiment:
 
 
         # validate hypothesis
-        # method_cluster = 'kmeans'
-        # number_cluster = 40
+        # method_cluster = 'biKmeans'
+        # number_cluster = 15
         # clusters = self.cluster_test_dist(self.test_vector, method=method_cluster, number=number_cluster)
         # self.patch_dist(self.patch_vector, clusters, method_cluster, number_cluster)
 
@@ -582,6 +612,9 @@ class Experiment:
         # evaluate collected patches for projects
         # self.evaluate_collected_projects(self.path_collected_patch)
 
+        # evaluate patch sim dataset
+        # testdata = '/Users/haoye.tian/Documents/University/data/PatchSimISSTA_sliced/'
+        # self.evaluate_collected_projects(testdata)
 
 if __name__ == '__main__':
     config = Config()
