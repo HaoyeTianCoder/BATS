@@ -601,13 +601,13 @@ class Experiment:
 
 
         # validate hypothesis
-        # method_cluster = 'biKmeans'
-        # number_cluster = 15
-        # clusters = self.cluster_test_dist(self.test_vector, method=method_cluster, number=number_cluster)
-        # self.patch_dist(self.patch_vector, clusters, method_cluster, number_cluster)
+        method_cluster = 'biKmeans'
+        number_cluster = 15
+        clusters = self.cluster_test_dist(self.test_vector, method=method_cluster, number=number_cluster)
+        self.patch_dist(self.patch_vector, clusters, method_cluster, number_cluster)
 
         # evaluate on developer's patch of defects4j
-        self.evaluate_defects4j_projects()
+        # self.evaluate_defects4j_projects()
 
         # evaluate collected patches for projects
         # self.evaluate_collected_projects(self.path_collected_patch)
