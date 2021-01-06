@@ -2,11 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import silhouette_score ,calinski_harabasz_score,davies_bouldin_score
 
-def randCent( dataSet, k):
+
+def randCent(dataSet, k):
     """
-    随机生成k个点作为质心，其中质心均在整个数据数据的边界之内
+    K points are randomly generated as the center of mass, where the center of mass is within the boundary of the whole data.
     """
-    n = dataSet.shape[1]  # 获取数据的维度
+    n = dataSet.shape[1]  # Get the dimension of the data
     centroids = np.mat(np.zeros((k, n)))
     for j in range(n):
         minJ = np.min(dataSet[:, j])
@@ -15,11 +16,12 @@ def randCent( dataSet, k):
     return centroids
 
 
-def distEclud( vecA, vecB):
+def distEclud(vecA, vecB):
     """
-    计算两个向量的欧式距离
+    Calculate the Euclidean distance between two vectors.
     """
     return np.sqrt(np.sum(np.power(vecA - vecB, 2)))
+
 
 class biKmeans:
     def __init__(self):
@@ -27,23 +29,24 @@ class biKmeans:
 
     def load_data_make_blobs(self,):
         """
-        生成模拟数据
+        Generate simulation data.
         """
-        from sklearn.datasets import make_blobs  # 导入产生模拟数据的方法
-        k = 5  # 给定聚类数量
+        from sklearn.datasets import make_blobs  # Import method to generate simulation data
+        k = 5  # Given number of clusters
         X, Y = make_blobs(n_samples=1000, n_features=2, centers=k, random_state=1)
         return X, k
 
 
-
     def kMeans(self, dataSet, k, distMeas=distEclud, createCent=randCent):
         """
-        k-Means聚类算法,返回最终的k各质心和点的分配结果
+        k-Means clustering algorithm. Return the final allocation result of k centroids and points.
         """
-        m = dataSet.shape[0]  # 获取样本数量
-        # 构建一个簇分配结果矩阵，共两列，第一列为样本所属的簇类值，第二列为样本到簇质心的误差
+        m = dataSet.shape[0]  # Get the number of samples
+        # Construct a cluster assignment result matrix with two columns,
+        # the first column is the cluster class value to which the sample belongs,
+        # and the second column is the error from the sample to the cluster centroid
         clusterAssment = np.mat(np.zeros((m, 2)))
-        # 1. 初始化k个质心
+        # 1. Initialize k centroids
         centroids = createCent(dataSet, k)
         clusterChanged = True
         while clusterChanged:
@@ -51,65 +54,63 @@ class biKmeans:
             for i in range(m):
                 minDist = np.inf
                 minIndex = -1
-                # 2. 找出最近的质心
+                # 2. Find the nearest centroid
                 for j in range(k):
                     distJI = distMeas(centroids[j, :], dataSet[i, :])
                     if distJI < minDist:
                         minDist = distJI
                         minIndex = j
-                # 3. 更新每一行样本所属的簇
+                # 3. Update the cluster to which each row sample belongs
                 if clusterAssment[i, 0] != minIndex:
                     clusterChanged = True
                 clusterAssment[i, :] = minIndex, minDist ** 2
-            # print(centroids)  # 打印质心
-            # 4. 更新质心
+            # print(centroids)  # Print centroid
+            # 4. Update centroid
             for cent in range(k):
-                ptsClust = dataSet[np.nonzero(clusterAssment[:, 0].A == cent)[0]]  # 获取给定簇的所有点
-                centroids[cent, :] = np.mean(ptsClust, axis=0)  # 沿矩阵列的方向求均值
+                ptsClust = dataSet[np.nonzero(clusterAssment[:, 0].A == cent)[0]]  # Get all points of a given cluster
+                centroids[cent, :] = np.mean(ptsClust, axis=0)  # Average along the matrix column
         return centroids, clusterAssment
-
 
 
     def biKmeans(self, dataSet, k, distMeas=distEclud):
         """
-        二分k-Means聚类算法,返回最终的k各质心和点的分配结果
+        Bisecting K-means Clustering Algorithm. Return the final distribution result of k centroids and points
         """
         distribution_SSE = []
         # distribution_rate = []
         m = dataSet.shape[0]
         clusterAssment = np.mat(np.zeros((m, 2)))
-        # 创建初始簇质心
+        # Create initial cluster centroid
         centroid0 = np.mean(dataSet, axis=0).tolist()
         centList = [centroid0]
-        # 计算每个点到质心的误差值
+        # Calculate the error value from each point to the centroid
         for j in range(m):
             clusterAssment[j, 1] = distMeas(np.mat(centroid0), dataSet[j, :]) ** 2
-        distribution_SSE.append(sum(clusterAssment[:,1]))
+        distribution_SSE.append(sum(clusterAssment[:, 1]))
         while (len(centList) < k):
             lowestSSE = np.inf
             for i in range(len(centList)):
-                # 获取当前簇的所有数据
+                # Get all the data of the current cluster
                 ptsInCurrCluster = dataSet[np.nonzero(clusterAssment[:, 0].A == i)[0], :]
-                # 对该簇的数据进行K-Means聚类
+                # Perform K-Means clustering on the data of this cluster
                 centroidMat, splitClustAss = self.kMeans(ptsInCurrCluster, 2, distMeas)
-                sseSplit = sum(splitClustAss[:, 1])  # 该簇聚类后的sse
-                sseNotSplit = sum(clusterAssment[np.nonzero(clusterAssment[:, 0].A != i)[0], 1])  # 获取剩余收据集的sse
+                sseSplit = sum(splitClustAss[:, 1])  # Calculate the sse after clustering the cluster
+                sseNotSplit = sum(clusterAssment[np.nonzero(clusterAssment[:, 0].A != i)[0], 1])  # Get the sse of the remaining data set
                 if (sseSplit + sseNotSplit) < lowestSSE:
                     bestCentToSplit = i
                     bestNewCents = centroidMat
                     bestClustAss = splitClustAss.copy()
                     lowestSSE = sseSplit + sseNotSplit
-            # 将簇编号0,1更新为划分簇和新加入簇的编号
+            # Update the cluster number 0, 1 to the number of the divided cluster and the newly added cluster
             bestClustAss[np.nonzero(bestClustAss[:, 0].A == 1)[0], 0] = len(centList)
             bestClustAss[np.nonzero(bestClustAss[:, 0].A == 0)[0], 0] = bestCentToSplit
 
-            # 增加质心
+            # Increase centroid
             centList[bestCentToSplit] = bestNewCents[0, :]
             centList.append(bestNewCents[1, :])
 
-            # 更新簇的分配结果
+            # Update cluster allocation results
             clusterAssment[np.nonzero(clusterAssment[:, 0].A == bestCentToSplit)[0], :] = bestClustAss
-
 
             print('cluster: {}'.format(len(centList)), end=' ')
             # print("the bestCentToSplit is: ", bestCentToSplit)
@@ -118,7 +119,7 @@ class biKmeans:
             distribution_SSE.append(float(lowestSSE))
 
         distribution_rate = [(distribution_SSE[i - 1] - distribution_SSE[i]) / distribution_SSE[i - 1] for i in range(1, len(distribution_SSE))]
-        plt.plot(np.linspace(1,k,k),distribution_SSE)
+        plt.plot(np.linspace(1, k, k), distribution_SSE)
         plt.xlabel('The number of cluster')
         plt.ylabel('SSE')
         if k > 50:
@@ -126,7 +127,7 @@ class biKmeans:
         # plt.show()
         plt.cla()
 
-        plt.plot(np.linspace(2,k,k-1),distribution_rate)
+        plt.plot(np.linspace(2, k, k-1), distribution_rate)
         plt.xlabel('The number of cluster')
         plt.ylabel('SSE Loss Rate')
         if k > 50:
@@ -134,5 +135,5 @@ class biKmeans:
         # plt.show()
         plt.cla()
 
-        clusters = np.array(list(map(int, np.array(clusterAssment)[:,0])))
+        clusters = np.array(list(map(int, np.array(clusterAssment)[:, 0])))
         return clusters
