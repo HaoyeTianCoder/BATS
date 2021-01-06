@@ -75,8 +75,7 @@ class biKmeans:
         二分k-Means聚类算法,返回最终的k各质心和点的分配结果
         """
         distribution_SSE = []
-        distribution_rate = []
-        distribution_s1 = []
+        # distribution_rate = []
         m = dataSet.shape[0]
         clusterAssment = np.mat(np.zeros((m, 2)))
         # 创建初始簇质心
@@ -117,8 +116,7 @@ class biKmeans:
             # print("the len of bestClustAss is: ", len(bestClustAss))
             print('lowest SSE: {}'.format(float(lowestSSE)))
             distribution_SSE.append(float(lowestSSE))
-            # s1_score = silhouette_score(dataSet, np.array(clusterAssment)[:,0], metric='euclidean')
-            # distribution_s1.append(s1_score)
+
         distribution_rate = [(distribution_SSE[i - 1] - distribution_SSE[i]) / distribution_SSE[i - 1] for i in range(1, len(distribution_SSE))]
         plt.plot(np.linspace(1,k,k),distribution_SSE)
         plt.xlabel('The number of cluster')
