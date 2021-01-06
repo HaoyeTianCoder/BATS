@@ -39,6 +39,7 @@ class Experiment:
         self.patch_name = None
         self.test_vector = None
         self.patch_vector = None
+        self.exception_name = None
 
     def load_test(self,):
         # if os.path.exists(self.path_test_vector) and os.path.exists(self.path_patch_vector):
@@ -65,6 +66,7 @@ class Experiment:
             self.patch_name = both_vector[1]
             self.test_vector = both_vector[2]
             self.patch_vector = both_vector[3]
+            self.exception_name = both_vector[4]
 
             # print('tmp transfer patch')
             # new_patch_vector = list()
@@ -79,9 +81,9 @@ class Experiment:
         else:
             # test_vector = self.test2vector(word2v='code2vec')
             # patch_vector = self.patch2vector(word2v='cc2vec')
-            all_test_name, all_patch_name, all_test_vector, all_patch_vector = self.test_patch_2vector(test_w2v='code2vec', patch_w2v=self.patch_w2v)
+            all_test_name, all_patch_name, all_test_vector, all_patch_vector, all_exception_name = self.test_patch_2vector(test_w2v='code2vec', patch_w2v=self.patch_w2v)
 
-            both_vector = [all_test_name, all_patch_name, all_test_vector, all_patch_vector]
+            both_vector = [all_test_name, all_patch_name, all_test_vector, all_patch_vector, all_exception_name]
             pickle.dump(both_vector, open(self.path_test_function_patch_vector, 'wb'))
             # np.save(self.path_test_function_patch_vector, both_vector)
 
@@ -89,19 +91,27 @@ class Experiment:
             self.patch_name = both_vector[1]
             self.test_vector = both_vector[2]
             self.patch_vector = both_vector[3]
+            self.exception_name = both_vector[4]
 
 
     def test_patch_2vector(self, test_w2v='code2vec', patch_w2v='cc2vec'):
-        all_test_name, all_patch_name, all_test_vector, all_patch_vector = [], [], [], []
+        all_test_name, all_patch_name, all_test_vector, all_patch_vector, all_exception_name = [], [], [], [], []
         w2v = Word2vector(test_w2v=test_w2v, patch_w2v=patch_w2v, path_patch_root=self.path_patch_root)
 
         test_name_list = self.test_data[0]
+        exception_name_list = self.test_data[1]
+        log_list = self.test_data[2]
         test_function_list = self.test_data[3]
         patch_ids_list = self.test_data[4]
         for i in range(len(test_name_list)):
             name = test_name_list[i]
             function = test_function_list[i]
             ids = patch_ids_list[i]
+
+            exception_name = exception_name_list[i]
+            # if ':' in exception_name:
+            #     exception_name = exception_name.split(':')[0]
+
             try:
                 test_vector, patch_vector = w2v.convert_both(name, function, ids)
             except Exception as e:
@@ -112,13 +122,14 @@ class Experiment:
             all_patch_name.append(ids)
             all_test_vector.append(test_vector)
             all_patch_vector.append(patch_vector)
+            all_exception_name.append(exception_name)
             if len(all_test_vector) != len(all_patch_vector):
                 print('???')
 
         if self.patch_w2v == 'str':
-            return all_test_name, all_patch_name, np.array(all_test_vector), all_patch_vector
+            return all_test_name, all_patch_name, np.array(all_test_vector), all_patch_vector, all_exception_name
         else:
-            return all_test_name, all_patch_name, np.array(all_test_vector), np.array(all_patch_vector)
+            return all_test_name, all_patch_name, np.array(all_test_vector), np.array(all_patch_vector), all_exception_name
 
     def test2vector(self, word2v='code2vec'):
         w2v = Word2vector(test_w2v=word2v, path_patch_root=self.path_patch_root)
@@ -305,7 +316,7 @@ class Experiment:
 
         return name_list, label_list, vector_list
 
-    def get_patch_list(self, failed_test_index, k=10, filt=False):
+    def get_patch_list(self, failed_test_index, k=5, filt=False):
         scaler = Normalizer()
         all_test_vector = scaler.fit_transform(self.test_vector)
 
@@ -316,36 +327,49 @@ class Experiment:
         dataset_patch = np.delete(all_patch_vector, failed_test_index, axis=0)
         dataset_name = np.delete(self.test_name, failed_test_index, axis=0)
         dataset_func = np.delete(self.test_data[3], failed_test_index, axis=0)
+        dataset_exp = np.delete(self.exception_name, failed_test_index, axis=0)
 
         patch_list = []
         closest_score = []
         for i in failed_test_index:
             failed_test_vector = all_test_vector[i]
+            # exception name of bug id
+            exp_name = self.exception_name[i]
+            # if ':' in exp_name:
+            #     exp_name = exp_name.split(':')[0]
+
             dists = []
             # find the k most closest test vector
             for j in range(len(dataset_test)):
                 simi_test_vec = dataset_test[j]
+                # exception name of bug id
+                simi_exp_name = dataset_exp[j]
+                # if ':' in simi_exp_name:
+                #     simi_exp_name = simi_exp_name.split(':')[0]
+
                 dist = distance.euclidean(simi_test_vec, failed_test_vector) / (1 + distance.euclidean(simi_test_vec, failed_test_vector))
                 # dist = distance.cosine(simi_test_vec, failed_test_vector)
-                dists.append([j, dist])
-            k_index = sorted(dists, key=lambda x: float(x[1]), reverse=False)[:k]
 
-            print('the closest test score is {}'.format(1-k_index[0][1]))
-            closest_score.append(1-k_index[0][1])
+                flag = 1 if exp_name == simi_exp_name else 0
+                dists.append([j, dist, flag])
+            k_index_list = sorted(dists, key=lambda x: float(x[1]), reverse=False)[:k]
+            closest_score.append(1-k_index_list[0][1])
 
             if filt:
                 # keep the test case with simi score >= 0.6
-                k_index = np.array([v[0] for v in k_index if v[1] <= 0.01])
+                k_index = np.array([v[0] for v in k_index_list if v[1] <= 0.3])
             else:
-                k_index = np.array([v[0] for v in k_index])
+                k_index = np.array([v[0] for v in k_index_list])
 
             if k_index.size == 0:
                 continue
 
+            print('the closest test score is {}'.format(1-k_index_list[0][1]))
+
             # check
             print('{}'.format(self.test_name[i]))
             # print('{}'.format(self.test_data[3][i]))
-            print('similar test case:')
+            print('the similar test cases:')
             k_simi_test = dataset_name[k_index]
             func = dataset_func[k_index]
             for t in range(len(k_simi_test)):
@@ -424,8 +448,8 @@ class Experiment:
                     dist = Levenshtein.distance(vec[0], new_patch[0])
                     dist_k.append(dist)
                 else:
-                    # dist = distance.cosine(vec, new_patch)
-                    dist = distance.euclidean(vec, new_patch)/(1 + distance.euclidean(vec, new_patch))
+                    dist = distance.cosine(vec, new_patch)
+                    # dist = distance.euclidean(vec, new_patch)/(1 + distance.euclidean(vec, new_patch))
                     dist_k.append(dist)
 
             dist_mean = np.array(dist_k).mean()
@@ -439,7 +463,7 @@ class Experiment:
 
     def evaluate_collected_projects(self, path_collected_patch):
         projects = {'Chart': 26, 'Lang': 65, 'Time': 27, 'Closure': 176,  'Math': 106, 'Mockito': 38}
-        projects = {'Closure': 86}
+        # projects = {'Closure': 86}
         all_closest_score = []
         for project, number in projects.items():
             recommend_list_project = []
@@ -473,7 +497,7 @@ class Experiment:
                 if self.patch_w2v == 'str':
                     patch_list, scaler_patch, closest_score = self.get_patch_list4str(failed_test_index, k=1, filt=True)
                 else:
-                    patch_list, scaler_patch, closest_score = self.get_patch_list(failed_test_index, k=1, filt=False)
+                    patch_list, scaler_patch, closest_score = self.get_patch_list(failed_test_index, k=1, filt=True)
                 all_closest_score += closest_score
                 if patch_list == []:
                     print('no close test case found')
@@ -538,7 +562,7 @@ class Experiment:
         plt.xlabel('the closest test case')
         plt.ylabel('Similarity Score of the closest test case')
         plt.title('Similarity of test case')
-        # plt.savefig('../fig/RQ3/Similarity_Test.png')
+        plt.savefig('../fig/RQ3/Similarity_Test.png')
 
     def evaluate_defects4j_projects(self, ):
         scaler = Normalizer()
@@ -601,16 +625,16 @@ class Experiment:
 
 
         # validate hypothesis
-        method_cluster = 'biKmeans'
-        number_cluster = 15
-        clusters = self.cluster_test_dist(self.test_vector, method=method_cluster, number=number_cluster)
-        self.patch_dist(self.patch_vector, clusters, method_cluster, number_cluster)
+        # method_cluster = 'biKmeans'
+        # number_cluster = 15
+        # clusters = self.cluster_test_dist(self.test_vector, method=method_cluster, number=number_cluster)
+        # self.patch_dist(self.patch_vector, clusters, method_cluster, number_cluster)
 
         # evaluate on developer's patch of defects4j
         # self.evaluate_defects4j_projects()
 
         # evaluate collected patches for projects
-        # self.evaluate_collected_projects(self.path_collected_patch)
+        self.evaluate_collected_projects(self.path_collected_patch)
 
         # evaluate patch sim dataset
         # testdata = '/Users/haoye.tian/Documents/University/data/PatchSimISSTA_sliced/'
