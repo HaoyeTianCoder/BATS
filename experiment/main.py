@@ -337,7 +337,6 @@ class Experiment:
             exp_type = self.exception_type[i]
             if ':' in exp_type:
                 exp_type = exp_type.split(':')[0]
-            print('exception type: {}'.format(exp_type.split('.')[-1]))
 
             dists = []
             # find the k most closest test vector
@@ -379,10 +378,12 @@ class Experiment:
             for t in range(len(k_simi_test)):
                 print('{}'.format(k_simi_test[t]))
                 # print('{}'.format(func[t]))
-            print('--------------')
 
             k_patch_vector = dataset_patch[k_index]
             patch_list.append(k_patch_vector)
+
+            print('exception type: {}'.format(exp_type.split('.')[-1]))
+            print('--------------')
         return patch_list, scaler_patch, closest_score
 
     def get_patch_list4str(self, failed_test_index, k=10, filt=False):
