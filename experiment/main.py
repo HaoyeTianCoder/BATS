@@ -39,7 +39,7 @@ class Experiment:
         self.patch_name = None
         self.test_vector = None
         self.patch_vector = None
-        self.exception_name = None
+        self.exception_type = None
 
     def load_test(self,):
         # if os.path.exists(self.path_test_vector) and os.path.exists(self.path_patch_vector):
@@ -66,7 +66,7 @@ class Experiment:
             self.patch_name = both_vector[1]
             self.test_vector = both_vector[2]
             self.patch_vector = both_vector[3]
-            self.exception_name = both_vector[4]
+            self.exception_type = both_vector[4]
 
             # print('tmp transfer patch')
             # new_patch_vector = list()
@@ -81,9 +81,9 @@ class Experiment:
         else:
             # test_vector = self.test2vector(word2v='code2vec')
             # patch_vector = self.patch2vector(word2v='cc2vec')
-            all_test_name, all_patch_name, all_test_vector, all_patch_vector, all_exception_name = self.test_patch_2vector(test_w2v='code2vec', patch_w2v=self.patch_w2v)
+            all_test_name, all_patch_name, all_test_vector, all_patch_vector, all_exception_type = self.test_patch_2vector(test_w2v='code2vec', patch_w2v=self.patch_w2v)
 
-            both_vector = [all_test_name, all_patch_name, all_test_vector, all_patch_vector, all_exception_name]
+            both_vector = [all_test_name, all_patch_name, all_test_vector, all_patch_vector, all_exception_type]
             pickle.dump(both_vector, open(self.path_test_function_patch_vector, 'wb'))
             # np.save(self.path_test_function_patch_vector, both_vector)
 
@@ -91,15 +91,15 @@ class Experiment:
             self.patch_name = both_vector[1]
             self.test_vector = both_vector[2]
             self.patch_vector = both_vector[3]
-            self.exception_name = both_vector[4]
+            self.exception_type = both_vector[4]
 
 
     def test_patch_2vector(self, test_w2v='code2vec', patch_w2v='cc2vec'):
-        all_test_name, all_patch_name, all_test_vector, all_patch_vector, all_exception_name = [], [], [], [], []
+        all_test_name, all_patch_name, all_test_vector, all_patch_vector, all_exception_type = [], [], [], [], []
         w2v = Word2vector(test_w2v=test_w2v, patch_w2v=patch_w2v, path_patch_root=self.path_patch_root)
 
         test_name_list = self.test_data[0]
-        exception_name_list = self.test_data[1]
+        exception_type_list = self.test_data[1]
         log_list = self.test_data[2]
         test_function_list = self.test_data[3]
         patch_ids_list = self.test_data[4]
@@ -108,9 +108,9 @@ class Experiment:
             function = test_function_list[i]
             ids = patch_ids_list[i]
 
-            exception_name = exception_name_list[i]
-            # if ':' in exception_name:
-            #     exception_name = exception_name.split(':')[0]
+            exception_type = exception_type_list[i]
+            # if ':' in exception_type:
+            #     exception_type = exception_type.split(':')[0]
 
             try:
                 test_vector, patch_vector = w2v.convert_both(name, function, ids)
@@ -122,14 +122,14 @@ class Experiment:
             all_patch_name.append(ids)
             all_test_vector.append(test_vector)
             all_patch_vector.append(patch_vector)
-            all_exception_name.append(exception_name)
+            all_exception_type.append(exception_type)
             if len(all_test_vector) != len(all_patch_vector):
                 print('???')
 
         if self.patch_w2v == 'str':
-            return all_test_name, all_patch_name, np.array(all_test_vector), all_patch_vector, all_exception_name
+            return all_test_name, all_patch_name, np.array(all_test_vector), all_patch_vector, all_exception_type
         else:
-            return all_test_name, all_patch_name, np.array(all_test_vector), np.array(all_patch_vector), all_exception_name
+            return all_test_name, all_patch_name, np.array(all_test_vector), np.array(all_patch_vector), all_exception_type
 
     def test2vector(self, word2v='code2vec'):
         w2v = Word2vector(test_w2v=word2v, path_patch_root=self.path_patch_root)
@@ -327,30 +327,34 @@ class Experiment:
         dataset_patch = np.delete(all_patch_vector, failed_test_index, axis=0)
         dataset_name = np.delete(self.test_name, failed_test_index, axis=0)
         dataset_func = np.delete(self.test_data[3], failed_test_index, axis=0)
-        dataset_exp = np.delete(self.exception_name, failed_test_index, axis=0)
+        dataset_exp = np.delete(self.exception_type, failed_test_index, axis=0)
 
         patch_list = []
         closest_score = []
         for i in failed_test_index:
             failed_test_vector = all_test_vector[i]
             # exception name of bug id
-            exp_name = self.exception_name[i]
-            # if ':' in exp_name:
-            #     exp_name = exp_name.split(':')[0]
+            exp_type = self.exception_type[i]
+            if ':' in exp_type:
+                exp_type = exp_type.split(':')[0]
+            print('exception type: {}'.format(exp_type.split('.')[-1]))
 
             dists = []
             # find the k most closest test vector
             for j in range(len(dataset_test)):
+                if dataset_name[j].startswith('Math_48') or dataset_name[j].startswith('Math_50') or dataset_name[j].startswith('Math_19') or dataset_name[j].startswith('Math_86'):
+                    continue
+
                 simi_test_vec = dataset_test[j]
                 # exception name of bug id
-                simi_exp_name = dataset_exp[j]
+                simi_exp_type = dataset_exp[j]
                 # if ':' in simi_exp_name:
                 #     simi_exp_name = simi_exp_name.split(':')[0]
 
                 dist = distance.euclidean(simi_test_vec, failed_test_vector) / (1 + distance.euclidean(simi_test_vec, failed_test_vector))
                 # dist = distance.cosine(simi_test_vec, failed_test_vector)
 
-                flag = 1 if exp_name == simi_exp_name else 0
+                flag = 1 if exp_type == simi_exp_type else 0
                 dists.append([j, dist, flag])
             k_index_list = sorted(dists, key=lambda x: float(x[1]), reverse=False)[:k]
             closest_score.append(1-k_index_list[0][1])
@@ -411,7 +415,7 @@ class Experiment:
 
             if filt:
                 # keep the test case with simi score >= 0.6
-                k_index = np.array([v[0] for v in k_index if v[1] <= 0.4])
+                k_index = np.array([v[0] for v in k_index if v[1] <= 0.5555])
             else:
                 k_index = np.array([v[0] for v in k_index])
 
@@ -462,8 +466,9 @@ class Experiment:
         return dist_final
 
     def evaluate_collected_projects(self, path_collected_patch):
-        projects = {'Chart': 26, 'Lang': 65, 'Time': 27, 'Closure': 176,  'Math': 106, 'Mockito': 38}
-        # projects = {'Closure': 86}
+        # projects = {'Chart': 26, 'Lang': 65, 'Closure': 176, 'Math': 106,}
+        projects = {'Chart': 26, 'Lang': 65, 'Math': 106,}
+        # projects = {'Math': 106}
         all_closest_score = []
         for project, number in projects.items():
             recommend_list_project = []
@@ -473,6 +478,8 @@ class Experiment:
                 print('{}_{} ------'.format(project, id))
                 # extract failed test index according to bug_id
                 project_id = '_'.join([project, str(id)])
+                if project_id == 'Math_48' or project_id == 'Math_50' or project_id == 'Math_19' or project_id == 'Math_86':
+                    continue
                 failed_test_index = [i for i in range(len(self.test_name)) if self.test_name[i].startswith(project_id+'-')]
                 if failed_test_index == []:
                     print('failed tests of this bugid not found:{}'.format(project_id))
@@ -540,15 +547,16 @@ class Experiment:
                 plt.close()
                 # plt.show()
 
-            print('{} recommend project:'.format(project))
+            # print('{} recommend project:'.format(project))
             if recommend_list_project == []:
                 continue
             recommend_list_project = pd.DataFrame(sorted(recommend_list_project, key=lambda x: x[2], reverse=True))
             Correct = recommend_list_project[recommend_list_project[1] == 1]
             Incorrect = recommend_list_project[recommend_list_project[1] == 0]
-            filter_out_incorrect = recommend_list_project.shape[0] - Correct[:].index.tolist()[-1] - 1
-            if Incorrect.size != 0:
-                print('{}: Incorrect filter rate: {}'.format(project, filter_out_incorrect/Incorrect.shape[0]))
+            print('{}: {}'.format(project, recommend_list_project.shape[0]), end='  ')
+            if Incorrect.shape[0] != 0 and Correct.shape[0] != 0:
+                filter_out_incorrect = recommend_list_project.shape[0] - Correct[:].index.tolist()[-1] - 1
+                print('Incorrect filter rate: {}'.format(filter_out_incorrect/Incorrect.shape[0]))
             plt.bar(Correct[:].index.tolist(), Correct[:][2], color="red")
             plt.bar(Incorrect[:].index.tolist(), Incorrect[:][2], color="lightgrey")
             # plt.xticks(recommend_list_project[:].index.tolist(), recommend_list_project[:][0].tolist())
