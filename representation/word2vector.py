@@ -15,6 +15,7 @@ from representation.code2vec.config import Config
 from representation.code2vec.model_base import Code2VecModelBase
 import numpy as np
 import re
+import logging
 
 MODEL_MODEL_LOAD_PATH = '/Users/haoye.tian/Documents/University/data/models/java14_model/saved_model_iter8.release'
 MODEL_CC2Vec = '../representation/CC2Vec/'
@@ -38,6 +39,7 @@ class Word2vector:
         if self.patch_w2v == 'cc2vec':
             self.dictionary = pickle.load(open(MODEL_CC2Vec+'dict.pkl', 'rb'))
         elif self.patch_w2v == 'bert':
+            logging.getLogger().info('Waiting for Bert server')
             self.m = BertClient(check_length=False, check_version=False)
 
 
