@@ -228,7 +228,8 @@ def get_func_message(func, buggy_path):
     # Judge head line
     if ind_start:
         if '@Test(' in lines[ind_start-1] or '@Test()' in lines[ind_start-1]:
-            print(lines[ind_start-1])
+            print(lines[ind_start-1], path.replace(path_my, ''), func)
+            # print(lines[ind_start - 1], path, func)
             return '-1'
 
     res = ''
