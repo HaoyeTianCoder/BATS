@@ -1,0 +1,55 @@
+    @Test(expected = IllegalArgumentException.class)
+
+    @Test(expected=TooManyEvaluationsException.class)
+
+    @Test(expected = OutOfRangeException.class)
+
+    @Test(expected = OutOfRangeException.class)
+
+    @Test(expected = OutOfRangeException.class)
+
+    @Test(expected = OutOfRangeException.class)
+
+    @Test(expected = UnsupportedOperationException.class)
+
+    @Test(expected=NumberIsTooLargeException.class)
+
+    @Test(expected=NumberIsTooLargeException.class)
+
+    @Test(expected = NotPositiveDefiniteMatrixException.class)
+
+    @Test(expected = NotPositiveDefiniteMatrixException.class)
+
+    @Test(expected=ConvergenceException.class)
+
+    @Test(expected=MathIllegalStateException.class)
+
+    @Test(expected = AssertionError.class)
+
+    @Test(expected = VerificationInOrderFailure.class)
+
+    @Test(expected = MockitoException.class)
+
+    @Test(expected = NoInteractionsWanted.class)
+
+    @Test(expected = NoInteractionsWanted.class)
+
+    @Test(expected = ParseException.class)
+
+    @Test(expected=IllegalArgumentException.class)
+
+    @Test(expected=IllegalArgumentException.class)
+
+    @Test(expected = IOException.class)
+
+    @Test(expected = NullPointerException.class)
+
+    @Test(expected = NullPointerException.class)
+
+    @Test(expected = NullPointerException.class)
+
+    @Test(expected = IllegalStateException.class)
+
+    @Test(expected = IllegalArgumentException.class)
+
+    @Test(expected = IllegalArgumentException.class)
