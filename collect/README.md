@@ -1,8 +1,11 @@
 # data collect
-collect function, error log, and error tips of failed test cases
+collect name number id, error title, error log, function, patch.
 
 # test_case.pkl
-[name_number_list, error_title_list, error_message_embed_list, case_func_list]
+[re_name_number_func_list, re_error_title_list, re_error_message_list, re_func_message_list, re_patch_list]
 
-# number of test case
-818
+# number of test_case_all.pkl
+- 1120
+
+# number of test_one_case_all.pkl
+- 458
