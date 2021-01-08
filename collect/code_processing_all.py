@@ -224,6 +224,13 @@ def get_func_message(func, buggy_path):
             break
 
     func_message = lines[ind_start: ind_end + 1]
+
+    # Judge head line
+    if ind_start:
+        if '@Test(' in lines[ind_start-1] or '@Test()' in lines[ind_start-1]:
+            print(lines[ind_start-1])
+            return '-1'
+
     res = ''
     for line in func_message:
         res += line
@@ -293,10 +300,10 @@ def get_all(PATH_PROJECTS, NAME_LIST):
             filter_re_error_message_list.append(re_error_message_list[ind])
             filter_re_func_message_list.append(re_func_message_list[ind])
 
-    print(len(filter_re_name_number_func_list))
-    print(len(filter_re_error_title_list))
-    print(len(filter_re_error_message_list))
-    print(len(filter_re_func_message_list))
+    # print(len(filter_re_name_number_func_list))
+    # print(len(filter_re_error_title_list))
+    # print(len(filter_re_error_message_list))
+    # print(len(filter_re_func_message_list))
 
     # print(filter_re_name_number_func_list[110])
     # print(filter_re_error_title_list[110])
