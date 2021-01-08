@@ -1,14 +1,17 @@
 PATH_PROJECTS = '/Users/lyh/Documents/thy/similarity/V2/defects4j/framework/projects/'
 
 
-NAME_LIST = ['Chart', 'Closure', 'JacksonDatabind', 'Jsoup', 'Lang', 'Math', 'Mockito', 'Time',
+# NAME_LIST = ['Chart', 'Closure', 'JacksonDatabind', 'Jsoup', 'Lang', 'Math', 'Mockito', 'Time',
+#              'Cli', 'Codec', 'Collections', 'Compress', 'Csv', 'Gson', 'JacksonCore', 'JacksonXml', 'JxPath']
+
+NAME_LIST = ['Chart', 'JacksonDatabind', 'Jsoup', 'Lang', 'Math', 'Mockito', 'Time',
              'Cli', 'Codec', 'Collections', 'Compress', 'Csv', 'Gson', 'JacksonCore', 'JacksonXml', 'JxPath']
 
 user_path = '/Users/lyh/Documents/thy/similarity/V2/'
 
 dic_buggy_path = {
     'Chart': user_path+'defects4j_buggy/Chart/tests/',
-    'Closure': user_path+'defects4j_buggy/Closure/test/',
+    # 'Closure': user_path+'defects4j_buggy/Closure/test/',
     'JacksonDatabind': user_path+'defects4j_buggy/JacksonDatabind/src/test/java/',
     'Jsoup': user_path+'defects4j_buggy/Jsoup/src/test/java/',
     'Lang': user_path+'defects4j_buggy/Lang/src/test/java/',
