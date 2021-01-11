@@ -63,7 +63,7 @@ class cluster:
             clusters = APC.cluster_centers_indices_
         X["Cluster"] = clusters
 
-        s1 = silhouette_score(X, clusters, metric='euclidean')
+        s1 = silhouette_score(X, clusters)
         s2 = calinski_harabasz_score(X, clusters)
         s3 = davies_bouldin_score(X, clusters)
         print('TEST------')
@@ -100,7 +100,7 @@ class cluster:
             v = Visual(algorithm='PCA', number_cluster=number, method=method)
             v.visualize(plotX=P)
 
-        s1 = silhouette_score(P, clusters, metric='cosine')
+        s1 = silhouette_score(P, clusters)
         s2 = calinski_harabasz_score(P, clusters)
         s3 = davies_bouldin_score(P, clusters)
         print('PATCH------')
