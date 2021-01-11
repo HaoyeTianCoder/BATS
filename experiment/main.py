@@ -126,64 +126,6 @@ class Experiment:
         # np.save(self.path_patch_vector, self.patch_vector)
 
 
-
-
-    def evaluate_defects4j_projects(self, ):
-        scaler = Normalizer()
-        all_test_vector = scaler.fit_transform(self.test_vector)
-        scaler_patch = scaler.fit(self.patch_vector)
-        all_patch_vector = scaler_patch.transform(self.patch_vector)
-        projects = {'Chart': 26, 'Lang': 65, 'Time': 27, 'Closure': 176, 'Math': 106, 'Cli': 40, 'Codec': 18, 'Collections': 28, 'Compress': 47, 'Csv': 16, 'Gson': 18, 'JacksonCore': 26, 'JacksonDatabind': 112, 'JacksonXml': 6, 'Jsoup': 93, 'JxPath': 22, 'Mockito': 38}
-        # projects = {'Mockito': 38}
-        for project, number in projects.items():
-            project_list = []
-            print('Testing {}'.format(project))
-            cnt = 0
-            for i in range(len(self.test_name)):
-                if not self.test_name[i].startswith(project):
-                    continue
-                project = self.test_name[i].split('-')[0].split('_')[0]
-                id = self.test_name[i].split('-')[0].split('_')[1]
-                print('{}'.format(self.test_name[i]))
-                this_test = all_test_vector[i]
-                this_patch = all_patch_vector[i]
-
-                dist_min_index = None
-                dist_min = 9999
-                for j in range(len(all_test_vector)):
-                    if j == i:
-                        continue
-                    # whether skip current project
-                    if self.test_name[j].startswith(project+'_'+id+'-'):
-                        continue
-                    dist = distance.euclidean(this_test, all_test_vector[j])/(1 + distance.euclidean(this_test, all_test_vector[j]))
-                    if dist < dist_min:
-                        dist_min = dist
-                        dist_min_index = j
-                print('the closest test: {}'.format(self.test_name[dist_min_index]))
-                closest_patch = all_patch_vector[dist_min_index]
-
-                distance_patch = distance.euclidean(closest_patch, this_patch)/(1 + distance.euclidean(closest_patch, this_patch))
-                # distance_patch = distance.cosine(closest_patch, this_patch)
-
-                score_patch = 1 - distance_patch
-                if math.isnan(score_patch):
-                    continue
-                project_list.append([self.test_name[i], score_patch])
-            if project_list == []:
-                print('{} no found'.format(project))
-                continue
-            recommend_list_project = pd.DataFrame(sorted(project_list, key=lambda x: x[1], reverse=True))
-            # plt.bar(recommend_list_project.index.tolist(), recommend_list_project[:][1], color='chocolate')
-            plt.bar(recommend_list_project.index.tolist(), recommend_list_project[:][1], color='steelblue')
-            plt.xlabel('failed test cases')
-            plt.ylabel('score of patch from the closest test case')
-            plt.title('score distribution of {}'.format(project))
-            plt.savefig('../fig/RQ2/distance_patch_{}'.format(project))
-            plt.cla()
-
-    # def evaluate_patch_sim(self, testdata):
-
     def run(self):
 
         # load data and vector
@@ -193,22 +135,22 @@ class Experiment:
         # patch_bert_vector.patch_bert()
 
 
-        # validate hypothesis
-        method = 'biKmeans'
-        number = 40
-        clu = cluster(self.test_data, self.test_name, self.patch_name, self.test_vector, self.patch_vector, method, number)
-        clu.validate()
+        # RQ1: validate hypothesis
+        # method = 'biKmeans'
+        # number = 40
+        # clu = cluster(self.test_data, self.test_name, self.patch_name, self.test_vector, self.patch_vector, method, number)
+        # clu.validate()
 
-
-        # evaluate on developer's patch of defects4j
-        # self.evaluate_defects4j_projects()
-
-        # evaluate collected patches for projects
         eval = evaluation(self.patch_w2v, self.test_data, self.test_name, self.test_vector, self.patch_vector, self.exception_type)
+
+        # RQ2: evaluate on developer's patch of defects4j
+        eval.evaluate_defects4j_projects()
+
+        # RQ3-1: evaluate collected patches for projects
         # eval.evaluate_collected_projects(self.path_collected_patch)
         eval.predict_collected_projects(self.path_collected_patch)
 
-        # evaluate patch sim dataset
+        # RQ3-2: evaluate patch sim dataset
         # testdata = '/Users/haoye.tian/Documents/University/data/PatchSimISSTA_sliced/'
         # eval.predict_collected_projects(testdata)
 
