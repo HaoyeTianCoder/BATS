@@ -11,7 +11,8 @@ from representation.word2vector import Word2vector
 import json
 import sklearn.metrics as metrics
 from sklearn.metrics import roc_curve, auc, accuracy_score, recall_score, precision_score
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, average_precision_score
+from mean_average_precision import MeanAveragePrecision
 
 class evaluation:
     def __init__(self, patch_w2v, test_data, test_name, test_vector, patch_vector, exception_type):
@@ -308,7 +309,7 @@ class evaluation:
                 #     continue
 
                 # get patch list for failed test case
-                patch_list, scaler_patch, closest_score = self.get_patch_list(failed_test_index, k=5, filt=0, model=self.patch_w2v)
+                patch_list, scaler_patch, closest_score = self.get_patch_list(failed_test_index, k=5, filt=0.0, model=self.patch_w2v)
                 all_closest_score += closest_score
                 if patch_list == []:
                     print('no closest test case found')
@@ -320,7 +321,8 @@ class evaluation:
                 #     print('all same')
                 #     continue
 
-                centers, threshold_list = self.dynamic_threshold(patch_list)
+                # centers, threshold_list = self.dynamic_threshold(patch_list)
+                centers, threshold_list = self.dynamic_threshold2(patch_list, sumup='mean')
                 for i in range(len(name_list)):
                     name = name_list[i]
                     vector_new_patch = vector_list[i]
@@ -378,6 +380,31 @@ class evaluation:
             threshold_list.append(score_mean)
         return centers, threshold_list
 
+    def dynamic_threshold2(self, patch_list, sumup='mean'):
+        centers = []
+        threshold_list = []
+        if len(patch_list) == 1:
+            center = patch_list[0].mean(axis=0)
+            if sumup == 'mean':
+                dist_mean = np.array([distance.cosine(p, center) for p in patch_list[0]]).mean()
+            elif sumup == 'max':
+                pass
+                # dist_mean = np.array([distance.cosine(p, center) for p in patch_list[0]]).max()
+        else:
+            patches = patch_list[0]
+            for i in range(1, len(patch_list)):
+                patches = np.concatenate((patches, patch_list[i]), axis=0)
+            center = patches.mean(axis=0)
+            if sumup == 'mean':
+                dist_mean = np.array([distance.cosine(p, center) for p in patches]).mean()
+            elif sumup == 'max':
+                dist_mean = np.array([distance.cosine(p, center) for p in patches]).max()
+
+        score_mean = 1 - dist_mean
+
+        return [center], [score_mean]
+
+
     def predict2(self, centers, threshold_list, new_patch, scaler_patch):
         if self.patch_w2v != 'string':
             new_patch = scaler_patch.transform(new_patch.reshape((1, -1)))
@@ -413,4 +440,60 @@ class evaluation:
         recall_n = tn / (tn + fp)
         print('+Recall: {:.3f}, -Recall: {:.3f}'.format(recall_p, recall_n))
         # return , auc_
+
+        # print('AP: {}'.format(average_precision_score(y_trues, y_preds)))
         return recall_p, recall_n, acc, prc, rc, f1
+
+    def evaluate_defects4j_projects(self, ):
+        scaler = Normalizer()
+        all_test_vector = scaler.fit_transform(self.test_vector)
+        scaler_patch = scaler.fit(self.patch_vector)
+        all_patch_vector = scaler_patch.transform(self.patch_vector)
+        projects = {'Chart': 26, 'Lang': 65, 'Time': 27, 'Closure': 176, 'Math': 106, 'Cli': 40, 'Codec': 18, 'Collections': 28, 'Compress': 47, 'Csv': 16, 'Gson': 18, 'JacksonCore': 26, 'JacksonDatabind': 112, 'JacksonXml': 6, 'Jsoup': 93, 'JxPath': 22, 'Mockito': 38}
+        # projects = {'Mockito': 38}
+        for project, number in projects.items():
+            project_list = []
+            print('Testing {}'.format(project))
+            cnt = 0
+            for i in range(len(self.test_name)):
+                if not self.test_name[i].startswith(project):
+                    continue
+                project = self.test_name[i].split('-')[0].split('_')[0]
+                id = self.test_name[i].split('-')[0].split('_')[1]
+                print('{}'.format(self.test_name[i]))
+                this_test = all_test_vector[i]
+                this_patch = all_patch_vector[i]
+
+                dist_min_index = None
+                dist_min = 9999
+                for j in range(len(all_test_vector)):
+                    if j == i:
+                        continue
+                    # whether skip current project
+                    if self.test_name[j].startswith(project+'_'+id+'-'):
+                        continue
+                    dist = distance.euclidean(this_test, all_test_vector[j])/(1 + distance.euclidean(this_test, all_test_vector[j]))
+                    if dist < dist_min:
+                        dist_min = dist
+                        dist_min_index = j
+                print('the closest test: {}'.format(self.test_name[dist_min_index]))
+                closest_patch = all_patch_vector[dist_min_index]
+
+                distance_patch = distance.euclidean(closest_patch, this_patch)/(1 + distance.euclidean(closest_patch, this_patch))
+                # distance_patch = distance.cosine(closest_patch, this_patch)
+
+                score_patch = 1 - distance_patch
+                if math.isnan(score_patch):
+                    continue
+                project_list.append([self.test_name[i], score_patch])
+            if project_list == []:
+                print('{} no found'.format(project))
+                continue
+            recommend_list_project = pd.DataFrame(sorted(project_list, key=lambda x: x[1], reverse=True))
+            # plt.bar(recommend_list_project.index.tolist(), recommend_list_project[:][1], color='chocolate')
+            plt.bar(recommend_list_project.index.tolist(), recommend_list_project[:][1], color='steelblue')
+            plt.xlabel('failed test cases')
+            plt.ylabel('score of patch from the closest test case')
+            plt.title('score distribution of {}'.format(project))
+            plt.savefig('../fig/RQ2/distance_patch_{}'.format(project))
+            plt.cla()
