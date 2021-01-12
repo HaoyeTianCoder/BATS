@@ -68,12 +68,13 @@ class evaluation:
 
             # vector
             json_key = p + '_.json'
-            if self.patch_w2v == 'bert' and os.path.exists(json_key):
-                with open(json_key, 'r+') as f:
-                    vector_str = json.load(f)
-                    vector = np.array(list(map(float, vector_str)))
-                if vector.size != 1024:
-                    w2v = Word2vector(patch_w2v=self.patch_w2v, )
+            if self.patch_w2v == 'bert':
+                if os.path.exists(json_key):
+                    with open(json_key, 'r+') as f:
+                        vector_str = json.load(f)
+                        vector = np.array(list(map(float, vector_str)))
+                else:
+                    w2v = Word2vector(patch_w2v='bert', )
                     vector = w2v.convert_single_patch(p)
                     vector_json = list(vector)
                     vector_json = list(map(str, vector_json))
@@ -83,11 +84,6 @@ class evaluation:
             else:
                 w2v = Word2vector(patch_w2v=self.patch_w2v, )
                 vector = w2v.convert_single_patch(p)
-                vector_json = list(vector)
-                vector_json = list(map(str, vector_json))
-                with open(json_key, 'w+') as f:
-                    jsonstr = json.dumps(vector_json, )
-                    f.write(jsonstr)
             vector_list.append(vector)
 
         return name_list, label_list, vector_list
@@ -284,7 +280,6 @@ class evaluation:
             recommend_list_project = []
             print('Testing {}'.format(project))
             for id in range(1, number + 1):
-                recommend_list = []
                 print('{}_{} ------'.format(project, id))
                 # extract failed test index according to bug_id
                 project_id = '_'.join([project, str(id)])
@@ -309,7 +304,7 @@ class evaluation:
                 #     continue
 
                 # get patch list for failed test case
-                patch_list, scaler_patch, closest_score = self.get_patch_list(failed_test_index, k=5, filt=0.0, model=self.patch_w2v)
+                patch_list, scaler_patch, closest_score = self.get_patch_list(failed_test_index, k=5, filt=0.7, model=self.patch_w2v)
                 all_closest_score += closest_score
                 if patch_list == []:
                     print('no closest test case found')
@@ -321,16 +316,24 @@ class evaluation:
                 #     print('all same')
                 #     continue
 
+                recommend_list = []
                 # centers, threshold_list = self.dynamic_threshold(patch_list)
                 centers, threshold_list = self.dynamic_threshold2(patch_list, sumup='mean')
                 for i in range(len(name_list)):
                     name = name_list[i]
                     vector_new_patch = vector_list[i]
                     y_true = label_list[i]
-                    y_pred = self.predict2(centers, threshold_list, vector_new_patch, scaler_patch)
+                    # y_pred = self.predict_label(centers, threshold_list, vector_new_patch, scaler_patch)
+                    # y_pred_prob = self.predict_prob(centers, threshold_list, vector_new_patch, scaler_patch)
+                    y_pred_prob, y_pred = self.predict_recom(centers, threshold_list, vector_new_patch, scaler_patch)
+
+                    recommend_list.append([name, y_pred, y_true, y_pred_prob])
 
                     y_preds.append(y_pred)
                     y_trues.append(y_true)
+
+                self.evaluate_recommend(recommend_list)
+
 
         recall_p, recall_n, acc, prc, rc, f1 = self.evaluation_metrics(y_trues, y_preds)
 
@@ -405,7 +408,7 @@ class evaluation:
         return [center], [score_mean]
 
 
-    def predict2(self, centers, threshold_list, new_patch, scaler_patch):
+    def predict_label(self, centers, threshold_list, new_patch, scaler_patch):
         if self.patch_w2v != 'string':
             new_patch = scaler_patch.transform(new_patch.reshape((1, -1)))
 
@@ -427,21 +430,61 @@ class evaluation:
         else:
             return 0
 
-    def evaluation_metrics(self, y_trues, y_preds):
+    def predict_prob(self, centers, threshold_list, new_patch, scaler_patch):
+        if self.patch_w2v != 'string':
+            new_patch = scaler_patch.transform(new_patch.reshape((1, -1)))
+
+        center = centers[0]
+        score_mean = threshold_list[0]
+
+        # choose method to calculate distance
+        # dist_new = distance.cosine(new_patch, center)
+        dist_new = distance.euclidean(new_patch, center)/(1 + distance.euclidean(new_patch, center))
+
+        score_prob_new = 1 - dist_new
+
+        return score_prob_new
+
+    def predict_recom(self, centers, threshold_list, new_patch, scaler_patch):
+        if self.patch_w2v != 'string':
+            new_patch = scaler_patch.transform(new_patch.reshape((1, -1)))
+
+        center = centers[0]
+        score_mean = threshold_list[0]
+
+        # choose method to calculate distance
+        # dist_new = distance.cosine(new_patch, center)
+        dist_new = distance.euclidean(new_patch, center)/(1 + distance.euclidean(new_patch, center))
+
+        score_prob_new = 1 - dist_new
+        if score_prob_new >= score_mean:
+            y_pred = 1
+        else:
+            y_pred = 0
+
+        return score_prob_new, y_pred
+
+    def evaluation_metrics(self, y_trues, y_pred_probs):
+        fpr, tpr, thresholds = roc_curve(y_true=y_trues, y_score=y_pred_probs, pos_label=1)
+        auc_ = auc(fpr, tpr)
+
+        y_preds = [1 if p >= 0.5 else 0 for p in y_pred_probs]
 
         acc = accuracy_score(y_true=y_trues, y_pred=y_preds)
         prc = precision_score(y_true=y_trues, y_pred=y_preds)
         rc = recall_score(y_true=y_trues, y_pred=y_preds)
         f1 = 2 * prc * rc / (prc + rc)
 
+        print('------------')
+        print('The number of dataset: {}, Correct: {}, Incorrect: {}'.format(len(y_trues), y_trues.count(1), y_trues.count(0)))
         print('Accuracy: %f -- Precision: %f -- +Recall: %f -- F1: %f ' % (acc, prc, rc, f1))
         tn, fp, fn, tp = confusion_matrix(y_trues, y_preds).ravel()
         recall_p = tp / (tp + fn)
         recall_n = tn / (tn + fp)
-        print('+Recall: {:.3f}, -Recall: {:.3f}'.format(recall_p, recall_n))
+        print('AUC: {:.3f}, +Recall: {:.3f}, -Recall: {:.3f}'.format(auc_, recall_p, recall_n))
         # return , auc_
 
-        # print('AP: {}'.format(average_precision_score(y_trues, y_preds)))
+        print('AP: {}'.format(average_precision_score(y_trues, y_pred_probs)))
         return recall_p, recall_n, acc, prc, rc, f1
 
     def evaluate_defects4j_projects(self, ):
@@ -497,3 +540,19 @@ class evaluation:
             plt.title('score distribution of {}'.format(project))
             plt.savefig('../fig/RQ2/distance_patch_{}'.format(project))
             plt.cla()
+
+    def evaluate_recommend(self, recommend_list):
+        recommend_list = pd.DataFrame(sorted(recommend_list, key=lambda x: x[3], reverse=True))
+        recommend_list = recommend_list[recommend_list[1] == 1]
+        k = 5
+        number_correct = 0
+        precision_all = 0
+        if recommend_list.shape[0] >= k:
+            for i in range(recommend_list.shape[0]):
+                if recommend_list[i][2] == 1:
+                    number_correct += 1.0
+                    precision_all += number_correct / (i + 1)
+        AP = precision_all / number_correct
+        print('AP@{} for recommend list: {}'.format(k, AP))
+        RR = 1.0 / (list(recommend_list[:][2]).index(1) + 1)
+        print('RR for recommend list: {}'.format(RR))
