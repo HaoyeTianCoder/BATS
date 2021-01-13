@@ -184,7 +184,7 @@ class Word2vector:
                     combined_vector += s
                 combined_vector = [combined_vector]
             # combined_vector = np.array(multi_vector).mean(axis=0)
-            return combined_vector
+            return combined_vector, None
         except Exception as e:
             raise e
 
