@@ -6,13 +6,13 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import roc_curve, auc, accuracy_score, recall_score, precision_score, confusion_matrix
 
 class MlPrediction:
-    def __init__(self):
-        self.x_train = None
-        self.y_train = None
-        self.x_test = None
-        self.y_test = None
+    def __init__(self, x_train, y_train, x_test, y_test, algorithm='lr'):
+        self.x_train = x_train
+        self.y_train = y_train
+        self.x_test = x_test
+        self.y_test = y_test
 
-        self.algorithm = None
+        self.algorithm = algorithm
 
     def predict(self):
         accs, prcs, rcs, f1s, aucs = list(), list(), list(), list(), list()
@@ -25,6 +25,8 @@ class MlPrediction:
         scaler = StandardScaler().fit(x_train)
         x_train = scaler.transform(x_train)
         x_test = scaler.transform(x_test)
+
+        print('The number of train: {}, The number of test: {}'.format(len(x_train), len(x_test)))
 
         clf = None
         if self.algorithm == 'lr':
