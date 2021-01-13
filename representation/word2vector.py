@@ -160,13 +160,18 @@ class Word2vector:
 
             elif self.patch_w2v == 'bert':
                 multi_vector = []
+                multi_vector_cross = []
                 patch = os.listdir(path_patch)
                 for part in patch:
                     p = os.path.join(path_patch, part)
                     learned_vector = self.learned_feature(p, self.patch_w2v)
-                    multi_vector.append(learned_vector)
-                combined_vector = np.array(multi_vector).sum(axis=0)
+                    learned_vector_cross = self.learned_feature_cross(p, self.patch_w2v)
 
+                    multi_vector.append(learned_vector)
+                    multi_vector_cross.append(learned_vector_cross)
+                combined_vector = np.array(multi_vector).sum(axis=0)
+                combined_vector_cross = np.array(multi_vector_cross).sum(axis=0)
+                return combined_vector, combined_vector_cross
             elif self.patch_w2v == 'str':
                 multi_vector = []
                 patch = os.listdir(path_patch)
@@ -216,6 +221,29 @@ class Word2vector:
         # embedding = np.hstack((subtract, multiple, cos, euc,))
 
         embedding = self.subtraction(bug_vec, patched_vec)
+
+        return list(embedding.flatten())
+
+    def learned_feature_cross(self, path_patch, w2v):
+        try:
+            bugy_all = self.get_diff_files_frag(path_patch, type='buggy')
+            patched_all = self.get_diff_files_frag(path_patch, type='patched')
+
+            # tokenize word
+            bugy_all_token = word_tokenize(bugy_all)
+            patched_all_token = word_tokenize(patched_all)
+
+            bug_vec, patched_vec = self.output_vec(w2v, bugy_all_token, patched_all_token)
+        except Exception as e:
+            # print('patch: {}, exception: {}'.format(path_patch, e))
+            raise e
+
+        bug_vec = bug_vec.reshape((1, -1))
+        patched_vec = patched_vec.reshape((1, -1))
+
+        # embedding feature cross
+        subtract, multiple, cos, euc = self.multi_diff_features(bug_vec, patched_vec)
+        embedding = np.hstack((subtract, multiple, cos, euc,))
 
         return list(embedding.flatten())
 
