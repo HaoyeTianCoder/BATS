@@ -29,22 +29,29 @@ def patch_bert():
                             cnt += 1
 
                             json_key = path_patch + '_.json'
-                            if os.path.exists(json_key):
-                                print('exists!')
-                                continue
+                            json_key_cross = path_patch + '_cross.json'
+
+                            # if os.path.exists(json_key) and os.path.exists(json_key_cross):
+                            #     print('exists!')
+                            #     continue
 
                             try:
-                                vector = w2v.convert_single_patch(path_patch)
+                                vector, vector_cross = w2v.convert_single_patch(path_patch)
                             except Exception as e:
                                 print('error bert vector: {}'.format(e))
                                 continue
-                            vector_list = list(vector)
-                            vector_list = list(map(str, vector_list))
+                            vector_list = list(map(str, list(vector)))
+                            vector_list_cross = list(map(str, list(vector_cross)))
 
                             with open(json_key, 'w+') as f:
                                 jsonstr = json.dumps(vector_list, )
                                 f.write(jsonstr)
+                            with open(json_key_cross, 'w+') as f:
+                                jsonstr = json.dumps(vector_list_cross, )
+                                f.write(jsonstr)
+
                             print('{} json_key: {}'.format(cnt, json_key))
+
         # pickle.dump(dict, f)
         # f.write(jsonstr)
 
