@@ -1,9 +1,10 @@
 from sklearn.metrics import roc_curve
-from sklearn.preprocessing import StandardScaler,MinMaxScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, Normalizer
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import roc_curve, auc, accuracy_score, recall_score, precision_score, confusion_matrix
+from sklearn.naive_bayes import GaussianNB
 
 class MlPrediction:
     def __init__(self, x_train, y_train, x_test, y_test, algorithm='lr'):
@@ -26,18 +27,20 @@ class MlPrediction:
         x_train = scaler.transform(x_train)
         x_test = scaler.transform(x_test)
 
-        print('The number of train: {}, The number of test: {}'.format(len(x_train), len(x_test)))
+        print('train data: {}, test data: {}'.format(len(x_train), len(x_test)))
 
         clf = None
         if self.algorithm == 'lr':
-            clf = LogisticRegression(solver='lbfgs', max_iter=1000).fit(X=x_train, y=y_train)
+            clf = LogisticRegression(solver='lbfgs', class_weight={1:1}, max_iter=10000).fit(X=x_train, y=y_train)
         elif self.algorithm == 'dt':
             clf = DecisionTreeClassifier().fit(X=x_train, y=y_train, sample_weight=None)
         elif self.algorithm == 'rf':
-            clf = RandomForestClassifier(n_estimators=100, ).fit(X=x_train, y=y_train)
+            clf = RandomForestClassifier(class_weight={1:1},n_estimators=1000).fit(X=x_train, y=y_train)
+        elif self.algorithm == 'nb':
+            clf = GaussianNB().fit(X=x_train, y=y_train)
 
         y_pred = clf.predict_proba(x_test)[:, 1]
-
+        print('{}: '.format(self.algorithm))
         auc_, recall_p, recall_n, acc, prc, rc, f1 = self.evaluation_metrics(y_true=y_test, y_pred_prob=y_pred)
 
     def evaluation_metrics(self, y_true, y_pred_prob):
