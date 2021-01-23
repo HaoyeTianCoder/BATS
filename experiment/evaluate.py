@@ -14,6 +14,7 @@ from sklearn.metrics import roc_curve, auc, accuracy_score, recall_score, precis
 from sklearn.metrics import confusion_matrix, average_precision_score
 from mean_average_precision import MeanAveragePrecision
 from experiment.ML4prediction import MlPrediction
+from tqdm import tqdm
 
 class evaluation:
     def __init__(self, patch_w2v, test_data, test_name, test_vector, patch_vector, exception_type):
@@ -48,7 +49,7 @@ class evaluation:
                             available_path_patch.append(path_patch)
         return available_path_patch
 
-    def vector4patch(self, available_path_patch, compare=False):
+    def vector4patch(self, available_path_patch, compare='bert'):
         vector_list = []
         vector_cross_list = []
         label_list = []
@@ -75,7 +76,7 @@ class evaluation:
             json_key = p + '_.json'
             json_key_cross = p + '_cross.json'
             if self.patch_w2v == 'bert':
-                if os.path.exists(json_key) and os.path.exists(json_key_cross):
+                if os.path.exists(json_key):
                     with open(json_key, 'r+') as f:
                         vector_str = json.load(f)
                         vector = np.array(list(map(float, vector_str)))
@@ -92,9 +93,9 @@ class evaluation:
                         f.write(jsonstr)
             else:
                 w2v = Word2vector(patch_w2v=self.patch_w2v, )
-                vector = w2v.convert_single_patch(p)
+                vector, _ = w2v.convert_single_patch(p)
             vector_list.append(vector)
-            if compare:
+            if compare=='bert':
                 with open(json_key_cross, 'r+') as f:
                     vector_str = json.load(f)
                     vector_cross = np.array(list(map(float, vector_str)))
@@ -142,7 +143,7 @@ class evaluation:
                 flag = 1 if exp_type == simi_exp_type else 0
                 score_test.append([j, 1-dist, flag])
             k_index_list = sorted(score_test, key=lambda x: float(x[1]), reverse=True)[:k]
-            closest_score.append(1-k_index_list[0][1])
+            closest_score.append(k_index_list[0][1])
 
             # keep the test case with simi score >= 0.7
             k_index = np.array([v[0] for v in k_index_list if v[1] >= filt])
@@ -209,7 +210,7 @@ class evaluation:
                     continue
 
                 # return vector for path patch
-                name_list, label_list, vector_list = self.vector4patch(available_path_patch)
+                name_list, label_list, vector_list, vector_cross_list = self.vector4patch(available_path_patch, 'False')
                 # if not 0 in label_list or not 1 in label_list:
                 #     print('all same')
                 #     continue
@@ -287,6 +288,8 @@ class evaluation:
         number_patch_MAP = 0
         recommend_list_project = []
         x_train, y_train, x_test, y_test = [], [], [], []
+        compare = 'bert'
+        skip = 0.0
         for project, number in projects.items():
             print('Testing {}'.format(project))
             for id in range(1, number + 1):
@@ -307,11 +310,11 @@ class evaluation:
                     continue
 
                 # get patch list for failed test case
-                patch_list, scaler_patch, closest_score = self.get_patch_list(failed_test_index, k=5, filt=0.80, model=self.patch_w2v)
+                patch_list, scaler_patch, closest_score = self.get_patch_list(failed_test_index, k=5, filt=0.8, model=self.patch_w2v)
                 all_closest_score += closest_score
 
                 # return vector for path patch
-                name_list, label_list, vector_list, vector_cross_list = self.vector4patch(available_path_patch, compare=True)
+                name_list, label_list, vector_list, vector_cross_list = self.vector4patch(available_path_patch, compare=compare)
 
                 if patch_list == []:
                     print('No closest test case found')
@@ -321,7 +324,7 @@ class evaluation:
                     y_train += label_list
                     continue
 
-                distance_method = distance.euclidean
+                distance_method = distance.cosine
                 recommend_list = []
                 # centers, threshold_list = self.dynamic_threshold(patch_list)
                 centers, threshold_list = self.dynamic_threshold2(patch_list, distance_method=distance_method,sumup='mean')
@@ -340,28 +343,35 @@ class evaluation:
                         y_trues.append(y_true)
 
                         # ML prediction for comparison
-                        x_test.append(vector_cross_list[i])
-                        y_test.append(y_true)
+                        if compare == 'bert':
+                            x_test.append(vector_cross_list[i])
+                            y_test.append(y_true)
 
-                if not (not 1 in label_list or not 0 in label_list):
-                    AP, RR = self.evaluate_recommend(recommend_list, k=0)
-                    if AP != None and RR != None:
-                        MAP.append(AP)
-                        MRR.append(RR)
-                        number_patch_MAP += len(recommend_list)
+                if not (not 1 in label_list or not 0 in label_list) and recommend_list != []:
+                    AP, RR = self.evaluate_recommend_list(recommend_list)
+                    MAP.append(AP)
+                    MRR.append(RR)
+                    number_patch_MAP += len(recommend_list)
+                else:
+                    pass
+                    skip += len(label_list)
 
                 recommend_list_project += recommend_list
 
         print('------------')
-        MlPrediction(x_train, y_train, x_test, y_test, algorithm='lr').predict()
+        if compare == 'bert':
+            MlPrediction(x_train, y_train, x_test, y_test, algorithm='lr').predict()
+            MlPrediction(x_train, y_train, x_test, y_test, algorithm='rf').predict()
 
         recall_p, recall_n, acc, prc, rc, f1 = self.evaluation_metrics(y_trues, y_preds)
 
+        # print('------------')
+        # print('The number of recommend list: {}'.format(len(recommend_list_project)))
+        # AP, RR = self.evaluate_recommend(recommend_list_project, k=0)
         print('------------')
-        print('The number of recommend list: {}'.format(len(recommend_list_project)))
-        AP, RR = self.evaluate_recommend(recommend_list_project, k=0)
-        print('------------')
-        print('The number of recommend list: {}'.format(number_patch_MAP))
+        print('skip: {}'.format(skip))
+        print('test data of patches: {}'.format(number_patch_MAP))
+        print('test data of bugs: {}'.format(len(MAP)))
         print('MAP: {}, MRR: {}'.format(np.array(MAP).mean(), np.array(MRR).mean()))
 
 
@@ -514,7 +524,7 @@ class evaluation:
         f1 = 2 * prc * rc / (prc + rc)
 
         print('------------')
-        print('The number of patches: {}, Correct: {}, Incorrect: {}'.format(len(y_trues), y_trues.count(1), y_trues.count(0)))
+        print('test data: {}, Correct: {}, Incorrect: {}'.format(len(y_trues), y_trues.count(1), y_trues.count(0)))
         print('Accuracy: %f -- Precision: %f -- +Recall: %f -- F1: %f ' % (acc, prc, rc, f1))
         tn, fp, fn, tp = confusion_matrix(y_trues, y_preds).ravel()
         recall_p = tp / (tp + fn)
@@ -579,29 +589,25 @@ class evaluation:
             plt.savefig('../fig/RQ2/distance_patch_{}'.format(project))
             plt.cla()
 
-    def evaluate_recommend(self, recommend_list, k):
+    def evaluate_recommend_list(self, recommend_list):
         recommend_list = pd.DataFrame(sorted(recommend_list, key=lambda x: x[3], reverse=True))
         # recommend_list = recommend_list[recommend_list[1] == 1]
         number_correct = 0.0
         precision_all = 0.0
-        if recommend_list.shape[0] >= k:
-            # recommend_list = recommend_list[:k]
-            for i in range(recommend_list.shape[0]):
-                if recommend_list.loc[i][2] == 1:
-                    number_correct += 1.0
-                    precision_all += number_correct / (i + 1)
-        else:
-            return None, None
 
-        if number_correct == 0:
-            print('No correct patch is put on top')
-            # return None, None
-            AP = RR = 0
+        for i in range(recommend_list.shape[0]):
+            if recommend_list.loc[i][2] == 1:
+                number_correct += 1.0
+                precision_all += (number_correct / (i + 1))
+
+        if number_correct == 0.0:
+            print('No correct patch found on the list')
+            raise
         else:
             AP = precision_all / number_correct
             RR = 1.0 / (list(recommend_list[:][2]).index(1) + 1)
 
-        print('AP@{} for recommend list: {}'.format(k, AP))
+        print('AP for recommend list: {}'.format(AP))
         print('RR for recommend list: {}'.format(RR))
 
         return AP, RR
