@@ -119,21 +119,20 @@ class biKmeans:
             distribution_SSE.append(float(lowestSSE))
 
         distribution_rate = [(distribution_SSE[i - 1] - distribution_SSE[i]) / distribution_SSE[i - 1] for i in range(1, len(distribution_SSE))]
-        plt.plot(np.linspace(1, k, k), distribution_SSE)
-        plt.xlabel('The number of cluster')
-        plt.ylabel('SSE')
-        if k > 50:
+        if k >= 50:
+            plt.plot(np.linspace(1, k, k), distribution_SSE)
+            plt.xlabel('Iteration')
+            plt.ylabel('SSE')
             plt.savefig('../fig/RQ1/SSE_Clustering.png')
-        # plt.show()
-        plt.cla()
+            # plt.show()
+            plt.cla()
 
-        plt.plot(np.linspace(2, k, k-1), distribution_rate)
-        plt.xlabel('The number of cluster')
-        plt.ylabel('SSE Loss Rate')
-        if k > 50:
-            plt.savefig('../fig/RQ1/SSE_Loss_Clustering.png')
-        # plt.show()
-        plt.cla()
+            plt.plot(np.linspace(2, k, k - 1), distribution_rate)
+            plt.xlabel('Iteration')
+            plt.ylabel('SSE Reduction Rate')
+            plt.savefig('../fig/RQ1/SSE_Reduction_Rate.png')
+            # plt.show()
+            plt.cla()
 
         clusters = np.array(list(map(int, np.array(clusterAssment)[:, 0])))
         return clusters
