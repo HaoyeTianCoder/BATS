@@ -87,7 +87,7 @@ class cluster:
         plt.boxplot(result_cluster, labels=['Original']+[str(i) for i in range(len(result_cluster)-1)] )
         plt.xlabel('Cluster')
         plt.ylabel('Distance to Center')
-        plt.savefig('../fig/RQ1/box_{}.png'.format(method))
+        plt.savefig('../fig/RQ1/boxplot.png')
 
         return clusters
 
