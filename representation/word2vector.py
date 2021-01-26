@@ -82,11 +82,11 @@ class Word2vector:
                     learned_vector = list(learned_vector.flatten())
                 elif self.patch_w2v == 'bert':
                     learned_vector = self.learned_feature(path_patch_id, self.patch_w2v)
-                elif self.patch_w2v == 'str':
+                elif self.patch_w2v == 'string':
                     learned_vector = self.extract_text(path_patch_id, )
                 multi_vector.append(learned_vector)
             # patch_vector = np.array(multi_vector).mean(axis=0)
-            if self.patch_w2v == 'str':
+            if self.patch_w2v == 'string':
                 patch_vector = ''
                 for s in multi_vector:
                     patch_vector += s
@@ -96,7 +96,7 @@ class Word2vector:
         except Exception as e:
             raise e
 
-        if self.patch_w2v == 'str':
+        if self.patch_w2v == 'string':
             if patch_vector == ['']:
                 raise Exception('null patch string')
             return test_vector, patch_vector
@@ -105,47 +105,47 @@ class Word2vector:
                 raise Exception('null vector')
             return test_vector, patch_vector
 
-    def convert(self, test_name, data_text):
-        if self.test_w2v == 'code2vec':
-            test_vector = []
-            for i in range(len(data_text)):
-                function = data_text[i]
-                try:
-                    vector = self.c2v.convert(function)
-                except Exception as e:
-                    print('{} test_name:{} Exception:{}'.format(i, test_name[i], 'Wrong syntax'))
-                    continue
-                print('{} test_name:{}'.format(i, test_name[i]))
-                test_vector.append(vector)
-            return test_vector
-
-        if self.patch_w2v == 'cc2vec':
-            patch_vector = []
-            for i in range(len(data_text)):
-                patch_ids = data_text[i]
-                # find path_patch
-                if len(patch_ids) == 1 and patch_ids[0].endwith('-one'):
-                    project = patch_ids[0].split('_')[0]
-                    id = patch_ids[0].split('_')[1].replace('-one','')
-                    path_patch = self.path_patch_root + project +'/'+ id + '/'
-                    patch_ids = os.listdir(path_patch)
-                    path_patch_ids = [path_patch + patch_id for patch_id in patch_ids]
-                else:
-                    path_patch_ids = []
-                    for name in patch_ids:
-                        project = name.split('_')[0]
-                        id = name.split('_')[1]
-                        patch_id = name.split('_')[1] +'_'+ name.split('_')[2] + '.patch'
-                        path_patch = self.path_patch_root + project +'/'+ id + '/'
-                        path_patch_ids.append(os.path.join(path_patch, patch_id))
-
-                multi_vector = []
-                for path_patch_id in path_patch_ids:
-                    learned_vector = lmg_cc2ftr_interface.learned_feature(path_patch_id, load_model=MODEL_CC2Vec+'cc2ftr.pt', dictionary=self.dictionary)
-                    multi_vector.append(list(learned_vector.flatten()))
-                combined_vector = np.array(multi_vector).mean(axis=0)
-                patch_vector.append(combined_vector)
-            return patch_vector
+    # def convert(self, test_name, data_text):
+    #     if self.test_w2v == 'code2vec':
+    #         test_vector = []
+    #         for i in range(len(data_text)):
+    #             function = data_text[i]
+    #             try:
+    #                 vector = self.c2v.convert(function)
+    #             except Exception as e:
+    #                 print('{} test_name:{} Exception:{}'.format(i, test_name[i], 'Wrong syntax'))
+    #                 continue
+    #             print('{} test_name:{}'.format(i, test_name[i]))
+    #             test_vector.append(vector)
+    #         return test_vector
+    #
+    #     if self.patch_w2v == 'cc2vec':
+    #         patch_vector = []
+    #         for i in range(len(data_text)):
+    #             patch_ids = data_text[i]
+    #             # find path_patch
+    #             if len(patch_ids) == 1 and patch_ids[0].endwith('-one'):
+    #                 project = patch_ids[0].split('_')[0]
+    #                 id = patch_ids[0].split('_')[1].replace('-one','')
+    #                 path_patch = self.path_patch_root + project +'/'+ id + '/'
+    #                 patch_ids = os.listdir(path_patch)
+    #                 path_patch_ids = [path_patch + patch_id for patch_id in patch_ids]
+    #             else:
+    #                 path_patch_ids = []
+    #                 for name in patch_ids:
+    #                     project = name.split('_')[0]
+    #                     id = name.split('_')[1]
+    #                     patch_id = name.split('_')[1] +'_'+ name.split('_')[2] + '.patch'
+    #                     path_patch = self.path_patch_root + project +'/'+ id + '/'
+    #                     path_patch_ids.append(os.path.join(path_patch, patch_id))
+    #
+    #             multi_vector = []
+    #             for path_patch_id in path_patch_ids:
+    #                 learned_vector = lmg_cc2ftr_interface.learned_feature(path_patch_id, load_model=MODEL_CC2Vec+'cc2ftr.pt', dictionary=self.dictionary)
+    #                 multi_vector.append(list(learned_vector.flatten()))
+    #             combined_vector = np.array(multi_vector).mean(axis=0)
+    #             patch_vector.append(combined_vector)
+    #         return patch_vector
 
     def convert_single_patch(self, path_patch):
         try:
@@ -172,7 +172,7 @@ class Word2vector:
                 combined_vector = np.array(multi_vector).sum(axis=0)
                 combined_vector_cross = np.array(multi_vector_cross).sum(axis=0)
                 return combined_vector, combined_vector_cross
-            elif self.patch_w2v == 'str':
+            elif self.patch_w2v == 'string':
                 multi_vector = []
                 patch = os.listdir(path_patch)
                 for part in patch:
