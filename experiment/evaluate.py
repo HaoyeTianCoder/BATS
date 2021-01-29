@@ -15,6 +15,9 @@ from sklearn.metrics import confusion_matrix, average_precision_score
 from mean_average_precision import MeanAveragePrecision
 from experiment.ML4prediction import MlPrediction
 from tqdm import tqdm
+import seaborn as sns
+from matplotlib.patches import PathPatch
+import scipy.stats as stats
 
 notRecognizedByBert = ['Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-25-patch1', 'Correct-Lang-53-patch1', 'Incorrect-Math-6-patch2', 'Incorrect-Math-6-patch2', 'Incorrect-Math-6-patch1', 'Correct-Math-56-patch1', 'Incorrect-Math-80-patch1', 'Incorrect-Math-104-patch1']
 notRecognizedByCC2Vec = ['Correct-Lang-25-patch1', 'Correct-Lang-53-patch1', 'Correct-Math-56-patch1', 'Incorrect-Math-80-patch1']
@@ -62,6 +65,69 @@ class evaluation:
             recogName = '-'.join([p.split('/')[-4], p.split('/')[-3], p.split('/')[-2], p.split('/')[-1]])
             if recogName in notRecognized:
                 continue
+
+            # vector
+            json_key = p + '_.json'
+            json_key_cross = p + '_cross.json'
+            if self.patch_w2v == 'bert':
+                if os.path.exists(json_key):
+                    with open(json_key, 'r+') as f:
+                        vector_str = json.load(f)
+                        vector = np.array(list(map(float, vector_str)))
+                else:
+                    w2v = Word2vector(patch_w2v='bert', )
+                    vector, vector_cross = w2v.convert_single_patch(p)
+                    vector_json = list(map(str, list(vector)))
+                    vector_json_cross = list(map(str, list(vector)))
+                    with open(json_key, 'w+') as f:
+                        jsonstr = json.dumps(vector_json, )
+                        f.write(jsonstr)
+                    # with open(json_key_cross, 'w+') as f:
+                    #     jsonstr = json.dumps(vector_json_cross, )
+                    #     f.write(jsonstr)
+            elif self.patch_w2v == 'cc2vec':
+                w2v = Word2vector(patch_w2v=self.patch_w2v, )
+                vector, _ = w2v.convert_single_patch(p)
+            elif self.patch_w2v == 'string':
+                w2v = Word2vector(patch_w2v=self.patch_w2v, )
+                vector, _ = w2v.convert_single_patch(p)
+            else:
+                raise
+            # if list(vector.astype(float)) == list(np.zeros(240).astype(float)) or list(vector.astype(float)) == list(np.zeros(1024).astype(float)):
+            #     ttt = '-'.join([p.split('/')[-4], p.split('/')[-3], p.split('/')[-2], p.split('/')[-1]])
+            #     notRecognized.append(ttt)
+            vector_list.append(vector)
+            if compare=='bert':
+                with open(json_key_cross, 'r+') as f:
+                    vector_str = json.load(f)
+                    vector_cross = np.array(list(map(float, vector_str)))
+                vector_cross_list.append(vector_cross)
+
+            # label
+            if 'Correct' in p:
+                label_list.append(1)
+                label = 'Correct'
+            elif 'Incorrect' in p:
+                label_list.append(0)
+                label = 'Incorrect'
+            else:
+                raise Exception('wrong label')
+
+            # name
+            tool = p.split('/')[-5]
+            patchid = p.split('/')[-1]
+            # name = tool + '-' + label + '-' + patchid
+            name = tool[:3] + patchid.replace('patch','')
+            name_list.append(name)
+
+        return name_list, label_list, vector_list, vector_cross_list
+
+    def vector4patch_patchsim(self, available_path_patch, compare='bert',):
+        vector_list = []
+        vector_cross_list = []
+        label_list = []
+        name_list = []
+        for p in available_path_patch:
 
             # vector
             json_key = p + '_.json'
@@ -298,15 +364,21 @@ class evaluation:
         projects = {'Chart': 26, 'Lang': 65, 'Math': 106, 'Time': 27}
         # projects = {'Math': 106}
         all_closest_score = []
-        y_preds = []
-        y_trues = []
+        y_preds, y_trues = [], []
         MAP, MRR = [], []
         number_patch_MAP = 0
         recommend_list_project = []
         x_train, y_train, x_test, y_test = [], [], [], []
         compare = 'bert-'
+        box_projecs_co= []
+        box_projecs_inco= []
+        projects_name = []
+        mean_stand_dict = {0.0: [443, 816], 0.6: [273, 246], 0.7: [231, 273], 0.8: [180, 235], 0.9: [130, 130]}
         for project, number in projects.items():
             print('Testing {}'.format(project))
+            # project_list_co = []
+            # project_list_inco = []
+            # projects_name.append(project)
             for id in range(1, number + 1):
                 print('{}_{} ------'.format(project, id))
                 # extract failed test index according to bug_id
@@ -325,14 +397,23 @@ class evaluation:
                     continue
 
                 # get patch list for failed test case
-                patch_list, scaler_patch, closest_score = self.get_patch_list(failed_test_index, k=5, filt=0.8, model=self.patch_w2v)
+                filt = 0.6
+                patch_list, scaler_patch, closest_score = self.get_patch_list(failed_test_index, k=5, filt=filt, model=self.patch_w2v)
                 all_closest_score += closest_score
 
                 # return vector for path patch
-                name_list, label_list, vector_list, vector_cross_list = self.vector4patch(available_path_patch, compare=compare,)
+                # name_list, label_list, vector_list, vector_cross_list = self.vector4patch(available_path_patch, compare=compare,)
+                name_list, label_list, vector_list, vector_cross_list = self.vector4patch_patchsim(available_path_patch, compare=compare,)
                 if name_list == []:
                     print('patch can not be recognized')
                     continue
+
+                # for plot
+                co = label_list.count(1)
+                inco = label_list.count(0)
+                box_projecs_co.append(co)
+                box_projecs_inco.append(inco)
+                projects_name.append(project)
 
                 if patch_list == []:
                     print('No closest test case found')
@@ -355,7 +436,7 @@ class evaluation:
                     y_true = label_list[i]
                     # y_pred = self.predict_label(centers, threshold_list, vector_new_patch, scaler_patch)
                     # y_pred_prob = self.predict_prob(centers, threshold_list, vector_new_patch, scaler_patch)
-                    y_pred_prob, y_pred = self.predict_recom(centers, vector_new_patch, scaler_patch, distance_method=distance_method)
+                    y_pred_prob, y_pred = self.predict_recom(centers, vector_new_patch, scaler_patch, mean_stand_dict[filt], distance_method=distance_method,)
 
                     if not math.isnan(y_pred_prob):
                         recommend_list.append([name, y_pred, y_true, y_pred_prob])
@@ -382,6 +463,8 @@ class evaluation:
 
                 recommend_list_project += recommend_list
 
+        # self.statistics_box(box_projecs_co, box_projecs_inco, projects_name)
+
         print('------------')
         if compare == 'bert':
             MlPrediction(x_train, y_train, x_test, y_test, algorithm='lr').predict()
@@ -403,6 +486,9 @@ class evaluation:
         filter_out_incorrect = recommend_list_project.shape[0] - Correct[:].index.tolist()[-1] - 1
         print('filter_out_incorrect: {}'.format(filter_out_incorrect))
         print('filter rate: {}'.format(filter_out_incorrect/recommend_list_project.shape[0]))
+
+        # print('mean: {}, std: {}'.format(np.array(middle).mean(), np.array(middle).std()))
+
 
 
     def predict(self, patch_list, new_patch, scaler_patch):
@@ -452,21 +538,25 @@ class evaluation:
         return centers, threshold_list
 
     def dynamic_threshold2(self, patch_list, distance_method=distance.euclidean, sumup='mean'):
-        if len(patch_list) == 1:
-            center = patch_list[0].mean(axis=0)
-            # if sumup == 'mean':
-            #     dist_mean = np.array([distance_method(p, center) for p in patch_list[0]]).mean()
-            # elif sumup == 'max':
-            #     dist_mean = np.array([distance_method(p, center) for p in patch_list[0]]).max()
+        # patch_list: [[top-5 patches for failed test case 1], [top-5 patches failed test case 2], [top-5 patches failed test case 3]]
+        if self.patch_w2v != 'string':
+            if len(patch_list) == 1:
+                center = patch_list[0].mean(axis=0)
+                # if sumup == 'mean':
+                #     dist_mean = np.array([distance_method(p, center) for p in patch_list[0]]).mean()
+                # elif sumup == 'max':
+                #     dist_mean = np.array([distance_method(p, center) for p in patch_list[0]]).max()
+            else:
+                patches = patch_list[0]
+                for i in range(1, len(patch_list)):
+                    patches = np.concatenate((patches, patch_list[i]), axis=0)
+                center = patches.mean(axis=0)
+                # if sumup == 'mean':
+                #     dist_mean = np.array([distance_method(p, center) for p in patches]).mean()
+                # elif sumup == 'max':
+                #     dist_mean = np.array([distance_method(p, center) for p in patches]).max()
         else:
-            patches = patch_list[0]
-            for i in range(1, len(patch_list)):
-                patches = np.concatenate((patches, patch_list[i]), axis=0)
-            center = patches.mean(axis=0)
-            # if sumup == 'mean':
-            #     dist_mean = np.array([distance_method(p, center) for p in patches]).mean()
-            # elif sumup == 'max':
-            #     dist_mean = np.array([distance_method(p, center) for p in patches]).max()
+            return patch_list
 
         # # normalize range
         # if distance_method == distance.euclidean:
@@ -514,35 +604,59 @@ class evaluation:
             score_prob_new = 1 - dist_new
 
         elif distance_method == distance.cosine:
-            score_prob_new = self.sigmoid(1-dist_new)
+            dist_new = dist_new / (1 + dist_new)
+            score_prob_new = 1 - dist_new
 
         return score_prob_new
 
-    def predict_recom(self, centers, new_patch, scaler_patch, distance_method=distance.euclidean):
+    def predict_recom(self, centers, new_patch, scaler_patch, mean_stand, distance_method=distance.euclidean):
         if self.patch_w2v != 'string':
             new_patch = scaler_patch.transform(new_patch.reshape((1, -1)))
 
-        center = centers[0]
-        # score_mean = threshold_list[0]
+            center = centers[0]
+            # score_mean = threshold_list[0]
+            dist_new = distance_method(new_patch, center)
 
-        dist_new = distance_method(new_patch, center)
+            # normalize range
+            if distance_method == distance.euclidean:
+                dist_new = dist_new / (1 + dist_new)
+                score_prob_new = 1 - dist_new
+            elif distance_method == distance.cosine:
+                # score_prob_new = self.sigmoid(1 - dist_new)
+                dist_new = dist_new / (1+dist_new)
+                score_prob_new = 1 - dist_new
 
-        # normalize range
-        if distance_method == distance.euclidean:
-            dist_new = dist_new / (1+dist_new)
-            score_prob_new = 1 - dist_new
-        elif distance_method == distance.cosine:
-            score_prob_new = self.sigmoid(1-dist_new)
-            # dist_new = dist_new / (1+dist_new)
-            # score_prob_new = 1 - dist_new
+            # if score_prob_new >= score_mean:
+            if score_prob_new >= 0.5:
+                y_pred = 1
+            else:
+                y_pred = 0
 
-        # if score_prob_new >= score_mean:
-        if score_prob_new >= 0.5:
-            y_pred = 1
+            return score_prob_new, y_pred
         else:
-            y_pred = 0
+            new_patch = new_patch[0]
+            dist_new = []
+            # mean distance to every patch
+            for i in range(len(centers)):
+                patches_top5 = centers[i]
+                for p in patches_top5:
+                    dist_new.append(Levenshtein.distance(new_patch, str(p)))
+            dist_new = np.array(dist_new).mean()
 
-        return score_prob_new, y_pred
+            # (dist_new-mean)/stand
+            dist_new = (dist_new-mean_stand[0])/mean_stand[1]
+            try:
+                score_prob_new = self.sigmoid(-dist_new)
+            except:
+                print(dist_new)
+
+            if score_prob_new >= 0.5:
+                y_pred = 1
+            else:
+                y_pred = 0
+
+            print ('score_prob_new: {}'.format(score_prob_new))
+            return score_prob_new, y_pred
 
     def evaluation_metrics(self, y_trues, y_pred_probs):
         fpr, tpr, thresholds = roc_curve(y_true=y_trues, y_score=y_pred_probs, pos_label=1)
@@ -572,11 +686,14 @@ class evaluation:
         all_test_vector = scaler.fit_transform(self.test_vector)
         scaler_patch = scaler.fit(self.patch_vector)
         all_patch_vector = scaler_patch.transform(self.patch_vector)
-        projects = {'Chart': 26, 'Lang': 65, 'Time': 27, 'Closure': 176, 'Math': 106, 'Cli': 40, 'Codec': 18, 'Collections': 28, 'Compress': 47, 'Csv': 16, 'Gson': 18, 'JacksonCore': 26, 'JacksonDatabind': 112, 'JacksonXml': 6, 'Jsoup': 93, 'JxPath': 22, 'Mockito': 38}
-        # projects = {'Mockito': 38}
+        projects = {'Chart': 26, 'Lang': 65, 'Time': 27, 'Closure': 176, 'Math': 106, 'Cli': 40, 'Codec': 18, 'Compress': 47, 'Collections': 28,  'JacksonCore': 26, 'JacksonDatabind': 112, 'JacksonXml': 6, 'Jsoup': 93, 'Csv': 16, 'Gson': 18, 'JxPath': 22, 'Mockito': 38}
+        # projects = {'Chart': 26, 'Lang': 65, 'Time': 27, 'Math': 106, }
+        all_closest_score = []
+        box_plot = []
         for project, number in projects.items():
             project_list = []
             print('Testing {}'.format(project))
+
             cnt = 0
             for i in range(len(self.test_name)):
                 if not self.test_name[i].startswith(project):
@@ -587,6 +704,8 @@ class evaluation:
                 this_test = all_test_vector[i]
                 this_patch = all_patch_vector[i]
 
+
+                # find the closest test case
                 dist_min_index = None
                 dist_min = 9999
                 for j in range(len(all_test_vector)):
@@ -599,27 +718,83 @@ class evaluation:
                     if dist < dist_min:
                         dist_min = dist
                         dist_min_index = j
-                print('the closest test: {}'.format(self.test_name[dist_min_index]))
-                closest_patch = all_patch_vector[dist_min_index]
+                sim_test = 1 - dist_min
+                all_closest_score.append(sim_test)
+                if sim_test >= 0.6:
+                    # find associated patches similarity
+                    print('the closest test: {}'.format(self.test_name[dist_min_index]))
+                    closest_patch = all_patch_vector[dist_min_index]
+                    distance_patch = distance.euclidean(closest_patch, this_patch)/(1 + distance.euclidean(closest_patch, this_patch))
+                    score_patch = 1 - distance_patch
+                    if math.isnan(score_patch):
+                        continue
+                    box_plot.append([project, 'H', score_patch])
 
-                distance_patch = distance.euclidean(closest_patch, this_patch)/(1 + distance.euclidean(closest_patch, this_patch))
-                # distance_patch = distance.cosine(closest_patch, this_patch)
 
-                score_patch = 1 - distance_patch
-                if math.isnan(score_patch):
-                    continue
-                project_list.append([self.test_name[i], score_patch])
-            if project_list == []:
-                print('{} no found'.format(project))
-                continue
-            recommend_list_project = pd.DataFrame(sorted(project_list, key=lambda x: x[1], reverse=True))
+                # find average patch similarity
+                simi_patch_current = []
+                for p in range(len(all_patch_vector)):
+                    if p == i:
+                        continue
+                    dist = distance.euclidean(this_patch, all_patch_vector[p]) / (1 + distance.euclidean(this_patch, all_patch_vector[p]))
+                    simi_patch = 1 - dist
+                    if math.isnan(simi_patch):
+                        continue
+                    simi_patch_current.append(simi_patch)
+                box_plot.append([project, 'N', np.array(simi_patch_current).mean()])
+
+                # project_list.append([self.test_name[i], score_patch])
+
+
+            # if project_list == []:
+            #     print('{} no found'.format(project))
+            #     continue
+            # recommend_list_project = pd.DataFrame(sorted(project_list, key=lambda x: x[1], reverse=True))
             # plt.bar(recommend_list_project.index.tolist(), recommend_list_project[:][1], color='chocolate')
-            plt.bar(recommend_list_project.index.tolist(), recommend_list_project[:][1], color='steelblue')
-            plt.xlabel('failed test cases')
-            plt.ylabel('score of patch from the closest test case')
-            plt.title('score distribution of {}'.format(project))
-            plt.savefig('../fig/RQ2/distance_patch_{}'.format(project))
-            plt.cla()
+            # # plt.bar(recommend_list_project.index.tolist(), recommend_list_project[:][1], color='steelblue')
+            # plt.xlabel('Failed test cases', fontsize=14)
+            # plt.ylabel('Similarity of the associated patches', fontsize=14)
+            # # plt.title('Similarity distribution of {}'.format(project))
+            # plt.savefig('../fig/RQ2/distance_patch_{}'.format(project))
+            # plt.cla()
+
+
+        plt.figure(figsize=(10, 5))
+        plt.xticks(fontsize=15, )
+        plt.yticks(fontsize=15, )
+        plt.bar(range(len(all_closest_score)), sorted(all_closest_score, reverse=True),)
+        plt.xlabel('ID of failing test cases', fontsize=20)
+        plt.ylabel('Similarity score \nwith the closest test cases', fontsize=20)
+        # plt.title('Similarity of test case')
+        # plt.savefig('../fig/RQ2/Similarity_Test.png')
+        plt.close()
+
+
+        dfl = pd.DataFrame(box_plot)
+        dfl.columns = ['Project', 'Label', 'Similarity of patch']
+        # b, c = dfl.iloc[0].copy(), dfl.iloc[15].copy()
+        # dfl.iloc[0], dfl.iloc[15] = c, b
+        colors = {'H': 'white', 'N': 'grey'}
+        fig = plt.figure(figsize=(15, 8))
+        plt.xticks(fontsize=28, )
+        plt.yticks(fontsize=28, )
+        bp = sns.boxplot(x='Project', y='Similarity of patch', data=dfl, showfliers=False, palette=colors, hue='Label', width=0.7, )
+        bp.set_xticklabels(bp.get_xticklabels(), rotation=320)
+        # bp.set_xticklabels(bp.get_xticklabels(), fontsize=28)
+        # bp.set_yticklabels(bp.get_yticklabels(), fontsize=28)
+        plt.xlabel('Project', size=31)
+        plt.ylabel('Similarity score', size=30)
+        plt.legend(bbox_to_anchor=(0, 1.02, 1, 0.2), loc="lower left",
+                   borderaxespad=0, ncol=3, fontsize=30, )
+        self.adjust_box_widths(fig, 0.8)
+        plt.tight_layout()
+        plt.show()
+
+        H_stat = dfl[dfl['Label'] == 'H'].iloc[:, 2].tolist()
+        N_stat = dfl[dfl['Label'] == 'N'].iloc[:, 2].tolist()
+        hypo = stats.mannwhitneyu(H_stat, N_stat, alternative='two-sided')
+        print(hypo)
+
 
     def evaluate_recommend_list(self, recommend_list):
         recommend_list = pd.DataFrame(sorted(recommend_list, key=lambda x: x[3], reverse=True))
@@ -643,3 +818,57 @@ class evaluation:
         print('RR for recommend list: {}'.format(RR))
 
         return AP, RR
+
+    def statistics_box(self, box_projecs_co, box_projecs_inco, projects_name):
+        data = {
+            'Correct': box_projecs_co,
+            'Incorrect': box_projecs_inco,
+            'Project': projects_name
+        }
+        df = pd.DataFrame(data)
+        dfl = pd.melt(df, id_vars='Project', value_vars=['Correct', 'Incorrect'], )
+        dfl.columns = ['Project', 'Label', 'Number of Patches']
+        colors = {'Correct': 'white', 'Incorrect': 'darkgrey'}
+
+        fig = plt.figure(figsize=(10, 5))
+        plt.xticks(fontsize=15, )
+        plt.yticks(fontsize=15, )
+        plt.legend(fontsize=15)
+        bp = sns.boxplot(x='Project', y='Number of Patches', data=dfl, showfliers=False, palette=colors, hue='Label', width=0.6, )
+        plt.xlabel('Project', fontsize=17)
+        plt.ylabel('Number of Patches', fontsize=17)
+        self.adjust_box_widths(fig, 0.8)
+
+        plt.show()
+
+    def adjust_box_widths(self, g, fac):
+        """
+        Adjust the widths of a seaborn-generated boxplot.
+        """
+
+        # iterating through Axes instances
+        for ax in g.axes:
+            # iterating through axes artists:
+            for c in ax.get_children():
+
+                # searching for PathPatches
+                if isinstance(c, PathPatch):
+                    # getting current width of box:
+                    p = c.get_path()
+                    verts = p.vertices
+                    verts_sub = verts[:-1]
+                    xmin = np.min(verts_sub[:, 0])
+                    xmax = np.max(verts_sub[:, 0])
+                    xmid = 0.5 * (xmin + xmax)
+                    xhalf = 0.5 * (xmax - xmin)
+
+                    # setting new width of box
+                    xmin_new = xmid - fac * xhalf
+                    xmax_new = xmid + fac * xhalf
+                    verts_sub[verts_sub[:, 0] == xmin, 0] = xmin_new
+                    verts_sub[verts_sub[:, 0] == xmax, 0] = xmax_new
+
+                    # setting new width of median line
+                    for l in ax.lines:
+                        if np.all(l.get_xdata() == [xmin, xmax]):
+                            l.set_xdata([xmin_new, xmax_new])
