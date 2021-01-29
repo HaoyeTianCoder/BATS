@@ -25,8 +25,12 @@ class cluster:
         self.number = number
 
     def validate(self,):
-        clusters = self.cluster_test_dist(self.test_vector, method=self.method, number=self.number)
-        self.patch_dist(self.patch_vector, clusters, self.method, self.number)
+        clusters = self.cluster_test_dist(self.patch_vector, method=self.method, number=self.number)
+        self.patch_dist(self.test_vector, clusters, self.method, self.number)
+
+
+        # clusters = self.cluster_test_dist(self.test_vector, method=self.method, number=self.number)
+        # self.patch_dist(self.patch_vector, clusters, self.method, self.number)
 
     def cluster_test_dist(self, test_vector, method, number):
         scaler = Normalizer()
@@ -84,12 +88,62 @@ class cluster:
             dist = [np.linalg.norm(vec - np.array(center)) for vec in np.array(cluster)]
             result_cluster.append(dist)
 
-        plt.boxplot(result_cluster, labels=['Original']+[str(i) for i in range(len(result_cluster)-1)] )
-        plt.xlabel('Cluster')
-        plt.ylabel('Distance to Center')
+        # plt for covering two columns
+        plt.figure(figsize=(18, 8))
+        plt.xticks(fontsize=15, )
+        plt.yticks(fontsize=15, )
+        bplot = plt.boxplot(result_cluster, labels=['All']+[str(i) for i in range(len(result_cluster)-1)], widths=0.4, patch_artist=True)
+        colors = ['red']+['white' for i in range(len(bplot['boxes'])-1)]
+        for patch, color in zip(bplot['boxes'], colors):
+            patch.set_facecolor(color)
+        plt.xlabel('Cluster', fontsize=17)
+        plt.ylabel('Euclidian Distance', fontsize=17)
         plt.savefig('../fig/RQ1/boxplot.png')
 
         return clusters
+
+    def cluster_patch_dist(self, patch_vector, method, number):
+        scaler = Normalizer()
+        X = pd.DataFrame(scaler.fit_transform(patch_vector))
+
+        # one cluster
+        center_one = np.mean(X, axis=0)
+        dists_one = [np.linalg.norm(vec - np.array(center_one)) for vec in np.array(X)]
+
+        if method == 'kmeans':
+            kmeans = KMeans(n_clusters=number, random_state=1)
+            # kmeans.fit(np.array(test_vector))
+            clusters = kmeans.fit_predict(X)
+        elif method == 'dbscan':
+            db = DBSCAN(eps=0.5, min_samples=10)
+            clusters = db.fit_predict(X)
+            number = max(clusters)+2
+        elif method == 'hier':
+            hu = AgglomerativeClustering(n_clusters=number)
+            clusters = hu.fit_predict(X)
+        elif method == 'xmeans':
+            xmeans_instance = xmeans(X, kmax=200, splitting_type=splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH)
+            clusters = xmeans_instance.process().predict(X)
+            # clusters = xmeans_instance.process().get_clusters()
+            number = max(clusters)+1
+        elif method == 'biKmeans':
+            bk = biKmeans()
+            clusters = bk.biKmeans(dataSet=np.array(X), k=number)
+        elif method == 'ap':
+            # ap = AffinityPropagation(random_state=5)
+            # clusters = ap.fit_predict(X)
+            APC = AffinityPropagation(verbose=True, max_iter=200, convergence_iter=25).fit(X)
+            APC_res = APC.predict(X)
+            clusters = APC.cluster_centers_indices_
+        X["Cluster"] = clusters
+
+        s1 = silhouette_score(X, clusters)
+        s2 = calinski_harabasz_score(X, clusters)
+        s3 = davies_bouldin_score(X, clusters)
+        print('Patch independently------')
+        print('Silhouette: {}'.format(s1))
+        print('CH: {}'.format(s2))
+        print('DBI: {}'.format(s3))
 
     def patch_dist(self, patch_vector, clusters, method, number):
         scaler = Normalizer()
