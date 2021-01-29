@@ -120,16 +120,20 @@ class biKmeans:
 
         distribution_rate = [(distribution_SSE[i - 1] - distribution_SSE[i]) / distribution_SSE[i - 1] for i in range(1, len(distribution_SSE))]
         if k >= 50:
-            plt.plot(np.linspace(1, k, k), distribution_SSE)
-            plt.xlabel('Iteration')
-            plt.ylabel('SSE')
-            plt.savefig('../fig/RQ1/SSE_Clustering.png')
-            # plt.show()
-            plt.cla()
+            # plt.plot(np.linspace(1, k, k), distribution_SSE)
+            # plt.xlabel('Iteration', fontsize=12)
+            # plt.ylabel('SSE', fontsize=12)
+            # plt.savefig('../fig/RQ1/SSE_Clustering.png')
+            # # plt.show()
+            # plt.cla()
 
+            plt.figure(figsize=(10, 5))
+            plt.xticks(fontsize=15, )
+            plt.yticks(fontsize=15, )
             plt.plot(np.linspace(2, k, k - 1), distribution_rate)
-            plt.xlabel('Iteration')
-            plt.ylabel('SSE Reduction Rate')
+            plt.xlabel('# Clusters', fontsize=17)
+            plt.ylabel('SSE Reduction Rate', fontsize=17)
+            # plt.title('', fontsize=14)
             plt.savefig('../fig/RQ1/SSE_Reduction_Rate.png')
             # plt.show()
             plt.cla()
