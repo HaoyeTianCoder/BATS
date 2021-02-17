@@ -121,7 +121,8 @@ def extracted_cc2ftr(data, params):
     model.eval()  # eval mode (batchnorm uses moving mean/variance instead of mini-batch mean/variance)
     with torch.no_grad():        
         commit_ftrs = list()
-        for i, (batch) in enumerate(tqdm(batches)):
+        # for i, (batch) in enumerate(tqdm(batches)):
+        for i, (batch) in enumerate(batches):
             state_word = model.init_hidden_word()
             state_sent = model.init_hidden_sent()
             state_hunk = model.init_hidden_hunk()

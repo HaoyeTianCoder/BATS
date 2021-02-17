@@ -17,7 +17,7 @@ import numpy as np
 import re
 import logging
 
-MODEL_MODEL_LOAD_PATH = '/Users/haoye.tian/Documents/University/data/models/java14_model/saved_model_iter8.release'
+MODEL_MODEL_LOAD_PATH = '/Users/haoye.tian/Documents/University/model/java14_model/saved_model_iter8.release'
 MODEL_CC2Vec = '../representation/CC2Vec/'
 
 class Word2vector:
@@ -27,8 +27,8 @@ class Word2vector:
         self.patch_w2v = patch_w2v
         self.path_patch_root = path_patch_root
 
+        # Init and Load the model for test cases
         if self.test_w2v == 'code2vec':
-            # Init and Load the model
             config = Config(set_defaults=True, load_from_args=True, verify=False)
             config.MODEL_LOAD_PATH = MODEL_MODEL_LOAD_PATH
             config.EXPORT_CODE_VECTORS = True
@@ -36,6 +36,8 @@ class Word2vector:
             config.log('Done creating code2vec model')
             self.c2v = Code2vector(model)
             # =======================
+
+        # init for patch vector
         if self.patch_w2v == 'cc2vec':
             self.dictionary = pickle.load(open(MODEL_CC2Vec+'dict.pkl', 'rb'))
         elif self.patch_w2v == 'bert':
@@ -54,13 +56,14 @@ class Word2vector:
 
     def convert_both(self, test_name, test_text, patch_ids):
         try:
-            #1 test case function
+            #1 represent test cases by embedding test function with code2vec(output dimension: 384)
             function = test_text
             test_vector = self.c2v.convert(function)
 
-            #2 patch ids
-            # find path_patch
+            #2 represent patch
+            # first of all, find associated patch path
             if len(patch_ids) == 1 and patch_ids[0].endswith('-one'):
+                # '-one' means this complete patch is the solution for the failed test case
                 project = patch_ids[0].split('_')[0]
                 id = patch_ids[0].split('_')[1].replace('-one', '')
                 path_patch = self.path_patch_root + project + '/' + id + '/'
@@ -75,6 +78,7 @@ class Word2vector:
                     path_patch = self.path_patch_root + project + '/' + id + '/'
                     path_patch_ids.append(os.path.join(path_patch, patch_id))
 
+            # embedding each patch and combine them together to learn the overall behaviour
             multi_vector = []
             for path_patch_id in path_patch_ids:
                 if self.patch_w2v == 'cc2vec':
@@ -85,7 +89,7 @@ class Word2vector:
                 elif self.patch_w2v == 'string':
                     learned_vector = self.extract_text(path_patch_id, )
                 multi_vector.append(learned_vector)
-            # patch_vector = np.array(multi_vector).mean(axis=0)
+
             if self.patch_w2v == 'string':
                 patch_vector = ''
                 for s in multi_vector:
@@ -95,6 +99,7 @@ class Word2vector:
                 patch_vector = np.array(multi_vector).sum(axis=0)
         except Exception as e:
             raise e
+
 
         if self.patch_w2v == 'string':
             if patch_vector == ['']:
