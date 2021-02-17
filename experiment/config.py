@@ -14,7 +14,7 @@ class Config:
         # self.patch_w2v = 'string'
 
         self.organized_dataset = '../data/organized_dataset_' + self.patch_w2v + '.pickle'
-        self.path_test_function_patch_vector = '../data/vector_one_case_' + self.patch_w2v + '.pickle'
+        # self.path_test_function_patch_vector = '../data/vector_one_case_' + self.patch_w2v + '.pickle'
 
 
 if __name__ == '__main__':
