@@ -397,7 +397,7 @@ class evaluation:
                     continue
 
                 # get patch list for failed test case
-                filt = 0.6
+                filt = 0.8
                 patch_list, scaler_patch, closest_score = self.get_patch_list(failed_test_index, k=5, filt=filt, model=self.patch_w2v)
                 all_closest_score += closest_score
 
@@ -686,32 +686,34 @@ class evaluation:
         all_test_vector = scaler.fit_transform(self.test_vector)
         scaler_patch = scaler.fit(self.patch_vector)
         all_patch_vector = scaler_patch.transform(self.patch_vector)
+
         projects = {'Chart': 26, 'Lang': 65, 'Time': 27, 'Closure': 176, 'Math': 106, 'Cli': 40, 'Codec': 18, 'Compress': 47, 'Collections': 28,  'JacksonCore': 26, 'JacksonDatabind': 112, 'JacksonXml': 6, 'Jsoup': 93, 'Csv': 16, 'Gson': 18, 'JxPath': 22, 'Mockito': 38}
         # projects = {'Chart': 26, 'Lang': 65, 'Time': 27, 'Math': 106, }
         all_closest_score = []
         box_plot = []
         for project, number in projects.items():
-            project_list = []
             print('Testing {}'.format(project))
 
+            # go through all test cases
             cnt = 0
             for i in range(len(self.test_name)):
+                # skip other projects while testing one project
                 if not self.test_name[i].startswith(project):
                     continue
-                project = self.test_name[i].split('-')[0].split('_')[0]
+                # project = self.test_name[i].split('-')[0].split('_')[0]
                 id = self.test_name[i].split('-')[0].split('_')[1]
                 print('{}'.format(self.test_name[i]))
                 this_test = all_test_vector[i]
                 this_patch = all_patch_vector[i]
 
-
                 # find the closest test case
                 dist_min_index = None
-                dist_min = 9999
+                dist_min = np.inf
                 for j in range(len(all_test_vector)):
+                    # skip itself
                     if j == i:
                         continue
-                    # whether skip current project
+                    # whether skip current project-id
                     if self.test_name[j].startswith(project+'_'+id+'-'):
                         continue
                     dist = distance.euclidean(this_test, all_test_vector[j])/(1 + distance.euclidean(this_test, all_test_vector[j]))
@@ -730,9 +732,8 @@ class evaluation:
                         continue
                     box_plot.append([project, 'H', score_patch])
 
-
                 # find average patch similarity
-                simi_patch_current = []
+                simi_patch_average = []
                 for p in range(len(all_patch_vector)):
                     if p == i:
                         continue
@@ -740,8 +741,8 @@ class evaluation:
                     simi_patch = 1 - dist
                     if math.isnan(simi_patch):
                         continue
-                    simi_patch_current.append(simi_patch)
-                box_plot.append([project, 'N', np.array(simi_patch_current).mean()])
+                    simi_patch_average.append(simi_patch)
+                box_plot.append([project, 'N', np.array(simi_patch_average).mean()])
 
                 # project_list.append([self.test_name[i], score_patch])
 
@@ -766,7 +767,7 @@ class evaluation:
         plt.xlabel('ID of failing test cases', fontsize=20)
         plt.ylabel('Similarity score \nwith the closest test cases', fontsize=20)
         # plt.title('Similarity of test case')
-        # plt.savefig('../fig/RQ2/Similarity_Test.png')
+        plt.savefig('../fig/RQ2/Similarity_Test.png')
         plt.close()
 
 
@@ -789,6 +790,7 @@ class evaluation:
         self.adjust_box_widths(fig, 0.8)
         plt.tight_layout()
         plt.show()
+        plt.savefig('../fig/RQ2/boxplot.png')
 
         H_stat = dfl[dfl['Label'] == 'H'].iloc[:, 2].tolist()
         N_stat = dfl[dfl['Label'] == 'N'].iloc[:, 2].tolist()
