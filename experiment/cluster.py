@@ -3,19 +3,20 @@ sys.path.append(os.path.abspath(os.path.join('..', '.')))
 import pandas as pd
 from sklearn.preprocessing import StandardScaler, Normalizer, MinMaxScaler
 import matplotlib.pyplot as plt
-
+import random
 import numpy as np
 from sklearn.cluster import KMeans, DBSCAN, AgglomerativeClustering, AffinityPropagation
 from pyclustering.cluster.xmeans import xmeans, splitting_type
 import scipy.cluster.hierarchy as h
 from experiment.visualize import Visual
 from experiment.clustering import biKmeans
-from sklearn.metrics import silhouette_score ,calinski_harabasz_score,davies_bouldin_score
-
+from sklearn.metrics import silhouette_score ,calinski_harabasz_score, davies_bouldin_score
+from scipy.spatial import distance
+import scipy.stats as stats
 
 class cluster:
-    def __init__(self, test_data, test_name, patch_name,test_vector, patch_vector, method, number):
-        self.test_data = test_data
+    def __init__(self, original_dataset, test_name, patch_name,test_vector, patch_vector, method, number):
+        self.original_dataset = original_dataset
         self.test_name = test_name
         self.patch_name = patch_name
 
@@ -25,20 +26,27 @@ class cluster:
         self.number = number
 
     def validate(self,):
-        clusters = self.cluster_test_dist(self.patch_vector, method=self.method, number=self.number)
-        self.patch_dist(self.test_vector, clusters, self.method, self.number)
-
-
-        # clusters = self.cluster_test_dist(self.test_vector, method=self.method, number=self.number)
-        # self.patch_dist(self.patch_vector, clusters, self.method, self.number)
-
-    def cluster_test_dist(self, test_vector, method, number):
         scaler = Normalizer()
-        X = pd.DataFrame(scaler.fit_transform(test_vector))
+        clusters = self.cluster_test_dist(method=self.method, number=self.number, scaler=scaler)
+        self.patch_dist(clusters, self.method, self.number, scaler=scaler)
 
-        # one cluster
+        print('Random or Independent **************')
+        # self.patch_dist(self.patch_vector, [i for i in range(40)] + [random.randint(0, 40) for j in range(418)], self.method, self.number, scaler=scaler)
+        # self.patch_dist([i for i in range(40)] + [random.randint(0, 40) for j in range(1080)], self.method, self.number, scaler=scaler)
+
+        self.cluster_patch_dist_inde(self.method, self.number, scaler)
+
+
+        # clusters = self.cluster_test_dist(self.patch_vector, method=self.method, number=self.number)
+        # self.patch_dist(self.test_vector, clusters, self.method, self.number)
+
+    def cluster_test_dist(self, method, number, scaler):
+        # scaler = Normalizer()
+        X = pd.DataFrame(scaler.fit_transform(self.test_vector))
+
+        # original distance as one cluster
         center_one = np.mean(X, axis=0)
-        dists_one = [np.linalg.norm(vec - np.array(center_one)) for vec in np.array(X)]
+        dists_one = [distance.euclidean(vec, np.array(center_one)) for vec in np.array(X)]
 
         if method == 'kmeans':
             kmeans = KMeans(n_clusters=number, random_state=1)
@@ -65,7 +73,9 @@ class cluster:
             APC = AffinityPropagation(verbose=True, max_iter=200, convergence_iter=25).fit(X)
             APC_res = APC.predict(X)
             clusters = APC.cluster_centers_indices_
-        X["Cluster"] = clusters
+        else:
+            raise
+        # X["Cluster"] = clusters
 
         s1 = silhouette_score(X, clusters)
         s2 = calinski_harabasz_score(X, clusters)
@@ -75,20 +85,29 @@ class cluster:
         print('CH: {}'.format(s2))
         print('DBI: {}'.format(s3))
 
-        if number <= 6:
-            v = Visual(algorithm='PCA', number_cluster=number, method=method)
-            v.visualize(plotX=X)
+        # self.score_inside_outside(X, clusters, number)
 
+        return clusters
+
+        # visualize clustering.
+        # X["Cluster"] = clusters
+        # if number <= 6:
+        #     v = Visual(algorithm='PCA', number_cluster=number, method=method)
+        #     v.visualize(plotX=X)
+
+    '''
+        # boxplot of distance to center in each cluster
         result_cluster = [dists_one]
         for i in range(number):
             if method == 'dbscan':
                 i -= 1
             cluster = X[X["Cluster"] == i].drop(["Cluster"], axis=1)
             center = np.mean(cluster, axis=0)
-            dist = [np.linalg.norm(vec - np.array(center)) for vec in np.array(cluster)]
+            # dist = [np.linalg.norm(vec - np.array(center)) for vec in np.array(cluster)]
+            dist = [distance.euclidean(vec, np.array(center)) for vec in np.array(cluster)]
             result_cluster.append(dist)
 
-        # plt for covering two columns
+        # boxplot figure covering two columns
         plt.figure(figsize=(18, 8))
         plt.xticks(fontsize=15, )
         plt.yticks(fontsize=15, )
@@ -97,58 +116,61 @@ class cluster:
         for patch, color in zip(bplot['boxes'], colors):
             patch.set_facecolor(color)
         plt.xlabel('Cluster', fontsize=17)
-        plt.ylabel('Euclidian Distance', fontsize=17)
+        plt.ylabel('Euclidian distance', fontsize=17)
         plt.savefig('../fig/RQ1/boxplot.png')
+    '''
 
-        return clusters
 
-    def cluster_patch_dist(self, patch_vector, method, number):
-        scaler = Normalizer()
-        X = pd.DataFrame(scaler.fit_transform(patch_vector))
+    def cluster_patch_dist_inde(self, method, number, scaler):
+        # scaler = Normalizer()
+        # scaler = MinMaxScaler()
+        P = pd.DataFrame(scaler.fit_transform(self.patch_vector))
 
         # one cluster
-        center_one = np.mean(X, axis=0)
-        dists_one = [np.linalg.norm(vec - np.array(center_one)) for vec in np.array(X)]
+        center_one = np.mean(P, axis=0)
+        dists_one = [np.linalg.norm(vec - np.array(center_one)) for vec in np.array(P)]
 
         if method == 'kmeans':
             kmeans = KMeans(n_clusters=number, random_state=1)
             # kmeans.fit(np.array(test_vector))
-            clusters = kmeans.fit_predict(X)
+            clusters = kmeans.fit_predict(P)
         elif method == 'dbscan':
             db = DBSCAN(eps=0.5, min_samples=10)
-            clusters = db.fit_predict(X)
+            clusters = db.fit_predict(P)
             number = max(clusters)+2
         elif method == 'hier':
             hu = AgglomerativeClustering(n_clusters=number)
-            clusters = hu.fit_predict(X)
+            clusters = hu.fit_predict(P)
         elif method == 'xmeans':
-            xmeans_instance = xmeans(X, kmax=200, splitting_type=splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH)
-            clusters = xmeans_instance.process().predict(X)
+            xmeans_instance = xmeans(P, kmax=200, splitting_type=splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH)
+            clusters = xmeans_instance.process().predict(P)
             # clusters = xmeans_instance.process().get_clusters()
             number = max(clusters)+1
         elif method == 'biKmeans':
             bk = biKmeans()
-            clusters = bk.biKmeans(dataSet=np.array(X), k=number)
+            clusters = bk.biKmeans(dataSet=np.array(P), k=number)
         elif method == 'ap':
             # ap = AffinityPropagation(random_state=5)
             # clusters = ap.fit_predict(X)
-            APC = AffinityPropagation(verbose=True, max_iter=200, convergence_iter=25).fit(X)
-            APC_res = APC.predict(X)
+            APC = AffinityPropagation(verbose=True, max_iter=200, convergence_iter=25).fit(P)
+            APC_res = APC.predict(P)
             clusters = APC.cluster_centers_indices_
-        X["Cluster"] = clusters
+        # X["Cluster"] = clusters
 
-        s1 = silhouette_score(X, clusters)
-        s2 = calinski_harabasz_score(X, clusters)
-        s3 = davies_bouldin_score(X, clusters)
+        s1 = silhouette_score(P, clusters)
+        s2 = calinski_harabasz_score(P, clusters)
+        s3 = davies_bouldin_score(P, clusters)
         print('Patch independently------')
         print('Silhouette: {}'.format(s1))
         print('CH: {}'.format(s2))
         print('DBI: {}'.format(s3))
 
-    def patch_dist(self, patch_vector, clusters, method, number):
-        scaler = Normalizer()
-        P = pd.DataFrame(scaler.fit_transform(patch_vector))
-        P["Cluster"] = clusters
+        # self.score_inside_outside(P, clusters, number)
+
+    def patch_dist(self, clusters, method, number, scaler):
+        X = pd.DataFrame(scaler.fit_transform(self.test_vector))
+        P = pd.DataFrame(scaler.fit_transform(self.patch_vector))
+        # P["Cluster"] = clusters
 
         if number <= 6:
             v = Visual(algorithm='PCA', number_cluster=number, method=method)
@@ -162,15 +184,90 @@ class cluster:
         print('CH: {}'.format(s2))
         print('DBI: {}'.format(s3))
 
-        n = 1
-        index = np.where(clusters==n)
-        patch_name = np.array(self.patch_name)[index]
-        test_name = np.array(self.test_name)[index]
-        function_name = np.array(self.test_data[3])[index]
+        # loose metric
+        # self.score_inside_outside(P, clusters, number)
 
-        print('cluster {}'.format(n))
-        for i in range(len(test_name)):
-            print('test&patch:{}'.format(test_name[i]), end='    ')
-            print('{}'.format(patch_name[i]))
+        '''
+        MWW validation
+        cnt = 0
+        for n in range(number):
+            index = np.where(clusters==n)
 
-            # print('function:{}'.format(function_name[i]))
+            test_mww = []
+            test_vector = X.iloc[index]
+            test_center = np.mean(test_vector, axis=0)
+            for i in test_vector.values:
+                dist = distance.euclidean(i, test_center)/ (1+distance.euclidean(i, test_center))
+                score = 1 - dist
+                test_mww.append(score)
+
+            patch_mww = []
+            patch_vector = P.iloc[index]
+            patch_center = np.mean(patch_vector, axis=0)
+            for j in patch_vector.values:
+                dist = distance.euclidean(j, patch_center)/ (1+distance.euclidean(j, patch_center))
+                score = 1 - dist
+                patch_mww.append(score)
+            try:
+                hypo = stats.mannwhitneyu(test_mww, patch_mww, alternative='two-sided')
+                p_value = hypo[1]
+            except Exception as e:
+                if 'identical' in e:
+                    p_value = 1
+            print('p-value: {}'.format(p_value))
+            if p_value >= 0.05:
+                cnt += 1
+        print('{}/{} satisfied the hypothesis'.format(cnt, number))
+        '''
+
+        # n = 1
+        # index = np.where(clusters==n)
+        # patch_name = np.array(self.patch_name)[index]
+        # test_name = np.array(self.test_name)[index]
+        # function_name = np.array(self.original_dataset[3])[index]
+        # print('cluster {}'.format(n))
+        # for i in range(len(test_name)):
+        #     print('test&patch:{}'.format(test_name[i]), end='    ')
+        #     print('{}'.format(patch_name[i]))
+        #
+        #     # print('function:{}'.format(function_name[i]))
+
+    def score_inside_outside(self, vectors, clusters, number):
+        cnt = 0
+        diffs = []
+        for n in range(number):
+            # print('cluster: {}'.format(n))
+            index_inside = np.where(clusters == n)
+            score_inside_mean = []
+            score_outside_mean = []
+            test_vector_inside = vectors.iloc[index_inside]
+            for i in range(test_vector_inside.shape[0]):
+                cur = test_vector_inside.iloc[i]
+
+                # compared to vectors inside this cluster
+                for j in range(i+1, test_vector_inside.shape[0]):
+                    cur2 = test_vector_inside.iloc[j]
+                    dist = distance.euclidean(cur, cur2) / (1 + distance.euclidean(cur, cur2))
+                    score = 1 - dist
+                    score_inside_mean.append(score)
+
+                # compared to vectors outside the cluster
+                index_outside = np.where(clusters!=n)
+                test_vector_outside = vectors.iloc[index_outside]
+                for k in range(test_vector_outside.shape[0]):
+                    cur3 = test_vector_outside.iloc[k]
+                    dist = distance.euclidean(cur, cur3) / (1 + distance.euclidean(cur, cur3))
+                    score = 1 - dist
+                    score_outside_mean.append(score)
+
+            inside_score = np.array(score_inside_mean).mean()
+            outside_score = np.array(score_outside_mean).mean()
+            # print('inside: {}'.format(inside_score), end='    ')
+            # print('outside: {}'.format(outside_score))
+
+            diff = (inside_score - outside_score) / max(inside_score, outside_score)
+            diffs.append(diff)
+
+        diff_mean = np.array(diffs).mean()
+        print('good cluster number: {}/{}'.format(len(np.where(np.array(diffs)>0)[0]), len(diffs)))
+        print('diff_mean: {}'.format(diff_mean))

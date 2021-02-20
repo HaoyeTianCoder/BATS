@@ -1,27 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import silhouette_score ,calinski_harabasz_score,davies_bouldin_score
-
-
-def randCent(dataSet, k):
-    """
-    K points are randomly generated as the center of mass, where the center of mass is within the boundary of the whole data.
-    """
-    n = dataSet.shape[1]  # Get the dimension of the data
-    centroids = np.mat(np.zeros((k, n)))
-    for j in range(n):
-        minJ = np.min(dataSet[:, j])
-        rangeJ = np.float(np.max(dataSet[:, j]) - minJ)
-        centroids[:, j] = minJ + rangeJ * np.random.rand(k, 1)
-    return centroids
-
-
-def distEclud(vecA, vecB):
-    """
-    Calculate the Euclidean distance between two vectors.
-    """
-    return np.sqrt(np.sum(np.power(vecA - vecB, 2)))
-
+from scipy.spatial import distance
+import random
 
 class biKmeans:
     def __init__(self):
@@ -36,18 +17,41 @@ class biKmeans:
         X, Y = make_blobs(n_samples=1000, n_features=2, centers=k, random_state=1)
         return X, k
 
+    def randCent(self, dataSet, k=2):
+        """
+        K points are randomly generated as the center of mass, where the center of mass is within the boundary of the whole data.
+        """
+        n = dataSet.shape[1]  # Get the dimension of the data
+        centroids = np.mat(np.zeros((k, n)))
+        # centroids = np.zeros((k, n))
+        for j in range(n):
+            minJ = np.min(dataSet[:, j])
+            rangeJ = np.float(np.max(dataSet[:, j]) - minJ)
+            centroids[:, j] = minJ + rangeJ * np.random.rand(k, 1)
+            # centroids[1, j] = minJ + rangeJ * random.random()
+        return centroids
 
-    def kMeans(self, dataSet, k, distMeas=distEclud, createCent=randCent):
+    def distEclud(self, vecA, vecB):
+        """
+        Calculate the Euclidean distance between two vectors.
+        """
+        return np.sqrt(np.sum(np.power(vecA - vecB, 2)))
+        # return distance.euclidean(vecA, vecB)
+
+    def kMeans(self, dataSet, k, ):
         """
         k-Means clustering algorithm. Return the final allocation result of k centroids and points.
         """
+
+        # handle special situation
+        # while True:
         m = dataSet.shape[0]  # Get the number of samples
         # Construct a cluster assignment result matrix with two columns,
         # the first column is the cluster class value to which the sample belongs,
         # and the second column is the error from the sample to the cluster centroid
         clusterAssment = np.mat(np.zeros((m, 2)))
         # 1. Initialize k centroids
-        centroids = createCent(dataSet, k)
+        centroids = self.randCent(dataSet, k)
         clusterChanged = True
         while clusterChanged:
             clusterChanged = False
@@ -56,7 +60,7 @@ class biKmeans:
                 minIndex = -1
                 # 2. Find the nearest centroid
                 for j in range(k):
-                    distJI = distMeas(centroids[j, :], dataSet[i, :])
+                    distJI = self.distEclud(centroids[j, :], dataSet[i, :])
                     if distJI < minDist:
                         minDist = distJI
                         minIndex = j
@@ -69,15 +73,22 @@ class biKmeans:
             for cent in range(k):
                 ptsClust = dataSet[np.nonzero(clusterAssment[:, 0].A == cent)[0]]  # Get all points of a given cluster
                 centroids[cent, :] = np.mean(ptsClust, axis=0)  # Average along the matrix column
+
+            #     # step out in advance
+            #     if True in np.isnan(centroids):
+            #         break
+            #
+            # if not True in np.isnan(centroids):
+            #     break
+
         return centroids, clusterAssment
 
 
-    def biKmeans(self, dataSet, k, distMeas=distEclud):
+    def biKmeans(self, dataSet, k, ):
         """
         Bisecting K-means Clustering Algorithm. Return the final distribution result of k centroids and points
         """
         distribution_SSE = []
-        # distribution_rate = []
         m = dataSet.shape[0]
         clusterAssment = np.mat(np.zeros((m, 2)))
         # Create initial cluster centroid
@@ -85,7 +96,7 @@ class biKmeans:
         centList = [centroid0]
         # Calculate the error value from each point to the centroid
         for j in range(m):
-            clusterAssment[j, 1] = distMeas(np.mat(centroid0), dataSet[j, :]) ** 2
+            clusterAssment[j, 1] = self.distEclud(np.mat(centroid0), dataSet[j, :]) ** 2
         distribution_SSE.append(sum(clusterAssment[:, 1]))
         while (len(centList) < k):
             lowestSSE = np.inf
@@ -93,7 +104,7 @@ class biKmeans:
                 # Get all the data of the current cluster
                 ptsInCurrCluster = dataSet[np.nonzero(clusterAssment[:, 0].A == i)[0], :]
                 # Perform K-Means clustering on the data of this cluster
-                centroidMat, splitClustAss = self.kMeans(ptsInCurrCluster, 2, distMeas)
+                centroidMat, splitClustAss = self.kMeans(ptsInCurrCluster, 2,)
                 sseSplit = sum(splitClustAss[:, 1])  # Calculate the sse after clustering the cluster
                 sseNotSplit = sum(clusterAssment[np.nonzero(clusterAssment[:, 0].A != i)[0], 1])  # Get the sse of the remaining data set
                 if (sseSplit + sseNotSplit) < lowestSSE:
