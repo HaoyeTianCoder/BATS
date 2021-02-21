@@ -241,22 +241,22 @@ class cluster:
             index_inside = np.where(clusters == n)
             score_inside_mean = []
             score_outside_mean = []
-            test_vector_inside = vectors.iloc[index_inside]
-            for i in range(test_vector_inside.shape[0]):
-                cur = test_vector_inside.iloc[i]
+            vector_inside = vectors.iloc[index_inside]
+            for i in range(vector_inside.shape[0]):
+                cur = vector_inside.iloc[i]
 
                 # compared to vectors inside this cluster
-                for j in range(i+1, test_vector_inside.shape[0]):
-                    cur2 = test_vector_inside.iloc[j]
+                for j in range(i+1, vector_inside.shape[0]):
+                    cur2 = vector_inside.iloc[j]
                     dist = distance.euclidean(cur, cur2) / (1 + distance.euclidean(cur, cur2))
                     score = 1 - dist
                     score_inside_mean.append(score)
 
                 # compared to vectors outside the cluster
                 index_outside = np.where(clusters!=n)
-                test_vector_outside = vectors.iloc[index_outside]
-                for k in range(test_vector_outside.shape[0]):
-                    cur3 = test_vector_outside.iloc[k]
+                vector_outside = vectors.iloc[index_outside]
+                for k in range(vector_outside.shape[0]):
+                    cur3 = vector_outside.iloc[k]
                     dist = distance.euclidean(cur, cur3) / (1 + distance.euclidean(cur, cur3))
                     score = 1 - dist
                     score_outside_mean.append(score)
