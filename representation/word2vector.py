@@ -41,6 +41,16 @@ class Word2vector:
         if self.patch_w2v == 'cc2vec':
             self.dictionary = pickle.load(open(MODEL_CC2Vec+'dict.pkl', 'rb'))
         elif self.patch_w2v == 'bert':
+            import nltk
+            import ssl
+            try:
+                _create_unverified_https_context = ssl._create_unverified_context
+            except AttributeError:
+                pass
+            else:
+                ssl._create_default_https_context = _create_unverified_https_context
+            nltk.download('punkt')
+
             logging.getLogger().info('Waiting for Bert server')
             self.m = BertClient(check_length=False, check_version=False)
 
@@ -155,7 +165,7 @@ class Word2vector:
     def convert_single_patch(self, path_patch):
         try:
             if self.patch_w2v == 'cc2vec':
-                multi_vector = []
+                multi_vector = [] # sum up vectors of different parts of patch
                 patch = os.listdir(path_patch)
                 for part in patch:
                     p = os.path.join(path_patch, part)
