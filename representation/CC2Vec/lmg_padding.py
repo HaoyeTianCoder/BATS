@@ -118,7 +118,7 @@ def padding_commit_code(data, max_line, max_length, dict_code):
     return padding_removed_code, padding_added_code
 
 def processing_data(code, dictionary, params):
-    code = load_code_data(code)
+    code = load_code_data(code) # only consider changed lines
     dict_msg, dict_code = dictionary    
     max_line, max_length = params.code_line, params.code_length
     pad_removed_code, pad_added_code = padding_commit_code(data=code, max_line=max_line, max_length=max_length, dict_code=dict_code)
