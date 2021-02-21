@@ -12,7 +12,6 @@ import json
 import sklearn.metrics as metrics
 from sklearn.metrics import roc_curve, auc, accuracy_score, recall_score, precision_score
 from sklearn.metrics import confusion_matrix, average_precision_score
-from mean_average_precision import MeanAveragePrecision
 from experiment.ML4prediction import MlPrediction
 from tqdm import tqdm
 import seaborn as sns
