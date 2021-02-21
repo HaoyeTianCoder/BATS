@@ -821,8 +821,8 @@ class evaluation:
         plt.xlabel('Project', fontsize=17)
         plt.ylabel('Number of Patches', fontsize=17)
         self.adjust_box_widths(fig, 0.8)
-
-        plt.show()
+        # plt.show()
+        plt.savefig('../fig/RQ3/boxplot.png')
 
     def adjust_box_widths(self, g, fac):
         """
