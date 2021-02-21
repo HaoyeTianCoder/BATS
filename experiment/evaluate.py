@@ -362,6 +362,7 @@ class evaluation:
         plt.savefig('../fig/RQ3/Similarity_Test.png')
 
     def predict_collected_projects(self, path_collected_patch=None, cut_off=0.8, distance_method = distance.cosine, patchsim=False):
+        print('Research Question 3')
         projects = {'Chart': 26, 'Lang': 65, 'Math': 106, 'Time': 27}
         y_preds, y_trues = [], []
         MAP, MRR, number_patch_MAP = [], [], 0
@@ -654,6 +655,7 @@ class evaluation:
         return recall_p, recall_n, acc, prc, rc, f1
 
     def evaluate_defects4j_projects(self, ):
+        print('Research Question 2')
         scaler = Normalizer()
         all_test_vector = scaler.fit_transform(self.test_vector)
         scaler_patch = scaler.fit(self.patch_vector)
