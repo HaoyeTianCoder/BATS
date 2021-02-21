@@ -1,2 +1,2 @@
-# Experiment
-The entrance to launch this experiment
+# Experiment Entrance
+Run main.py after defining config.py
