@@ -31,9 +31,9 @@ def patch_bert():
                             json_key = path_patch + '_.json'
                             json_key_cross = path_patch + '_cross.json'
 
-                            # if os.path.exists(json_key) and os.path.exists(json_key_cross):
-                            #     print('exists!')
-                            #     continue
+                            if os.path.exists(json_key) and os.path.exists(json_key_cross):
+                                print('exists!')
+                                continue
 
                             try:
                                 vector, vector_cross = w2v.convert_single_patch(path_patch)
