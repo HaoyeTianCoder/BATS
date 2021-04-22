@@ -7,11 +7,13 @@ from sklearn.metrics import roc_curve, auc, accuracy_score, recall_score, precis
 from sklearn.naive_bayes import GaussianNB
 
 class MlPrediction:
-    def __init__(self, x_train, y_train, x_test, y_test, algorithm='lr'):
+    def __init__(self, x_train, y_train, x_test, y_test, y_pred_bats, test_case_similarity_list, algorithm='lr', ):
         self.x_train = x_train
         self.y_train = y_train
         self.x_test = x_test
         self.y_test = y_test
+        self.y_pred_bats = y_pred_bats
+        self.test_case_similarity_list = test_case_similarity_list
 
         self.algorithm = algorithm
 
@@ -31,16 +33,37 @@ class MlPrediction:
 
         clf = None
         if self.algorithm == 'lr':
-            clf = LogisticRegression(solver='lbfgs', class_weight={1:1}, max_iter=10000).fit(X=x_train, y=y_train)
+            clf = LogisticRegression(solver='lbfgs',).fit(X=x_train, y=y_train)
         elif self.algorithm == 'dt':
             clf = DecisionTreeClassifier().fit(X=x_train, y=y_train, sample_weight=None)
         elif self.algorithm == 'rf':
-            clf = RandomForestClassifier(class_weight={1:1},n_estimators=1000).fit(X=x_train, y=y_train)
+            clf = RandomForestClassifier().fit(X=x_train, y=y_train)
         elif self.algorithm == 'nb':
             clf = GaussianNB().fit(X=x_train, y=y_train)
 
         y_pred = clf.predict_proba(x_test)[:, 1]
         print('{}: '.format(self.algorithm))
+
+        print('1. ML:')
+        auc_, recall_p, recall_n, acc, prc, rc, f1 = self.evaluation_metrics(y_true=y_test, y_pred_prob=y_pred)
+
+        # # combine ML-based and BATs
+        # print('2. Combine:')
+        # y_pred_prob_combine = []
+        # BATs, ML = 0, 0
+        # for i in range(len(self.y_pred_bats)):
+        #     if self.test_case_similarity_list[i] >= 0.9:
+        #         y_pred_prob_combine.append(self.y_pred_bats[i])
+        #         BATs += 1
+        #     else:
+        #         y_pred_ML = clf.predict_proba(x_test[i].reshape(1, -1))[:, 1]
+        #         y_pred_prob_combine.append(y_pred_ML)
+        #         ML += 1
+        # print('BATs:{}, ML:{}'.format(BATs, ML))
+        # auc_, recall_p, recall_n, acc, prc, rc, f1 = self.evaluation_metrics(y_true=y_test, y_pred_prob=y_pred_prob_combine)
+
+        # average ML-based and BATs
+        y_pred = (y_pred + self.y_pred_bats)/2.0
         auc_, recall_p, recall_n, acc, prc, rc, f1 = self.evaluation_metrics(y_true=y_test, y_pred_prob=y_pred)
 
     def evaluation_metrics(self, y_true, y_pred_prob):

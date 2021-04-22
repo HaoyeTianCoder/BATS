@@ -17,10 +17,18 @@ from tqdm import tqdm
 import seaborn as sns
 from matplotlib.patches import PathPatch
 import scipy.stats as stats
+from sklearn.model_selection import KFold, StratifiedKFold
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from representation.CC2Vec import lmg_cc2ftr_interface
 
 notRecognizedByBert = ['Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-25-patch1', 'Correct-Lang-53-patch1', 'Incorrect-Math-6-patch2', 'Incorrect-Math-6-patch2', 'Incorrect-Math-6-patch1', 'Correct-Math-56-patch1', 'Incorrect-Math-80-patch1', 'Incorrect-Math-104-patch1']
 notRecognizedByCC2Vec = ['Correct-Lang-25-patch1', 'Correct-Lang-53-patch1', 'Correct-Math-56-patch1', 'Incorrect-Math-80-patch1']
 notRecognized = notRecognizedByBert + notRecognizedByCC2Vec
+
+MODEL_MODEL_LOAD_PATH = '/Users/haoye.tian/Documents/University/model/java14_model/saved_model_iter8.release'
+MODEL_CC2Vec = '../representation/CC2Vec/'
 
 class evaluation:
     def __init__(self, patch_w2v, test_data, test_name, test_vector, patch_vector, exception_type):
@@ -66,7 +74,7 @@ class evaluation:
                 continue
 
             # vector
-            json_key = p + '_.json' # pre-saved bert vector
+            json_key = p + '_.json' # pre-saved bert vector of BATs
             json_key_cross = p + '_cross.json' # pre-saved bert feature in Haoye's ASE2020
             if self.patch_w2v == 'bert':
                 if os.path.exists(json_key):
@@ -99,6 +107,7 @@ class evaluation:
 
             # compared with Haoye's ASE2020
             if compare=='ASE2020':
+                # Bert
                 with open(json_key_cross, 'r+') as f:
                     vector_str = json.load(f)
                     vector_ML = np.array(list(map(float, vector_str)))
@@ -181,7 +190,8 @@ class evaluation:
             tool = p.split('/')[-5]
             patchid = p.split('/')[-1]
             # name = tool + '-' + label + '-' + patchid
-            name = tool[:3] + patchid.replace('patch','')
+            # name = tool[:3] + patchid.replace('patch','')
+            name = '-'.join([tool[:3], p.split('/')[-4], p.split('/')[-3], p.split('/')[-2], patchid])
             name_list.append(name)
 
         return name_list, label_list, vector_list, vector_ML_list
@@ -205,6 +215,7 @@ class evaluation:
         dataset_exp = np.delete(self.exception_type, failed_test_index, axis=0)
 
         patch_list = [] # the associated patches of similar test cases
+        cut_off_list = []
         closest_score = []
         for i in failed_test_index:
             failed_test_vector = all_test_vector[i]
@@ -233,6 +244,7 @@ class evaluation:
 
             # keep the test case with simi score >= 0.8 or *
             k_index = np.array([v[0] for v in k_index_list if v[1] >= cut_off])
+            cut_offs = np.array([v[1] for v in k_index_list if v[1] >= cut_off])
 
             if k_index.size == 0:
                 continue
@@ -249,10 +261,12 @@ class evaluation:
 
             k_patch_vector = dataset_patch[k_index]
             patch_list.append(k_patch_vector)
+            # cut_off_list.append(cut_offs)
 
             # print('exception type: {}'.format(exp_type.split('.')[-1]))
-        return patch_list, scaler_patch, closest_score
+        return patch_list, scaler_patch, closest_score,
 
+    # deprecated
     def evaluate_collected_projects(self, path_collected_patch):
         projects = {'Chart': 26, 'Lang': 65, 'Math': 106, 'Time': 27}
         # projects = {'Math': 106}
@@ -360,17 +374,18 @@ class evaluation:
         plt.title('Similarity of test case')
         plt.savefig('../fig/RQ3/Similarity_Test.png')
 
-    def predict_collected_projects(self, path_collected_patch=None, cut_off=0.8, distance_method = distance.cosine, patchsim=False):
+    def predict_collected_projects(self, path_collected_patch=None, cut_off=0.8, distance_method = distance.cosine, comparison='None', patchsim=False):
         print('Research Question 3')
         projects = {'Chart': 26, 'Lang': 65, 'Math': 106, 'Time': 27}
         y_preds, y_trues = [], []
         MAP, MRR, number_patch_MAP = [], [], 0
         recommend_list_project = []
         x_train, y_train, x_test, y_test = [], [], [], []
-        comparison = 'No2020' # will make comparison if the value equals to 'ASE2020'
         box_projecs_co, box_projecs_inco, projects_name = [], [], []
-        mean_stand_dict = {0.0: [443, 816], 0.6: [273, 246], 0.7: [231, 273], 0.8: [180, 235], 0.9: [130, 130]}
+        mean_stand_dict = {0.0: [443, 816], 0.5: ['', ''], 0.6: [273, 246], 0.7: [231, 273], 0.8: [180, 235], 0.9: [130, 130]}
         print('test case similarity cut-off: {}'.format(cut_off))
+        test_case_similarity_list = []
+        patch_available_distribution = {}
         for project, number in projects.items():
             print('Testing {}'.format(project))
             for id in range(1, number + 1):
@@ -396,9 +411,25 @@ class evaluation:
                     name_list, label_list, generated_patch_list, vector_ML_list = self.vector4patch_patchsim(available_path_patch, compare=comparison,)
                 else:
                     name_list, label_list, generated_patch_list, vector_ML_list = self.vector4patch(available_path_patch, compare=comparison,)
+
+                # # depulicate
+                # index_to_delete = []
+                # for i in range(len(vector_ML_list)):
+                #     if list(vector_ML_list[i]) in unique:
+                #         index_to_delete.append(i)
+                #     else:
+                #         unique.append(list(vector_ML_list[i]))
+                # for counter, index in enumerate(index_to_delete):
+                #     index = index - counter
+                #     name_list.pop(index)
+                #     label_list.pop(index)
+                #     generated_patch_list.pop(index)
+                #     vector_ML_list.pop(index)
+
                 if name_list == []:
                     print('all the patches can not be recognized')
                     continue
+
                 # plot distribution of correct and incorrect patches
                 co = label_list.count(1)
                 inco = label_list.count(0)
@@ -406,7 +437,7 @@ class evaluation:
                 box_projecs_inco.append(inco)
                 projects_name.append(project)
 
-                # access the associated patch list(patch repository) of similar failed test cases
+                # access the associated patch list(patch search space) of similar failed test cases
                 associated_patch_list, scaler_patch, closest_score = self.get_associated_patch_list(failed_test_index, k=5, cut_off=cut_off, model=self.patch_w2v)
                 if associated_patch_list == []:
                     print('No closest test case that satisfied with the condition of cut-off similarity')
@@ -436,10 +467,20 @@ class evaluation:
                         y_preds.append(y_pred_prob)
                         y_trues.append(y_true)
 
+                        # the current patches are address this bug. The highest test case similarity we can find for test case of this bug is in 'test_case_similarity_list'
+                        test_case_similarity_list.append(max(closest_score))
+
                         # ML prediction for comparison
                         if comparison == 'ASE2020':
                             x_test.append(vector_ML_list[i])
                             y_test.append(y_true)
+
+                        # record distribution of available patches
+                        key = name[:3]+str(y_true)
+                        if key not in patch_available_distribution:
+                            patch_available_distribution[key] = 1
+                        else:
+                            patch_available_distribution[key] += 1
 
 
                 if not (not 1 in label_list or not 0 in label_list) and recommend_list != []: # ensure there are correct and incorrect patches in recommended list
@@ -451,6 +492,9 @@ class evaluation:
 
                 recommend_list_project += recommend_list
 
+        # patch distribution
+        print(patch_available_distribution)
+
         # evaluation based on a few metrics
         self.evaluation_metrics(y_trues, y_preds)
 
@@ -459,8 +503,8 @@ class evaluation:
         if comparison == 'ASE2020' and cut_off > 0.0:
             print('------')
             print('Evaluating ASE2020 Performance')
-            MlPrediction(x_train, y_train, x_test, y_test, algorithm='lr').predict()
-            MlPrediction(x_train, y_train, x_test, y_test, algorithm='rf').predict()
+            MlPrediction(x_train, y_train, x_test, y_test, y_pred_bats=y_preds, test_case_similarity_list=test_case_similarity_list, algorithm='lr').predict()
+            MlPrediction(x_train, y_train, x_test, y_test, y_pred_bats=y_preds, test_case_similarity_list=test_case_similarity_list, algorithm='rf').predict()
 
         if patchsim:
             print('------')
@@ -469,10 +513,168 @@ class evaluation:
             recommend_list_project = pd.DataFrame(sorted(recommend_list_project, key=lambda x: x[3], reverse=True))
             Correct = recommend_list_project[recommend_list_project[2]==1]
             filter_out_incorrect = recommend_list_project.shape[0] - Correct[:].index.tolist()[-1] - 1
-            print('Exclude incorrect: {}'.format(filter_out_incorrect))
-            print('Exclude rate: {}'.format(filter_out_incorrect/recommend_list_project.shape[0]))
+
+            print('Test data size: {}, Incorrect: {}, Correct: {}'.format(recommend_list_project.shape[0], recommend_list_project.shape[0]-Correct.shape[0],
+                                                                          Correct.shape[0]))
+            # print('Exclude incorrect: {}'.format(filter_out_incorrect))
+            # print('Exclude rate: {}'.format(filter_out_incorrect/(recommend_list_project.shape[0]-Correct.shape[0])))
+            # print('Excluded name: {}'.format(recommend_list_project.iloc[Correct[:].index.tolist()[-1]+1:][0].values))
+
+            # topHalf = recommend_list_project.iloc[:Correct[:].index.tolist()[-1] + 1]
+            # topHalfIncorrect = topHalf[topHalf[2] == 0][0].values
+            # print('Noe excluded name: {}'.format(topHalfIncorrect))
 
         # self.statistics_box(box_projecs_co, box_projecs_inco, projects_name)
+
+    def improve_ML(self, path_collected_patch=None, cut_off=0.8, distance_method = distance.cosine, kfold=10, algorithm='lr', method='combine'):
+        print('Research Question 3: Improvement')
+        projects = {'Chart': 26, 'Lang': 65, 'Math': 106, 'Time': 27}
+        y_preds_bats, y_preds_prob_bats, y_trues = [], [], []
+        x_all, y_all, x_test, y_test = [], [], [], []
+        comparison = 'ASE2020' # will make comparison if the value equals to 'ASE2020'
+        mean_stand_dict = {0.0: [443, 816], 0.6: [273, 246], 0.7: [231, 273], 0.8: [180, 235], 0.9: [130, 130]}
+        print('test case similarity cut-off: {}'.format(cut_off))
+        unique_dict = []
+        for project, number in projects.items():
+            print('Testing {}'.format(project))
+            for id in range(1, number + 1):
+                print('----------------')
+                print('{}_{}'.format(project, id))
+                project_id = '_'.join([project, str(id)])
+
+                # extract failed test index according to bug_id
+                failed_test_index = [i for i in range(len(self.test_name)) if self.test_name[i].startswith(project_id+'-')]
+                if failed_test_index == []:
+                    print('Couldnt find any failed test case for this bugid: {}'.format(project_id))
+                    # print('{} patches skipped'.format(len(available_path_patch)))
+                    continue
+
+                # find paths of patches generated by tools
+                available_path_patch = self.find_path_patch(path_collected_patch, project_id)
+                if available_path_patch == []:
+                    print('No generated patches of APR tools found:{}'.format(project_id))
+                    continue
+
+                # return vector according to available_path_patch
+                name_list, label_list, generated_patch_list, vector_ML_list = self.vector4patch(available_path_patch, compare=comparison,)
+                if name_list == []:
+                    print('all the patches can not be recognized')
+                    continue
+
+                # access the associated patch list(patch repository) of similar failed test cases
+                associated_patch_list, scaler_patch, closest_score = self.get_associated_patch_list(failed_test_index, k=5, cut_off=cut_off, model=self.patch_w2v)
+
+                # print('save train data for ML model of ASE2020')
+                if comparison == 'ASE2020' and vector_ML_list != []:
+                    for i in range(len(vector_ML_list)):
+                        # if list(vector_list[i].astype(float)) != list(np.zeros(240).astype(float)):
+                        if vector_ML_list[i] in unique_dict:
+                            continue
+                        else:
+                            x_all.append(vector_ML_list[i])
+                            y_all.append(label_list[i])
+
+                # calculate the center of associated patches(repository)
+                if associated_patch_list == []:
+                    y_preds_bats += [-999 for i in range(len(vector_ML_list))]
+                    y_preds_prob_bats += [-999 for i in range(len(vector_ML_list))]
+                    y_trues += [i for i in label_list]
+                else:
+                    centers = self.dynamic_threshold2(associated_patch_list, distance_method=distance_method, sumup='mean')
+                    for i in range(len(vector_ML_list)):
+                        name = name_list[i]
+                        tested_patch = generated_patch_list[i]
+                        y_true = label_list[i]
+                        # y_pred = self.predict_label(centers, threshold_list, vector_new_patch, scaler_patch)
+                        # y_pred_prob = self.predict_prob(centers, threshold_list, vector_new_patch, scaler_patch)
+                        y_pred_prob, y_pred = self.predict_recom(centers, tested_patch, scaler_patch, mean_stand_dict[cut_off], distance_method=distance_method,)
+
+                        if math.isnan(y_pred_prob):
+                            y_preds_bats.append(-999)
+                            y_preds_prob_bats.append(-999)
+                            y_trues.append(y_true)
+                        else:
+                            y_preds_bats.append(y_pred)
+                            y_preds_prob_bats.append(y_pred_prob)
+                            y_trues.append(y_true)
+
+        # run cross validation for ML-based approach in ASE2020
+        # x_all_unique, y_all_unique, y_preds_prob_bats_unique = [], [], []
+        # for i in range(len(x_all)):
+        #     if list(x_all[i]) in unique_dict:
+        #         continue
+        #     else:
+        #         unique_dict.append(list(x_all[i]))
+        #         x_all_unique.append(x_all[i])
+        #         y_all_unique.append(y_all[i])
+        #         y_preds_prob_bats_unique.append(y_preds_prob_bats[i])
+        # x_all_unique = np.array(x_all_unique)
+        # y_all_unique = np.array(y_all_unique)
+        # y_preds_prob_bats_unique = np.array(y_preds_prob_bats_unique)
+        skf = StratifiedKFold(n_splits=kfold, shuffle=True)
+        accs, prcs, rcs, f1s, aucs = list(), list(), list(), list(), list()
+        rcs_p, rcs_n = list(), list()
+        for train_index, test_index in skf.split(x_all_unique, y_all_unique):
+            x_train, y_train = x_all_unique[train_index], y_all_unique[train_index]
+            x_test, y_test = x_all_unique[test_index], y_all_unique[test_index]
+
+            # prediction by BATs
+            # y_pred_bats = y_preds_bats[test_index]
+            y_test_pred_prob_bats = y_preds_prob_bats_unique[test_index]
+
+            # standard data
+            scaler = StandardScaler().fit(x_train)
+            # scaler = MinMaxScaler().fit(x_train)
+            x_train = scaler.transform(x_train)
+            x_test = scaler.transform(x_test)
+
+            print('\ntrain data: {}, test data: {}'.format(len(x_train), len(x_test)), end='')
+
+            clf = None
+            if algorithm == 'lr':
+                clf = LogisticRegression(solver='lbfgs', class_weight={1: 1},).fit(X=x_train, y=y_train)
+            elif algorithm == 'dt':
+                clf = DecisionTreeClassifier().fit(X=x_train, y=y_train, sample_weight=None)
+            elif algorithm == 'rf':
+                clf = RandomForestClassifier(class_weight={1: 1}, ).fit(X=x_train, y=y_train)
+
+            if method == 'combine':
+                # combine both
+                number_bats = 0
+                number_ML = 0
+                y_pred_final = []
+                for i in range(len(y_test)):
+
+                    # apply BATs first
+                    if y_test_pred_prob_bats[i] != -999:
+                        number_bats += 1
+                        y_pred_final.append(y_test_pred_prob_bats[i])
+                    else:
+                        number_ML += 1
+                        y_test_pred_prob_ML = clf.predict_proba(x_test[i].reshape(1,-1))[:, 1]
+                        y_pred_final.append(y_test_pred_prob_ML)
+
+                    # y_pred_final.append((y_test_pred_prob_bats[i] + clf.predict_proba(x_test[i].reshape(1,-1))[:, 1])/2.0)
+                print('\nNumber of BATs and ML: {} {}'.format(number_bats, number_ML))
+            else:
+                y_pred_final = clf.predict_proba(x_test)[:, 1]
+
+            # print('{}: '.format(algorithm))
+            recall_p, recall_n, acc, prc, rc, f1, auc_ = self.evaluation_metrics(list(y_test), y_pred_final)
+
+            accs.append(acc)
+            prcs.append(prc)
+            rcs.append(rc)
+            f1s.append(f1)
+
+            aucs.append(auc_)
+            rcs_p.append(recall_p)
+            rcs_n.append(recall_n)
+
+        print('\n{}-fold cross validation mean: '.format(kfold))
+        print('Accuracy: {:.1f} -- Precision: {:.1f} -- +Recall: {:.1f} -- F1: {:.1f} -- AUC: {:.3f}'.format(np.array(accs).mean() * 100, np.array(prcs).mean() * 100, np.array(rcs).mean() * 100, np.array(f1s).mean() * 100, np.array(aucs).mean()))
+        print('AUC: {:.3f}, +Recall: {:.3f}, -Recall: {:.3f}'.format(np.array(aucs).mean(), np.array(rcs_p).mean(), np.array(rcs_n).mean()))
+
 
     def predict(self, patch_list, new_patch, scaler_patch):
         if self.patch_w2v != 'string':
@@ -586,7 +788,7 @@ class evaluation:
 
         return score_prob_new
 
-    def predict_recom(self, centers, new_patch, scaler_patch, mean_stand, distance_method=distance.euclidean):
+    def predict_recom(self, centers, new_patch, scaler_patch, mean_stand=None, distance_method=distance.euclidean):
         if self.patch_w2v != 'string':
             new_patch = scaler_patch.transform(new_patch.reshape((1, -1)))
 
@@ -651,7 +853,7 @@ class evaluation:
         # return , auc_
 
         # print('AP: {}'.format(average_precision_score(y_trues, y_pred_probs)))
-        return recall_p, recall_n, acc, prc, rc, f1
+        return recall_p, recall_n, acc, prc, rc, f1, auc_
 
     def evaluate_defects4j_projects(self, ):
         print('Research Question 2')
