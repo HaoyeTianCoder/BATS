@@ -35,7 +35,7 @@ class cluster:
         # self.patch_dist(self.patch_vector, [i for i in range(40)] + [random.randint(0, 40) for j in range(418)], self.method, self.number, scaler=scaler)
         # self.patch_dist([i for i in range(40)] + [random.randint(0, 40) for j in range(1080)], self.method, self.number, scaler=scaler)
 
-        self.cluster_patch_dist_inde(self.method, self.number, scaler)
+        # self.cluster_patch_dist_inde(self.method, self.number, scaler)
 
 
         # clusters = self.cluster_test_dist(self.patch_vector, method=self.method, number=self.number)
@@ -78,15 +78,15 @@ class cluster:
             raise
         # X["Cluster"] = clusters
 
-        s1 = silhouette_score(X, clusters)
-        s2 = calinski_harabasz_score(X, clusters)
-        s3 = davies_bouldin_score(X, clusters)
-        print('TEST------')
-        print('Silhouette: {}'.format(s1))
-        print('CH: {}'.format(s2))
-        print('DBI: {}'.format(s3))
+        # s1 = silhouette_score(X, clusters)
+        # s2 = calinski_harabasz_score(X, clusters)
+        # s3 = davies_bouldin_score(X, clusters)
+        # print('TEST------')
+        # print('Silhouette: {}'.format(s1))
+        # print('CH: {}'.format(s2))
+        # print('DBI: {}'.format(s3))
 
-        # self.score_inside_outside(X, clusters, number)
+        self.score_inside_outside(X, clusters, number)
 
         return clusters
 
@@ -181,12 +181,12 @@ class cluster:
         s2 = calinski_harabasz_score(P, clusters)
         s3 = davies_bouldin_score(P, clusters)
         print('PATCH------')
-        print('Silhouette: {}'.format(s1))
-        print('CH: {}'.format(s2))
-        print('DBI: {}'.format(s3))
+        # print('Silhouette: {}'.format(s1))
+        # print('CH: {}'.format(s2))
+        # print('DBI: {}'.format(s3))
 
         # loose metric
-        # self.score_inside_outside(P, clusters, number)
+        self.score_inside_outside(P, clusters, number)
 
         '''
         MWW validation
