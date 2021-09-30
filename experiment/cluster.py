@@ -31,15 +31,14 @@ class cluster:
         clusters = self.cluster_test_dist(method=self.method, number=self.number, scaler=scaler)
         self.patch_dist(clusters, self.method, self.number, scaler=scaler)
 
-        print('Random or Independent **************')
+        # print('Random or Independent **************')
         # self.patch_dist(self.patch_vector, [i for i in range(40)] + [random.randint(0, 40) for j in range(418)], self.method, self.number, scaler=scaler)
         # self.patch_dist([i for i in range(40)] + [random.randint(0, 40) for j in range(1080)], self.method, self.number, scaler=scaler)
-
         # self.cluster_patch_dist_inde(self.method, self.number, scaler)
 
-
-        # clusters = self.cluster_test_dist(self.patch_vector, method=self.method, number=self.number)
-        # self.patch_dist(self.test_vector, clusters, self.method, self.number)
+        # reverse test case and patch
+        # clusters = self.cluster_patch_dist_inde(self.method, self.number, scaler)
+        # self.test_dist(clusters, self.method, self.number, scaler=scaler)
 
     def cluster_test_dist(self, method, number, scaler):
         # scaler = Normalizer()
@@ -81,13 +80,12 @@ class cluster:
         # s1 = silhouette_score(X, clusters)
         # s2 = calinski_harabasz_score(X, clusters)
         # s3 = davies_bouldin_score(X, clusters)
-        # print('TEST------')
+        print('TEST------')
         # print('Silhouette: {}'.format(s1))
         # print('CH: {}'.format(s2))
         # print('DBI: {}'.format(s3))
 
         self.score_inside_outside(X, clusters, number)
-
         return clusters
 
         # visualize clustering.
@@ -156,20 +154,43 @@ class cluster:
             APC = AffinityPropagation(verbose=True, max_iter=200, convergence_iter=25).fit(P)
             APC_res = APC.predict(P)
             clusters = APC.cluster_centers_indices_
+        else:
+            raise
         # X["Cluster"] = clusters
 
-        s1 = silhouette_score(P, clusters)
-        s2 = calinski_harabasz_score(P, clusters)
-        s3 = davies_bouldin_score(P, clusters)
+        # s1 = silhouette_score(P, clusters)
+        # s2 = calinski_harabasz_score(P, clusters)
+        # s3 = davies_bouldin_score(P, clusters)
         print('Patch independently------')
-        print('Silhouette: {}'.format(s1))
-        print('CH: {}'.format(s2))
-        print('DBI: {}'.format(s3))
+        # print('Silhouette: {}'.format(s1))
+        # print('CH: {}'.format(s2))
+        # print('DBI: {}'.format(s3))
 
-        # self.score_inside_outside(P, clusters, number)
+        self.score_inside_outside(P, clusters, number)
+        return clusters
+
+    def test_dist(self, clusters, method, number, scaler):
+        X = pd.DataFrame(scaler.fit_transform(self.test_vector))
+        # P = pd.DataFrame(scaler.fit_transform(self.patch_vector))
+        # P["Cluster"] = clusters
+
+        # if number <= 6:
+        #     v = Visual(algorithm='PCA', number_cluster=number, method=method)
+        #     v.visualize(plotX=P)
+
+        # s1 = silhouette_score(P, clusters)
+        # s2 = calinski_harabasz_score(P, clusters)
+        # s3 = davies_bouldin_score(P, clusters)
+        print('TEST------')
+        # print('Silhouette: {}'.format(s1))
+        # print('CH: {}'.format(s2))
+        # print('DBI: {}'.format(s3))
+
+        # loose metric
+        self.score_inside_outside(X, clusters, number)
 
     def patch_dist(self, clusters, method, number, scaler):
-        X = pd.DataFrame(scaler.fit_transform(self.test_vector))
+        # X = pd.DataFrame(scaler.fit_transform(self.test_vector))
         P = pd.DataFrame(scaler.fit_transform(self.patch_vector))
         # P["Cluster"] = clusters
 
@@ -177,9 +198,9 @@ class cluster:
             v = Visual(algorithm='PCA', number_cluster=number, method=method)
             v.visualize(plotX=P)
 
-        s1 = silhouette_score(P, clusters)
-        s2 = calinski_harabasz_score(P, clusters)
-        s3 = davies_bouldin_score(P, clusters)
+        # s1 = silhouette_score(P, clusters)
+        # s2 = calinski_harabasz_score(P, clusters)
+        # s3 = davies_bouldin_score(P, clusters)
         print('PATCH------')
         # print('Silhouette: {}'.format(s1))
         # print('CH: {}'.format(s2))
@@ -236,8 +257,9 @@ class cluster:
     def score_inside_outside(self, vectors, clusters, number):
         cnt = 0
         diffs = []
+        print('Calculating...')
         for n in range(number):
-            # print('cluster: {}'.format(n))
+            # print('cluster index: {}'.format(n))
             index_inside = np.where(clusters == n)
             score_inside_mean = []
             score_outside_mean = []
@@ -266,9 +288,9 @@ class cluster:
             # print('inside: {}'.format(inside_score), end='    ')
             # print('outside: {}'.format(outside_score))
 
-            diff = (inside_score - outside_score) / max(inside_score, outside_score)
-            diffs.append(diff)
+            SC = (inside_score - outside_score) / max(inside_score, outside_score)
+            diffs.append(SC)
 
-        diff_mean = np.array(diffs).mean()
-        print('good cluster number: {}/{}'.format(len(np.where(np.array(diffs)>0)[0]), len(diffs)))
-        print('diff_mean: {}'.format(diff_mean))
+        CSC = np.array(diffs).mean()
+        print('Qualified: {}/{}'.format(len(np.where(np.array(diffs)>0)[0]), len(diffs)))
+        print('CSC: {}'.format(CSC))
