@@ -30,6 +30,8 @@ notRecognized = notRecognizedByBert + notRecognizedByCC2Vec
 MODEL_MODEL_LOAD_PATH = '/Users/haoye.tian/Documents/University/model/java14_model/saved_model_iter8.release'
 MODEL_CC2Vec = '../representation/CC2Vec/'
 
+# Root_ODS_feature = '/Users/haoye.tian/Documents/University/data/PatchCollectingTOSEMYe'
+
 class evaluation:
     def __init__(self, patch_w2v, test_data, test_name, test_vector, patch_vector, exception_type):
         self.patch_w2v = patch_w2v
@@ -63,9 +65,117 @@ class evaluation:
                             available_path_patch.append(path_patch)
         return available_path_patch
 
+    def engineered_features(self, path_json):
+        other_vector = []
+        P4J_vector = []
+        repair_patterns = []
+        repair_patterns2 = []
+        try:
+            with open(path_json, 'r') as f:
+                feature_json = json.load(f)
+                features_list = feature_json['files'][0]['features']
+                P4J = features_list[-3]
+                RP = features_list[-2]
+                RP2 = features_list[-1]
+
+                '''
+                # other
+                for k,v in other.items():
+                    # if k.startswith('FEATURES_BINARYOPERATOR'):
+                    #     for k2,v2 in other[k].items():
+                    #         for k3,v3 in other[k][k2].items():
+                    #             if v3 == 'true':
+                    #                 other_vector.append('1')
+                    #             elif v3 == 'false':
+                    #                 other_vector.append('0')
+                    #             else:
+                    #                 other_vector.append('0.5')
+                    if k.startswith('S'):
+                        if k.startswith('S6'):
+                            continue
+                        other_vector.append(v)
+                    else:
+                        continue
+                '''
+
+                # P4J
+                if not list(P4J.keys())[100].startswith('P4J'):
+                    raise
+                for k, v in P4J.items():
+                    # dict = P4J[i]
+                    # value = list(dict.values())[0]
+                    P4J_vector.append(int(v))
+
+                # repair pattern
+                for k, v in RP['repairPatterns'].items():
+                    repair_patterns.append(v)
+
+                # repair pattern 2
+                for k, v in RP2.items():
+                    repair_patterns2.append(v)
+
+                # for i in range(len(features_list)):
+                #     dict_fea = features_list[i]
+                #     if 'repairPatterns' in dict_fea.keys():
+                #             # continue
+                #             for k,v in dict_fea['repairPatterns'].items():
+                #                 repair_patterns.append(int(v))
+                #     else:
+                #         value = list(dict_fea.values())[0]
+                #         engineered_vector.append(value)
+        except Exception as e:
+            print('name: {}, exception: {}'.format(path_json, e))
+            return []
+
+        if len(P4J_vector) != 156 or len(repair_patterns) != 26 or len(repair_patterns2) != 13:
+            print('name: {}, exception: {}'.format(path_json, 'null feature or shape error'))
+            return []
+
+        # return engineered_vector
+        # return P4J_vector + repair_patterns + repair_patterns2
+        return P4J_vector + repair_patterns
+
+    def getODSFeature(self, p):
+        tool = p.split('/')[-5]
+        label = p.split('/')[-4]
+        project = p.split('/')[-3]
+        id = p.split('/')[-2]
+
+        name = p.split('/')[-1]
+        folder1, folder2 = '-'.join([name, project, id]), tool
+        all_root = '/'.join(
+            [Root_ODS_feature, tool, label, project, id, folder1 + '_' + folder2, folder1, folder2])
+        all_path_feature = all_root + '/features_' + name + '-' + project + '-' + id + '.json'
+        ods_feature_all = []
+
+        if os.path.exists(all_path_feature):
+            ods_feature_all = self.engineered_features(all_path_feature)
+        else:
+            tmp = []
+            for i in range(9):
+                name_concatenated = name.split('-')
+                name_concatenated[0] += '#' + str(i)
+                name_concatenated = '-'.join(name_concatenated)
+                folder1, folder2 = '-'.join([name_concatenated, project, id]), tool
+                all_root = '/'.join(
+                    [Root_ODS_feature, tool, label, project, id, folder1 + '_' + folder2, folder1, folder2])
+                all_path_feature = all_root + '/features_' + name_concatenated + '-' + project + '-' + id + '.json'
+                if os.path.exists(all_path_feature):
+                    ods_feature = self.engineered_features(all_path_feature)
+                    if ods_feature != []:
+                        tmp.append(ods_feature)
+                else:
+                    pass
+            if tmp != []:
+                ods_feature_all = np.sum(tmp, axis=0).tolist()
+        if ods_feature_all == []:
+            print('NoODS')
+        return ods_feature_all if ods_feature_all != [] else [0 for i in range(182)]
+
     def vector4patch(self, available_path_patch, compare='ASE2020',):
         vector_list = []
         vector_ML_list = []
+        vector_ODS_list = []
         label_list = []
         name_list = []
         for p in available_path_patch:
@@ -112,6 +222,9 @@ class evaluation:
                     vector_str = json.load(f)
                     vector_ML = np.array(list(map(float, vector_str)))
                 vector_ML_list.append(vector_ML)
+            # if compare=='ODS':
+            #     vector_ODS = np.array(self.getODSFeature(p))
+            #     vector_ODS_list.append(vector_ODS)
 
             # label
             if 'Correct' in p:
@@ -130,7 +243,7 @@ class evaluation:
             name = tool[:3] + patchid.replace('patch','')
             name_list.append(name)
 
-        return name_list, label_list, vector_list, vector_ML_list
+        return name_list, label_list, vector_list, vector_ML_list, vector_ODS_list
 
     def vector4patch_patchsim(self, available_path_patch, compare='ASE2020',):
         vector_list = []
@@ -381,18 +494,21 @@ class evaluation:
         MAP, MRR, number_patch_MAP = [], [], 0
         recommend_list_project = []
         x_train, y_train, x_test, y_test = [], [], [], []
+        x_train_ods, y_train_ods, x_test_ods, y_test_ods = [], [], [], []
         box_projecs_co, box_projecs_inco, projects_name = [], [], []
         mean_stand_dict = {0.0: [443, 816], 0.5: ['', ''], 0.6: [273, 246], 0.7: [231, 273], 0.8: [180, 235], 0.9: [130, 130]}
         print('test case similarity cut-off: {}'.format(cut_off))
-        test_case_similarity_list = []
+        test_case_similarity_list, patch1278_list_short = [], []
         patch_available_distribution = {}
+        patch1278_list = []
         for project, number in projects.items():
             print('Testing {}'.format(project))
             for id in range(1, number + 1):
                 print('----------------')
                 print('{}_{}'.format(project, id))
                 project_id = '_'.join([project, str(id)])
-
+                # if project_id == 'Chart_26':
+                #     print('get incorrect patch case')
                 # extract failed test index according to bug_id
                 failed_test_index = [i for i in range(len(self.test_name)) if self.test_name[i].startswith(project_id+'-')]
                 if failed_test_index == []:
@@ -407,10 +523,10 @@ class evaluation:
                     continue
 
                 # return vector according to available_path_patch
-                if patchsim:
-                    name_list, label_list, generated_patch_list, vector_ML_list = self.vector4patch_patchsim(available_path_patch, compare=comparison,)
-                else:
-                    name_list, label_list, generated_patch_list, vector_ML_list = self.vector4patch(available_path_patch, compare=comparison,)
+                # if patchsim:
+                #     name_list, label_list, generated_patch_list, vector_ML_list = self.vector4patch_patchsim(available_path_patch, compare=comparison,)
+                # else:
+                name_list, label_list, generated_patch_list, vector_ML_list, vector_ODS_list = self.vector4patch(available_path_patch, compare=comparison,)
 
                 # # depulicate
                 # index_to_delete = []
@@ -448,6 +564,11 @@ class evaluation:
                             # if list(vector_list[i].astype(float)) != list(np.zeros(240).astype(float)):
                                 x_train.append(vector_ML_list[i])
                                 y_train.append(label_list[i])
+                    # if comparison == 'ODS' and vector_ODS_list != []:
+                    #     for i in range(len(label_list)):
+                    #         # if list(vector_list[i].astype(float)) != list(np.zeros(240).astype(float)):
+                    #             x_train_ods.append(vector_ODS_list[i])
+                    #             y_train_ods.append(label_list[i])
                     continue
 
                 recommend_list = []
@@ -467,13 +588,18 @@ class evaluation:
                         y_preds.append(y_pred_prob)
                         y_trues.append(y_true)
 
-                        # the current patches are address this bug. The highest test case similarity we can find for test case of this bug is in 'test_case_similarity_list'
+                        # the current patches addressing this bug. The highest test case similarity we can find for test case of this bug is in 'test_case_similarity_list'
                         test_case_similarity_list.append(max(closest_score))
 
                         # ML prediction for comparison
                         if comparison == 'ASE2020':
                             x_test.append(vector_ML_list[i])
                             y_test.append(y_true)
+
+                        # ML prediction for comparison
+                        # if comparison == 'ODS':
+                        #     x_test_ods.append(vector_ODS_list[i])
+                        #     y_test_ods.append(y_true)
 
                         # record distribution of available patches
                         key = name[:3]+str(y_true)
@@ -482,6 +608,12 @@ class evaluation:
                         else:
                             patch_available_distribution[key] += 1
 
+                        # save the name of 1278 patches for evaluating
+                        path = available_path_patch[i]
+                        patchname = path.split('/')[-1]
+                        tool = path.split('/')[-5]
+                        patchname_complete = '-'.join([patchname, project, str(id), tool, str(y_true)])
+                        patch1278_list.append(patchname_complete)
 
                 if not (not 1 in label_list or not 0 in label_list) and recommend_list != []: # ensure there are correct and incorrect patches in recommended list
                     AP, RR = self.evaluate_recommend_list(recommend_list)
@@ -506,6 +638,33 @@ class evaluation:
             MlPrediction(x_train, y_train, x_test, y_test, y_pred_bats=y_preds, test_case_similarity_list=test_case_similarity_list, algorithm='lr').predict()
             MlPrediction(x_train, y_train, x_test, y_test, y_pred_bats=y_preds, test_case_similarity_list=test_case_similarity_list, algorithm='rf').predict()
 
+        with open('./patch'+str(len(patch1278_list))+'.txt', 'w+') as f:
+            for p in patch1278_list:
+                f.write(p + '\n')
+
+        if patchsim:
+            print('------')
+            print('Evaluating PatchSim improvement')
+            y_combine, y_combine_trues = [], []
+            y_patchsim = []
+            BATs_cnt = 0
+            with open('patch325_result.txt', 'r+') as f_patchsim:
+                for line in f_patchsim:
+                    line = line.strip()
+                    name_ps, prediction_ps = line.split(',')[0], line.split(',')[1]
+                    i = patch1278_list.index(name_ps)
+                    y_combine_trues.append(y_trues[i])
+                    y_patchsim.append(float(prediction_ps))
+                    if test_case_similarity_list[i] >= 0.8:
+                        y_combine.append(y_preds[i])
+                        BATs_cnt += 1
+                    else:
+                        y_combine.append(float(prediction_ps))
+            print('BATs_cnt: {}, PatchSim_cnt: {}'.format(BATs_cnt, len(y_combine)-BATs_cnt))
+            self.evaluation_metrics(y_combine_trues, y_patchsim)
+            self.evaluation_metrics(y_combine_trues, y_combine)
+
+        '''
         if patchsim:
             print('------')
             print('Evaluating Incorrect Excluded on PatchSim')
@@ -523,8 +682,8 @@ class evaluation:
             # topHalf = recommend_list_project.iloc[:Correct[:].index.tolist()[-1] + 1]
             # topHalfIncorrect = topHalf[topHalf[2] == 0][0].values
             # print('Noe excluded name: {}'.format(topHalfIncorrect))
-
-        # self.statistics_box(box_projecs_co, box_projecs_inco, projects_name)
+        '''
+        self.statistics_box(box_projecs_co, box_projecs_inco, projects_name)
 
     def improve_ML(self, path_collected_patch=None, cut_off=0.8, distance_method = distance.cosine, kfold=10, algorithm='lr', method='combine'):
         print('Research Question 3: Improvement')
@@ -556,7 +715,7 @@ class evaluation:
                     continue
 
                 # return vector according to available_path_patch
-                name_list, label_list, generated_patch_list, vector_ML_list = self.vector4patch(available_path_patch, compare=comparison,)
+                name_list, label_list, generated_patch_list, vector_ML_list, vector_ODS_list = self.vector4patch(available_path_patch, compare=comparison,)
                 if name_list == []:
                     print('all the patches can not be recognized')
                     continue
@@ -573,9 +732,18 @@ class evaluation:
                         else:
                             x_all.append(vector_ML_list[i])
                             y_all.append(label_list[i])
+                # elif comparison == 'ODS' and vector_ODS_list != []:
+                #     for i in range(len(vector_ODS_list)):
+                #         # if list(vector_list[i].astype(float)) != list(np.zeros(240).astype(float)):
+                #         if vector_ODS_list[i] in unique_dict:
+                #             continue
+                #         else:
+                #             x_all.append(vector_ODS_list[i])
+                #             y_all.append(label_list[i])
 
                 # calculate the center of associated patches(repository)
                 if associated_patch_list == []:
+                    # fill value for the prediction of BATS to keep it the same length as ML prediction
                     y_preds_bats += [-999 for i in range(len(vector_ML_list))]
                     y_preds_prob_bats += [-999 for i in range(len(vector_ML_list))]
                     y_trues += [i for i in label_list]
@@ -599,18 +767,18 @@ class evaluation:
                             y_trues.append(y_true)
 
         # run cross validation for ML-based approach in ASE2020
-        # x_all_unique, y_all_unique, y_preds_prob_bats_unique = [], [], []
-        # for i in range(len(x_all)):
-        #     if list(x_all[i]) in unique_dict:
-        #         continue
-        #     else:
-        #         unique_dict.append(list(x_all[i]))
-        #         x_all_unique.append(x_all[i])
-        #         y_all_unique.append(y_all[i])
-        #         y_preds_prob_bats_unique.append(y_preds_prob_bats[i])
-        # x_all_unique = np.array(x_all_unique)
-        # y_all_unique = np.array(y_all_unique)
-        # y_preds_prob_bats_unique = np.array(y_preds_prob_bats_unique)
+        x_all_unique, y_all_unique, y_preds_prob_bats_unique = [], [], []
+        for i in range(len(x_all)):
+            if list(x_all[i]) in unique_dict:
+                continue
+            else:
+                unique_dict.append(list(x_all[i]))
+                x_all_unique.append(x_all[i])
+                y_all_unique.append(y_all[i])
+                y_preds_prob_bats_unique.append(y_preds_prob_bats[i])
+        x_all_unique = np.array(x_all_unique)
+        y_all_unique = np.array(y_all_unique)
+        y_preds_prob_bats_unique = np.array(y_preds_prob_bats_unique)
         skf = StratifiedKFold(n_splits=kfold, shuffle=True)
         accs, prcs, rcs, f1s, aucs = list(), list(), list(), list(), list()
         rcs_p, rcs_n = list(), list()
@@ -794,6 +962,7 @@ class evaluation:
 
             center = centers[0]
             dist_new = distance_method(new_patch, center)
+            # dist_new = 1-distance_method(new_patch, center)[0][1] # pearson
 
             # normalize range
             # score_prob_new = self.sigmoid(1 - dist_new)
@@ -1015,12 +1184,13 @@ class evaluation:
         colors = {'Correct': 'white', 'Incorrect': 'darkgrey'}
 
         fig = plt.figure(figsize=(10, 5))
-        plt.xticks(fontsize=15, )
-        plt.yticks(fontsize=15, )
-        plt.legend(fontsize=15)
+        plt.xticks(fontsize=20, )
+        plt.yticks(fontsize=20, )
+        plt.legend(fontsize=20)
         bp = sns.boxplot(x='Project', y='Number of Patches', data=dfl, showfliers=False, palette=colors, hue='Label', width=0.6, )
-        plt.xlabel('Project', fontsize=17)
-        plt.ylabel('Number of Patches', fontsize=17)
+        # plt.xlabel('Project', fontsize=17)
+        plt.xlabel('')
+        plt.ylabel('Number of Patches', fontsize=20)
         self.adjust_box_widths(fig, 0.8)
         # plt.show()
         plt.savefig('../fig/RQ3/boxplot.png')
