@@ -28,8 +28,9 @@ class cluster:
     def validate(self,):
         print('Research Question 1')
         scaler = Normalizer()
-        clusters = self.cluster_test_dist(method=self.method, number=self.number, scaler=scaler)
-        self.patch_dist(clusters, self.method, self.number, scaler=scaler)
+        clusters, SC_list_test = self.cluster_test_dist(method=self.method, number=self.number, scaler=scaler)
+        SC_list_patch = self.patch_dist(clusters, self.method, self.number, scaler=scaler)
+        self.plot_sc(SC_list_test, SC_list_patch, self.number)
 
         # print('Random or Independent **************')
         # self.patch_dist(self.patch_vector, [i for i in range(40)] + [random.randint(0, 40) for j in range(418)], self.method, self.number, scaler=scaler)
@@ -85,8 +86,25 @@ class cluster:
         # print('CH: {}'.format(s2))
         # print('DBI: {}'.format(s3))
 
-        self.score_inside_outside(X, clusters, number)
-        return clusters
+        # present the bug id at each clusters
+        # for n in range(number):
+        #     # n = i
+        #     index = np.where(clusters==n)
+        #     patch_name = np.array(self.patch_name)[index]
+        #     test_name = np.array(self.test_name)[index]
+        #     function_name = np.array(self.original_dataset[3])[index]
+        #     print('cluster {}'.format(n))
+        #     project_ids = set()
+        #     for i in range(len(test_name)):
+        #         testcase = test_name[i]
+        #         project_id = testcase.split('-')[0]
+        #         project_ids.add(project_id)
+        #         # print('{}'.format(patch_name[i]))
+        #         # print('function:{}'.format(function_name[i]))
+        #     print(project_ids)
+
+        SC_list = self.score_inside_outside(X, clusters, number)
+        return clusters, SC_list
 
         # visualize clustering.
         # X["Cluster"] = clusters
@@ -207,7 +225,7 @@ class cluster:
         # print('DBI: {}'.format(s3))
 
         # loose metric
-        self.score_inside_outside(P, clusters, number)
+        SC_list = self.score_inside_outside(P, clusters, number)
 
         '''
         MWW validation
@@ -242,6 +260,8 @@ class cluster:
         print('{}/{} satisfied the hypothesis'.format(cnt, number))
         '''
 
+        return SC_list
+
         # n = 1
         # index = np.where(clusters==n)
         # patch_name = np.array(self.patch_name)[index]
@@ -256,7 +276,7 @@ class cluster:
 
     def score_inside_outside(self, vectors, clusters, number):
         cnt = 0
-        diffs = []
+        SC_list = []
         print('Calculating...')
         for n in range(number):
             # print('cluster index: {}'.format(n))
@@ -289,8 +309,27 @@ class cluster:
             # print('outside: {}'.format(outside_score))
 
             SC = (inside_score - outside_score) / max(inside_score, outside_score)
-            diffs.append(SC)
+            SC_list.append(SC)
 
-        CSC = np.array(diffs).mean()
-        print('Qualified: {}/{}'.format(len(np.where(np.array(diffs)>0)[0]), len(diffs)))
+
+        CSC = np.array(SC_list).mean()
+        print('Qualified: {}/{}'.format(len(np.where(np.array(SC_list)>0)[0]), len(SC_list)))
         print('CSC: {}'.format(CSC))
+
+        return SC_list
+
+    def plot_sc(self, SC_list_test, SC_list_patch, number):
+        index = [i for i in range(number)]
+        data = np.array([SC_list_test, SC_list_patch]).T
+        df = pd.DataFrame(data, index=index, columns=['Test cases', 'Patches'], )
+        # df = pd.DataFrame({'test':SC_list_test, 'patch':SC_list_patch}, index=index,)
+
+        df.plot.bar(rot=0, linewidth=1, color=['grey', 'white', ], edgecolor = "black")
+        fontsize = 22
+        plt.xlabel('Clusters', fontsize=fontsize)
+        plt.ylabel('Similarity Coefficient', fontsize=fontsize)
+        plt.xticks(fontsize=18, )
+        plt.yticks(fontsize=20, )
+        plt.legend(fontsize=20, )
+
+        plt.show()
