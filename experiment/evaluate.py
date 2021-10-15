@@ -1,3 +1,5 @@
+import pickle
+
 import matplotlib.pyplot as plt
 import numpy as np
 import Levenshtein
@@ -309,6 +311,48 @@ class evaluation:
 
         return name_list, label_list, vector_list, vector_ML_list
 
+    # baseline
+    def get_correct_patch_list(self, failed_test_index, model=None):
+        scaler = Normalizer()
+        all_test_vector = scaler.fit_transform(self.test_vector)
+
+        scaler_patch = None
+        if model == 'string':
+            all_patch_vector = self.patch_vector
+        else:
+            scaler_patch = scaler.fit(self.patch_vector)
+            all_patch_vector = scaler_patch.transform(self.patch_vector)
+
+        # construct new test and patch dataset(repository) by excluding the current failed test cases being predicted
+        dataset_test = np.delete(all_test_vector, failed_test_index, axis=0)
+        dataset_patch = np.delete(all_patch_vector, failed_test_index, axis=0)
+        dataset_name = np.delete(self.test_name, failed_test_index, axis=0)
+        dataset_func = np.delete(self.test_data[3], failed_test_index, axis=0)
+        dataset_exp = np.delete(self.exception_type, failed_test_index, axis=0)
+
+        return dataset_patch
+    def get_correct_patch_list2(self, project_id, model=None):
+        scaler = Normalizer()
+
+        scaler_patch = None
+        # if model == 'string':
+        #     all_patch_vector = self.patch_vector
+        # else:
+        #     scaler_patch = scaler.fit(self.patch_vector)
+        #     all_patch_vector = scaler_patch.transform(self.patch_vector)
+
+        all_patch_vector = []
+        with open('../cc2vec_correct_patch.pickle', 'rb') as f:
+            dict = pickle.load(f)
+        for k in dict.keys():
+            project = k.split('-')[0]
+            id = k.split('-')[1]
+            if project_id != (project+'_'+id):
+                patch_vector = dict[k]
+                all_patch_vector.append(patch_vector)
+
+        return np.array(all_patch_vector)
+
     def get_associated_patch_list(self, failed_test_index, k=5, cut_off=0.0, model=None):
         scaler = Normalizer()
         all_test_vector = scaler.fit_transform(self.test_vector)
@@ -491,7 +535,9 @@ class evaluation:
         print('Research Question 3')
         projects = {'Chart': 26, 'Lang': 65, 'Math': 106, 'Time': 27}
         y_preds, y_trues = [], []
+        y_preds_baseline, y_trues = [], []
         MAP, MRR, number_patch_MAP = [], [], 0
+        MAP_baseline, MRR_baseline, number_patch_MAP_baseline = [], [], 0
         recommend_list_project = []
         x_train, y_train, x_test, y_test = [], [], [], []
         x_train_ods, y_train_ods, x_test_ods, y_test_ods = [], [], [], []
@@ -507,8 +553,8 @@ class evaluation:
                 print('----------------')
                 print('{}_{}'.format(project, id))
                 project_id = '_'.join([project, str(id)])
-                # if project_id == 'Chart_26':
-                #     print('get incorrect patch case')
+                # if project_id != 'Chart_26':
+                #     continue
                 # extract failed test index according to bug_id
                 failed_test_index = [i for i in range(len(self.test_name)) if self.test_name[i].startswith(project_id+'-')]
                 if failed_test_index == []:
@@ -555,6 +601,8 @@ class evaluation:
 
                 # access the associated patch list(patch search space) of similar failed test cases
                 associated_patch_list, scaler_patch, closest_score = self.get_associated_patch_list(failed_test_index, k=5, cut_off=cut_off, model=self.patch_w2v)
+                # baseline
+                correct_patches_baseline = self.get_correct_patch_list(failed_test_index, model=self.patch_w2v)
                 if associated_patch_list == []:
                     print('No closest test case that satisfied with the condition of cut-off similarity')
                     print('save train data for ML model of ASE2020')
@@ -571,9 +619,10 @@ class evaluation:
                     #             y_train_ods.append(label_list[i])
                     continue
 
-                recommend_list = []
+                recommend_list, recommend_list_baseline = [], []
                 # calculate the center of associated patches(repository)
                 centers = self.dynamic_threshold2(associated_patch_list, distance_method=distance_method, sumup='mean')
+                centers_baseline = [correct_patches_baseline.mean(axis=0)]
                 for i in range(len(name_list)):
                     name = name_list[i]
                     tested_patch = generated_patch_list[i]
@@ -581,11 +630,14 @@ class evaluation:
                     # y_pred = self.predict_label(centers, threshold_list, vector_new_patch, scaler_patch)
                     # y_pred_prob = self.predict_prob(centers, threshold_list, vector_new_patch, scaler_patch)
                     y_pred_prob, y_pred = self.predict_recom(centers, tested_patch, scaler_patch, mean_stand_dict[cut_off], distance_method=distance_method,)
+                    y_pred_prob_baseline, y_pred_baseline = self.predict_recom(centers_baseline, tested_patch, scaler_patch, mean_stand_dict[cut_off], distance_method=distance_method,)
 
                     if not math.isnan(y_pred_prob):
                         recommend_list.append([name, y_pred, y_true, y_pred_prob])
+                        recommend_list_baseline.append([name, y_pred_baseline, y_true, y_pred_prob_baseline])
 
                         y_preds.append(y_pred_prob)
+                        y_preds_baseline.append(y_pred_prob_baseline)
                         y_trues.append(y_true)
 
                         # the current patches addressing this bug. The highest test case similarity we can find for test case of this bug is in 'test_case_similarity_list'
@@ -621,6 +673,12 @@ class evaluation:
                         MAP.append(AP)
                         MRR.append(RR)
                         number_patch_MAP += len(recommend_list)
+                if not (not 1 in label_list or not 0 in label_list) and recommend_list_baseline != []: # ensure there are correct and incorrect patches in recommended list
+                    AP, RR = self.evaluate_recommend_list(recommend_list_baseline)
+                    if AP != None and RR != None:
+                        MAP_baseline.append(AP)
+                        MRR_baseline.append(RR)
+                        number_patch_MAP_baseline += len(recommend_list_baseline)
 
                 recommend_list_project += recommend_list
 
@@ -628,9 +686,16 @@ class evaluation:
         print(patch_available_distribution)
 
         # evaluation based on a few metrics
+        ## baseline
+        if cut_off == 0.0:
+            print('\nBaseline---')
+            self.evaluation_metrics(y_trues, y_preds_baseline)
+            self.MAP_MRR_Mean(MAP_baseline, MRR_baseline, number_patch_MAP_baseline)
+        ## BATS
+        print('\nBATS---')
         self.evaluation_metrics(y_trues, y_preds)
-
         self.MAP_MRR_Mean(MAP, MRR, number_patch_MAP)
+
 
         if comparison == 'ASE2020' and cut_off > 0.0:
             print('------')
@@ -914,7 +979,6 @@ class evaluation:
 
         return [center]
 
-
     def predict_label(self, centers, threshold_list, new_patch, scaler_patch, ):
         if self.patch_w2v != 'string':
             new_patch = scaler_patch.transform(new_patch.reshape((1, -1)))
@@ -1013,7 +1077,7 @@ class evaluation:
 
         print('\n***------------***')
         print('Evaluating AUC, F1, +Recall, -Recall')
-        print('Test data size: {}, Incorrect: {}, Correct: {}'.format(len(y_trues), y_trues.count(0), y_trues.count(1)))
+        print('Test data size: {}, Correct: {}, Incorrect: {}'.format(len(y_trues), y_trues.count(1), y_trues.count(0)))
         print('Accuracy: %f -- Precision: %f -- +Recall: %f -- F1: %f ' % (acc, prc, rc, f1))
         tn, fp, fn, tp = confusion_matrix(y_trues, y_preds).ravel()
         recall_p = tp / (tp + fn)
@@ -1057,20 +1121,22 @@ class evaluation:
                     # skip itself
                     if j == i:
                         continue
-                    # whether skip current project-id
-                    if self.test_name[j].startswith(project+'_'+id+'-'):
-                        continue
+                    # option: whether skip current project-id
+                    # if self.test_name[j].startswith(project+'_'+id+'-'):
+                    #     continue
                     dist = distance.euclidean(this_test, all_test_vector[j])/(1 + distance.euclidean(this_test, all_test_vector[j]))
                     if dist < dist_min:
                         dist_min = dist
                         dist_min_index = j
                 sim_test = 1 - dist_min
                 all_closest_score.append(sim_test)
-                if sim_test >= 0.6:
+                # option: threshold for test cases similarity
+                if sim_test >= 0.0:
                     # find associated patches similarity
                     print('the closest test: {}'.format(self.test_name[dist_min_index]))
                     closest_patch = all_patch_vector[dist_min_index]
-                    distance_patch = distance.euclidean(closest_patch, this_patch)/(1 + distance.euclidean(closest_patch, this_patch))
+                    # distance_patch = distance.euclidean(closest_patch, this_patch)/(1 + distance.euclidean(closest_patch, this_patch))
+                    distance_patch = distance.cosine(closest_patch, this_patch)/(1 + distance.cosine(closest_patch, this_patch))
                     score_patch = 1 - distance_patch
                     if math.isnan(score_patch):
                         continue
@@ -1081,7 +1147,8 @@ class evaluation:
                 for p in range(len(all_patch_vector)):
                     if p == i:
                         continue
-                    dist = distance.euclidean(this_patch, all_patch_vector[p]) / (1 + distance.euclidean(this_patch, all_patch_vector[p]))
+                    # dist = distance.euclidean(this_patch, all_patch_vector[p]) / (1 + distance.euclidean(this_patch, all_patch_vector[p]))
+                    dist = distance.cosine(this_patch, all_patch_vector[p]) / (1 + distance.cosine(this_patch, all_patch_vector[p]))
                     simi_patch = 1 - dist
                     if math.isnan(simi_patch):
                         continue
@@ -1103,7 +1170,7 @@ class evaluation:
             # plt.savefig('../fig/RQ2/distance_patch_{}'.format(project))
             # plt.cla()
 
-
+        # Distribution of similarities between closest pairs of test cases.
         plt.figure(figsize=(10, 5))
         plt.xticks(fontsize=15, )
         plt.yticks(fontsize=15, )
@@ -1114,11 +1181,12 @@ class evaluation:
         plt.savefig('../fig/RQ2/Similarity_Test.png')
         plt.close()
 
-
         dfl = pd.DataFrame(box_plot)
         dfl.columns = ['Project', 'Label', 'Similarity of patch']
-        # b, c = dfl.iloc[0].copy(), dfl.iloc[15].copy()
-        # dfl.iloc[0], dfl.iloc[15] = c, b
+        # put H on left side in plot
+        if dfl.iloc[0]['Label'] != 'H':
+            b, c = dfl.iloc[0].copy(), dfl[dfl['Label']=='H'].iloc[0].copy()
+            dfl.iloc[0], dfl[dfl['Label']=='H'].iloc[0] = c, b
         colors = {'H': 'white', 'N': 'grey'}
         fig = plt.figure(figsize=(15, 8))
         plt.xticks(fontsize=28, )
@@ -1136,6 +1204,7 @@ class evaluation:
         # plt.show()
         plt.savefig('../fig/RQ2/boxplot.png')
 
+        # MMW
         H_stat = dfl[dfl['Label'] == 'H'].iloc[:, 2].tolist()
         N_stat = dfl[dfl['Label'] == 'N'].iloc[:, 2].tolist()
         hypo = stats.mannwhitneyu(H_stat, N_stat, alternative='two-sided')
