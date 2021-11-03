@@ -13,6 +13,8 @@ from experiment.clustering import biKmeans
 from sklearn.metrics import silhouette_score ,calinski_harabasz_score, davies_bouldin_score
 from scipy.spatial import distance
 import scipy.stats as stats
+from scipy.stats import pearsonr
+
 
 class cluster:
     def __init__(self, original_dataset, test_name, patch_name,test_vector, patch_vector, method, number):
@@ -319,6 +321,11 @@ class cluster:
         return SC_list
 
     def plot_sc(self, SC_list_test, SC_list_patch, number):
+        corr, p = pearsonr(SC_list_test, SC_list_patch)
+        # corrcoef = np.corrcoef(np.array(SC_list_test), np.array(SC_list_patch))
+
+        print('Pearson correlation: {}'.format(corr))
+
         index = [i for i in range(number)]
         data = np.array([SC_list_test, SC_list_patch]).T
         df = pd.DataFrame(data, index=index, columns=['Test cases', 'Patches'], )
