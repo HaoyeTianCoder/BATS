@@ -2,7 +2,6 @@ class Config:
     def __init__(self):
         # the orginal data of test case name, test function, associated patch including 'single test case' and 'full' versions.
         self.path_test = '../data/test_case_all.pkl'
-        # self.path_test = '../data/test_one_case_all.pkl'
 
         # developers' patches in defects4j and generated patches of APR tools
         self.path_patch_root = '/Users/haoye.tian/Documents/University/project/defects4j_patch_sliced/'
@@ -14,7 +13,6 @@ class Config:
         # self.patch_w2v = 'string'
 
         self.organized_dataset = '../data/organized_dataset_' + self.patch_w2v + '.pickle'
-        # self.organized_dataset = '../data/organized_single_dataset_' + self.patch_w2v + '.pickle'
 
 
 if __name__ == '__main__':
