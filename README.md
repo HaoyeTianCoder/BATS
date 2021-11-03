@@ -6,8 +6,8 @@ BATS, an unsupervised learning based system to predict patch correctness by chec
   Unzip *PatchCollectingV1_sliced.zip* to obtain the generated patches by APR and Defects4j developer patches.
 * **representation.**
   Follow *README.md* to download trained Code2Vec model.
-* **others.**
+* **other requirements.**
   Bert: cased_L-24_H-1024_A-16 
 ### Launch
 * **experiment.** 
-  run *main.py* to execute RQ1, RQ2 and RQ3
+  Follow *experiment/README.md* to run RQ1, RQ2 and RQ3.
