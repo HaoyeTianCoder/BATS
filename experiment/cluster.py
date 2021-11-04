@@ -28,7 +28,7 @@ class cluster:
         self.number = number
 
     def validate(self,):
-        print('Research Question 1')
+        print('Research Question 1.1')
         scaler = Normalizer()
         clusters, SC_list_test = self.cluster_test_dist(method=self.method, number=self.number, scaler=scaler)
         SC_list_patch = self.patch_dist(clusters, self.method, self.number, scaler=scaler)

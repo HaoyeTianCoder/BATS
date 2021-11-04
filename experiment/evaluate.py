@@ -24,6 +24,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from representation.CC2Vec import lmg_cc2ftr_interface
+import time
 
 notRecognizedByBert = ['Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-6-patch1', 'Correct-Lang-25-patch1', 'Correct-Lang-53-patch1', 'Incorrect-Math-6-patch2', 'Incorrect-Math-6-patch2', 'Incorrect-Math-6-patch1', 'Correct-Math-56-patch1', 'Incorrect-Math-80-patch1', 'Incorrect-Math-104-patch1']
 notRecognizedByCC2Vec = ['Correct-Lang-25-patch1', 'Correct-Lang-53-patch1', 'Correct-Math-56-patch1', 'Incorrect-Math-80-patch1']
@@ -531,8 +532,8 @@ class evaluation:
         plt.title('Similarity of test case')
         plt.savefig('../fig/RQ3/Similarity_Test.png')
 
-    def predict_collected_projects(self, path_collected_patch=None, cut_off=0.8, distance_method = distance.cosine, comparison='None', patchsim=False):
-        print('Research Question 3')
+    def predict_collected_projects(self, path_collected_patch=None, cut_off=0.8, distance_method = distance.cosine, comparison='None', patchsim=False, APR_tool='all'):
+        print('Research Question 2')
         projects = {'Chart': 26, 'Lang': 65, 'Math': 106, 'Time': 27}
         y_preds, y_trues = [], []
         y_preds_baseline, y_trues = [], []
@@ -547,6 +548,7 @@ class evaluation:
         test_case_similarity_list, patch1278_list_short = [], []
         patch_available_distribution = {}
         patch1278_list = []
+        ttt = []
         for project, number in projects.items():
             print('Testing {}'.format(project))
             for id in range(1, number + 1):
@@ -625,6 +627,8 @@ class evaluation:
                 centers_baseline = [correct_patches_baseline.mean(axis=0)]
                 for i in range(len(name_list)):
                     name = name_list[i]
+                    if APR_tool != 'all' and name[:3] != APR_tool[:3]:
+                        continue
                     tested_patch = generated_patch_list[i]
                     y_true = label_list[i]
                     # y_pred = self.predict_label(centers, threshold_list, vector_new_patch, scaler_patch)
@@ -683,7 +687,11 @@ class evaluation:
                 recommend_list_project += recommend_list
 
         # patch distribution
-        print(patch_available_distribution)
+        # print(patch_available_distribution)
+
+        print('APR_tool: {}'.format(APR_tool))
+        if y_trues == [] or not 1 in y_trues or not 0 in y_trues:
+            return
 
         # evaluation based on a few metrics
         ## baseline
@@ -693,7 +701,10 @@ class evaluation:
             self.MAP_MRR_Mean(MAP_baseline, MRR_baseline, number_patch_MAP_baseline)
         ## BATS
         print('\nBATS---')
-        self.evaluation_metrics(y_trues, y_preds)
+        recall_p, recall_n, acc, prc, rc, f1, auc_, result_APR = self.evaluation_metrics(y_trues, y_preds)
+        # with open('APR_tool_evaluation80%.txt', 'a+') as f:
+        #     result_APR = 'APR_tool: {}'.format(APR_tool) + '\nBATS---' + result_APR
+        #     f.write(result_APR)
         self.MAP_MRR_Mean(MAP, MRR, number_patch_MAP)
 
 
@@ -893,7 +904,7 @@ class evaluation:
                 y_pred_final = clf.predict_proba(x_test)[:, 1]
 
             # print('{}: '.format(algorithm))
-            recall_p, recall_n, acc, prc, rc, f1, auc_ = self.evaluation_metrics(list(y_test), y_pred_final)
+            recall_p, recall_n, acc, prc, rc, f1, auc_, _ = self.evaluation_metrics(list(y_test), y_pred_final)
 
             accs.append(acc)
             prcs.append(prc)
@@ -1075,20 +1086,22 @@ class evaluation:
         rc = recall_score(y_true=y_trues, y_pred=y_preds)
         f1 = 2 * prc * rc / (prc + rc)
 
-        print('\n***------------***')
-        print('Evaluating AUC, F1, +Recall, -Recall')
-        print('Test data size: {}, Correct: {}, Incorrect: {}'.format(len(y_trues), y_trues.count(1), y_trues.count(0)))
-        print('Accuracy: %f -- Precision: %f -- +Recall: %f -- F1: %f ' % (acc, prc, rc, f1))
         tn, fp, fn, tp = confusion_matrix(y_trues, y_preds).ravel()
         recall_p = tp / (tp + fn)
         recall_n = tn / (tn + fp)
-        print('AUC: {:.3f}, +Recall: {:.3f}, -Recall: {:.3f}'.format(auc_, recall_p, recall_n))
+
+        result = '\n***------------***'
+        result += 'Evaluating AUC, F1, +Recall, -Recall\n'
+        result += 'Test data size: {}, Correct: {}, Incorrect: {}\n'.format(len(y_trues), y_trues.count(1), y_trues.count(0))
+        result += 'Accuracy: %f -- Precision: %f -- +Recall: %f -- F1: %f \n' % (acc, prc, rc, f1)
+        result += 'AUC: {:.3f}, +Recall: {:.3f}, -Recall: {:.3f}\n'.format(auc_, recall_p, recall_n)
         # return , auc_
 
+        print(result)
         # print('AP: {}'.format(average_precision_score(y_trues, y_pred_probs)))
-        return recall_p, recall_n, acc, prc, rc, f1, auc_
+        return recall_p, recall_n, acc, prc, rc, f1, auc_, result
 
-    def evaluate_defects4j_projects(self, ):
+    def evaluate_defects4j_projects(self, option1=True, option2=0.6):
         print('Research Question 2')
         scaler = Normalizer()
         all_test_vector = scaler.fit_transform(self.test_vector)
@@ -1121,17 +1134,17 @@ class evaluation:
                     # skip itself
                     if j == i:
                         continue
-                    # option: whether skip current project-id
-                    # if self.test_name[j].startswith(project+'_'+id+'-'):
-                    #     continue
+                    # option 1: whether skip current project-id
+                    if option1 and self.test_name[j].startswith(project+'_'+id+'-'):
+                        continue
                     dist = distance.euclidean(this_test, all_test_vector[j])/(1 + distance.euclidean(this_test, all_test_vector[j]))
                     if dist < dist_min:
                         dist_min = dist
                         dist_min_index = j
                 sim_test = 1 - dist_min
                 all_closest_score.append(sim_test)
-                # option: threshold for test cases similarity
-                if sim_test >= 0.0:
+                # option 2: threshold for test cases similarity
+                if sim_test >= option2:
                     # find associated patches similarity
                     print('the closest test: {}'.format(self.test_name[dist_min_index]))
                     closest_patch = all_patch_vector[dist_min_index]
@@ -1175,10 +1188,10 @@ class evaluation:
         plt.xticks(fontsize=15, )
         plt.yticks(fontsize=15, )
         plt.bar(range(len(all_closest_score)), sorted(all_closest_score, reverse=True),)
-        plt.xlabel('ID of failing test cases', fontsize=20)
-        plt.ylabel('Similarity score \nwith the closest test cases', fontsize=20)
+        plt.xlabel('Distribution on the similarities between each failing test case of each bug and its closest similar test case.', fontsize=20)
+        plt.ylabel('Similarity score', fontsize=20)
         # plt.title('Similarity of test case')
-        plt.savefig('../fig/RQ2/Similarity_Test.png')
+        plt.savefig('../fig/RQ2/distribution_test_similarity.png')
         plt.close()
 
         dfl = pd.DataFrame(box_plot)
@@ -1202,23 +1215,39 @@ class evaluation:
         self.adjust_box_widths(fig, 0.8)
         plt.tight_layout()
         # plt.show()
-        plt.savefig('../fig/RQ2/boxplot.png')
+        plt.savefig('../fig/RQ2/distribution_pairwise_patches.png')
 
-        # MMW
-        H_stat = dfl[dfl['Label'] == 'H'].iloc[:, 2].tolist()
-        N_stat = dfl[dfl['Label'] == 'N'].iloc[:, 2].tolist()
-        hypo = stats.mannwhitneyu(H_stat, N_stat, alternative='two-sided')
-        print(hypo)
+        # # MMW
+        # H_stat = dfl[dfl['Label'] == 'H'].iloc[:, 2].tolist()
+        # N_stat = dfl[dfl['Label'] == 'N'].iloc[:, 2].tolist()
+        # hypo = stats.mannwhitneyu(H_stat, N_stat, alternative='two-sided')
+        # print(hypo)
 
 
     def evaluate_recommend_list(self, recommend_list):
         # recommend_list: [name, y_pred, y_true, y_pred_prob]
-        recommend_list = pd.DataFrame(sorted(recommend_list, key=lambda x: x[3], reverse=True)) # rank by prediction probability
+        recommend_list = pd.DataFrame(sorted(recommend_list, key=lambda x: x[3], reverse=True), columns=['name', 'y_pred', 'y_true', 'y_pred_prob']) # rank by prediction probability
+
+
+        # # plot example for Chart-26
+        # Correct = recommend_list[recommend_list['y_true'] == 1]
+        # Incorrect = recommend_list[recommend_list[ 'y_true'] == 0]
+        # plt.figure(figsize=(10, 5))
+        # plt.bar(Correct[:].index.tolist(), Correct[:]['y_pred_prob'], color="grey", edgecolor="black")
+        # plt.bar(Incorrect[:].index.tolist(), Incorrect[:]['y_pred_prob'], color="white", edgecolor="black")
+        # plt.xticks(recommend_list.index.tolist(), list(recommend_list.iloc[:]['name']))
+        # # plt.xticks(recommend_list_project[:].index.tolist(), recommend_list_project[:][0].tolist())
+        # fontsize = 22
+        # plt.xlabel('Patches', fontsize=fontsize)
+        # plt.ylabel('Similarity of patch', fontsize=fontsize)
+        # plt.xticks(fontsize=18, )
+        # plt.yticks(fontsize=20, )
+        # plt.legend(['Correct', 'Incorrect'], fontsize=20, )
+
         number_correct = 0.0
         precision_all = 0.0
-
         for i in range(recommend_list.shape[0]):
-            if recommend_list.loc[i][2] == 1:
+            if recommend_list.loc[i]['y_true'] == 1:
                 number_correct += 1.0
                 precision_all += (number_correct / (i + 1))
 
@@ -1227,7 +1256,7 @@ class evaluation:
             return None, None
         else:
             AP = precision_all / number_correct
-            RR = 1.0 / (list(recommend_list[:][2]).index(1) + 1)
+            RR = 1.0 / (list(recommend_list[:]['y_true']).index(1) + 1)
 
         print('AP: {}'.format(AP))
         print('RR: {}'.format(RR))
