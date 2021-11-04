@@ -1102,7 +1102,7 @@ class evaluation:
         return recall_p, recall_n, acc, prc, rc, f1, auc_, result
 
     def evaluate_defects4j_projects(self, option1=True, option2=0.6):
-        print('Research Question 2')
+        print('Research Question 1.2')
         scaler = Normalizer()
         all_test_vector = scaler.fit_transform(self.test_vector)
         scaler_patch = scaler.fit(self.patch_vector)
@@ -1191,7 +1191,7 @@ class evaluation:
         plt.xlabel('Distribution on the similarities between each failing test case of each bug and its closest similar test case.', fontsize=20)
         plt.ylabel('Similarity score', fontsize=20)
         # plt.title('Similarity of test case')
-        plt.savefig('../fig/RQ2/distribution_test_similarity.png')
+        plt.savefig('../fig/RQ1/distribution_test_similarity.png')
         plt.close()
 
         dfl = pd.DataFrame(box_plot)
@@ -1215,7 +1215,7 @@ class evaluation:
         self.adjust_box_widths(fig, 0.8)
         plt.tight_layout()
         # plt.show()
-        plt.savefig('../fig/RQ2/distribution_pairwise_patches.png')
+        plt.savefig('../fig/RQ1/distribution_pairwise_patches.png')
 
         # # MMW
         # H_stat = dfl[dfl['Label'] == 'H'].iloc[:, 2].tolist()
@@ -1291,7 +1291,7 @@ class evaluation:
         plt.ylabel('Number of Patches', fontsize=20)
         self.adjust_box_widths(fig, 0.8)
         # plt.show()
-        plt.savefig('../fig/RQ3/boxplot.png')
+        plt.savefig('../fig/RQ2/boxplot.png')
 
     def adjust_box_widths(self, g, fac):
         """

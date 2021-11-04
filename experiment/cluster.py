@@ -34,14 +34,14 @@ class cluster:
         SC_list_patch = self.patch_dist(clusters, self.method, self.number, scaler=scaler)
         self.plot_sc(SC_list_test, SC_list_patch, self.number)
 
+        # reverse test case and patch
+        # clusters = self.cluster_patch_dist_inde(self.method, self.number, scaler)
+        # self.test_dist(clusters, self.method, self.number, scaler=scaler)
+
         # print('Random or Independent **************')
         # self.patch_dist(self.patch_vector, [i for i in range(40)] + [random.randint(0, 40) for j in range(418)], self.method, self.number, scaler=scaler)
         # self.patch_dist([i for i in range(40)] + [random.randint(0, 40) for j in range(1080)], self.method, self.number, scaler=scaler)
         # self.cluster_patch_dist_inde(self.method, self.number, scaler)
-
-        # reverse test case and patch
-        # clusters = self.cluster_patch_dist_inde(self.method, self.number, scaler)
-        # self.test_dist(clusters, self.method, self.number, scaler=scaler)
 
     def cluster_test_dist(self, method, number, scaler):
         # scaler = Normalizer()
@@ -338,5 +338,5 @@ class cluster:
         plt.xticks(fontsize=18, )
         plt.yticks(fontsize=20, )
         plt.legend(fontsize=20, )
-
-        plt.show()
+        plt.savefig('../fig/RQ1/sc_clusters.png')
+        # plt.show()
