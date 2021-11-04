@@ -114,27 +114,30 @@ class Experiment:
         # pre-save bert vector for generated patches
         # patch_bert_vector.patch_bert()
 
-        # RQ1: validate hypothesis
-        if 'RQ1-1' in RQ:
+        # RQ1.1: validate hypothesis
+        if 'RQ1.1' in RQ:
             clu = cluster(self.original_dataset, self.test_name, self.patch_name, self.test_vector, self.patch_vector, method='biKmeans', number=40)
             clu.validate()
 
         eval = evaluation(self.patch_w2v, self.original_dataset, self.test_name, self.test_vector, self.patch_vector, self.exception_type)
-        # RQ2: evaluate on developer's patches of defects4j
-        if 'RQ1-2' in RQ:
-            eval.evaluate_defects4j_projects()
+        # RQ1.2: evaluate on developer's patches of defects4j
+        if 'RQ1.2' in RQ:
+            eval.evaluate_defects4j_projects(option1=True, option2=0.6)
 
-        # RQ3-1: evaluate BATS on the generated patches of APR tools. use cc2vec representation(patch_w2v='cc2vec') and cosine distance
+        # RQ2: evaluate BATS on the generated patches of APR tools. use cc2vec representation(patch_w2v='cc2vec') and cosine distance
         if 'RQ2' in RQ:
-            eval.predict_collected_projects(path_collected_patch=self.path_generated_patch, cut_off=0.8, distance_method=distance.cosine, comparison='NoASE2020', patchsim=False )
-            # eval.predict_collected_projects(path_collected_patch=self.path_generated_patch, cut_off=0.9, distance_method=np.corrcoef, comparison='NoASE2020', patchsim=False )
+            APR_tool = os.listdir(self.path_generated_patch)
+            APR_tool.remove('.DS_Store')
+            APR_tool = ['all']
+            for APR in APR_tool:
+                eval.predict_collected_projects(path_collected_patch=self.path_generated_patch, cut_off=0.0, distance_method=distance.cosine, comparison='NoASE2020', patchsim=False, APR_tool=APR )
 
-        # RQ3-2: improve ML-based approach
-        if 'RQ3-1' in RQ:
+        # RQ3.1: improve ML-based approach
+        if 'RQ3.1' in RQ:
             eval.predict_collected_projects(path_collected_patch=self.path_generated_patch, cut_off=0.6, distance_method=distance.euclidean, comparison='ASE2020', patchsim=False )
 
-        # RQ3-3: improve PatchSim approach. cut-off 0.8 for comparison and 0.6 for complementary
-        if 'RQ3-2' in RQ:
+        # RQ3.2: improve PatchSim approach. cut-off 0.8 for comparison and 0.6 for complementary
+        if 'RQ3.2' in RQ:
             eval.predict_collected_projects(path_collected_patch=self.path_generated_patch, cut_off=0.6, distance_method=distance.cosine, comparison='NoASE2020', patchsim=True )
 
         '''
@@ -154,4 +157,4 @@ if __name__ == '__main__':
     patch_w2v = config.patch_w2v
 
     e = Experiment(path_test, path_patch_root, path_generated_patch, organized_dataset, patch_w2v)
-    e.run(RQ=['RQ2',])
+    e.run(RQ=['RQ1.1',])
