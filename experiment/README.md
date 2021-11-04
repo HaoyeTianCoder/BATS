@@ -37,14 +37,14 @@ OUTPUT:
 
 ## RQ3.1
 
-compare and enhance ML-based approach
+Compare and enhance static approach
 
 OUTPUT:
-* **performance:** classification and ranking of the Baseline and BATS in terms of correct patches. 
+* **performance:** Comparison and enhancement of classification of the BATS and ML-based approach on patch correctness.
 
 ## RQ3.2
 
-compare and enhance PatchSim
+Compare and enhance dynamic approach
 
 OUTPUT:
-* **performance:** classification and ranking of the Baseline and BATS in terms of correct patches. 
+* **performance:** Comparison and enhancement of classification of the BATS and PatchSim on patch correctness.
