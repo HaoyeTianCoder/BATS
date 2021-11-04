@@ -6,8 +6,14 @@
 
 
 ## RQ1.1
+
+Customize: 
+* **number:** premade the number of clusters. If more than 50, SSE Reduction Rate will be calculated as well.
+
+OUTPUT: 
 * **Qualified:** the ratio of clusters that have SC > 0 out of all clusters identified.
 * **CSC:** the average value of similarity coefficient (SC) values for all clusters.
+* **fig/RQ1/sc_clusters.png:** Similarity coefficient of test cases and patches at each cluster.
 
 ## RQ1.2
 
