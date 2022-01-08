@@ -4,7 +4,6 @@
 
 # Experiment
 
-
 ## RQ1.1
 
 Customize: 
@@ -37,14 +36,17 @@ OUTPUT:
 
 ## RQ3.1
 
-Compare and enhance static approach
+Compare the state of the art approaches
+
+Static: ML-based approach.
+Dynamic: Patch-Sim. Run *evaluate_patchsim.py*
 
 OUTPUT:
-* **performance:** Comparison and enhancement of classification of the BATS and ML-based approach on patch correctness.
+* **performance:** The results of the state of the art.
 
 ## RQ3.2
 
-Compare and enhance dynamic approach
+Enhance static and dynamic approaches
 
 OUTPUT:
-* **performance:** Comparison and enhancement of classification of the BATS and PatchSim on patch correctness.
+* **performance:** Enhancement of classification of ML-based and patchSim approaches on patch correctness.

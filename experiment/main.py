@@ -115,30 +115,32 @@ class Experiment:
         # patch_bert_vector.patch_bert()
 
         # RQ1.1: validate hypothesis
-        if 'RQ1.1' in RQ:
+        if 'RQ1.1' == RQ:
             clu = cluster(self.original_dataset, self.test_name, self.patch_name, self.test_vector, self.patch_vector, method='biKmeans', number=40)
             clu.validate()
 
         eval = evaluation(self.patch_w2v, self.original_dataset, self.test_name, self.test_vector, self.patch_vector, self.exception_type)
         # RQ1.2: evaluate on developer's patches of defects4j
-        if 'RQ1.2' in RQ:
+        if 'RQ1.2' == RQ:
             eval.evaluate_defects4j_projects(option1=True, option2=0.6)
 
         # RQ2: evaluate BATS on the generated patches of APR tools. use cc2vec representation(patch_w2v='cc2vec') and cosine distance
-        if 'RQ2' in RQ:
-            APR_tool = os.listdir(self.path_generated_patch)
-            APR_tool.remove('.DS_Store')
-            APR_tool = ['all']
-            for APR in APR_tool:
-                eval.predict_collected_projects(path_collected_patch=self.path_generated_patch, cut_off=0.0, distance_method=distance.cosine, comparison='NoASE2020', patchsim=False, APR_tool=APR )
+        if 'RQ2' == RQ:
+            # set cut-off = 0.0 to get baseline.
+            eval.predict_collected_projects(path_collected_patch=self.path_generated_patch, cut_off=0.8, distance_method=distance.cosine, ASE2020=False, patchsim=False, )
 
-        # RQ3.1: improve ML-based approach
-        if 'RQ3.1' in RQ:
-            eval.predict_collected_projects(path_collected_patch=self.path_generated_patch, cut_off=0.6, distance_method=distance.euclidean, comparison='ASE2020', patchsim=False )
+        # RQ3.1: compare ML-based approach.
+        if 'RQ3.1' == RQ:
+            # ML-based approach.
+            eval.predict_collected_projects(path_collected_patch=self.path_generated_patch, cut_off=0.8, distance_method=distance.cosine, ASE2020=True, patchsim=False )
+            # patchsim: run experiment/evaluate_patchsim.py
 
-        # RQ3.2: improve PatchSim approach. cut-off 0.8 for comparison and 0.6 for complementary
-        if 'RQ3.2' in RQ:
-            eval.predict_collected_projects(path_collected_patch=self.path_generated_patch, cut_off=0.6, distance_method=distance.cosine, comparison='NoASE2020', patchsim=True )
+        # RQ3.2: enhance PatchSim approach.
+        if 'RQ3.2' == RQ:
+            # ML-based approach. change patch_w2v to 'bert' in config.py as BATS with bert is better at -Recall.
+            eval.predict_collected_projects(path_collected_patch=self.path_generated_patch, cut_off=0.6, distance_method=distance.euclidean, ASE2020=True, patchsim=False )
+            # patchsim
+            eval.predict_collected_projects(path_collected_patch=self.path_generated_patch, cut_off=0.6, distance_method=distance.cosine, ASE2020=False, patchsim=True )
 
         '''
         # RQ3: 5-fold cv ML-based approach, not used
@@ -148,13 +150,15 @@ class Experiment:
         # eval.predict_collected_projects(path_collected_patch='/Users/haoye.tian/Documents/University/data/PatchSimISSTA_sliced/', cut_off=0.0, distance_method=distance.euclidean, patchsim=True,)
         '''
 if __name__ == '__main__':
+    # specify RQ
+    RQ = 'RQ3.2'
+
     config = Config()
     path_test = config.path_test
     path_patch_root = config.path_patch_root
     path_generated_patch = config.path_generated_patch
-
     organized_dataset = config.organized_dataset
     patch_w2v = config.patch_w2v
 
     e = Experiment(path_test, path_patch_root, path_generated_patch, organized_dataset, patch_w2v)
-    e.run(RQ=['RQ1.1',])
+    e.run(RQ=RQ)
