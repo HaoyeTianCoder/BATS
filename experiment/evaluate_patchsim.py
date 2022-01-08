@@ -5,7 +5,6 @@ import numpy as np
 from sklearn.metrics import roc_curve, auc, accuracy_score, recall_score, precision_score, confusion_matrix
 
 patchsim_result = '/Users/haoye.tian/Documents/University/data/RESULT.csv'
-path_patch = 'patch325.txt'
 defects4j_V120_projects = ['Chart', 'Closure', 'Lang', 'Math', 'Mockito', 'Time']
 
 def evaluation_metrics(y_true, y_pred_prob):
@@ -23,7 +22,7 @@ def evaluation_metrics(y_true, y_pred_prob):
     tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
     recall_p = tp / (tp + fn)
     recall_n = tn / (tn + fp)
-    print('AUC: {:.3f}, +Recall: {:.3f}, -Recall: {:.3f}'.format(auc_, recall_p, recall_n))
+    print('AUC: {:.3f}, +Recall: {:.3f}, -Recall: {:.3f}\n'.format(auc_, recall_p, recall_n))
     # return , auc_
     return auc_, recall_p, recall_n, acc, prc, rc, f1
 
@@ -118,7 +117,8 @@ def save_patchsim_result(y_true, y_pred_prob, patch_names, path_patch):
             f.write(lines)
 
 if __name__ == '__main__':
-    dict = extractResult(patchsim_result)
-    y_true, y_pred_prob, patch_names = statistics(dict, path_patch)
-    save_patchsim_result(y_true, y_pred_prob, patch_names, path_patch)
-    evaluation_metrics(y_true, y_pred_prob)
+    for path_patch in ['patch114.txt', 'patch325.txt',]:
+        dict = extractResult(patchsim_result)
+        y_true, y_pred_prob, patch_names = statistics(dict, path_patch)
+        save_patchsim_result(y_true, y_pred_prob, patch_names, path_patch)
+        evaluation_metrics(y_true, y_pred_prob)
