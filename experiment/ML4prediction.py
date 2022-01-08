@@ -50,7 +50,7 @@ class MlPrediction:
         #     else:
         #         x_train_unique.append(x_train[i])
 
-        print('train data: {}, test data: {}'.format(len(x_train), len(x_test)))
+        print('\ntrain data: {}, test data: {}'.format(len(x_train), len(x_test)))
 
         clf = None
         if self.algorithm == 'lr':
@@ -65,13 +65,13 @@ class MlPrediction:
         y_pred = clf.predict_proba(x_test)[:, 1]
         print('{}: '.format(self.algorithm))
 
-        print('1. ML:')
+        print('ML: ')
         auc_, recall_p, recall_n, acc, prc, rc, f1 = self.evaluation_metrics(y_true=y_test, y_pred_prob=y_pred)
         # self.confusion_matrix(y_pred, y_test)
 
         # # combine ML-based and BATs
         if self.cutoff == 0.6:
-            print('2. Combine(replace):')
+            print('Combine(replace): ')
             y_pred_prob_combine = []
             BATs, ML = 0, 0
             for i in range(len(self.y_pred_bats)):
