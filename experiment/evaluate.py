@@ -722,6 +722,7 @@ class evaluation:
                         y_combine.append(float(prediction_ps))
             print('BATs_cnt: {}, PatchSim_cnt: {}'.format(BATs_cnt, len(y_combine)-BATs_cnt))
             self.evaluation_metrics(y_combine_trues, y_patchsim)
+            print('----------')
             self.evaluation_metrics(y_combine_trues, y_combine)
 
         '''
