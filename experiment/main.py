@@ -2,26 +2,14 @@ import sys, os
 sys.path.append(os.path.abspath(os.path.join('..', '.')))
 # import seaborn as sns
 import pickle
-import pandas as pd
-from sklearn.preprocessing import StandardScaler, Normalizer, MinMaxScaler
-import matplotlib.pyplot as plt
-from matplotlib.pyplot import boxplot
 from experiment.config import Config
 from representation.word2vector import Word2vector
 import numpy as np
-from sklearn.cluster import KMeans, DBSCAN, AgglomerativeClustering, AffinityPropagation
-from pyclustering.cluster.xmeans import xmeans, splitting_type
-import scipy.cluster.hierarchy as h
-from experiment.visualize import Visual
-from experiment.clustering import biKmeans
-from sklearn.metrics import silhouette_score ,calinski_harabasz_score,davies_bouldin_score
 from scipy.spatial import distance
-import json
-from collect import patch_bert_vector
+from experiment import patch_bert_vector
 from experiment.evaluate import evaluation
 from experiment.cluster import cluster
-import math
-from tqdm import tqdm
+
 
 class Experiment:
     def __init__(self, path_test, path_patch_root, path_generated_patch, organized_dataset, patch_w2v):
@@ -111,7 +99,7 @@ class Experiment:
         # load original data and corresponding vector
         self.load_test()
 
-        # pre-save bert vector for generated patches
+        # pre-save bert vector of patches if you use your different datasets(patches)
         # patch_bert_vector.patch_bert()
 
         # RQ1.1: validate hypothesis
