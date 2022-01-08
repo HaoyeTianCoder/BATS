@@ -4,6 +4,7 @@ import json
 import pickle
 from representation.word2vector import Word2vector
 
+# change the path
 path_patch_sliced = '/Users/haoye.tian/Documents/University/data/PatchCollectingV1_sliced/'
 
 def patch_bert():
