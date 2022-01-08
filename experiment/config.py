@@ -5,7 +5,7 @@ class Config:
 
         # developers' patches in defects4j and generated patches of APR tools
         self.path_patch_root = '/Users/haoye.tian/Documents/University/project/defects4j_patch_sliced/'
-        self.path_generated_patch = '/Users/haoye.tian/Documents/University/data/PatchCollectingV1ISSTA_sliced/'
+        self.path_generated_patch = '/Users/haoye.tian/Documents/University/data/PatchCollectingV1_sliced/'
 
         # choose one type of representations to learn the behaviour of patch
         self.patch_w2v = 'cc2vec'
