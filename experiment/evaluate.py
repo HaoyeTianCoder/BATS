@@ -138,47 +138,46 @@ class evaluation:
         # return P4J_vector + repair_patterns + repair_patterns2
         return P4J_vector + repair_patterns
 
-    def getODSFeature(self, p):
-        tool = p.split('/')[-5]
-        label = p.split('/')[-4]
-        project = p.split('/')[-3]
-        id = p.split('/')[-2]
+    # def getODSFeature(self, p):
+    #     tool = p.split('/')[-5]
+    #     label = p.split('/')[-4]
+    #     project = p.split('/')[-3]
+    #     id = p.split('/')[-2]
+    #
+    #     name = p.split('/')[-1]
+    #     folder1, folder2 = '-'.join([name, project, id]), tool
+    #     all_root = '/'.join(
+    #         [Root_ODS_feature, tool, label, project, id, folder1 + '_' + folder2, folder1, folder2])
+    #     all_path_feature = all_root + '/features_' + name + '-' + project + '-' + id + '.json'
+    #     ods_feature_all = []
+    #
+    #     if os.path.exists(all_path_feature):
+    #         ods_feature_all = self.engineered_features(all_path_feature)
+    #     else:
+    #         tmp = []
+    #         for i in range(9):
+    #             name_concatenated = name.split('-')
+    #             name_concatenated[0] += '#' + str(i)
+    #             name_concatenated = '-'.join(name_concatenated)
+    #             folder1, folder2 = '-'.join([name_concatenated, project, id]), tool
+    #             all_root = '/'.join(
+    #                 [Root_ODS_feature, tool, label, project, id, folder1 + '_' + folder2, folder1, folder2])
+    #             all_path_feature = all_root + '/features_' + name_concatenated + '-' + project + '-' + id + '.json'
+    #             if os.path.exists(all_path_feature):
+    #                 ods_feature = self.engineered_features(all_path_feature)
+    #                 if ods_feature != []:
+    #                     tmp.append(ods_feature)
+    #             else:
+    #                 pass
+    #         if tmp != []:
+    #             ods_feature_all = np.sum(tmp, axis=0).tolist()
+    #     if ods_feature_all == []:
+    #         print('NoODS')
+    #     return ods_feature_all if ods_feature_all != [] else [0 for i in range(182)]
 
-        name = p.split('/')[-1]
-        folder1, folder2 = '-'.join([name, project, id]), tool
-        all_root = '/'.join(
-            [Root_ODS_feature, tool, label, project, id, folder1 + '_' + folder2, folder1, folder2])
-        all_path_feature = all_root + '/features_' + name + '-' + project + '-' + id + '.json'
-        ods_feature_all = []
-
-        if os.path.exists(all_path_feature):
-            ods_feature_all = self.engineered_features(all_path_feature)
-        else:
-            tmp = []
-            for i in range(9):
-                name_concatenated = name.split('-')
-                name_concatenated[0] += '#' + str(i)
-                name_concatenated = '-'.join(name_concatenated)
-                folder1, folder2 = '-'.join([name_concatenated, project, id]), tool
-                all_root = '/'.join(
-                    [Root_ODS_feature, tool, label, project, id, folder1 + '_' + folder2, folder1, folder2])
-                all_path_feature = all_root + '/features_' + name_concatenated + '-' + project + '-' + id + '.json'
-                if os.path.exists(all_path_feature):
-                    ods_feature = self.engineered_features(all_path_feature)
-                    if ods_feature != []:
-                        tmp.append(ods_feature)
-                else:
-                    pass
-            if tmp != []:
-                ods_feature_all = np.sum(tmp, axis=0).tolist()
-        if ods_feature_all == []:
-            print('NoODS')
-        return ods_feature_all if ods_feature_all != [] else [0 for i in range(182)]
-
-    def vector4patch(self, available_path_patch, compare='ASE2020',):
+    def vector4patch(self, available_path_patch, compare=True,):
         vector_list = []
         vector_ML_list = []
-        vector_ODS_list = []
         label_list = []
         name_list = []
         for p in available_path_patch:
@@ -219,15 +218,12 @@ class evaluation:
             vector_list.append(vector)
 
             # compared with Haoye's ASE2020
-            if compare=='ASE2020':
+            if compare:
                 # Bert
                 with open(json_key_cross, 'r+') as f:
                     vector_str = json.load(f)
                     vector_ML = np.array(list(map(float, vector_str)))
                 vector_ML_list.append(vector_ML)
-            # if compare=='ODS':
-            #     vector_ODS = np.array(self.getODSFeature(p))
-            #     vector_ODS_list.append(vector_ODS)
 
             # label
             if 'Correct' in p:
@@ -243,12 +239,13 @@ class evaluation:
             tool = p.split('/')[-5]
             patchid = p.split('/')[-1]
             # name = tool + '-' + label + '-' + patchid
-            name = tool[:3] + patchid.replace('patch','')
+            # name = tool[:3] + patchid.replace('patch','')
+            name = tool + patchid.replace('patch','')
             name_list.append(name)
 
-        return name_list, label_list, vector_list, vector_ML_list, vector_ODS_list
+        return name_list, label_list, vector_list, vector_ML_list
 
-    def vector4patch_patchsim(self, available_path_patch, compare='ASE2020',):
+    def vector4patch_patchsim(self, available_path_patch, compare=True,):
         vector_list = []
         vector_ML_list = []
         label_list = []
@@ -286,7 +283,7 @@ class evaluation:
             #     ttt = '-'.join([p.split('/')[-4], p.split('/')[-3], p.split('/')[-2], p.split('/')[-1]])
             #     notRecognized.append(ttt)
             vector_list.append(vector)
-            if compare=='ASE2020':
+            if compare:
                 with open(json_key_cross, 'r+') as f:
                     vector_str = json.load(f)
                     vector_ML = np.array(list(map(float, vector_str)))
@@ -532,7 +529,7 @@ class evaluation:
         plt.title('Similarity of test case')
         plt.savefig('../fig/RQ3/Similarity_Test.png')
 
-    def predict_collected_projects(self, path_collected_patch=None, cut_off=0.8, distance_method = distance.cosine, comparison='None', patchsim=False, APR_tool='all'):
+    def predict_collected_projects(self, path_collected_patch=None, cut_off=0.8, distance_method = distance.cosine, ASE2020=False, patchsim=False,):
         print('Research Question 2')
         projects = {'Chart': 26, 'Lang': 65, 'Math': 106, 'Time': 27}
         y_preds, y_trues = [], []
@@ -541,14 +538,12 @@ class evaluation:
         MAP_baseline, MRR_baseline, number_patch_MAP_baseline = [], [], 0
         recommend_list_project = []
         x_train, y_train, x_test, y_test = [], [], [], []
-        x_train_ods, y_train_ods, x_test_ods, y_test_ods = [], [], [], []
         box_projecs_co, box_projecs_inco, projects_name = [], [], []
         mean_stand_dict = {0.0: [443, 816], 0.5: ['', ''], 0.6: [273, 246], 0.7: [231, 273], 0.8: [180, 235], 0.9: [130, 130]}
         print('test case similarity cut-off: {}'.format(cut_off))
         test_case_similarity_list, patch1278_list_short = [], []
         patch_available_distribution = {}
         patch1278_list = []
-        ttt = []
         for project, number in projects.items():
             print('Testing {}'.format(project))
             for id in range(1, number + 1):
@@ -572,9 +567,9 @@ class evaluation:
 
                 # return vector according to available_path_patch
                 # if patchsim:
-                #     name_list, label_list, generated_patch_list, vector_ML_list = self.vector4patch_patchsim(available_path_patch, compare=comparison,)
+                #     name_list, label_list, generated_patch_list, vector_ML_list = self.vector4patch_patchsim(available_path_patch, compare=ASE2020,)
                 # else:
-                name_list, label_list, generated_patch_list, vector_ML_list, vector_ODS_list = self.vector4patch(available_path_patch, compare=comparison,)
+                name_list, label_list, generated_patch_list, vector_ML_list = self.vector4patch(available_path_patch, compare=ASE2020,)
 
                 # # depulicate
                 # index_to_delete = []
@@ -609,16 +604,11 @@ class evaluation:
                     print('No closest test case that satisfied with the condition of cut-off similarity')
                     print('save train data for ML model of ASE2020')
                     # comparison with ML prediction in ASE2020
-                    if comparison == 'ASE2020' and vector_ML_list != []:
+                    if ASE2020 and vector_ML_list != []:
                         for i in range(len(label_list)):
                             # if list(vector_list[i].astype(float)) != list(np.zeros(240).astype(float)):
                                 x_train.append(vector_ML_list[i])
                                 y_train.append(label_list[i])
-                    # if comparison == 'ODS' and vector_ODS_list != []:
-                    #     for i in range(len(label_list)):
-                    #         # if list(vector_list[i].astype(float)) != list(np.zeros(240).astype(float)):
-                    #             x_train_ods.append(vector_ODS_list[i])
-                    #             y_train_ods.append(label_list[i])
                     continue
 
                 recommend_list, recommend_list_baseline = [], []
@@ -627,8 +617,6 @@ class evaluation:
                 centers_baseline = [correct_patches_baseline.mean(axis=0)]
                 for i in range(len(name_list)):
                     name = name_list[i]
-                    if APR_tool != 'all' and name[:3] != APR_tool[:3]:
-                        continue
                     tested_patch = generated_patch_list[i]
                     y_true = label_list[i]
                     # y_pred = self.predict_label(centers, threshold_list, vector_new_patch, scaler_patch)
@@ -648,14 +636,11 @@ class evaluation:
                         test_case_similarity_list.append(max(closest_score))
 
                         # ML prediction for comparison
-                        if comparison == 'ASE2020':
+                        if ASE2020:
                             x_test.append(vector_ML_list[i])
                             y_test.append(y_true)
 
                         # ML prediction for comparison
-                        # if comparison == 'ODS':
-                        #     x_test_ods.append(vector_ODS_list[i])
-                        #     y_test_ods.append(y_true)
 
                         # record distribution of available patches
                         key = name[:3]+str(y_true)
@@ -689,30 +674,29 @@ class evaluation:
         # patch distribution
         # print(patch_available_distribution)
 
-        print('APR_tool: {}'.format(APR_tool))
         if y_trues == [] or not 1 in y_trues or not 0 in y_trues:
             return
 
         # evaluation based on a few metrics
-        ## baseline
-        if cut_off == 0.0:
-            print('\nBaseline---')
-            self.evaluation_metrics(y_trues, y_preds_baseline)
-            self.MAP_MRR_Mean(MAP_baseline, MRR_baseline, number_patch_MAP_baseline)
-        ## BATS
-        print('\nBATS---')
-        recall_p, recall_n, acc, prc, rc, f1, auc_, result_APR = self.evaluation_metrics(y_trues, y_preds)
-        # with open('APR_tool_evaluation80%.txt', 'a+') as f:
-        #     result_APR = 'APR_tool: {}'.format(APR_tool) + '\nBATS---' + result_APR
-        #     f.write(result_APR)
-        self.MAP_MRR_Mean(MAP, MRR, number_patch_MAP)
 
+        # 1. independently
+        if not ASE2020 and not patchsim:
+            ## baseline
+            if cut_off == 0.0:
+                print('\nBaseline: ')
+                self.evaluation_metrics(y_trues, y_preds_baseline)
+                self.MAP_MRR_Mean(MAP_baseline, MRR_baseline, number_patch_MAP_baseline)
+            ## BATS
+            print('\nBATS: ')
+            recall_p, recall_n, acc, prc, rc, f1, auc_, result_APR = self.evaluation_metrics(y_trues, y_preds)
+            self.MAP_MRR_Mean(MAP, MRR, number_patch_MAP)
 
-        if comparison == 'ASE2020' and cut_off > 0.0:
+        # 2. Compare and Combine
+        if ASE2020 and cut_off > 0.0:
             print('------')
             print('Evaluating ASE2020 Performance')
-            MlPrediction(x_train, y_train, x_test, y_test, y_pred_bats=y_preds, test_case_similarity_list=test_case_similarity_list, algorithm='lr').predict()
-            MlPrediction(x_train, y_train, x_test, y_test, y_pred_bats=y_preds, test_case_similarity_list=test_case_similarity_list, algorithm='rf').predict()
+            MlPrediction(x_train, y_train, x_test, y_test, y_pred_bats=y_preds, test_case_similarity_list=test_case_similarity_list, algorithm='lr', comparison=ASE2020, cutoff=cut_off).predict()
+            MlPrediction(x_train, y_train, x_test, y_test, y_pred_bats=y_preds, test_case_similarity_list=test_case_similarity_list, algorithm='rf', comparison=ASE2020, cutoff=cut_off).predict()
 
         with open('./patch'+str(len(patch1278_list))+'.txt', 'w+') as f:
             for p in patch1278_list:
@@ -761,164 +745,156 @@ class evaluation:
         '''
         self.statistics_box(box_projecs_co, box_projecs_inco, projects_name)
 
-    def improve_ML(self, path_collected_patch=None, cut_off=0.8, distance_method = distance.cosine, kfold=10, algorithm='lr', method='combine'):
-        print('Research Question 3: Improvement')
-        projects = {'Chart': 26, 'Lang': 65, 'Math': 106, 'Time': 27}
-        y_preds_bats, y_preds_prob_bats, y_trues = [], [], []
-        x_all, y_all, x_test, y_test = [], [], [], []
-        comparison = 'ASE2020' # will make comparison if the value equals to 'ASE2020'
-        mean_stand_dict = {0.0: [443, 816], 0.6: [273, 246], 0.7: [231, 273], 0.8: [180, 235], 0.9: [130, 130]}
-        print('test case similarity cut-off: {}'.format(cut_off))
-        unique_dict = []
-        for project, number in projects.items():
-            print('Testing {}'.format(project))
-            for id in range(1, number + 1):
-                print('----------------')
-                print('{}_{}'.format(project, id))
-                project_id = '_'.join([project, str(id)])
-
-                # extract failed test index according to bug_id
-                failed_test_index = [i for i in range(len(self.test_name)) if self.test_name[i].startswith(project_id+'-')]
-                if failed_test_index == []:
-                    print('Couldnt find any failed test case for this bugid: {}'.format(project_id))
-                    # print('{} patches skipped'.format(len(available_path_patch)))
-                    continue
-
-                # find paths of patches generated by tools
-                available_path_patch = self.find_path_patch(path_collected_patch, project_id)
-                if available_path_patch == []:
-                    print('No generated patches of APR tools found:{}'.format(project_id))
-                    continue
-
-                # return vector according to available_path_patch
-                name_list, label_list, generated_patch_list, vector_ML_list, vector_ODS_list = self.vector4patch(available_path_patch, compare=comparison,)
-                if name_list == []:
-                    print('all the patches can not be recognized')
-                    continue
-
-                # access the associated patch list(patch repository) of similar failed test cases
-                associated_patch_list, scaler_patch, closest_score = self.get_associated_patch_list(failed_test_index, k=5, cut_off=cut_off, model=self.patch_w2v)
-
-                # print('save train data for ML model of ASE2020')
-                if comparison == 'ASE2020' and vector_ML_list != []:
-                    for i in range(len(vector_ML_list)):
-                        # if list(vector_list[i].astype(float)) != list(np.zeros(240).astype(float)):
-                        if vector_ML_list[i] in unique_dict:
-                            continue
-                        else:
-                            x_all.append(vector_ML_list[i])
-                            y_all.append(label_list[i])
-                # elif comparison == 'ODS' and vector_ODS_list != []:
-                #     for i in range(len(vector_ODS_list)):
-                #         # if list(vector_list[i].astype(float)) != list(np.zeros(240).astype(float)):
-                #         if vector_ODS_list[i] in unique_dict:
-                #             continue
-                #         else:
-                #             x_all.append(vector_ODS_list[i])
-                #             y_all.append(label_list[i])
-
-                # calculate the center of associated patches(repository)
-                if associated_patch_list == []:
-                    # fill value for the prediction of BATS to keep it the same length as ML prediction
-                    y_preds_bats += [-999 for i in range(len(vector_ML_list))]
-                    y_preds_prob_bats += [-999 for i in range(len(vector_ML_list))]
-                    y_trues += [i for i in label_list]
-                else:
-                    centers = self.dynamic_threshold2(associated_patch_list, distance_method=distance_method, sumup='mean')
-                    for i in range(len(vector_ML_list)):
-                        name = name_list[i]
-                        tested_patch = generated_patch_list[i]
-                        y_true = label_list[i]
-                        # y_pred = self.predict_label(centers, threshold_list, vector_new_patch, scaler_patch)
-                        # y_pred_prob = self.predict_prob(centers, threshold_list, vector_new_patch, scaler_patch)
-                        y_pred_prob, y_pred = self.predict_recom(centers, tested_patch, scaler_patch, mean_stand_dict[cut_off], distance_method=distance_method,)
-
-                        if math.isnan(y_pred_prob):
-                            y_preds_bats.append(-999)
-                            y_preds_prob_bats.append(-999)
-                            y_trues.append(y_true)
-                        else:
-                            y_preds_bats.append(y_pred)
-                            y_preds_prob_bats.append(y_pred_prob)
-                            y_trues.append(y_true)
-
-        # run cross validation for ML-based approach in ASE2020
-        x_all_unique, y_all_unique, y_preds_prob_bats_unique = [], [], []
-        for i in range(len(x_all)):
-            if list(x_all[i]) in unique_dict:
-                continue
-            else:
-                unique_dict.append(list(x_all[i]))
-                x_all_unique.append(x_all[i])
-                y_all_unique.append(y_all[i])
-                y_preds_prob_bats_unique.append(y_preds_prob_bats[i])
-        x_all_unique = np.array(x_all_unique)
-        y_all_unique = np.array(y_all_unique)
-        y_preds_prob_bats_unique = np.array(y_preds_prob_bats_unique)
-        skf = StratifiedKFold(n_splits=kfold, shuffle=True)
-        accs, prcs, rcs, f1s, aucs = list(), list(), list(), list(), list()
-        rcs_p, rcs_n = list(), list()
-        for train_index, test_index in skf.split(x_all_unique, y_all_unique):
-            x_train, y_train = x_all_unique[train_index], y_all_unique[train_index]
-            x_test, y_test = x_all_unique[test_index], y_all_unique[test_index]
-
-            # prediction by BATs
-            # y_pred_bats = y_preds_bats[test_index]
-            y_test_pred_prob_bats = y_preds_prob_bats_unique[test_index]
-
-            # standard data
-            scaler = StandardScaler().fit(x_train)
-            # scaler = MinMaxScaler().fit(x_train)
-            x_train = scaler.transform(x_train)
-            x_test = scaler.transform(x_test)
-
-            print('\ntrain data: {}, test data: {}'.format(len(x_train), len(x_test)), end='')
-
-            clf = None
-            if algorithm == 'lr':
-                clf = LogisticRegression(solver='lbfgs', class_weight={1: 1},).fit(X=x_train, y=y_train)
-            elif algorithm == 'dt':
-                clf = DecisionTreeClassifier().fit(X=x_train, y=y_train, sample_weight=None)
-            elif algorithm == 'rf':
-                clf = RandomForestClassifier(class_weight={1: 1}, ).fit(X=x_train, y=y_train)
-
-            if method == 'combine':
-                # combine both
-                number_bats = 0
-                number_ML = 0
-                y_pred_final = []
-                for i in range(len(y_test)):
-
-                    # apply BATs first
-                    if y_test_pred_prob_bats[i] != -999:
-                        number_bats += 1
-                        y_pred_final.append(y_test_pred_prob_bats[i])
-                    else:
-                        number_ML += 1
-                        y_test_pred_prob_ML = clf.predict_proba(x_test[i].reshape(1,-1))[:, 1]
-                        y_pred_final.append(y_test_pred_prob_ML)
-
-                    # y_pred_final.append((y_test_pred_prob_bats[i] + clf.predict_proba(x_test[i].reshape(1,-1))[:, 1])/2.0)
-                print('\nNumber of BATs and ML: {} {}'.format(number_bats, number_ML))
-            else:
-                y_pred_final = clf.predict_proba(x_test)[:, 1]
-
-            # print('{}: '.format(algorithm))
-            recall_p, recall_n, acc, prc, rc, f1, auc_, _ = self.evaluation_metrics(list(y_test), y_pred_final)
-
-            accs.append(acc)
-            prcs.append(prc)
-            rcs.append(rc)
-            f1s.append(f1)
-
-            aucs.append(auc_)
-            rcs_p.append(recall_p)
-            rcs_n.append(recall_n)
-
-        print('\n{}-fold cross validation mean: '.format(kfold))
-        print('Accuracy: {:.1f} -- Precision: {:.1f} -- +Recall: {:.1f} -- F1: {:.1f} -- AUC: {:.3f}'.format(np.array(accs).mean() * 100, np.array(prcs).mean() * 100, np.array(rcs).mean() * 100, np.array(f1s).mean() * 100, np.array(aucs).mean()))
-        print('AUC: {:.3f}, +Recall: {:.3f}, -Recall: {:.3f}'.format(np.array(aucs).mean(), np.array(rcs_p).mean(), np.array(rcs_n).mean()))
-
+    # def improve_ML(self, path_collected_patch=None, cut_off=0.8, distance_method = distance.cosine, kfold=10, algorithm='lr', method='combine'):
+    #     print('Research Question 3: Improvement')
+    #     projects = {'Chart': 26, 'Lang': 65, 'Math': 106, 'Time': 27}
+    #     y_preds_bats, y_preds_prob_bats, y_trues = [], [], []
+    #     x_all, y_all, x_test, y_test = [], [], [], []
+    #     # comparison = 'ASE2020' # will make comparison if the value equals to 'ASE2020'
+    #     mean_stand_dict = {0.0: [443, 816], 0.6: [273, 246], 0.7: [231, 273], 0.8: [180, 235], 0.9: [130, 130]}
+    #     print('test case similarity cut-off: {}'.format(cut_off))
+    #     unique_dict = []
+    #     for project, number in projects.items():
+    #         print('Testing {}'.format(project))
+    #         for id in range(1, number + 1):
+    #             print('----------------')
+    #             print('{}_{}'.format(project, id))
+    #             project_id = '_'.join([project, str(id)])
+    #
+    #             # extract failed test index according to bug_id
+    #             failed_test_index = [i for i in range(len(self.test_name)) if self.test_name[i].startswith(project_id+'-')]
+    #             if failed_test_index == []:
+    #                 print('Couldnt find any failed test case for this bugid: {}'.format(project_id))
+    #                 # print('{} patches skipped'.format(len(available_path_patch)))
+    #                 continue
+    #
+    #             # find paths of patches generated by tools
+    #             available_path_patch = self.find_path_patch(path_collected_patch, project_id)
+    #             if available_path_patch == []:
+    #                 print('No generated patches of APR tools found:{}'.format(project_id))
+    #                 continue
+    #
+    #             # return vector according to available_path_patch
+    #             name_list, label_list, generated_patch_list, vector_ML_list, vector_ODS_list = self.vector4patch(available_path_patch, compare=ASE2020,)
+    #             if name_list == []:
+    #                 print('all the patches can not be recognized')
+    #                 continue
+    #
+    #             # access the associated patch list(patch repository) of similar failed test cases
+    #             associated_patch_list, scaler_patch, closest_score = self.get_associated_patch_list(failed_test_index, k=5, cut_off=cut_off, model=self.patch_w2v)
+    #
+    #             # print('save train data for ML model of ASE2020')
+    #             if ASE2020 and vector_ML_list != []:
+    #                 for i in range(len(vector_ML_list)):
+    #                     # if list(vector_list[i].astype(float)) != list(np.zeros(240).astype(float)):
+    #                     if vector_ML_list[i] in unique_dict:
+    #                         continue
+    #                     else:
+    #                         x_all.append(vector_ML_list[i])
+    #                         y_all.append(label_list[i])
+    #
+    #             # calculate the center of associated patches(repository)
+    #             if associated_patch_list == []:
+    #                 # fill value for the prediction of BATS to keep it the same length as ML prediction
+    #                 y_preds_bats += [-999 for i in range(len(vector_ML_list))]
+    #                 y_preds_prob_bats += [-999 for i in range(len(vector_ML_list))]
+    #                 y_trues += [i for i in label_list]
+    #             else:
+    #                 centers = self.dynamic_threshold2(associated_patch_list, distance_method=distance_method, sumup='mean')
+    #                 for i in range(len(vector_ML_list)):
+    #                     name = name_list[i]
+    #                     tested_patch = generated_patch_list[i]
+    #                     y_true = label_list[i]
+    #                     # y_pred = self.predict_label(centers, threshold_list, vector_new_patch, scaler_patch)
+    #                     # y_pred_prob = self.predict_prob(centers, threshold_list, vector_new_patch, scaler_patch)
+    #                     y_pred_prob, y_pred = self.predict_recom(centers, tested_patch, scaler_patch, mean_stand_dict[cut_off], distance_method=distance_method,)
+    #
+    #                     if math.isnan(y_pred_prob):
+    #                         y_preds_bats.append(-999)
+    #                         y_preds_prob_bats.append(-999)
+    #                         y_trues.append(y_true)
+    #                     else:
+    #                         y_preds_bats.append(y_pred)
+    #                         y_preds_prob_bats.append(y_pred_prob)
+    #                         y_trues.append(y_true)
+    #
+    #     # run cross validation for ML-based approach in ASE2020
+    #     x_all_unique, y_all_unique, y_preds_prob_bats_unique = [], [], []
+    #     for i in range(len(x_all)):
+    #         if list(x_all[i]) in unique_dict:
+    #             continue
+    #         else:
+    #             unique_dict.append(list(x_all[i]))
+    #             x_all_unique.append(x_all[i])
+    #             y_all_unique.append(y_all[i])
+    #             y_preds_prob_bats_unique.append(y_preds_prob_bats[i])
+    #     x_all_unique = np.array(x_all_unique)
+    #     y_all_unique = np.array(y_all_unique)
+    #     y_preds_prob_bats_unique = np.array(y_preds_prob_bats_unique)
+    #     skf = StratifiedKFold(n_splits=kfold, shuffle=True)
+    #     accs, prcs, rcs, f1s, aucs = list(), list(), list(), list(), list()
+    #     rcs_p, rcs_n = list(), list()
+    #     for train_index, test_index in skf.split(x_all_unique, y_all_unique):
+    #         x_train, y_train = x_all_unique[train_index], y_all_unique[train_index]
+    #         x_test, y_test = x_all_unique[test_index], y_all_unique[test_index]
+    #
+    #         # prediction by BATs
+    #         # y_pred_bats = y_preds_bats[test_index]
+    #         y_test_pred_prob_bats = y_preds_prob_bats_unique[test_index]
+    #
+    #         # standard data
+    #         scaler = StandardScaler().fit(x_train)
+    #         # scaler = MinMaxScaler().fit(x_train)
+    #         x_train = scaler.transform(x_train)
+    #         x_test = scaler.transform(x_test)
+    #
+    #         print('\ntrain data: {}, test data: {}'.format(len(x_train), len(x_test)), end='')
+    #
+    #         clf = None
+    #         if algorithm == 'lr':
+    #             clf = LogisticRegression(solver='lbfgs', class_weight={1: 1},).fit(X=x_train, y=y_train)
+    #         elif algorithm == 'dt':
+    #             clf = DecisionTreeClassifier().fit(X=x_train, y=y_train, sample_weight=None)
+    #         elif algorithm == 'rf':
+    #             clf = RandomForestClassifier(class_weight={1: 1}, ).fit(X=x_train, y=y_train)
+    #
+    #         if method == 'combine':
+    #             # combine both
+    #             number_bats = 0
+    #             number_ML = 0
+    #             y_pred_final = []
+    #             for i in range(len(y_test)):
+    #
+    #                 # apply BATs first
+    #                 if y_test_pred_prob_bats[i] != -999:
+    #                     number_bats += 1
+    #                     y_pred_final.append(y_test_pred_prob_bats[i])
+    #                 else:
+    #                     number_ML += 1
+    #                     y_test_pred_prob_ML = clf.predict_proba(x_test[i].reshape(1,-1))[:, 1]
+    #                     y_pred_final.append(y_test_pred_prob_ML)
+    #
+    #                 # y_pred_final.append((y_test_pred_prob_bats[i] + clf.predict_proba(x_test[i].reshape(1,-1))[:, 1])/2.0)
+    #             print('\nNumber of BATs and ML: {} {}'.format(number_bats, number_ML))
+    #         else:
+    #             y_pred_final = clf.predict_proba(x_test)[:, 1]
+    #
+    #         # print('{}: '.format(algorithm))
+    #         recall_p, recall_n, acc, prc, rc, f1, auc_, _ = self.evaluation_metrics(list(y_test), y_pred_final)
+    #
+    #         accs.append(acc)
+    #         prcs.append(prc)
+    #         rcs.append(rc)
+    #         f1s.append(f1)
+    #
+    #         aucs.append(auc_)
+    #         rcs_p.append(recall_p)
+    #         rcs_n.append(recall_n)
+    #
+    #     print('\n{}-fold cross validation mean: '.format(kfold))
+    #     print('Accuracy: {:.1f} -- Precision: {:.1f} -- +Recall: {:.1f} -- F1: {:.1f} -- AUC: {:.3f}'.format(np.array(accs).mean() * 100, np.array(prcs).mean() * 100, np.array(rcs).mean() * 100, np.array(f1s).mean() * 100, np.array(aucs).mean()))
+    #     print('AUC: {:.3f}, +Recall: {:.3f}, -Recall: {:.3f}'.format(np.array(aucs).mean(), np.array(rcs_p).mean(), np.array(rcs_n).mean()))
+    #
 
     def predict(self, patch_list, new_patch, scaler_patch):
         if self.patch_w2v != 'string':
@@ -1090,11 +1066,11 @@ class evaluation:
         recall_p = tp / (tp + fn)
         recall_n = tn / (tn + fp)
 
-        result = '\n***------------***'
+        result = '***------------***\n'
         result += 'Evaluating AUC, F1, +Recall, -Recall\n'
         result += 'Test data size: {}, Correct: {}, Incorrect: {}\n'.format(len(y_trues), y_trues.count(1), y_trues.count(0))
         result += 'Accuracy: %f -- Precision: %f -- +Recall: %f -- F1: %f \n' % (acc, prc, rc, f1)
-        result += 'AUC: {:.3f}, +Recall: {:.3f}, -Recall: {:.3f}\n'.format(auc_, recall_p, recall_n)
+        result += 'AUC: {:.3f}, +Recall: {:.3f}, -Recall: {:.3f}'.format(auc_, recall_p, recall_n)
         # return , auc_
 
         print(result)
@@ -1235,8 +1211,9 @@ class evaluation:
         # plt.figure(figsize=(10, 5))
         # plt.bar(Correct[:].index.tolist(), Correct[:]['y_pred_prob'], color="grey", edgecolor="black")
         # plt.bar(Incorrect[:].index.tolist(), Incorrect[:]['y_pred_prob'], color="white", edgecolor="black")
-        # plt.xticks(recommend_list.index.tolist(), list(recommend_list.iloc[:]['name']))
-        # # plt.xticks(recommend_list_project[:].index.tolist(), recommend_list_project[:][0].tolist())
+        # plt.xticks(recommend_list.index.tolist(), list(recommend_list.iloc[:]['name']), rotation=320)
+
+        # plt.xticks(recommend_list_project[:].index.tolist(), recommend_list_project[:][0].tolist())
         # fontsize = 22
         # plt.xlabel('Patches', fontsize=fontsize)
         # plt.ylabel('Similarity of patch', fontsize=fontsize)
