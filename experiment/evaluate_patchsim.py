@@ -4,7 +4,7 @@ import csv
 import numpy as np
 from sklearn.metrics import roc_curve, auc, accuracy_score, recall_score, precision_score, confusion_matrix
 
-patchsim_result = '/Users/haoye.tian/Documents/University/data/RESULT.csv'
+patchsim_result = '../data/PATCHSIM_RESULT.csv'
 defects4j_V120_projects = ['Chart', 'Closure', 'Lang', 'Math', 'Mockito', 'Time']
 
 def evaluation_metrics(y_true, y_pred_prob):
