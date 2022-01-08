@@ -4,7 +4,7 @@ import json
 import pickle
 from representation.word2vector import Word2vector
 
-path_patch_sliced = '/Users/haoye.tian/Documents/University/data/PatchCollectingV1ISSTA_sliced/'
+path_patch_sliced = '/Users/haoye.tian/Documents/University/data/PatchCollectingV1_sliced/'
 
 def patch_bert():
     w2v = Word2vector(patch_w2v='bert', )

@@ -142,16 +142,10 @@ class Experiment:
             # patchsim
             eval.predict_collected_projects(path_collected_patch=self.path_generated_patch, cut_off=0.6, distance_method=distance.cosine, ASE2020=False, patchsim=True )
 
-        '''
-        # RQ3: 5-fold cv ML-based approach, not used
-        # eval.improve_ML(path_collected_patch=self.path_generated_patch, cut_off=0.9, distance_method=distance.cosine, kfold=10, algorithm='lr', method='combine')
 
-        # RQ3: evaluate BATS on patchsim dataset. use bert representation(patch_w2v='bert') and euclidean distance
-        # eval.predict_collected_projects(path_collected_patch='/Users/haoye.tian/Documents/University/data/PatchSimISSTA_sliced/', cut_off=0.0, distance_method=distance.euclidean, patchsim=True,)
-        '''
 if __name__ == '__main__':
     # specify RQ
-    RQ = 'RQ3.2'
+    RQ = 'RQ3.1'
 
     config = Config()
     path_test = config.path_test

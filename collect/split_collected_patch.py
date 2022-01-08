@@ -46,6 +46,7 @@ def slice_patch(path):
                     print('{} patches with multiple fixes found'.format(cnt))
 
 def slice_patch2(path):
+    name_folder = 'PatchCollectingV1Natural'
     cnt = 0
     for root, dirs, files in os.walk(path):
         for file in files:
@@ -63,7 +64,7 @@ def slice_patch2(path):
                             if line.startswith('--- ') or line.startswith('-- '):
                                 if number_diff > 0:
                                     # save previous patch
-                                    new_path = root.replace('PatchCollectingV1ISSTA', 'PatchCollectingV1ISSTA_sliced')
+                                    new_path = root.replace(name_folder, name_folder+'_sliced')
                                     new_name = name+'-'+str(number_AT)+'.patch'
                                     if not os.path.exists(new_path):
                                         os.makedirs(new_path)
@@ -79,7 +80,7 @@ def slice_patch2(path):
                             elif line.startswith('@@ '):
                                 if content:
                                     # save previous patch
-                                    new_path = root.replace('PatchCollectingV1ISSTA', 'PatchCollectingV1ISSTA_sliced')
+                                    new_path = root.replace(name_folder, name_folder+'_sliced')
                                     new_name = name+'-'+str(number_AT)+'.patch'
                                     if not os.path.exists(new_path):
                                         os.makedirs(new_path)
@@ -102,7 +103,7 @@ def slice_patch2(path):
                     print(e)
 
                 # save last patch
-                new_path = root.replace('PatchCollectingV1ISSTA', 'PatchCollectingV1ISSTA_sliced')
+                new_path = root.replace(name_folder, name_folder+'_sliced')
                 new_name = name + '-' + str(number_AT) + '.patch'
                 if not os.path.exists(new_path):
                     os.makedirs(new_path)
@@ -142,6 +143,6 @@ def move(path):
                 shutil.copy(os.path.join(root, file), os.path.join(new_root, file))
 
 # move('/Users/haoye.tian/Documents/University/data/PatchCollectingV1/')
-path = '/Users/haoye.tian/Documents/University/data/PatchCollectingV1ISSTA/'
+path = '/Users/haoye.tian/Documents/University/data/PatchCollectingV1/'
 # combine_patch(path)
 slice_patch2(path)
