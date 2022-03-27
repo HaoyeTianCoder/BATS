@@ -257,7 +257,7 @@ class cluster:
                 if 'identical' in e:
                     p_value = 1
             print('p-value: {}'.format(p_value))
-            if p_value >= 0.05:
+            if p_value < 0.05:
                 cnt += 1
         print('{}/{} satisfied the hypothesis'.format(cnt, number))
         '''
