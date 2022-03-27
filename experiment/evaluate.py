@@ -68,6 +68,58 @@ class evaluation:
                             available_path_patch.append(path_patch)
         return available_path_patch
 
+    def find_path_patch_for_naturalness(self, path_patch_sliced, project_id):
+        available_path_patch = []
+        target_project = project_id.split('_')[0]
+        target_id = project_id.split('_')[1]
+
+        datasets = os.listdir(path_patch_sliced)
+        for dataset in datasets:
+            path_dataset = os.path.join(path_patch_sliced, dataset)
+            benchmarks = os.listdir(path_dataset)
+            for benchmark in benchmarks:
+                path_benchmark = os.path.join(path_dataset, benchmark)
+                tools = os.listdir(path_benchmark)
+                for tool in tools:
+                    path_tool = os.path.join(path_benchmark, tool)
+                    labels = os.listdir(path_tool)
+                    for label in labels:
+                        path_label = os.path.join(path_tool, label)
+                        projects = os.listdir(path_label)
+                        for project in projects:
+                            if project != target_project:
+                                continue
+                            path_project = os.path.join(path_label, project)
+                            ids = os.listdir(path_project)
+                            for id in ids:
+                                if id != target_id:
+                                    continue
+                                path_id = os.path.join(path_project, id)
+                                patches = os.listdir(path_id)
+                                for patch in patches:
+                                    # parse patch
+                                    if label == 'Correct':
+                                        label_int = 1
+                                    elif label == 'Incorrect':
+                                        label_int = 0
+                                    else:
+                                        raise
+                                    path_single_patch = os.path.join(path_id, patch)
+                                    if os.path.isdir(path_single_patch):
+                                        available_path_patch.append(path_single_patch)
+
+                                    # for root, dirs, files in os.walk(path_single_patch):
+                                    #     for file in files:
+                                    #         if file.endswith('.patch'):
+                                    #             try:
+                                    #                 with open(os.path.join(root, file), 'r+') as f:
+                                    #                     patch_diff += f.readlines()
+                                    #             except Exception as e:
+                                    #                 print(e)
+                                    #                 continue
+
+        return available_path_patch
+
     def engineered_features(self, path_json):
         other_vector = []
         P4J_vector = []
@@ -180,6 +232,7 @@ class evaluation:
         vector_ML_list = []
         label_list = []
         name_list = []
+        patch_id_list = []
         for p in available_path_patch:
             recogName = '-'.join([p.split('/')[-4], p.split('/')[-3], p.split('/')[-2], p.split('/')[-1]])
             if recogName in notRecognized: # some specific patches can not be recognized
@@ -235,15 +288,22 @@ class evaluation:
             else:
                 raise Exception('wrong label')
 
-            # name
+            # name for BATs project
             tool = p.split('/')[-5]
-            patchid = p.split('/')[-1]
+            patch = p.split('/')[-1]
             # name = tool + '-' + label + '-' + patchid
             # name = tool[:3] + patchid.replace('patch','')
-            name = tool + patchid.replace('patch','')
+            name = tool + patch.replace('patch','')
             name_list.append(name)
 
-        return name_list, label_list, vector_list, vector_ML_list
+            # patch id for Naturalness project
+            patch = p.split('/')[-1]
+            project_id = p.split('/')[-3] + '-' + p.split('/')[-2]
+            tool = p.split('/')[-5]
+            dataset = p.split('/')[-7]
+            patch_id = patch + '-' + project_id + '_' + tool + '_' + dataset
+            patch_id_list.append(patch_id)
+        return patch_id_list, label_list, vector_list, vector_ML_list
 
     def vector4patch_patchsim(self, available_path_patch, compare=True,):
         vector_list = []
@@ -421,113 +481,113 @@ class evaluation:
             # print('exception type: {}'.format(exp_type.split('.')[-1]))
         return patch_list, scaler_patch, closest_score,
 
-    # deprecated
-    def evaluate_collected_projects(self, path_collected_patch):
-        projects = {'Chart': 26, 'Lang': 65, 'Math': 106, 'Time': 27}
-        # projects = {'Math': 106}
-        all_closest_score = []
-        similarity_correct_minimum = 1
-        similarity_incorrect = []
-        for project, number in projects.items():
-            recommend_list_project = []
-            print('Testing {}'.format(project))
-            for id in range(1, number + 1):
-                recommend_list = []
-                print('{}_{} ------'.format(project, id))
-                # extract failed test index according to bug_id
-                project_id = '_'.join([project, str(id)])
-                failed_test_index = [i for i in range(len(self.test_name)) if self.test_name[i].startswith(project_id+'-')]
-                if failed_test_index == []:
-                    print('failed tests of this bugid not found:{}'.format(project_id))
-                    continue
-                # find corresponding patches generated by tools
-                available_path_patch = self.find_path_patch(path_collected_patch, project_id)
-                if available_path_patch == []:
-                    print('No tool patches found:{}'.format(project_id))
-                    continue
-
-                correct = incorrect = 0
-                for p in available_path_patch:
-                    if 'Correct' in p:
-                        correct += 1
-                    elif 'Incorrect' in p:
-                        incorrect += 1
-
-                # get patch list for failed test case
-                patch_list, scaler_patch, closest_score = self.get_patch_list(failed_test_index, k=1, cut_off=0.7, model=self.patch_w2v)
-                all_closest_score += closest_score
-                if patch_list == []:
-                    print('no closest test case found')
-                    continue
-
-                # return vector for path patch
-                name_list, label_list, vector_list, vector_ML_list = self.vector4patch(available_path_patch, 'False')
-                # if not 0 in label_list or not 1 in label_list:
-                #     print('all same')
-                #     continue
-
-                for i in range(len(name_list)):
-                    name = name_list[i]
-                    label = label_list[i]
-                    vector_new_patch = vector_list[i]
-                    dist = self.predict(patch_list, vector_new_patch, scaler_patch)
-                    if self.patch_w2v == 'string':
-                        score = 2800 - dist
-                    else:
-                        score = 1 - dist
-                    if math.isnan(score):
-                        continue
-                    # record
-                    recommend_list.append([name, label, score])
-                    recommend_list_project.append([name, label, score])
-                if recommend_list == []:
-                    continue
-                print('{} recommend list:'.format(project))
-                recommend_list = pd.DataFrame(sorted(recommend_list, key=lambda x: x[2], reverse=True))
-                Correct = recommend_list[recommend_list[1] == 1]
-                Incorrect = recommend_list[recommend_list[1] == 0]
-                plt.figure(figsize=(10, 4))
-                plt.bar(Correct[:].index.tolist(), Correct[:][2], color="red")
-                plt.bar(Incorrect[:].index.tolist(), Incorrect[:][2], color="lightgrey",)
-                plt.xticks(recommend_list[:].index.tolist(), recommend_list[:][0].tolist())
-                plt.xlabel('patchid by tool')
-                plt.ylabel('Score of patch')
-                plt.savefig('../fig/RQ3/recommend_{}'.format(project_id))
-                plt.cla()
-                plt.close()
-                # plt.show()
-
-            # print('{} recommend project:'.format(project))
-            if recommend_list_project == []:
-                continue
-            recommend_list_project = pd.DataFrame(sorted(recommend_list_project, key=lambda x: x[2], reverse=True))
-            Correct = recommend_list_project[recommend_list_project[1] == 1]
-            Incorrect = recommend_list_project[recommend_list_project[1] == 0]
-            print('{}: {}'.format(project, recommend_list_project.shape[0]), end='  ')
-            if Incorrect.shape[0] != 0 and Correct.shape[0] != 0:
-                filter_out_incorrect = recommend_list_project.shape[0] - Correct[:].index.tolist()[-1] - 1
-                print('Incorrect filter rate: {}'.format(filter_out_incorrect/Incorrect.shape[0]))
-                # print('The minimum similarity score of the correct patch: {}'.format(np.array(Correct)[-1][2]))
-                if np.array(Correct)[-1][2] < similarity_correct_minimum:
-                    similarity_correct_minimum = np.array(Correct)[-1][2]
-                similarity_incorrect.append(list(Incorrect[:][2]))
-            plt.bar(Correct[:].index.tolist(), Correct[:][2], color="red")
-            plt.bar(Incorrect[:].index.tolist(), Incorrect[:][2], color="lightgrey")
-            # plt.xticks(recommend_list_project[:].index.tolist(), recommend_list_project[:][0].tolist())
-            plt.xlabel('patchid by tool')
-            plt.ylabel('Score of patch')
-            plt.title('recommend for {}'.format(project))
-            plt.savefig('../fig/RQ3/{}_recommend.png'.format(project))
-            plt.cla()
-            plt.close()
-        print('The minimum similarity score of the correct patch: {}'.format(similarity_correct_minimum))
-        for i in range(len(similarity_incorrect)):
-            print('The number of incorrect patch: {}'.format(np.where(np.array(similarity_incorrect[i]) < similarity_correct_minimum)[0].size))
-        plt.bar(range(len(all_closest_score)), sorted(all_closest_score, reverse=True),)
-        plt.xlabel('the closest test case')
-        plt.ylabel('Similarity Score of the closest test case')
-        plt.title('Similarity of test case')
-        plt.savefig('../fig/RQ3/Similarity_Test.png')
+    # # deprecated
+    # def evaluate_collected_projects(self, path_collected_patch):
+    #     projects = {'Chart': 26, 'Lang': 65, 'Math': 106, 'Time': 27}
+    #     # projects = {'Math': 106}
+    #     all_closest_score = []
+    #     similarity_correct_minimum = 1
+    #     similarity_incorrect = []
+    #     for project, number in projects.items():
+    #         recommend_list_project = []
+    #         print('Testing {}'.format(project))
+    #         for id in range(1, number + 1):
+    #             recommend_list = []
+    #             print('{}_{} ------'.format(project, id))
+    #             # extract failed test index according to bug_id
+    #             project_id = '_'.join([project, str(id)])
+    #             failed_test_index = [i for i in range(len(self.test_name)) if self.test_name[i].startswith(project_id+'-')]
+    #             if failed_test_index == []:
+    #                 print('failed tests of this bugid not found:{}'.format(project_id))
+    #                 continue
+    #             # find corresponding patches generated by tools
+    #             available_path_patch = self.find_path_patch(path_collected_patch, project_id)
+    #             if available_path_patch == []:
+    #                 print('No tool patches found:{}'.format(project_id))
+    #                 continue
+    #
+    #             correct = incorrect = 0
+    #             for p in available_path_patch:
+    #                 if 'Correct' in p:
+    #                     correct += 1
+    #                 elif 'Incorrect' in p:
+    #                     incorrect += 1
+    #
+    #             # get patch list for failed test case
+    #             patch_list, scaler_patch, closest_score = self.get_patch_list(failed_test_index, k=1, cut_off=0.7, model=self.patch_w2v)
+    #             all_closest_score += closest_score
+    #             if patch_list == []:
+    #                 print('no closest test case found')
+    #                 continue
+    #
+    #             # return vector for path patch
+    #             name_list, label_list, vector_list, vector_ML_list = self.vector4patch(available_path_patch, 'False')
+    #             # if not 0 in label_list or not 1 in label_list:
+    #             #     print('all same')
+    #             #     continue
+    #
+    #             for i in range(len(name_list)):
+    #                 name = name_list[i]
+    #                 label = label_list[i]
+    #                 vector_new_patch = vector_list[i]
+    #                 dist = self.predict(patch_list, vector_new_patch, scaler_patch)
+    #                 if self.patch_w2v == 'string':
+    #                     score = 2800 - dist
+    #                 else:
+    #                     score = 1 - dist
+    #                 if math.isnan(score):
+    #                     continue
+    #                 # record
+    #                 recommend_list.append([name, label, score])
+    #                 recommend_list_project.append([name, label, score])
+    #             if recommend_list == []:
+    #                 continue
+    #             print('{} recommend list:'.format(project))
+    #             recommend_list = pd.DataFrame(sorted(recommend_list, key=lambda x: x[2], reverse=True))
+    #             Correct = recommend_list[recommend_list[1] == 1]
+    #             Incorrect = recommend_list[recommend_list[1] == 0]
+    #             plt.figure(figsize=(10, 4))
+    #             plt.bar(Correct[:].index.tolist(), Correct[:][2], color="red")
+    #             plt.bar(Incorrect[:].index.tolist(), Incorrect[:][2], color="lightgrey",)
+    #             plt.xticks(recommend_list[:].index.tolist(), recommend_list[:][0].tolist())
+    #             plt.xlabel('patchid by tool')
+    #             plt.ylabel('Score of patch')
+    #             plt.savefig('../fig/RQ3/recommend_{}'.format(project_id))
+    #             plt.cla()
+    #             plt.close()
+    #             # plt.show()
+    #
+    #         # print('{} recommend project:'.format(project))
+    #         if recommend_list_project == []:
+    #             continue
+    #         recommend_list_project = pd.DataFrame(sorted(recommend_list_project, key=lambda x: x[2], reverse=True))
+    #         Correct = recommend_list_project[recommend_list_project[1] == 1]
+    #         Incorrect = recommend_list_project[recommend_list_project[1] == 0]
+    #         print('{}: {}'.format(project, recommend_list_project.shape[0]), end='  ')
+    #         if Incorrect.shape[0] != 0 and Correct.shape[0] != 0:
+    #             filter_out_incorrect = recommend_list_project.shape[0] - Correct[:].index.tolist()[-1] - 1
+    #             print('Incorrect filter rate: {}'.format(filter_out_incorrect/Incorrect.shape[0]))
+    #             # print('The minimum similarity score of the correct patch: {}'.format(np.array(Correct)[-1][2]))
+    #             if np.array(Correct)[-1][2] < similarity_correct_minimum:
+    #                 similarity_correct_minimum = np.array(Correct)[-1][2]
+    #             similarity_incorrect.append(list(Incorrect[:][2]))
+    #         plt.bar(Correct[:].index.tolist(), Correct[:][2], color="red")
+    #         plt.bar(Incorrect[:].index.tolist(), Incorrect[:][2], color="lightgrey")
+    #         # plt.xticks(recommend_list_project[:].index.tolist(), recommend_list_project[:][0].tolist())
+    #         plt.xlabel('patchid by tool')
+    #         plt.ylabel('Score of patch')
+    #         plt.title('recommend for {}'.format(project))
+    #         plt.savefig('../fig/RQ3/{}_recommend.png'.format(project))
+    #         plt.cla()
+    #         plt.close()
+    #     print('The minimum similarity score of the correct patch: {}'.format(similarity_correct_minimum))
+    #     for i in range(len(similarity_incorrect)):
+    #         print('The number of incorrect patch: {}'.format(np.where(np.array(similarity_incorrect[i]) < similarity_correct_minimum)[0].size))
+    #     plt.bar(range(len(all_closest_score)), sorted(all_closest_score, reverse=True),)
+    #     plt.xlabel('the closest test case')
+    #     plt.ylabel('Similarity Score of the closest test case')
+    #     plt.title('Similarity of test case')
+    #     plt.savefig('../fig/RQ3/Similarity_Test.png')
 
     def predict_collected_projects(self, path_collected_patch=None, cut_off=0.8, distance_method = distance.cosine, ASE2020=False, patchsim=False,):
         print('Research Question 2')
@@ -544,6 +604,7 @@ class evaluation:
         test_case_similarity_list, patch1278_list_short = [], []
         patch_available_distribution = {}
         patch1278_list = []
+        BATS_RESULT = []
         for project, number in projects.items():
             print('Testing {}'.format(project))
             for id in range(1, number + 1):
@@ -560,7 +621,9 @@ class evaluation:
                     continue
 
                 # find paths of patches generated by tools
-                available_path_patch = self.find_path_patch(path_collected_patch, project_id)
+                # available_path_patch = self.find_path_patch(path_collected_patch, project_id)
+                # for Naturalness project
+                available_path_patch = self.find_path_patch_for_naturalness(path_collected_patch, project_id)
                 if available_path_patch == []:
                     print('No generated patches of APR tools found:{}'.format(project_id))
                     continue
@@ -569,7 +632,7 @@ class evaluation:
                 # if patchsim:
                 #     name_list, label_list, generated_patch_list, vector_ML_list = self.vector4patch_patchsim(available_path_patch, compare=ASE2020,)
                 # else:
-                name_list, label_list, generated_patch_list, vector_ML_list = self.vector4patch(available_path_patch, compare=ASE2020,)
+                patch_id_list, label_list, generated_patch_list, vector_ML_list = self.vector4patch(available_path_patch, compare=ASE2020,)
 
                 # # depulicate
                 # index_to_delete = []
@@ -585,7 +648,7 @@ class evaluation:
                 #     generated_patch_list.pop(index)
                 #     vector_ML_list.pop(index)
 
-                if name_list == []:
+                if patch_id_list == []:
                     print('all the patches can not be recognized')
                     continue
 
@@ -615,14 +678,18 @@ class evaluation:
                 # calculate the center of associated patches(repository)
                 centers = self.dynamic_threshold2(associated_patch_list, distance_method=distance_method, sumup='mean')
                 centers_baseline = [correct_patches_baseline.mean(axis=0)]
-                for i in range(len(name_list)):
-                    name = name_list[i]
+                for i in range(len(patch_id_list)):
+                    # name = name_list[i]
+                    name = patch_id_list[i]
                     tested_patch = generated_patch_list[i]
                     y_true = label_list[i]
                     # y_pred = self.predict_label(centers, threshold_list, vector_new_patch, scaler_patch)
                     # y_pred_prob = self.predict_prob(centers, threshold_list, vector_new_patch, scaler_patch)
                     y_pred_prob, y_pred = self.predict_recom(centers, tested_patch, scaler_patch, mean_stand_dict[cut_off], distance_method=distance_method,)
                     y_pred_prob_baseline, y_pred_baseline = self.predict_recom(centers_baseline, tested_patch, scaler_patch, mean_stand_dict[cut_off], distance_method=distance_method,)
+
+                    # for Naturalness project
+                    BATS_RESULT.append([name, y_pred])
 
                     if not math.isnan(y_pred_prob):
                         recommend_list.append([name, y_pred, y_true, y_pred_prob])
@@ -642,12 +709,12 @@ class evaluation:
 
                         # ML prediction for comparison
 
-                        # record distribution of available patches
-                        key = name[:3]+str(y_true)
-                        if key not in patch_available_distribution:
-                            patch_available_distribution[key] = 1
-                        else:
-                            patch_available_distribution[key] += 1
+                        # # record distribution of available patches
+                        # key = name[:3]+str(y_true)
+                        # if key not in patch_available_distribution:
+                        #     patch_available_distribution[key] = 1
+                        # else:
+                        #     patch_available_distribution[key] += 1
 
                         # save the name of 1278 patches for evaluating
                         path = available_path_patch[i]
@@ -673,6 +740,10 @@ class evaluation:
 
         # patch distribution
         # print(patch_available_distribution)
+
+        # for Naturalness project
+        pdata = pd.DataFrame(BATS_RESULT)
+        pdata.to_csv('../data/BATS_RESULT.csv', sep=',')
 
         if y_trues == [] or not 1 in y_trues or not 0 in y_trues:
             return
@@ -1194,7 +1265,7 @@ class evaluation:
         # plt.show()
         plt.savefig('../fig/RQ1/distribution_pairwise_patches.png')
 
-        # # MMW
+        # # MWW
         # H_stat = dfl[dfl['Label'] == 'H'].iloc[:, 2].tolist()
         # N_stat = dfl[dfl['Label'] == 'N'].iloc[:, 2].tolist()
         # hypo = stats.mannwhitneyu(H_stat, N_stat, alternative='two-sided')
