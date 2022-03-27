@@ -166,11 +166,14 @@ class Word2vector:
         try:
             if self.patch_w2v == 'cc2vec':
                 multi_vector = [] # sum up vectors of different parts of patch
-                patch = os.listdir(path_patch)
-                for part in patch:
-                    p = os.path.join(path_patch, part)
-                    learned_vector = lmg_cc2ftr_interface.learned_feature(p, load_model=MODEL_CC2Vec + 'cc2ftr.pt', dictionary=self.dictionary)
-                    multi_vector.append(list(learned_vector.flatten()))
+                # patch = os.listdir(path_patch)
+                # for part in patch:
+                for root, dirs, files in os.walk(path_patch):
+                    for file in files:
+                        if file.endswith('.patch'):
+                            p = os.path.join(root, file)
+                            learned_vector = lmg_cc2ftr_interface.learned_feature(p, load_model=MODEL_CC2Vec + 'cc2ftr.pt', dictionary=self.dictionary)
+                            multi_vector.append(list(learned_vector.flatten()))
                 combined_vector = np.array(multi_vector).sum(axis=0)
 
             elif self.patch_w2v == 'bert':
