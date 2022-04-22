@@ -604,7 +604,7 @@ class evaluation:
         test_case_similarity_list, patch1278_list_short = [], []
         patch_available_distribution = {}
         patch1278_list = []
-        BATS_RESULT = []
+        BATS_RESULT_dict = {}
         for project, number in projects.items():
             print('Testing {}'.format(project))
             for id in range(1, number + 1):
@@ -689,7 +689,7 @@ class evaluation:
                     y_pred_prob_baseline, y_pred_baseline = self.predict_recom(centers_baseline, tested_patch, scaler_patch, mean_stand_dict[cut_off], distance_method=distance_method,)
 
                     # for Naturalness project
-                    BATS_RESULT.append([name, y_pred])
+                    BATS_RESULT_dict[name.lower()] = y_pred
 
                     if not math.isnan(y_pred_prob):
                         recommend_list.append([name, y_pred, y_true, y_pred_prob])
@@ -742,8 +742,8 @@ class evaluation:
         # print(patch_available_distribution)
 
         # for Naturalness project
-        pdata = pd.DataFrame(BATS_RESULT)
-        pdata.to_csv('../data/BATS_RESULT.csv', sep=',')
+        with open('../data/BATS_RESULT_{}.json'.format(cut_off), 'w+') as f:
+            json.dump(BATS_RESULT_dict, f)
 
         if y_trues == [] or not 1 in y_trues or not 0 in y_trues:
             return
