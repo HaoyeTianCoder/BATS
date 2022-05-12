@@ -99,7 +99,7 @@ class Experiment:
         # load original data and corresponding vector
         self.load_test()
 
-        # pre-save bert vector of patches if you use your different datasets(patches)
+        # pre-save bert vector of patches if you use your own datasets(patches)
         # patch_bert_vector.patch_bert()
 
         # RQ1.1: validate hypothesis
@@ -133,7 +133,7 @@ class Experiment:
 
 if __name__ == '__main__':
     # specify RQ
-    RQ = 'RQ3.1'
+    RQ = 'RQ2'
 
     config = Config()
     path_test = config.path_test
