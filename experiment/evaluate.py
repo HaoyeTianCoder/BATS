@@ -825,7 +825,9 @@ class evaluation:
         failed_test_index = [i for i in range(len(self.test_name)) if
                              self.test_name[i].startswith(project_id + '-')]
         if failed_test_index == []:
-            print('Couldnt find any failed test case for this bugid: {}'.format(project_id))
+            print('############################################')
+            print('Sorry, we cannot find any failed test case for this bug id: {}.'.format(project_id))
+            print('Please try another bug id.')
             # print('{} patches skipped'.format(len(available_path_patch)))
             return
 
@@ -835,7 +837,10 @@ class evaluation:
                                                                                             cut_off=cut_off,
                                                                                             model=self.patch_w2v)
         if associated_patch_list == []:
-            raise ('No closest test case that satisfied with the condition of cut-off similarity')
+            print('############################################')
+            print ('Sorry, there is no any test case satisfying with the requirement of test case similarity cut-off.')
+            print('Please try to decrease the cut-off.')
+            return
 
         # calculate the center of associated patches(repository)
         centers = self.dynamic_threshold2(associated_patch_list, distance_method=distance_method, sumup='mean')
