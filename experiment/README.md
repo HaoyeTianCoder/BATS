@@ -1,8 +1,12 @@
-# Entrance
-* **config.py** Set up your patch path(path_patch_root, path_generated_patch).  
-* **main.py** Run it with parameters of RQ=['RQ1.1', 'RQ1.2', 'RQ2', 'RQ3.1', 'RQ3.2']
 
-# Experiment
+# Experimental Reproduction
+Run `main.py` following one of the arguments ('RQ1.1', 'RQ1.2', 'RQ2', 'RQ3.1', 'RQ3.2')
+
+For instance, execute the following command to obtain the results of research question 2 in the paper.
+```
+python main.py RQ2
+```
+
 
 ## RQ1.1
 
@@ -32,21 +36,21 @@ Customize: Choose one of representation embeddings for patch under *config.py*.
 * **string:** raw strings(Levenshtein is used to calculate the distance of pairwise strings).
 
 OUTPUT:
-* **performance:** classification and ranking of the Baseline and BATS in terms of correct patches. 
+* **performance:** classification and ranking of the Baseline and BATS on the APR-generated patches. 
 
 ## RQ3.1
 
-Compare the state of the art approaches
+Compare the state of the art approaches.
 
-Static: ML-based approach.
-Dynamic: Patch-Sim. Run *evaluate_patchsim.py*
+* **Static approach:** ML-based approach.
+* **Dynamic approach:** Patch-Sim. Please run `python evaluate_patchsim.py`
 
 OUTPUT:
 * **performance:** The results of the state of the art.
 
 ## RQ3.2
 
-Enhance static and dynamic approaches
+Enhance static and dynamic approaches.
 
 OUTPUT:
 * **performance:** Enhancement of classification of ML-based and patchSim approaches on patch correctness.
