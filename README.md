@@ -7,9 +7,8 @@
   journal={ACM Transactions on Software Engineering and Methodology},
   year={2022},
   publisher={ACM New York, NY},
-  url = {https://doi-org.proxy.bnl.lu/10.1145/3511096},
+  url = {https://doi.org/10.1145/3511096}, 
   doi = {10.1145/3511096}
-
 ```
 Paper Link: https://dl.acm.org/doi/10.1145/3511096
 
