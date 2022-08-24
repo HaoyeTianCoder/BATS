@@ -1,14 +1,17 @@
 # Predicting Patch Correctness Based on the Similarity of Failing Test Cases
 
 ```bibtex
-@article{tian2021checking,
-  title={Checking Patch Behaviour against Test Specification},
-  author={Tian, Haoye and Li, Yinghua and Pian, Weiguo and Kabor{\'e}, Abdoul Kader and Liu, Kui and Klein, Jacques and Bissyande, Tegawend{\'e} F},
-  journal={arXiv preprint arXiv:2107.13296},
-  year={2021}
+@article{tian2022predicting,
+  title={Predicting Patch Correctness Based on the Similarity of Failing Test Cases},
+  author={Tian, Haoye and Li, Yinghua and Pian, Weiguo and Kabore, Abdoul Kader and Liu, Kui and Habib, Andrew and Klein, Jacques and Bissyand{\'e}, Tegawend{\'e} F},
+  journal={ACM Transactions on Software Engineering and Methodology},
+  year={2022},
+  publisher={ACM New York, NY},
+  url = {https://doi-org.proxy.bnl.lu/10.1145/3511096},
+  doi = {10.1145/3511096}
 }
 ```
-Paper Link: https://arxiv.org/abs/2107.13296
+
 # BATS
 BATS, an unsupervised learning based system to predict patch correctness by checking patch **B**ehaviour **A**gainst failing **T**est **S**pecification.
 
@@ -41,4 +44,7 @@ To predict the correctness of your custom patches, you are welcome to use the pr
 python main.py predict $cut-off $bug_id $path2patch
 ```
 
-For instance: `python main.py predict 0.8 Chart_26 "path2dataset"/BATS_DataSet/PatchCollectingV1_sliced/PraPR/Correct/Chart/26/patch1`
+For instance: 
+```
+python main.py predict 0.8 Chart_26 "path2dataset"/BATS_DataSet/PatchCollectingV1_sliced/PraPR/Correct/Chart/26/patch1
+```
