@@ -94,7 +94,7 @@ class Experiment:
         else:
             return all_test_name, all_patch_name, np.array(all_test_vector), np.array(all_patch_vector), all_exception_type
 
-    def run(self, RQ):
+    def run(self, arg1='RQ2', arg2='', arg3='', arg4=''):
 
         # load original data and corresponding vector
         self.load_test()
@@ -103,37 +103,64 @@ class Experiment:
         # patch_bert_vector.patch_bert()
 
         # RQ1.1: validate hypothesis
-        if 'RQ1.1' == RQ:
+        if 'RQ1.1' == arg1:
             clu = cluster(self.original_dataset, self.test_name, self.patch_name, self.test_vector, self.patch_vector, method='biKmeans', number=40)
             clu.validate()
 
         eval = evaluation(self.patch_w2v, self.original_dataset, self.test_name, self.test_vector, self.patch_vector, self.exception_type)
         # RQ1.2: evaluate on developer's patches of defects4j
-        if 'RQ1.2' == RQ:
+        if 'RQ1.2' == arg1:
             eval.evaluate_defects4j_projects(option1=True, option2=0.6)
 
         # RQ2: evaluate BATS on the generated patches of APR tools. use cc2vec representation(patch_w2v='cc2vec') and cosine distance
-        if 'RQ2' == RQ:
+        elif 'RQ2' == arg1:
             # set cut-off = 0.0 to get baseline.
             eval.predict_collected_projects(path_collected_patch=self.path_generated_patch, cut_off=0.8, distance_method=distance.cosine, ASE2020=False, patchsim=False, )
 
         # RQ3.1: compare ML-based approach.
-        if 'RQ3.1' == RQ:
+        elif 'RQ3.1' == arg1:
             # ML-based approach.
             eval.predict_collected_projects(path_collected_patch=self.path_generated_patch, cut_off=0.8, distance_method=distance.cosine, ASE2020=True, patchsim=False )
             # patchsim: run experiment/evaluate_patchsim.py
 
         # RQ3.2: enhance PatchSim approach.
-        if 'RQ3.2' == RQ:
+        elif 'RQ3.2' == arg1:
             # ML-based approach. change patch_w2v to 'bert' in config.py as BATS with bert is better at -Recall.
             eval.predict_collected_projects(path_collected_patch=self.path_generated_patch, cut_off=0.6, distance_method=distance.euclidean, ASE2020=True, patchsim=False )
             # patchsim
             eval.predict_collected_projects(path_collected_patch=self.path_generated_patch, cut_off=0.6, distance_method=distance.cosine, ASE2020=False, patchsim=True )
 
+        # custom predict
+        if 'predict' == arg1:
+            cut_off = arg2
+            project_id = arg3
+            root_path_patch_snippet = arg4
+            threshold = 0.5
+
+            patch_vector = eval.obtain_vector_for_new_patch(w2v='cc2vec', path_patch_snippet=root_path_patch_snippet)
+
+            eval.predict_new_patch(project_id=project_id, cut_off=cut_off, patch_vector=patch_vector, distance_method=distance.cosine, threshold=threshold)
+
 
 if __name__ == '__main__':
+    if len(sys.argv) == 2:
+        script_name = sys.argv[0]
+        arg1 = sys.argv[1] # RQ
+        arg2 = ''
+        arg3 = ''
+        arg4 = ''
+    elif len(sys.argv) == 5:
+        script_name = sys.argv[0]
+        arg1 = sys.argv[1] # predict
+        arg2 = float(sys.argv[2]) # cut-off
+        arg3 = sys.argv[3] # project_id
+        arg4 = sys.argv[4] # path to patch snippet
+    else:
+        raise 'sorry, please check your arguments.'
+    sys.argv = [sys.argv[0]]
+
     # specify RQ
-    RQ = 'RQ2'
+    # arg1, arg2, arg3 = 'RQ2', '', ''
 
     config = Config()
     path_test = config.path_test
@@ -143,4 +170,4 @@ if __name__ == '__main__':
     patch_w2v = config.patch_w2v
 
     e = Experiment(path_test, path_patch_root, path_generated_patch, organized_dataset, patch_w2v)
-    e.run(RQ=RQ)
+    e.run(arg1, arg2, arg3, arg4)

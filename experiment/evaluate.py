@@ -817,6 +817,39 @@ class evaluation:
         '''
         self.statistics_box(box_projecs_co, box_projecs_inco, projects_name)
 
+    def predict_new_patch(self, project_id, cut_off=0.8, patch_vector=None, distance_method=distance.cosine, threshold=0.5):
+        mean_stand_dict = {0.0: [443, 816], 0.5: ['', ''], 0.6: [273, 246], 0.7: [231, 273], 0.8: [180, 235], 0.9: [130, 130]}
+
+        print('----------------')
+        # extract failed test index according to bug_id
+        failed_test_index = [i for i in range(len(self.test_name)) if
+                             self.test_name[i].startswith(project_id + '-')]
+        if failed_test_index == []:
+            print('Couldnt find any failed test case for this bugid: {}'.format(project_id))
+            # print('{} patches skipped'.format(len(available_path_patch)))
+            return
+
+        # access the associated patch list(patch search space) of similar failed test cases
+        associated_patch_list, scaler_patch, closest_score = self.get_associated_patch_list(failed_test_index,
+                                                                                            k=5,
+                                                                                            cut_off=cut_off,
+                                                                                            model=self.patch_w2v)
+        if associated_patch_list == []:
+            raise ('No closest test case that satisfied with the condition of cut-off similarity')
+
+        # calculate the center of associated patches(repository)
+        centers = self.dynamic_threshold2(associated_patch_list, distance_method=distance_method, sumup='mean')
+
+        tested_patch = patch_vector
+        y_pred_prob, _ = self.predict_recom(centers, tested_patch, scaler_patch, mean_stand_dict[cut_off], distance_method=distance_method, )
+        print('############################################')
+        y_pred = 1 if y_pred_prob >= threshold else 0
+        if y_pred == 1:
+            print('Congrats! Your patch is CORRECT.')
+        elif y_pred == 0:
+            print('Sorry, your patch is INCORRECT.')
+        print(y_pred_prob)
+
     # def improve_ML(self, path_collected_patch=None, cut_off=0.8, distance_method = distance.cosine, kfold=10, algorithm='lr', method='combine'):
     #     print('Research Question 3: Improvement')
     #     projects = {'Chart': 26, 'Lang': 65, 'Math': 106, 'Time': 27}
@@ -1284,8 +1317,8 @@ class evaluation:
         # plt.bar(Correct[:].index.tolist(), Correct[:]['y_pred_prob'], color="grey", edgecolor="black")
         # plt.bar(Incorrect[:].index.tolist(), Incorrect[:]['y_pred_prob'], color="white", edgecolor="black")
         # plt.xticks(recommend_list.index.tolist(), list(recommend_list.iloc[:]['name']), rotation=320)
-
-        # plt.xticks(recommend_list_project[:].index.tolist(), recommend_list_project[:][0].tolist())
+        #
+        # # plt.xticks(recommend_list_project[:].index.tolist(), recommend_list_project[:][0].tolist())
         # fontsize = 22
         # plt.xlabel('Patches', fontsize=fontsize)
         # plt.ylabel('Similarity of patch', fontsize=fontsize)
@@ -1373,3 +1406,8 @@ class evaluation:
                     for l in ax.lines:
                         if np.all(l.get_xdata() == [xmin, xmax]):
                             l.set_xdata([xmin_new, xmax_new])
+
+    def obtain_vector_for_new_patch(self, w2v, path_patch_snippet):
+        w2v = Word2vector(test_w2v=None, patch_w2v=w2v, path_patch_root=path_patch_snippet)
+        patch_vector, _ = w2v.convert_single_patch(path_patch_snippet)
+        return patch_vector
