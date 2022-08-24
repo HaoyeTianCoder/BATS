@@ -1,0 +1,23 @@
+--- a/gson/src/main/java/com/google/gson/internal/ConstructorConstructor.java
++++ b/gson/src/main/java/com/google/gson/internal/ConstructorConstructor.java
+@@ -172,7 +176,19 @@ public final class ConstructorConstructor {
+     }
+ 
+     if (Map.class.isAssignableFrom(rawType)) {
+-      if (SortedMap.class.isAssignableFrom(rawType)) {
++      if (ConcurrentNavigableMap.class.isAssignableFrom(rawType)) {
++        return new ObjectConstructor<T>() {
++          @Override public T construct() {
++            return (T) new ConcurrentSkipListMap<Object, Object>();
++          }
++        };
++      } else if (ConcurrentMap.class.isAssignableFrom(rawType)) {
++        return new ObjectConstructor<T>() {
++          @Override public T construct() {
++            return (T) new ConcurrentHashMap<Object, Object>();
++          }
++        };
++      } else if (SortedMap.class.isAssignableFrom(rawType)) {
+         return new ObjectConstructor<T>() {
+           @Override public T construct() {
+             return (T) new TreeMap<Object, Object>();

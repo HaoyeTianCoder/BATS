@@ -1,0 +1,14 @@
+--- a/src/main/java/org/jsoup/parser/Parser.java
++++ b/src/main/java/org/jsoup/parser/Parser.java
+@@ -70,6 +71,11 @@ public class Parser {
+      @param baseUri base URI of document (i.e. original fetch location), for resolving relative URLs.
+      @return Document, with empty head, and HTML parsed into body
+      */
++    public static Document parseBodyFragmentRelaxed(String bodyHtml, String baseUri) {
++        Parser parser = new Parser(bodyHtml, baseUri, true);
++        parser.relaxed = true;
++        return parser.parse();
++    }
+ 
+     private Document parse() {
+         while (!tq.isEmpty()) {

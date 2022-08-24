@@ -1,0 +1,14 @@
+--- a/src/com/google/javascript/jscomp/ScopedAliases.java
++++ b/src/com/google/javascript/jscomp/ScopedAliases.java
+@@ -405,7 +419,11 @@ class ScopedAliases implements HotSwapCompilerPass {
+             NodeUtil.setDebugInformation(
+                 newDecl.getFirstChild().getFirstChild(), n, name);
+ 
++            if (isHoisted) {
++              grandparent.addChildToFront(newDecl);
++            } else {
+               grandparent.addChildBefore(newDecl, varNode);
++            }
+           }
+ 
+           // Rewrite "var name = EXPR;" to "var name = $jscomp.scope.name;"

@@ -1,0 +1,28 @@
+--- a/src/main/java/org/jsoup/parser/Tokeniser.java
++++ b/src/main/java/org/jsoup/parser/Tokeniser.java
+@@ -133,23 +133,14 @@ class Tokeniser {
+         } else { // named
+             // get as many letters as possible, and look for matching entities.
+             String nameRef = reader.consumeLetterThenDigitSequence();
+-            String origNameRef = new String(nameRef);
+             boolean looksLegit = reader.matches(';');
+             // found if a base named entity without a ;, or an extended entity with the ;.
+-            boolean found = false;
+-            while (nameRef.length() > 0 && !found) {
+-                if (Entities.isNamedEntity(nameRef))
+-                    found = true;
+-                else {
+-                    nameRef = nameRef.substring(0, nameRef.length()-1);
+-                    reader.unconsume();
+-                }
+-            }
++            boolean found = (Entities.isBaseNamedEntity(nameRef) || (Entities.isNamedEntity(nameRef) && looksLegit));
+ 
+             if (!found) {
+                 reader.rewindToMark();
+                 if (looksLegit) // named with semicolon
+-                    characterReferenceError(String.format("invalid named referenece '%s'", origNameRef));
++                    characterReferenceError(String.format("invalid named referenece '%s'", nameRef));
+                 return null;
+             }
+             if (inAttribute && (reader.matchesLetter() || reader.matchesDigit() || reader.matchesAny('=', '-', '_'))) {

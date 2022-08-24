@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/Normalize.java
++++ b/src/com/google/javascript/jscomp/Normalize.java
+@@ -79,7 +79,6 @@ class Normalize implements CompilerPass {
+   public void process(Node externs, Node root) {
+     NodeTraversal.traverse(compiler, root,
+         new NormalizeStatements(compiler, assertOnChange));
+-    removeDuplicateDeclarations(root);
+     if (MAKE_LOCAL_NAMES_UNIQUE) {
+       MakeDeclaredNamesUnique renamer = new MakeDeclaredNamesUnique();
+       NodeTraversal t = new NodeTraversal(compiler, renamer);

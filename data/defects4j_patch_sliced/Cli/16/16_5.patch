@@ -1,0 +1,10 @@
+--- a/src/java/org/apache/commons/cli2/option/OptionImpl.java
++++ b/src/java/org/apache/commons/cli2/option/OptionImpl.java
+@@ -33,6 +33,7 @@ import org.apache.commons.cli2.resource.ResourceHelper;
+ public abstract class OptionImpl implements Option {
+     private final int id;
+     private final boolean required;
++    private Option parent;
+ 
+     /**
+      * Creates an OptionImpl with the specified id

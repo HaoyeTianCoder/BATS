@@ -1,0 +1,9 @@
+--- a/src/java/org/apache/commons/jxpath/ri/model/jdom/JDOMAttributeIterator.java
++++ b/src/java/org/apache/commons/jxpath/ri/model/jdom/JDOMAttributeIterator.java
+@@ -114,4 +113,4 @@ public class JDOMAttributeIterator implements NodeIterator {
+         this.position = position;
+         return position >= 1 && position <= attributes.size();
+     }
+-}
++}
+\ No newline at end of file

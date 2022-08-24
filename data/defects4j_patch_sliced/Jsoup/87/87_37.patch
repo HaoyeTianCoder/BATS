@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
+@@ -1015,7 +1015,7 @@ enum HtmlTreeBuilderState {
+                         return anythingElse(t, tb);
+                     break;
+                 case EOF:
+-                    if (tb.currentElement().nodeName().equals("html"))
++                    if (tb.currentElement().normalName().equals("html"))
+                         return true; // stop parsing; frag case
+                     else
+                         return anythingElse(t, tb);

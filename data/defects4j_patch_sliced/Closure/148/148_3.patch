@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/SourceMap.java
++++ b/src/com/google/javascript/jscomp/SourceMap.java
+@@ -47,7 +48,7 @@ public class SourceMap {
+     /**
+      * A unique ID for this mapping for record keeping purposes.
+      */
+-    int id;
++    int id = UNMAPPED;
+ 
+     /**
+      * The input source file.

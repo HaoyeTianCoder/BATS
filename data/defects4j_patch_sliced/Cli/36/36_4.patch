@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/cli/Options.java
++++ b/src/main/java/org/apache/commons/cli/Options.java
+@@ -58,7 +57,7 @@ public class Options implements Serializable
+     private final List<Object> requiredOpts = new ArrayList<Object>();
+ 
+     /** a map of the option groups */
+-    private final Map<String, OptionGroup> optionGroups = new HashMap<String, OptionGroup>();
++    private final Map<String, OptionGroup> optionGroups = new LinkedHashMap<String, OptionGroup>();
+ 
+     /**
+      * Add the specified option group.

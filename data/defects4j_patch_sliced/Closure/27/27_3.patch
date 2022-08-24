@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/rhino/IR.java
++++ b/src/com/google/javascript/rhino/IR.java
+@@ -230,7 +233,7 @@ public class IR {
+   public static Node tryCatch(Node tryBody, Node catchNode) {
+     Preconditions.checkState(tryBody.isBlock());
+     Preconditions.checkState(catchNode.isCatch());
+-    Node catchBody = block(catchNode).copyInformationFrom(catchNode);
++    Node catchBody = blockUnchecked(catchNode).copyInformationFrom(catchNode);
+     return new Node(Token.TRY, tryBody, catchBody);
+   }
+ 

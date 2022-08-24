@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/MakeDeclaredNamesUnique.java
++++ b/src/com/google/javascript/jscomp/MakeDeclaredNamesUnique.java
+@@ -459,6 +483,7 @@ class MakeDeclaredNamesUnique
+ 
+     @Override
+     public void addDeclaredName(String name) {
++      Preconditions.checkState(!name.equals(ARGUMENTS));
+       if (!declarations.containsKey(name)) {
+         declarations.put(name, getUniqueName(name));
+       }

@@ -1,0 +1,12 @@
+--- a/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java
++++ b/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java
+@@ -1884,7 +1924,8 @@ public class UTF8JsonGenerator
+             if (ch <= SURR2_LAST) { // yes, outside of BMP
+                 // Do we have second part?
+                 if (inputOffset >= inputEnd || cbuf == null) { // nope... have to note down
+-                    _reportError("Split surrogate on writeRaw() input (last character)");
++                    _reportError(String.format(
++"Split surrogate on writeRaw() input (last character): first character 0x%4x", ch));
+                 }
+                 _outputSurrogates(ch, cbuf[inputOffset]);
+                 return inputOffset+1;

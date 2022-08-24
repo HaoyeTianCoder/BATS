@@ -1,0 +1,18 @@
+--- a/src/com/google/javascript/rhino/jstype/JSType.java
++++ b/src/com/google/javascript/rhino/jstype/JSType.java
+@@ -589,13 +591,13 @@ public abstract class JSType implements Serializable {
+     if (this instanceof ProxyObjectType) {
+       return ((ProxyObjectType) this)
+           .getReferencedTypeInternal().checkEquivalenceHelper(
+-              that, tolerateUnknowns);
++              that, eqMethod);
+     }
+ 
+     if (that instanceof ProxyObjectType) {
+       return checkEquivalenceHelper(
+           ((ProxyObjectType) that).getReferencedTypeInternal(),
+-          tolerateUnknowns);
++          eqMethod);
+     }
+ 
+     // Relies on the fact that for the base {@link JSType}, only one

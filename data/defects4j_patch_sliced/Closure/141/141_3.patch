@@ -1,0 +1,30 @@
+--- a/src/com/google/javascript/jscomp/PureFunctionIdentifier.java
++++ b/src/com/google/javascript/jscomp/PureFunctionIdentifier.java
+@@ -195,6 +193,27 @@ class PureFunctionIdentifier implements CompilerPass {
+       }
+ 
+       return result;
++    } else if (name.getType() == Token.OR || name.getType() == Token.HOOK) {
++      Node firstVal;
++      if (name.getType() == Token.HOOK) {
++        firstVal = name.getFirstChild().getNext();
++      } else {
++        firstVal = name.getFirstChild();
++      }
++
++      Collection<Definition> defs1 = getCallableDefinitions(definitionProvider,
++                                                            firstVal);
++      Collection<Definition> defs2 = getCallableDefinitions(definitionProvider,
++                                                            firstVal.getNext());
++      if (defs1 != null && defs2 != null) {
++        defs1.addAll(defs2);
++        return defs1;
++      } else {
++        return null;
++      }
++    } else {
++      return null;
++    }
+   }
+ 
+   /**

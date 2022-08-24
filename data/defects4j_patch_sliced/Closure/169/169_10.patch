@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/rhino/jstype/JSType.java
++++ b/src/com/google/javascript/rhino/jstype/JSType.java
+@@ -497,7 +497,7 @@ public abstract class JSType implements Serializable {
+    * @see EquivalenceMethod
+    */
+   public final boolean isInvariant(JSType that) {
+-    return checkEquivalenceHelper(that, false);
++    return checkEquivalenceHelper(that, EquivalenceMethod.INVARIANT);
+   }
+ 
+   /**

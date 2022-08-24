@@ -1,0 +1,12 @@
+--- a/src/com/google/javascript/jscomp/Normalize.java
++++ b/src/com/google/javascript/jscomp/Normalize.java
+@@ -278,6 +278,9 @@ class Normalize implements CompilerPass {
+           }
+           break;
+ 
++        case Token.FUNCTION:
++          normalizeFunctionDeclaration(n);
++          break;
+       }
+     }
+ 

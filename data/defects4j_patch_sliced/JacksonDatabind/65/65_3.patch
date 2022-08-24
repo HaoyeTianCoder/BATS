@@ -1,0 +1,12 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/introspect/BasicBeanDescription.java
++++ b/src/main/java/com/fasterxml/jackson/databind/introspect/BasicBeanDescription.java
+@@ -555,7 +555,9 @@ public class BasicBeanDescription extends BeanDescription
+         final String name = am.getName();
+         // 24-Oct-2016, tatu: As per [databind#1429] must ensure takes exactly one arg
+         if ("valueOf".equals(name)) {
++            if (am.getParameterCount() == 1) {
+                 return true;
++            }
+         }
+         // [databind#208] Also accept "fromString()", if takes String or CharSequence
+         if ("fromString".equals(name)) {

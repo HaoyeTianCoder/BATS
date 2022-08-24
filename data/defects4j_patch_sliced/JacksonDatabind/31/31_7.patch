@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/util/TokenBuffer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/util/TokenBuffer.java
+@@ -789,7 +789,7 @@ sb.append("NativeObjectIds=").append(_hasNativeObjectIds).append(",");
+         if (v == null) {
+             writeNull();
+         } else {
+-            _append(JsonToken.VALUE_NUMBER_INT, v);
++            _appendValue(JsonToken.VALUE_NUMBER_INT, v);
+         }
+     }
+ 

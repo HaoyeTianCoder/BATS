@@ -1,0 +1,26 @@
+--- a/src/com/google/javascript/jscomp/Normalize.java
++++ b/src/com/google/javascript/jscomp/Normalize.java
+@@ -306,12 +316,23 @@ class Normalize implements CompilerPass {
+      *         LP
+      *         BLOCK
+      */
++    private void rewriteFunctionDeclaration(Node n) {
+       // Prepare a spot for the function.
++      Node oldNameNode = n.getFirstChild();
++      Node fnNameNode = oldNameNode.cloneNode();
++      Node var = new Node(Token.VAR, fnNameNode, n.getLineno(), n.getCharno());
++      var.copyInformationFrom(n);
+ 
+       // Prepare the function
++      oldNameNode.setString("");
+ 
+       // Move the function
++      Node parent = n.getParent();
++      parent.replaceChild(n, var);
++      fnNameNode.addChildToFront(n);
+ 
++      reportCodeChange("Function declaration");
++    }
+ 
+     /**
+      * Do normalizations that introduce new siblings or parents.

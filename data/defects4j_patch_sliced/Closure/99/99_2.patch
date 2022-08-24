@@ -1,0 +1,21 @@
+--- a/src/com/google/javascript/jscomp/CheckGlobalThis.java
++++ b/src/com/google/javascript/jscomp/CheckGlobalThis.java
+@@ -122,13 +123,17 @@ final class CheckGlobalThis implements Callback {
+       } else {
+         // Only traverse the right side if it's not an assignment to a prototype
+         // property or subproperty.
++        if (NodeUtil.isGet(lhs)) {
+           if (lhs.getType() == Token.GETPROP &&
+               lhs.getLastChild().getString().equals("prototype")) {
+             return false;
+           }
+-          if (lhs.getQualifiedName() != null && lhs.getQualifiedName().contains(".prototype.")) {
++          Node llhs = lhs.getFirstChild();
++          if (llhs.getType() == Token.GETPROP &&
++              llhs.getLastChild().getString().equals("prototype")) {
+             return false;
+           }
++        }
+       }
+     }
+ 

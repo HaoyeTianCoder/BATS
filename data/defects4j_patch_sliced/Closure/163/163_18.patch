@@ -1,0 +1,12 @@
+--- a/src/com/google/javascript/jscomp/CrossModuleMethodMotion.java
++++ b/src/com/google/javascript/jscomp/CrossModuleMethodMotion.java
+@@ -138,6 +138,9 @@ class CrossModuleMethodMotion implements CompilerPass {
+         // So if we move a prototype method into a deeper module, we must
+         // replace it with a stub function so that it preserves its original
+         // behavior.
++        if (!(prop.getRootVar() != null && prop.getRootVar().isGlobal())) {
++          continue;
++        }
+ 
+         Node value = prop.getValue();
+         if (moduleGraph.dependsOn(deepestCommonModuleRef, prop.getModule()) &&

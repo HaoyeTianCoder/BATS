@@ -1,0 +1,13 @@
+--- a/src/java/org/apache/commons/cli/OptionBuilder.java
++++ b/src/java/org/apache/commons/cli/OptionBuilder.java
+@@ -356,8 +358,10 @@ public final class OptionBuilder
+             option.setType(type);
+             option.setValueSeparator(valuesep);
+             option.setArgName(argName);
++        } finally {
+             // reset the OptionBuilder properties
+             OptionBuilder.reset();
++        }
+ 
+         // return the Option instance
+         return option;

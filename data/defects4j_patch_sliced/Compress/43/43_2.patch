@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/zip/ZipArchiveOutputStream.java
++++ b/src/main/java/org/apache/commons/compress/archivers/zip/ZipArchiveOutputStream.java
+@@ -1072,7 +1072,7 @@ private void writeLocalFileHeader(final ZipArchiveEntry ze, final boolean phased
+ 
+         //store method in local variable to prevent multiple method calls
+         final int zipMethod = ze.getMethod();
+-        final boolean dataDescriptor = usesDataDescriptor(zipMethod);
++        final boolean dataDescriptor = usesDataDescriptor(zipMethod, phased);
+ 
+         putShort(versionNeededToExtract(zipMethod, hasZip64Extra(ze), dataDescriptor), buf, LFH_VERSION_NEEDED_OFFSET);
+ 

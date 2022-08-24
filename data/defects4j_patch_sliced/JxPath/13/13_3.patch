@@ -1,0 +1,21 @@
+--- a/src/java/org/apache/commons/jxpath/ri/NamespaceResolver.java
++++ b/src/java/org/apache/commons/jxpath/ri/NamespaceResolver.java
+@@ -113,14 +135,11 @@ public class NamespaceResolver implements Cloneable {
+      * @return namespace URI or null if the prefix is undefined.
+      * @since JXPath 1.3
+      */
++     protected synchronized String getExternallyRegisteredNamespaceURI(
++            String prefix) {
+         String uri = (String) namespaceMap.get(prefix);
+-        if (uri == null && pointer != null) {
+-            uri = pointer.getNamespaceURI(prefix);
+-        }
+-        if (uri == null && parent != null) {
+-            return parent.getNamespaceURI(prefix);
+-        }
+-        return uri;
++        return uri == null && parent != null ? parent
++                .getExternallyRegisteredNamespaceURI(prefix) : uri;
+     }
+ 
+     /**

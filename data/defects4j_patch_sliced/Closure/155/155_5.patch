@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/Scope.java
++++ b/src/com/google/javascript/jscomp/Scope.java
+@@ -60,6 +60,7 @@ public class Scope implements StaticScope<JSType> {
+   /** Whether this is a bottom scope for the purposes of type inference. */
+   private final boolean isBottom;
+ 
++  private Var arguments;
+ 
+   /** Stores info about a variable */
+   public static class Var implements StaticSlot<JSType> {

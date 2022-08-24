@@ -1,0 +1,13 @@
+--- a/src/java/org/apache/commons/codec/binary/Base64InputStream.java
++++ b/src/java/org/apache/commons/codec/binary/Base64InputStream.java
+@@ -175,7 +177,9 @@ public class Base64InputStream extends FilterInputStream {
+                         base64.decode(buf, 0, c);
+                     }
+                 }
+-            return base64.readResults(b, offset, len);
++                readLen = base64.readResults(b, offset, len);
++            }
++            return readLen;
+         }
+     }
+ 

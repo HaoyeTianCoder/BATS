@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
+@@ -571,7 +571,7 @@ enum HtmlTreeBuilderState {
+                                 tb.error(this);
+                                 tb.removeFromActiveFormattingElements(formatEl);
+                                 return true;
+-                            } else if (!tb.inScope(formatEl.nodeName())) {
++                            } else if (!tb.inScope(formatEl.normalName())) {
+                                 tb.error(this);
+                                 return false;
+                             } else if (tb.currentElement() != formatEl)

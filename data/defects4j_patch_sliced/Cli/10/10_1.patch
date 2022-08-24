@@ -1,0 +1,10 @@
+--- a/src/java/org/apache/commons/cli/Parser.java
++++ b/src/java/org/apache/commons/cli/Parser.java
+@@ -16,6 +16,7 @@
+  */
+ package org.apache.commons.cli;
+ 
++import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.Enumeration;
+ import java.util.Iterator;

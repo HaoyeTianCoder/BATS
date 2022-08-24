@@ -1,0 +1,50 @@
+--- a/src/com/google/javascript/jscomp/ScopedAliases.java
++++ b/src/com/google/javascript/jscomp/ScopedAliases.java
+@@ -300,31 +321,32 @@ class ScopedAliases implements HotSwapCompilerPass {
+         validateScopeCall(t, n, n.getParent());
+       }
+ 
++      if (t.getScopeDepth() < 2) {
++        return;
++      }
+ 
++      int type = n.getType();
++      Var aliasVar = null;
++      if (type == Token.NAME) {
++        String name = n.getString();
++        Var lexicalVar = t.getScope().getVar(n.getString());
++        if (lexicalVar != null && lexicalVar == aliases.get(name)) {
++          aliasVar = lexicalVar;
++        }
++      }
+ 
+       // Validate the top level of the goog.scope block.
+       if (t.getScopeDepth() == 2) {
+-        int type = n.getType();
+-        if (type == Token.NAME && parent.getType() == Token.VAR) {
+-          if (n.hasChildren() && n.getFirstChild().isQualifiedName()) {
+-            String name = n.getString();
+-            Var aliasVar = t.getScope().getVar(name);
+-            aliases.put(name, aliasVar);
+-
++        if (aliasVar != null && NodeUtil.isLValue(n)) {
++          if (aliasVar.getNode() == n) {
+             aliasDefinitionsInOrder.add(n);
+-            String qualifiedName =
+-                aliasVar.getInitialValue().getQualifiedName();
+-            transformation.addAlias(name, qualifiedName);
++
+             // Return early, to ensure that we don't record a definition
+             // twice.
+             return;
+           } else {
+-            report(t, n, GOOG_SCOPE_NON_ALIAS_LOCAL, n.getString());
+-          }
+-        }
+-        if (type == Token.NAME && NodeUtil.isAssignmentOp(parent) &&
+-            n == parent.getFirstChild()) {
+             report(t, n, GOOG_SCOPE_ALIAS_REDEFINED, n.getString());
++          }
+         }
+ 
+         if (type == Token.RETURN) {

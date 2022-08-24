@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/JsonMappingException.java
++++ b/src/main/java/com/fasterxml/jackson/databind/JsonMappingException.java
+@@ -377,7 +378,7 @@ public class JsonMappingException
+             jme = (JsonMappingException) src;
+         } else {
+             // [databind#2128]: try to avoid duplication
+-            String msg = src.getMessage();
++            String msg = ClassUtil.exceptionMessage(src);
+             // Let's use a more meaningful placeholder if all we have is null
+             if (msg == null || msg.length() == 0) {
+                 msg = "(was "+src.getClass().getName()+")";

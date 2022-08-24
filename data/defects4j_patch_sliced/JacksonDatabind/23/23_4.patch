@@ -1,0 +1,13 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/std/NumberSerializers.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/std/NumberSerializers.java
+@@ -172,6 +182,10 @@ public class NumberSerializers
+             super(Number.class, JsonParser.NumberType.INT, "integer");
+         }
+ 
++        @Override
++        public boolean isEmpty(SerializerProvider prov, Number value) {
++            return value.intValue() == 0;
++        }
+ 
+         @Override
+         public void serialize(Number value, JsonGenerator gen, SerializerProvider provider) throws IOException {

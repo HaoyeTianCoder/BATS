@@ -1,0 +1,16 @@
+--- a/src/java/org/apache/commons/codec/binary/Base64.java
++++ b/src/java/org/apache/commons/codec/binary/Base64.java
+@@ -416,13 +416,6 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
+         return eof ? -1 : 0;
+     }
+ 
+-    void setInitialBuffer(byte[] out, int outPos, int outAvail) {
+-        if (out != null && out.length == outAvail) {
+-            buffer = out;
+-            pos = outPos;
+-            readPos = outPos;
+-        }
+-    }
+     /**
+      * <p>
+      * Encodes all of the provided data, starting at inPos, for inAvail bytes. Must be called at least twice: once with

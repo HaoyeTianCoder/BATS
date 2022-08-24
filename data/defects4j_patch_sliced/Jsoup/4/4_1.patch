@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/nodes/Entities.java
++++ b/src/main/java/org/jsoup/nodes/Entities.java
+@@ -61,7 +61,7 @@ public class Entities {
+                 } catch (NumberFormatException e) {
+                 } // skip
+             } else {
+-                String name = m.group(1).toLowerCase();
++                String name = m.group(1);
+                 if (full.containsKey(name))
+                     charval = full.get(name);
+             }

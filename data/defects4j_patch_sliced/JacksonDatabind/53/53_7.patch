@@ -1,0 +1,13 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/type/TypeFactory.java
++++ b/src/main/java/com/fasterxml/jackson/databind/type/TypeFactory.java
+@@ -1222,9 +1236,7 @@ public final class TypeFactory
+             }
+         }
+         context.resolveSelfReferences(result);
+-        if (cachable) {
+-            _typeCache.putIfAbsent(rawType, result);
+-        }
++        _typeCache.putIfAbsent(key, result); // cache object syncs
+         return result;
+     }
+ 

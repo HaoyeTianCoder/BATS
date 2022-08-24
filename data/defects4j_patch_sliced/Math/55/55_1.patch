@@ -1,0 +1,24 @@
+--- a/src/main/java/org/apache/commons/math/geometry/Vector3D.java
++++ b/src/main/java/org/apache/commons/math/geometry/Vector3D.java
+@@ -456,9 +456,21 @@ public class Vector3D implements Serializable {
+    */
+   public static Vector3D crossProduct(final Vector3D v1, final Vector3D v2) {
+ 
++      final double n1 = v1.getNormSq();
++      final double n2 = v2.getNormSq();
++      if ((n1 * n2) < MathUtils.SAFE_MIN) {
++          return ZERO;
++      }
+ 
+       // rescale both vectors without losing precision,
+       // to ensure their norm are the same order of magnitude
++      final int deltaExp = (FastMath.getExponent(n1) - FastMath.getExponent(n2)) / 4;
++      final double x1    = FastMath.scalb(v1.x, -deltaExp);
++      final double y1    = FastMath.scalb(v1.y, -deltaExp);
++      final double z1    = FastMath.scalb(v1.z, -deltaExp);
++      final double x2    = FastMath.scalb(v2.x,  deltaExp);
++      final double y2    = FastMath.scalb(v2.y,  deltaExp);
++      final double z2    = FastMath.scalb(v2.z,  deltaExp);
+ 
+       // we reduce cancellation errors by preconditioning,
+       // we replace v1 by v3 = v1 - rho v2 with rho chosen in order to compute

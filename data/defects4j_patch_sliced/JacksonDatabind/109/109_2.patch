@@ -1,0 +1,12 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/std/NumberSerializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/std/NumberSerializer.java
+@@ -55,6 +56,9 @@ public class NumberSerializer
+             switch (format.getShape()) {
+             case STRING:
+                 // [databind#2264]: Need special handling for `BigDecimal`
++                if (((Class<?>) handledType()) == BigDecimal.class) {
++                    return bigDecimalAsStringSerializer();
++                }
+                 return ToStringSerializer.instance;
+             default:
+             }

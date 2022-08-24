@@ -1,0 +1,22 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/std/EnumSerializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/std/EnumSerializer.java
+@@ -214,15 +214,16 @@ public class EnumSerializer
+      * index (number) or not.
+      */
+     protected static Boolean _isShapeWrittenUsingIndex(Class<?> enumClass,
+-            JsonFormat.Value format, boolean fromClass)
++            JsonFormat.Value format, boolean fromClass,
++            Boolean defaultValue)
+     {
+         JsonFormat.Shape shape = (format == null) ? null : format.getShape();
+         if (shape == null) {
+-            return null;
++            return defaultValue;
+         }
+         // i.e. "default", check dynamically
+         if (shape == Shape.ANY || shape == Shape.SCALAR) {
+-            return null;
++            return defaultValue;
+         }
+         // 19-May-2016, tatu: also consider "natural" shape
+         if (shape == Shape.STRING || shape == Shape.NATURAL) {

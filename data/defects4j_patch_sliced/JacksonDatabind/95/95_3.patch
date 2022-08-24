@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/type/TypeFactory.java
++++ b/src/main/java/com/fasterxml/jackson/databind/type/TypeFactory.java
+@@ -893,7 +893,7 @@ public final class TypeFactory
+         int len = parameterClasses.length;
+         JavaType[] pt = new JavaType[len];
+         for (int i = 0; i < len; ++i) {
+-            pt[i] = _fromClass(null, parameterClasses[i], null);
++            pt[i] = _fromClass(null, parameterClasses[i], EMPTY_BINDINGS);
+         }
+         return constructParametricType(parametrized, pt);
+     }

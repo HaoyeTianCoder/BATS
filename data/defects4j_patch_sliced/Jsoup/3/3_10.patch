@@ -1,0 +1,18 @@
+--- a/src/main/java/org/jsoup/parser/Tag.java
++++ b/src/main/java/org/jsoup/parser/Tag.java
+@@ -152,9 +155,15 @@ public class Tag {
+         return (!ancestors.isEmpty()) ? ancestors.get(0) : null;
+     }
+ 
++    boolean requiresSpecificParent() {
++        return this.parent != null;
++    }
+ 
+     boolean isValidParent(Tag child) {
++        return this.equals(child.parent);
++    }
+ 
++    boolean isValidAncestor(Tag child) {
+         if (child.ancestors.isEmpty())
+             return true; // HTML tag
+ 

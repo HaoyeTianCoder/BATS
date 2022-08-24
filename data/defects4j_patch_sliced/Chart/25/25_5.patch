@@ -1,0 +1,13 @@
+--- a/source/org/jfree/chart/renderer/category/StatisticalBarRenderer.java
++++ b/source/org/jfree/chart/renderer/category/StatisticalBarRenderer.java
+@@ -456,7 +465,9 @@ public class StatisticalBarRenderer extends BarRenderer
+         }
+ 
+         // standard deviation lines
+-            double valueDelta = dataset.getStdDevValue(row, column).doubleValue();
++        Number n = dataset.getStdDevValue(row, column);
++        if (n != null) {
++            double valueDelta = n.doubleValue();
+             double highVal = rangeAxis.valueToJava2D(meanValue.doubleValue() 
+                     + valueDelta, dataArea, yAxisLocation);
+             double lowVal = rangeAxis.valueToJava2D(meanValue.doubleValue() 

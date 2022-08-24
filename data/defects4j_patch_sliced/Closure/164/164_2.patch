@@ -1,0 +1,14 @@
+--- a/src/com/google/javascript/rhino/jstype/ArrowType.java
++++ b/src/com/google/javascript/rhino/jstype/ArrowType.java
+@@ -149,6 +161,11 @@ final class ArrowType extends JSType {
+     }
+ 
+     // "that" can't be a supertype, because it's missing a required arguement.
++    if (thisParam != null
++        && !thisParam.isOptionalArg() && !thisParam.isVarArgs()
++        && thatParam == null) {
++      return false;
++    }
+ 
+     return true;
+   }

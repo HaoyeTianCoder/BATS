@@ -1,0 +1,19 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
+@@ -528,14 +528,14 @@ enum HtmlTreeBuilderState {
+                         else
+                             tb.transition(InSelect);
+                     } else if (StringUtil.inSorted(name, Constants.InBodyStartOptions)) {
+-                        if (tb.currentElement().nodeName().equals("option"))
++                        if (tb.currentElement().normalName().equals("option"))
+                             tb.processEndTag("option");
+                         tb.reconstructFormattingElements();
+                         tb.insert(startTag);
+                     } else if (StringUtil.inSorted(name, Constants.InBodyStartRuby)) {
+                         if (tb.inScope("ruby")) {
+                             tb.generateImpliedEndTags();
+-                            if (!tb.currentElement().nodeName().equals("ruby")) {
++                            if (!tb.currentElement().normalName().equals("ruby")) {
+                                 tb.error(this);
+                                 tb.popStackToBefore("ruby"); // i.e. close up to but not include name
+                             }

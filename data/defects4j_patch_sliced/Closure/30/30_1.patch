@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/FlowSensitiveInlineVariables.java
++++ b/src/com/google/javascript/jscomp/FlowSensitiveInlineVariables.java
+@@ -154,7 +154,7 @@ class FlowSensitiveInlineVariables extends AbstractPostOrderCallback
+ 
+   @Override
+   public void process(Node externs, Node root) {
+-    (new NodeTraversal(compiler, this)).traverse(root);
++    (new NodeTraversal(compiler, this)).traverseRoots(externs, root);
+   }
+ 
+   @Override

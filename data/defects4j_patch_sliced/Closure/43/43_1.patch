@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/TypedScopeCreator.java
++++ b/src/com/google/javascript/jscomp/TypedScopeCreator.java
+@@ -417,6 +417,7 @@ final class TypedScopeCreator implements ScopeCreator {
+      * For more information, see
+      * http://code.google.com/p/closure-compiler/issues/detail?id=314
+      */
++    private List<Node> lentObjectLiterals = null;
+ 
+     /**
+      * Type-less stubs.

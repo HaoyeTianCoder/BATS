@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/BasicSerializerFactory.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/BasicSerializerFactory.java
+@@ -838,6 +856,7 @@ public abstract class BasicSerializerFactory
+         //   types can not be annotated (in theory I guess we could have mix-ins but... ?)
+         //   so we need not do primary annotation lookup here.
+         //   So all we need is (1) Custom, (2) Default array serializers
++        SerializationConfig config = prov.getConfig();
+         JsonSerializer<?> ser = null;
+ 
+         for (Serializers serializers : customSerializers()) { // (1) Custom

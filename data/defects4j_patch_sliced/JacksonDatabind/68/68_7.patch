@@ -1,0 +1,15 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializerBase.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializerBase.java
+@@ -1301,9 +1305,10 @@ public abstract class BeanDeserializerBase
+             return _valueInstantiator.createFromDouble(ctxt, p.getDoubleValue());
+         }
+         // actually, could also be BigDecimal, so:
+-        if (_delegateDeserializer != null) {
++        JsonDeserializer<Object> delegateDeser = _delegateDeserializer();
++        if (delegateDeser != null) {
+             return _valueInstantiator.createUsingDelegate(ctxt,
+-                    _delegateDeserializer.deserialize(p, ctxt));
++                    delegateDeser.deserialize(p, ctxt));
+         }
+         return ctxt.handleMissingInstantiator(handledType(), p,
+                 "no suitable creator method found to deserialize from Number value (%s)",

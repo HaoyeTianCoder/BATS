@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilder.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilder.java
+@@ -578,7 +578,7 @@ public class HtmlTreeBuilder extends TreeBuilder {
+     boolean isSpecial(Element el) {
+         // todo: mathml's mi, mo, mn
+         // todo: svg's foreigObject, desc, title
+-        String name = el.nodeName();
++        String name = el.normalName();
+         return inSorted(name, TagSearchSpecial);
+     }
+ 

@@ -1,0 +1,27 @@
+--- a/src/com/google/javascript/jscomp/TypeValidator.java
++++ b/src/com/google/javascript/jscomp/TypeValidator.java
+@@ -585,7 +593,24 @@ class TypeValidator {
+             prop, implementedInterface.toString(), instance.toString()));
+       }
+       registerMismatch(instance, implementedInterface);
++    } else {
++      JSType found = instance.getPropertyType(prop);
++      JSType required
++        = implementedInterface.getImplicitPrototype().getPropertyType(prop);
++      found = found.restrictByNotNullOrUndefined();
++      required = required.restrictByNotNullOrUndefined();
++      if (!found.canAssignTo(required)) {
+         // Implemented, but not correctly typed
++        if (shouldReport) {
++          FunctionType constructor
++            = implementedInterface.toObjectType().getConstructor();
++          compiler.report(t.makeError(n,
++              HIDDEN_INTERFACE_PROPERTY_MISMATCH, prop,
++              constructor.getTopMostDefiningType(prop).toString(),
++              required.toString(), found.toString()));
++        }
++        registerMismatch(found, required);
++      }
+     }
+   }
+ 

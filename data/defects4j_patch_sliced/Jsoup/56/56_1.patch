@@ -1,0 +1,10 @@
+--- a/src/main/java/org/jsoup/nodes/DocumentType.java
++++ b/src/main/java/org/jsoup/nodes/DocumentType.java
+@@ -12,6 +12,7 @@ public class DocumentType extends Node {
+     public static final String PUBLIC_KEY = "PUBLIC";
+     public static final String SYSTEM_KEY = "SYSTEM";
+     private static final String NAME = "name";
++    private static final String PUB_SYS_KEY = "pubSysKey"; // PUBLIC or SYSTEM
+     private static final String PUBLIC_ID = "publicId";
+     private static final String SYSTEM_ID = "systemId";
+     // todo: quirk mode from publicId and systemId

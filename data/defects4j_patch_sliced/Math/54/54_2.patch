@@ -1,0 +1,14 @@
+--- a/src/main/java/org/apache/commons/math/dfp/Dfp.java
++++ b/src/main/java/org/apache/commons/math/dfp/Dfp.java
+@@ -2316,7 +2319,10 @@ public class Dfp implements FieldElement<Dfp> {
+ 
+         Dfp y = this;
+         boolean negate = false;
+-        if (lessThan(getZero())) {
++        int cmp0 = compare(this, getZero());
++        if (cmp0 == 0) {
++            return sign < 0 ? -0.0 : +0.0;
++        } else if (cmp0 < 0) {
+             y = negate();
+             negate = true;
+         }

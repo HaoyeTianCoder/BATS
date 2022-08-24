@@ -1,0 +1,17 @@
+--- a/src/com/google/javascript/jscomp/InlineObjectLiterals.java
++++ b/src/com/google/javascript/jscomp/InlineObjectLiterals.java
+@@ -178,6 +179,14 @@ class InlineObjectLiterals implements CompilerPass {
+           // We short-circuit this problem by bailing out if we see a reference
+           // to a property that isn't defined on the object literal. This
+           // isn't a perfect algorithm, but it should catch most cases.
++          String propName = parent.getLastChild().getString();
++          if (!validProperties.contains(propName)) {
++            if (NodeUtil.isVarOrSimpleAssignLhs(parent, gramps)) {
++              validProperties.add(propName);
++            } else {
++              return false;
++            }
++          }
+           continue;
+         }
+ 

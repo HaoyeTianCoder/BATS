@@ -1,0 +1,16 @@
+--- a/src/main/java/org/apache/commons/math/optimization/general/LevenbergMarquardtOptimizer.java
++++ b/src/main/java/org/apache/commons/math/optimization/general/LevenbergMarquardtOptimizer.java
+@@ -341,9 +348,12 @@ public class LevenbergMarquardtOptimizer extends AbstractLeastSquaresOptimizer {
+                 double[] tmpVec = residuals;
+                 residuals = oldRes;
+                 oldRes    = tmpVec;
++                tmpVec    = objective;
++                objective = oldObj;
++                oldObj    = tmpVec;
+ 
+                 // determine the Levenberg-Marquardt parameter
+-                determineLMParameter(oldRes, delta, diag, work1, work2, work3);
++                determineLMParameter(qtf, delta, diag, work1, work2, work3);
+ 
+                 // compute the new point and the norm of the evolution direction
+                 double lmNorm = 0;

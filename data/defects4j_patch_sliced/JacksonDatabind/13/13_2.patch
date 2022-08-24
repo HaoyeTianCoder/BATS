@@ -1,0 +1,12 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/impl/ObjectIdValueProperty.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/impl/ObjectIdValueProperty.java
+@@ -89,6 +89,9 @@ public final class ObjectIdValueProperty
+          *  will be generated externally, at a later point, and is not available
+          *  quite yet. Typical use case is with DB inserts.
+          */
++        if (id == null) {
++            return null;
++        }
+         
+         ReadableObjectId roid = ctxt.findObjectId(id, _objectIdReader.generator, _objectIdReader.resolver);
+         roid.bindItem(instance);

@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/TypedScopeCreator.java
++++ b/src/com/google/javascript/jscomp/TypedScopeCreator.java
+@@ -631,6 +633,7 @@ final class TypedScopeCreator implements ScopeCreator {
+             .inferInheritance(info)
+             .inferThisType(info, owner)
+             .inferParameterTypes(parametersNode, info)
++            .inferReturnStatements(fnBlock)
+             .buildAndRegister();
+       }
+ 

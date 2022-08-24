@@ -1,0 +1,13 @@
+--- a/src/main/java/org/apache/commons/math/optimization/general/LevenbergMarquardtOptimizer.java
++++ b/src/main/java/org/apache/commons/math/optimization/general/LevenbergMarquardtOptimizer.java
+@@ -439,10 +457,6 @@ public class LevenbergMarquardtOptimizer extends AbstractLeastSquaresOptimizer {
+                        (delta <= parRelativeTolerance * xNorm)) {
+                        return current;
+                    }
+-                } else {
+-                    if (checker.converged(getIterations(), previous, current)) {
+-                        return current;
+-                    }
+                 }
+                 // tests for termination and stringent tolerances
+                 // (2.2204e-16 is the machine epsilon for IEEE754)

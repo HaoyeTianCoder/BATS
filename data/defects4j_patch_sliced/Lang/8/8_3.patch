@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/lang3/time/FastDatePrinter.java
++++ b/src/main/java/org/apache/commons/lang3/time/FastDatePrinter.java
+@@ -1131,6 +1129,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
+          */
+         @Override
+         public void appendTo(StringBuffer buffer, Calendar calendar) {
++            TimeZone zone = calendar.getTimeZone();
+             if (zone.useDaylightTime()
+                     && calendar.get(Calendar.DST_OFFSET) != 0) {
+                 buffer.append(getTimeZoneDisplay(zone, true, mStyle, mLocale));

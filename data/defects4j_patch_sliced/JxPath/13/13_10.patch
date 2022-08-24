@@ -1,0 +1,16 @@
+--- a/src/java/org/apache/commons/jxpath/ri/model/dom/DOMNodePointer.java
++++ b/src/java/org/apache/commons/jxpath/ri/model/dom/DOMNodePointer.java
+@@ -186,6 +188,13 @@ public class DOMNodePointer extends NodePointer {
+     /* (non-Javadoc)
+      * @see org.apache.commons.jxpath.ri.model.NodePointer#getNamespaceResolver()
+      */
++    public synchronized NamespaceResolver getNamespaceResolver() {
++        if (localNamespaceResolver == null) {
++            localNamespaceResolver = new NamespaceResolver(super.getNamespaceResolver());
++            localNamespaceResolver.setNamespaceContextPointer(this);
++        }
++        return localNamespaceResolver;
++    }
+ 
+     public String getNamespaceURI(String prefix) {
+         if (prefix == null || prefix.equals("")) {

@@ -1,0 +1,10 @@
+--- a/source/org/jfree/data/statistics/DefaultBoxAndWhiskerCategoryDataset.java
++++ b/source/org/jfree/data/statistics/DefaultBoxAndWhiskerCategoryDataset.java
+@@ -154,6 +154,7 @@ public class DefaultBoxAndWhiskerCategoryDataset extends AbstractDataset
+                 && this.minimumRangeValueColumn == c))  {
+             updateBounds();
+         }
++        else {
+         
+             double minval = Double.NaN;
+             if (item.getMinOutlier() != null) {

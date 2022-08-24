@@ -1,0 +1,13 @@
+--- a/src/com/google/javascript/jscomp/ScopedAliases.java
++++ b/src/com/google/javascript/jscomp/ScopedAliases.java
+@@ -353,8 +353,8 @@ class ScopedAliases implements HotSwapCompilerPass {
+       for (Var v : scope.getVarIterable()) {
+         Node n = v.getNode();
+         Node parent = n.getParent();
+-        boolean isVarAssign = parent.isVar() && n.hasChildren();
+-        if (isVarAssign && n.getFirstChild().isQualifiedName()) {
++        boolean isVar = parent.isVar();
++        if (isVar && n.getFirstChild() != null && n.getFirstChild().isQualifiedName()) {
+           recordAlias(v);
+         } else if (v.isBleedingFunction()) {
+           // Bleeding functions already get a BAD_PARAMETERS error, so just

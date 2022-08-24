@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/Compiler.java
++++ b/src/com/google/javascript/jscomp/Compiler.java
+@@ -265,6 +265,7 @@ public class Compiler extends AbstractCompiler {
+             getDiagnosticGroups().getRegisteredGroups()));
+     guards.add(options.getWarningsGuard());
+ 
++    ComposeWarningsGuard composedGuards = new ComposeWarningsGuard(guards);
+ 
+     // All passes must run the variable check. This synthesizes
+     // variables later so that the compiler doesn't crash. It also

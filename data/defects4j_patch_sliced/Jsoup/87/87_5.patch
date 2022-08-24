@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilder.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilder.java
+@@ -352,7 +352,7 @@ public class HtmlTreeBuilder extends TreeBuilder {
+     void popStackToBefore(String elName) {
+         for (int pos = stack.size() -1; pos >= 0; pos--) {
+             Element next = stack.get(pos);
+-            if (next.nodeName().equals(elName)) {
++            if (next.normalName().equals(elName)) {
+                 break;
+             } else {
+                 stack.remove(pos);

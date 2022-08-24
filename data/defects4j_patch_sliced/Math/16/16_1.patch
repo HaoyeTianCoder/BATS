@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/math3/util/FastMath.java
++++ b/src/main/java/org/apache/commons/math3/util/FastMath.java
+@@ -79,6 +79,7 @@ import java.io.PrintStream;
+  */
+ public class FastMath {
+     /** StrictMath.log(Double.MAX_VALUE): {@value} */
++    private static final double LOG_MAX_VALUE = StrictMath.log(Double.MAX_VALUE);
+ 
+     /** Archimede's constant PI, ratio of circle circumference to diameter. */
+     public static final double PI = 105414357.0 / 33554432.0 + 1.984187159361080883e-9;

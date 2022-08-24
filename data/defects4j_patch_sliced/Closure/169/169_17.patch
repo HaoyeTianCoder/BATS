@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/rhino/jstype/RecordType.java
++++ b/src/com/google/javascript/rhino/jstype/RecordType.java
+@@ -115,7 +115,7 @@ class RecordType extends PrototypeObjectType {
+   }
+ 
+   boolean checkRecordEquivalenceHelper(
+-      RecordType otherRecord, boolean tolerateUnknowns) {
++      RecordType otherRecord, EquivalenceMethod eqMethod) {
+     Set<String> keySet = properties.keySet();
+     Map<String, JSType> otherProps = otherRecord.properties;
+     if (!otherProps.keySet().equals(keySet)) {

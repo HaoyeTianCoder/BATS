@@ -1,0 +1,20 @@
+--- a/src/main/java/org/apache/commons/lang3/StringUtils.java
++++ b/src/main/java/org/apache/commons/lang3/StringUtils.java
+@@ -1573,8 +1592,16 @@ public class StringUtils {
+         int strLen = str.length();
+         for (int i = 0; i < strLen; i++) {
+             char ch = str.charAt(i);
+-            if (searchChars.indexOf(ch) < 0) {
++            boolean chFound = searchChars.indexOf(ch) >= 0;
++            if (i + 1 < strLen && Character.isHighSurrogate(ch)) {
++                char ch2 = str.charAt(i + 1);
++                if (chFound && searchChars.indexOf(ch2) < 0) {
+                     return i;
++                }
++            } else {
++                if (!chFound) {
++                    return i;
++                }
+             }
+         }
+         return INDEX_NOT_FOUND;

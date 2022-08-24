@@ -1,0 +1,16 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializerBase.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializerBase.java
+@@ -1266,10 +1268,11 @@ public abstract class BeanDeserializerBase
+         /* Bit complicated if we have delegating creator; may need to use it,
+          * or might not...
+          */
+-        if (_delegateDeserializer != null) {
++        JsonDeserializer<Object> delegateDeser = _delegateDeserializer();
++        if (delegateDeser != null) {
+             if (!_valueInstantiator.canCreateFromString()) {
+                 Object bean = _valueInstantiator.createUsingDelegate(ctxt,
+-                        _delegateDeserializer.deserialize(p, ctxt));
++                        delegateDeser.deserialize(p, ctxt));
+                 if (_injectables != null) {
+                     injectValues(ctxt, bean);
+                 }

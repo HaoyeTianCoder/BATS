@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/ScopedAliases.java
++++ b/src/com/google/javascript/jscomp/ScopedAliases.java
+@@ -223,6 +223,7 @@ class ScopedAliases implements HotSwapCompilerPass {
+       if (n != null && isCallToScopeMethod(n)) {
+         transformation = transformationHandler.logAliasTransformation(
+             n.getSourceFileName(), getSourceRegion(n));
++        findAliases(t);
+       }
+     }
+ 

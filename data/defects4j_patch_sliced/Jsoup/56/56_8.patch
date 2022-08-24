@@ -1,0 +1,12 @@
+--- a/src/main/java/org/jsoup/parser/Token.java
++++ b/src/main/java/org/jsoup/parser/Token.java
+@@ -53,6 +55,9 @@ abstract class Token {
+             return name.toString();
+         }
+ 
++        String getPubSysKey() {
++            return pubSysKey;
++        }
+ 
+         String getPublicIdentifier() {
+             return publicIdentifier.toString();

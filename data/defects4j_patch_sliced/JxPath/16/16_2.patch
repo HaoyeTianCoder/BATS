@@ -1,0 +1,11 @@
+--- a/src/java/org/apache/commons/jxpath/ri/model/jdom/JDOMNodePointer.java
++++ b/src/java/org/apache/commons/jxpath/ri/model/jdom/JDOMNodePointer.java
+@@ -388,7 +388,7 @@ public class JDOMNodePointer extends NodePointer {
+         if (test instanceof NodeTypeTest) {
+             switch (((NodeTypeTest) test).getNodeType()) {
+                 case Compiler.NODE_TYPE_NODE :
+-                    return (node instanceof Element) || (node instanceof Document);
++                    return true;
+                 case Compiler.NODE_TYPE_TEXT :
+                     return (node instanceof Text) || (node instanceof CDATA);
+                 case Compiler.NODE_TYPE_COMMENT :

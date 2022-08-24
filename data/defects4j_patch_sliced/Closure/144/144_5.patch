@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/TypedScopeCreator.java
++++ b/src/com/google/javascript/jscomp/TypedScopeCreator.java
+@@ -574,6 +574,7 @@ final class TypedScopeCreator implements ScopeCreator {
+       Node fnRoot = isFnLiteral ? rValue : null;
+       Node parametersNode = isFnLiteral ?
+           rValue.getFirstChild().getNext() : null;
++      Node fnBlock = isFnLiteral ? parametersNode.getNext() : null;
+ 
+       if (functionType == null && info != null && info.hasType()) {
+         JSType type = info.getType().evaluate(scope, typeRegistry);

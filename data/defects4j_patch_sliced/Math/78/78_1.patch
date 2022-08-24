@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/math/ode/events/EventState.java
++++ b/src/main/java/org/apache/commons/math/ode/events/EventState.java
+@@ -188,6 +188,7 @@ public class EventState {
+                 if (g0Positive ^ (gb >= 0)) {
+                     // there is a sign change: an event is expected during this step
+ 
++                    if (ga * gb > 0) {
+                         // this is a corner case:
+                         // - there was an event near ta,
+                         // - there is another event between ta and tb

@@ -1,0 +1,9 @@
+--- a/src/main/java/org/jsoup/nodes/Document.java
++++ b/src/main/java/org/jsoup/nodes/Document.java
+@@ -1,5 +1,6 @@
+ package org.jsoup.nodes;
+ 
++import org.jsoup.helper.StringUtil;
+ import org.jsoup.helper.Validate;
+ import org.jsoup.parser.Tag;
+ import org.jsoup.select.Elements;

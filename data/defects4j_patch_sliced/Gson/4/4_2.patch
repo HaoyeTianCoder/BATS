@@ -1,0 +1,12 @@
+--- a/gson/src/main/java/com/google/gson/stream/JsonReader.java
++++ b/gson/src/main/java/com/google/gson/stream/JsonReader.java
+@@ -582,9 +579,6 @@ public class JsonReader implements Closeable {
+     default:
+       pos--; // Don't consume the first character in a literal value.
+     }
+-    if (stackSize == 1) {
+-      checkLenient();
+-    }
+ 
+     int result = peekKeyword();
+     if (result != PEEKED_NONE) {

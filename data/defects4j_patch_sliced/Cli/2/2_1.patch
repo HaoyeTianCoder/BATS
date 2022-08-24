@@ -1,0 +1,15 @@
+--- a/src/java/org/apache/commons/cli/PosixParser.java
++++ b/src/java/org/apache/commons/cli/PosixParser.java
+@@ -302,8 +302,9 @@ public class PosixParser extends Parser {
+             }
+             else
+             {
+-                tokens.add("-" + ch);
++                tokens.add(token);
++                break;
+             }
+         }
+     }
+-}
++}
+\ No newline at end of file

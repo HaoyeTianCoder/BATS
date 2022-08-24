@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/rhino/jstype/FunctionType.java
++++ b/src/com/google/javascript/rhino/jstype/FunctionType.java
+@@ -887,7 +887,7 @@ public class FunctionType extends PrototypeObjectType {
+    * have signatures, two interfaces are equal if their names match.
+    */
+   boolean checkFunctionEquivalenceHelper(
+-      FunctionType that, boolean tolerateUnknowns) {
++      FunctionType that, EquivalenceMethod eqMethod) {
+     if (isConstructor()) {
+       if (that.isConstructor()) {
+         return this == that;

@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/lang3/time/FastDatePrinter.java
++++ b/src/main/java/org/apache/commons/lang3/time/FastDatePrinter.java
+@@ -1109,7 +1108,6 @@ public class FastDatePrinter implements DatePrinter, Serializable {
+         TimeZoneNameRule(TimeZone timeZone, Locale locale, int style) {
+             mLocale = locale;
+             mStyle = style;
+-            zone = timeZone;
+             
+             mStandard = getTimeZoneDisplay(timeZone, false, style, locale);
+             mDaylight = getTimeZoneDisplay(timeZone, true, style, locale);

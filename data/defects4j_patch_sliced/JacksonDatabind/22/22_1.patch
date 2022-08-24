@@ -1,0 +1,44 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/BasicSerializerFactory.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/BasicSerializerFactory.java
+@@ -577,30 +577,35 @@ public abstract class BasicSerializerFactory
+              */
+             JsonSerializer<Object> keySerializer = _findKeySerializer(prov, beanDesc.getClassInfo());
+             if (mlt.isTrueMapType()) {
+-                return buildMapSerializer(config, (MapType) mlt, beanDesc, staticTyping,
++                return buildMapSerializer(prov, (MapType) mlt, beanDesc, staticTyping,
+                         keySerializer, elementTypeSerializer, elementValueSerializer);
+             }
+             // With Map-like, just 2 options: (1) Custom, (2) Annotations
+             JsonSerializer<?> ser = null;
++            MapLikeType mlType = (MapLikeType) type;
+             for (Serializers serializers : customSerializers()) { // (1) Custom
+-                MapLikeType mlType = (MapLikeType) type;
+                 ser = serializers.findMapLikeSerializer(config,
+                         mlType, beanDesc, keySerializer, elementTypeSerializer, elementValueSerializer);
++                if (ser != null) {
++                    break;
++                }
++            }
++            if (ser == null) { // (2) Annotations-based ones:
++                ser = findSerializerByAnnotations(prov, type, beanDesc);
++            }
+             if (ser != null) {
+                 if (_factoryConfig.hasSerializerModifiers()) {
+                     for (BeanSerializerModifier mod : _factoryConfig.serializerModifiers()) {
+                         ser = mod.modifyMapLikeSerializer(config, mlType, beanDesc, ser);
+                     }
+-                    }
+-                    return ser;
+                 }
+             }
+-            return null;
++            return ser;
+         }
+         if (type.isCollectionLikeType()) {
+             CollectionLikeType clt = (CollectionLikeType) type;
+             if (clt.isTrueCollectionType()) {
+-                return buildCollectionSerializer(config,  (CollectionType) clt, beanDesc, staticTyping,
++                return buildCollectionSerializer(prov,  (CollectionType) clt, beanDesc, staticTyping,
+                         elementTypeSerializer, elementValueSerializer);
+             }
+             // With Map-like, just 2 options: (1) Custom, (2) Annotations

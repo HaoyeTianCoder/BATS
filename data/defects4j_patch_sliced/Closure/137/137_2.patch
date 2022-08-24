@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/MakeDeclaredNamesUnique.java
++++ b/src/com/google/javascript/jscomp/MakeDeclaredNamesUnique.java
+@@ -45,6 +45,7 @@ import java.util.Set;
+ class MakeDeclaredNamesUnique
+     implements NodeTraversal.ScopedCallback {
+ 
++  public static final String ARGUMENTS = "arguments";
+   private Deque<Renamer> nameStack = new ArrayDeque<Renamer>();
+   private final Renamer rootRenamer;
+ 

@@ -1,0 +1,15 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/std/StringCollectionDeserializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/std/StringCollectionDeserializer.java
+@@ -104,8 +104,11 @@ public final class StringCollectionDeserializer
+         JsonDeserializer<Object> delegate = null;
+         if (_valueInstantiator != null) {
+             // [databind#2324]: check both array-delegating and delegating
+-            AnnotatedWithParams delegateCreator = _valueInstantiator.getDelegateCreator();
++            AnnotatedWithParams delegateCreator = _valueInstantiator.getArrayDelegateCreator();
+             if (delegateCreator != null) {
++                JavaType delegateType = _valueInstantiator.getArrayDelegateType(ctxt.getConfig());
++                delegate = findDeserializer(ctxt, delegateType, property);
++            } else if ((delegateCreator = _valueInstantiator.getDelegateCreator()) != null) {
+                 JavaType delegateType = _valueInstantiator.getDelegateType(ctxt.getConfig());
+                 delegate = findDeserializer(ctxt, delegateType, property);
+             }

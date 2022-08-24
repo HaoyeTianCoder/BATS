@@ -1,0 +1,16 @@
+--- a/src/com/google/javascript/jscomp/FunctionInjector.java
++++ b/src/com/google/javascript/jscomp/FunctionInjector.java
+@@ -687,12 +695,11 @@ class FunctionInjector {
+    * </pre>
+    */
+   private CanInlineResult canInlineReferenceDirectly(
+-      Node callNode, Node fnNode) {
++      Node callNode, Node fnNode, Set<String> namesToAlias) {
+     if (!isDirectCallNodeReplacementPossible(fnNode)) {
+       return CanInlineResult.NO;
+     }
+ 
+-    Node block = fnNode.getLastChild();
+     // CALL NODE: [ NAME, ARG1, ARG2, ... ]
+     Node cArg = callNode.getFirstChild().getNext();
+ 

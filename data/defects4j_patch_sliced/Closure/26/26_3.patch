@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/ProcessCommonJSModules.java
++++ b/src/com/google/javascript/jscomp/ProcessCommonJSModules.java
+@@ -225,6 +229,7 @@ public class ProcessCommonJSModules implements CompilerPass {
+       Node exports = prop.getChildAtIndex(1);
+       exports.putProp(Node.ORIGINALNAME_PROP, "exports");
+       exports.setString("module$exports");
++      modulesWithExports.add(moduleName);
+     }
+ 
+     /**

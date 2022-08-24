@@ -1,0 +1,13 @@
+--- a/src/main/java/org/apache/commons/collections4/IteratorUtils.java
++++ b/src/main/java/org/apache/commons/collections4/IteratorUtils.java
+@@ -602,7 +602,9 @@ public class IteratorUtils {
+     public static <E> Iterator<E> collatedIterator(final Comparator<? super E> comparator,
+                                                    final Iterator<? extends E> iterator1,
+                                                    final Iterator<? extends E> iterator2) {
+-        return new CollatingIterator<E>(comparator, iterator1, iterator2);
++        @SuppressWarnings("unchecked")
++        final Comparator<E> comp = comparator == null ? ComparatorUtils.NATURAL_COMPARATOR : comparator;
++        return new CollatingIterator<E>(comp, iterator1, iterator2);
+     }
+ 
+     /**

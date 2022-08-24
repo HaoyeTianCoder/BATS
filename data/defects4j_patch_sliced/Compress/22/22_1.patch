@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorInputStream.java
++++ b/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorInputStream.java
+@@ -64,7 +64,6 @@ public class BZip2CompressorInputStream extends CompressorInputStream implements
+     private InputStream in;
+     private final boolean decompressConcatenated;
+ 
+-    private int currentChar = -1;
+     private static final int EOF = 0;
+     private static final int START_BLOCK_STATE = 1;
+     private static final int RAND_PART_A_STATE = 2;

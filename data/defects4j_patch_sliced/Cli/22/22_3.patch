@@ -1,0 +1,17 @@
+--- a/src/java/org/apache/commons/cli/PosixParser.java
++++ b/src/java/org/apache/commons/cli/PosixParser.java
+@@ -143,13 +145,9 @@ public class PosixParser extends Parser
+                     burstToken(token, stopAtNonOption);
+                 }
+             }
+-            else if (stopAtNonOption)
+-            {
+-                processNonOptionToken(token);
+-            }
+             else
+             {
+-                tokens.add(token);
++                processNonOptionToken(token, stopAtNonOption);
+             }
+ 
+             gobble(iter);

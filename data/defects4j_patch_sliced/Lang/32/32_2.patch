@@ -1,0 +1,12 @@
+--- a/src/main/java/org/apache/commons/lang3/builder/HashCodeBuilder.java
++++ b/src/main/java/org/apache/commons/lang3/builder/HashCodeBuilder.java
+@@ -149,7 +144,8 @@ public class HashCodeBuilder {
+      * @since 2.3
+      */
+     static boolean isRegistered(Object value) {
+-        return getRegistry().contains(new IDKey(value));
++        Set<IDKey> registry = getRegistry();
++        return registry != null && registry.contains(new IDKey(value));
+     }
+ 
+     /**

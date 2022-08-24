@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/SourceMap.java
++++ b/src/com/google/javascript/jscomp/SourceMap.java
+@@ -140,8 +170,6 @@ public class SourceMap {
+   private static String escapeString(String value) {
+     return CodeGenerator.escapeToDoubleQuotedJsString(value);
+   }
+-  private String lastSourceFile = null;
+-  private String lastSourceFileEscaped = null;
+ 
+   /**
+    * Adds a mapping for the given node.  Mappings must be added in order.

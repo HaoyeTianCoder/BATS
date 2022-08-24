@@ -1,0 +1,23 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/util/TokenBuffer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/util/TokenBuffer.java
+@@ -798,17 +798,17 @@ sb.append("NativeObjectIds=").append(_hasNativeObjectIds).append(",");
+         /* 03-Dec-2010, tatu: related to [JACKSON-423], should try to keep as numeric
+          *   identity as long as possible
+          */
+-        _append(JsonToken.VALUE_NUMBER_FLOAT, encodedValue);
++        _appendValue(JsonToken.VALUE_NUMBER_FLOAT, encodedValue);
+     }
+ 
+     @Override
+     public void writeBoolean(boolean state) throws IOException {
+-        _append(state ? JsonToken.VALUE_TRUE : JsonToken.VALUE_FALSE);
++        _appendValue(state ? JsonToken.VALUE_TRUE : JsonToken.VALUE_FALSE);
+     }
+ 
+     @Override
+     public void writeNull() throws IOException {
+-        _append(JsonToken.VALUE_NULL);
++        _appendValue(JsonToken.VALUE_NULL);
+     }
+ 
+     /*

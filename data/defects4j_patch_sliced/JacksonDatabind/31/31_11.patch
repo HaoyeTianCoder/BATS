@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/util/TokenBuffer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/util/TokenBuffer.java
+@@ -850,7 +850,7 @@ sb.append("NativeObjectIds=").append(_hasNativeObjectIds).append(",");
+ 
+         if (_objectCodec == null) {
+             // as with 'writeObject()', is codec optional?
+-            _append(JsonToken.VALUE_EMBEDDED_OBJECT, node);
++            _appendValue(JsonToken.VALUE_EMBEDDED_OBJECT, node);
+         } else {
+             _objectCodec.writeTree(this, node);
+         }

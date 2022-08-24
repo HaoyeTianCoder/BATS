@@ -1,0 +1,11 @@
+--- a/src/org/mockito/Matchers.java
++++ b/src/org/mockito/Matchers.java
+@@ -209,7 +209,7 @@ public class Matchers {
+      * @return <code>0</code>.
+      */
+     public static double anyDouble() {
+-        return reportMatcher(Any.ANY).returnZero();
++        return reportMatcher(new InstanceOf(Double.class)).returnZero();
+     }
+ 
+     /**

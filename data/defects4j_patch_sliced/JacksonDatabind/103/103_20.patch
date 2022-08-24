@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/std/StdValueInstantiator.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/std/StdValueInstantiator.java
+@@ -453,7 +453,7 @@ public class StdValueInstantiator
+             }
+         }
+         return new JsonMappingException(null,
+-                "Instantiation of "+getValueTypeDesc()+" value failed: "+t.getMessage(), t);
++                "Instantiation of "+getValueTypeDesc()+" value failed: "+ClassUtil.exceptionMessage(t), t);
+     }
+ 
+     /**

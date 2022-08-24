@@ -1,0 +1,9 @@
+--- a/src/java/org/apache/commons/jxpath/ri/model/jdom/JDOMNodePointer.java
++++ b/src/java/org/apache/commons/jxpath/ri/model/jdom/JDOMNodePointer.java
+@@ -753,4 +757,4 @@ public class JDOMNodePointer extends NodePointer {
+         return factory;
+     }
+ 
+-}
++}
+\ No newline at end of file

@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/MakeDeclaredNamesUnique.java
++++ b/src/com/google/javascript/jscomp/MakeDeclaredNamesUnique.java
+@@ -389,6 +411,7 @@ class MakeDeclaredNamesUnique
+      */
+     @Override
+     public void addDeclaredName(String name) {
++      if (!name.equals(ARGUMENTS)) {
+         if (global) {
+           reserveName(name);
+         } else {

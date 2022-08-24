@@ -1,0 +1,16 @@
+--- a/src/main/java/com/fasterxml/jackson/dataformat/xml/deser/FromXmlParser.java
++++ b/src/main/java/com/fasterxml/jackson/dataformat/xml/deser/FromXmlParser.java
+@@ -509,8 +509,13 @@ public class FromXmlParser
+             // Simple, except that if this is a leaf, need to suppress end:
+             if (_mayBeLeaf) {
+                 _mayBeLeaf = false;
++                if (_parsingContext.inArray()) {
+                     // 06-Jan-2015, tatu: as per [dataformat-xml#180], need to
+                     //    expose as empty Object, not null
++                    _nextToken = JsonToken.END_OBJECT;
++                    _parsingContext = _parsingContext.createChildObjectContext(-1, -1);
++                    return (_currToken = JsonToken.START_OBJECT);
++                }
+                 return (_currToken = JsonToken.VALUE_NULL);
+             }
+             _currToken = _parsingContext.inArray() ? JsonToken.END_ARRAY : JsonToken.END_OBJECT;

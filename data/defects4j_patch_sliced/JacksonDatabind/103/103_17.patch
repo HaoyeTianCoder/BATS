@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/std/StdDeserializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/std/StdDeserializer.java
+@@ -523,7 +523,7 @@ public abstract class StdDeserializer<T>
+         } catch (IllegalArgumentException iae) {
+             return (java.util.Date) ctxt.handleWeirdStringValue(_valueClass, value,
+                     "not a valid representation (error: %s)",
+-                    iae.getMessage());
++                    ClassUtil.exceptionMessage(iae));
+         }
+     }
+ 

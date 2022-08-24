@@ -1,0 +1,11 @@
+--- a/src/org/mockito/Matchers.java
++++ b/src/org/mockito/Matchers.java
+@@ -321,7 +321,7 @@ public class Matchers {
+      * @return empty String ("")
+      */
+     public static String anyString() {
+-        return reportMatcher(Any.ANY).returnString();
++        return reportMatcher(new InstanceOf(String.class)).returnString();
+     }
+     
+     /**

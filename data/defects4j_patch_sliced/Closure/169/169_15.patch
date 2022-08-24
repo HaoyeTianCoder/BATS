@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/rhino/jstype/JSType.java
++++ b/src/com/google/javascript/rhino/jstype/JSType.java
+@@ -577,7 +579,7 @@ public abstract class JSType implements Serializable {
+       JSType thatRootType = thatParamType == null ?
+           that : thatParamType.getReferencedTypeInternal();
+       return paramsMatch &&
+-          thisRootType.checkEquivalenceHelper(thatRootType, tolerateUnknowns);
++          thisRootType.checkEquivalenceHelper(thatRootType, eqMethod);
+     }
+ 
+     if (isNominalType() && that.isNominalType()) {

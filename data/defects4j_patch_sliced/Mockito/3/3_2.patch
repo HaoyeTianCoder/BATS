@@ -1,0 +1,21 @@
+--- a/src/org/mockito/internal/invocation/InvocationMatcher.java
++++ b/src/org/mockito/internal/invocation/InvocationMatcher.java
+@@ -140,6 +142,18 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArgumensF
+         }
+     }
+ 
++    private Set<Matcher> uniqueMatcherSet(int indexOfVararg) {
++        HashSet<Matcher> set = new HashSet<Matcher>();
++        for (int position = indexOfVararg; position < matchers.size(); position++) {
++            Matcher matcher = matchers.get(position);
++            if(matcher instanceof MatcherDecorator) {
++                set.add(((MatcherDecorator) matcher).getActualMatcher());
++            } else {
++                set.add(matcher);
++            }
++        }
++        return set;
++    }
+ 
+     public static List<InvocationMatcher> createFrom(List<Invocation> invocations) {
+         LinkedList<InvocationMatcher> out = new LinkedList<InvocationMatcher>();

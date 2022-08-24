@@ -1,0 +1,12 @@
+--- a/src/main/java/org/jsoup/parser/CharacterReader.java
++++ b/src/main/java/org/jsoup/parser/CharacterReader.java
+@@ -34,6 +34,9 @@ public final class CharacterReader {
+         charBuf = new char[sz > maxBufferLen ? maxBufferLen : sz];
+         bufferUp();
+ 
++        if (isBinary()) {
++            throw new UncheckedIOException("Input is binary and unsupported");
++        }
+     }
+ 
+     public CharacterReader(Reader input) {

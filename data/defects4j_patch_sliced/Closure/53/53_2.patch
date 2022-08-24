@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/InlineObjectLiterals.java
++++ b/src/com/google/javascript/jscomp/InlineObjectLiterals.java
+@@ -347,6 +350,7 @@ class InlineObjectLiterals implements CompilerPass {
+         }
+         cur.addChildToFront(nodes.get(i));
+         cur.addChildToFront(nodes.get(i + 1));
++      }
+ 
+       Node replace = ref.getParent();
+       replacement.copyInformationFromForTree(replace);

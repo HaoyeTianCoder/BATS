@@ -1,0 +1,28 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/MappingIterator.java
++++ b/src/main/java/com/fasterxml/jackson/databind/MappingIterator.java
+@@ -233,16 +257,20 @@ public class MappingIterator<T> implements Iterator<T>, Closeable
+ 
+     public T nextValue() throws IOException
+     {
+-        if (!_hasNextChecked) {
++        switch (_state) {
++        case STATE_CLOSED:
++            return _throwNoSuchElement();
++        case STATE_NEED_RESYNC: // fall-through, will do re-sync
++        case STATE_MAY_HAVE_VALUE:
+             if (!hasNextValue()) {
+                 return _throwNoSuchElement();
+             }
++            break;
++        case STATE_HAS_VALUE:
++            break;
+         }
+-        if (_parser == null) {
+-            return _throwNoSuchElement();
+-        }
+-        _hasNextChecked = false;
+ 
++        int nextState = STATE_NEED_RESYNC;
+         try {
+             T value;
+             if (_updatedValue == null) {

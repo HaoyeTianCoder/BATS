@@ -1,0 +1,11 @@
+--- a/src/java/org/apache/commons/math/stat/Frequency.java
++++ b/src/java/org/apache/commons/math/stat/Frequency.java
+@@ -107,6 +107,8 @@ public class Frequency implements Serializable {
+      */
+     @Deprecated
+     public void addValue(Object v) {
++        addValue((Comparable<?>) v);
++    }
+     
+     /**
+      * Adds 1 to the frequency count for v.

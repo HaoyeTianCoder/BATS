@@ -1,0 +1,22 @@
+--- a/src/java/org/apache/commons/lang/ClassUtils.java
++++ b/src/java/org/apache/commons/lang/ClassUtils.java
+@@ -242,12 +255,18 @@ public class ClassUtils {
+      * @return the package name or an empty string
+      */
+     public static String getPackageName(String className) {
+-        if (className == null) {
++        if (className == null || className.length() == 0) {
+             return StringUtils.EMPTY;
+         }
+ 
+         // Strip array encoding
++        while (className.charAt(0) == '[') {
++            className = className.substring(1);
++        }
+         // Strip Object type encoding
++        if (className.charAt(0) == 'L' && className.charAt(className.length() - 1) == ';') {
++            className = className.substring(1);
++        }
+ 
+         int i = className.lastIndexOf(PACKAGE_SEPARATOR_CHAR);
+         if (i == -1) {

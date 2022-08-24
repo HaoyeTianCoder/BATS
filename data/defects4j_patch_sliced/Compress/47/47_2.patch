@@ -1,0 +1,13 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/zip/ZipArchiveInputStream.java
++++ b/src/main/java/org/apache/commons/compress/archivers/zip/ZipArchiveInputStream.java
+@@ -437,6 +438,10 @@ public int read(final byte[] buffer, final int offset, final int length) throws
+             throw new UnsupportedZipFeatureException(UnsupportedZipFeatureException.Feature.DATA_DESCRIPTOR,
+                     current.entry);
+         }
++        if (!supportsCompressedSizeFor(current.entry)) {
++            throw new UnsupportedZipFeatureException(UnsupportedZipFeatureException.Feature.UNKNOWN_COMPRESSED_SIZE,
++                    current.entry);
++        }
+ 
+         int read;
+         if (current.entry.getMethod() == ZipArchiveOutputStream.STORED) {

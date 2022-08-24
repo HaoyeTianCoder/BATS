@@ -1,0 +1,13 @@
+--- a/src/main/java/com/fasterxml/jackson/dataformat/xml/deser/XmlTokenStream.java
++++ b/src/main/java/com/fasterxml/jackson/dataformat/xml/deser/XmlTokenStream.java
+@@ -337,6 +347,10 @@ public class XmlTokenStream
+             return (_currentState = XML_ATTRIBUTE_VALUE);
+         case XML_TEXT:
+             // mixed text with other elements
++            if (_mixedText){
++                _mixedText = false;
++                return _initStartElement();
++            }
+             // text followed by END_ELEMENT
+             return _handleEndElement();
+         case XML_END:

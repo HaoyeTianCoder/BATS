@@ -1,0 +1,10 @@
+--- a/src/org/mockito/internal/stubbing/defaultanswers/ReturnsSmartNulls.java
++++ b/src/org/mockito/internal/stubbing/defaultanswers/ReturnsSmartNulls.java
+@@ -6,6 +6,7 @@ package org.mockito.internal.stubbing.defaultanswers;
+ 
+ import java.io.Serializable;
+ import java.lang.reflect.Method;
++import java.util.Arrays;
+ 
+ import org.mockito.Mockito;
+ import org.mockito.cglib.proxy.MethodInterceptor;

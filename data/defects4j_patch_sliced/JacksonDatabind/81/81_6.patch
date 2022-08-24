@@ -1,0 +1,12 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/introspect/JacksonAnnotationIntrospector.java
++++ b/src/main/java/com/fasterxml/jackson/databind/introspect/JacksonAnnotationIntrospector.java
+@@ -1148,7 +1156,8 @@ public class JacksonAnnotationIntrospector
+         if (contentType != null) { // collection[like], map[like], array, reference
+             // And then value types for all containers:
+             final Class<?> contentClass = (jsonDeser == null) ? null : _classIfExplicit(jsonDeser.contentAs());
+-            if (contentClass != null) {
++            if ((contentClass != null)
++                    && !_primitiveAndWrapper(contentType, contentClass)) {
+                 try {
+                     contentType = tf.constructSpecializedType(contentType, contentClass);
+                     type = type.withContentType(contentType);

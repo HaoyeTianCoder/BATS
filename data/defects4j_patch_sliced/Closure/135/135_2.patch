@@ -1,0 +1,13 @@
+--- a/src/com/google/javascript/rhino/jstype/FunctionType.java
++++ b/src/com/google/javascript/rhino/jstype/FunctionType.java
+@@ -409,6 +409,10 @@ public class FunctionType extends PrototypeObjectType {
+     return super.hasProperty(name) || "prototype".equals(name);
+   }
+ 
++  @Override
++  public boolean hasOwnProperty(String name) {
++    return super.hasOwnProperty(name) || "prototype".equals(name);
++  }
+ 
+   @Override
+   public JSType getPropertyType(String name) {

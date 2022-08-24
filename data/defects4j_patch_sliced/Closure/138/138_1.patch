@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/ClosureReverseAbstractInterpreter.java
++++ b/src/com/google/javascript/jscomp/ClosureReverseAbstractInterpreter.java
+@@ -205,7 +205,6 @@ class ClosureReverseAbstractInterpreter
+       Node param = condition.getLastChild();
+       if (callee.getType() == GETPROP && param.isQualifiedName()) {
+         JSType paramType =  getTypeIfRefinable(param, blindScope);
+-        if (paramType != null) {
+         Node left = callee.getFirstChild();
+         Node right = callee.getLastChild();
+         if (left.getType() == NAME && "goog".equals(left.getString()) &&

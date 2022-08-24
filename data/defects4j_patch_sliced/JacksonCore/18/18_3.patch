@@ -1,0 +1,14 @@
+--- a/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java
++++ b/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java
+@@ -907,10 +907,7 @@ public class UTF8JsonGenerator
+         if (value == null) {
+             _writeNull();
+         } else  if (_cfgNumbersAsStrings) {
+-            String raw = Feature.WRITE_BIGDECIMAL_AS_PLAIN.enabledIn(_features) ? value.toPlainString() : value.toString();
+-            _writeQuotedRaw(raw);
+-        } else if (Feature.WRITE_BIGDECIMAL_AS_PLAIN.enabledIn(_features)) {
+-            writeRaw(value.toPlainString());
++            _writeQuotedRaw(_asString(value));
+         } else {
+             writeRaw(_asString(value));
+         }

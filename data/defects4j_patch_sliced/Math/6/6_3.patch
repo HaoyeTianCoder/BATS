@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/math3/optim/nonlinear/scalar/gradient/NonLinearConjugateGradientOptimizer.java
++++ b/src/main/java/org/apache/commons/math3/optim/nonlinear/scalar/gradient/NonLinearConjugateGradientOptimizer.java
+@@ -274,7 +273,7 @@ public class NonLinearConjugateGradientOptimizer
+             steepestDescent = newSteepestDescent;
+ 
+             // Compute conjugate search direction.
+-            if (iter % n == 0 ||
++            if (getIterations() % n == 0 ||
+                 beta < 0) {
+                 // Break conjugation: reset search direction.
+                 searchDirection = steepestDescent.clone();

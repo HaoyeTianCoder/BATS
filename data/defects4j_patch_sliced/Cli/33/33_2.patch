@@ -1,0 +1,28 @@
+--- a/src/main/java/org/apache/commons/cli/HelpFormatter.java
++++ b/src/main/java/org/apache/commons/cli/HelpFormatter.java
+@@ -897,8 +897,25 @@ public class HelpFormatter
+      * @param nextLineTabStop The position on the next line for the first tab.
+      * @param text The text to be rendered.
+      */
++    private StringBuffer renderWrappedTextBlock(StringBuffer sb, int width, int nextLineTabStop, String text) {
++        try {
++            BufferedReader in = new BufferedReader(new StringReader(text));
++            String line;
++            boolean firstLine = true;
++            while ((line = in.readLine()) != null) {
++                if (!firstLine) {
++                    sb.append(getNewLine());
++                } else {
++                    firstLine = false;
++                }
++                renderWrappedText(sb, width, nextLineTabStop, line);
++            }
++        } catch (IOException e) {
+             // cannot happen
++        }
+ 
++        return sb;
++    }
+ 
+     /**
+      * Finds the next text wrap position after <code>startPos</code> for the

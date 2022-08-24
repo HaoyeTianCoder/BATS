@@ -1,0 +1,10 @@
+--- a/src/java/org/apache/commons/cli/TypeHandler.java
++++ b/src/java/org/apache/commons/cli/TypeHandler.java
+@@ -22,7 +22,6 @@ import java.net.URL;
+ 
+ import java.util.Date;
+ 
+-import org.apache.commons.lang.math.NumberUtils;
+ /**
+   * This is a temporary implementation. TypeHandler will handle the 
+   * pluggableness of OptionTypes and it will direct all of these types 

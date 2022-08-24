@@ -1,0 +1,16 @@
+--- a/src/main/java/org/jsoup/nodes/DocumentType.java
++++ b/src/main/java/org/jsoup/nodes/DocumentType.java
+@@ -30,11 +32,11 @@ public class DocumentType extends Node {
+ 
+     @Override
+     void outerHtmlHead(StringBuilder accum, int depth, Document.OutputSettings out) {
+-        accum.append("<!DOCTYPE html");
++        accum.append("<!DOCTYPE ").append(attr("name"));
+         if (!StringUtil.isBlank(attr("publicId")))
+             accum.append(" PUBLIC \"").append(attr("publicId")).append("\"");
+         if (!StringUtil.isBlank(attr("systemId")))
+-            accum.append(' ').append(attr("systemId")).append("\"");
++            accum.append(" \"").append(attr("systemId")).append("\"");
+         accum.append('>');
+     }
+ 

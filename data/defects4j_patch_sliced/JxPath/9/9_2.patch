@@ -1,0 +1,14 @@
+--- a/src/java/org/apache/commons/jxpath/ri/compiler/CoreOperationCompare.java
++++ b/src/java/org/apache/commons/jxpath/ri/compiler/CoreOperationCompare.java
+@@ -118,11 +128,6 @@ public abstract class CoreOperationCompare extends CoreOperation {
+     }
+ 
+     protected boolean equal(Object l, Object r) {
+-        if (l instanceof Pointer && r instanceof Pointer) {
+-            if (l.equals(r)) {
+-                return true;
+-            }
+-        }
+         if (l instanceof Pointer) {
+             l = ((Pointer) l).getValue();
+         }

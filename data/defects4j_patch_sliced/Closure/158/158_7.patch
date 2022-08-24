@@ -1,0 +1,55 @@
+--- a/src/com/google/javascript/jscomp/CommandLineRunner.java
++++ b/src/com/google/javascript/jscomp/CommandLineRunner.java
+@@ -386,13 +392,52 @@ public class CommandLineRunner extends
+ 
+     // Our own parser for warning guards that preserves the original order
+     // of the flags.
++    public static class WarningGuardErrorOptionHandler
++        extends StringOptionHandler {
++      public WarningGuardErrorOptionHandler(
++          CmdLineParser parser, OptionDef option,
++          Setter<? super String> setter) {
++        super(parser, option, new WarningGuardSetter(setter, CheckLevel.ERROR));
++      }
++    }
+ 
++    public static class WarningGuardWarningOptionHandler
++        extends StringOptionHandler {
++      public WarningGuardWarningOptionHandler(
++          CmdLineParser parser, OptionDef option,
++          Setter<? super String> setter) {
++        super(parser, option,
++            new WarningGuardSetter(setter, CheckLevel.WARNING));
++      }
++    }
+ 
++    public static class WarningGuardOffOptionHandler
++        extends StringOptionHandler {
++      public WarningGuardOffOptionHandler(
++          CmdLineParser parser, OptionDef option,
++          Setter<? super String> setter) {
++        super(parser, option, new WarningGuardSetter(setter, CheckLevel.OFF));
++      }
++    }
+ 
++    private static class WarningGuardSetter implements Setter {
++      private final Setter proxy;
++      private final CheckLevel level;
+ 
++      private WarningGuardSetter(Setter proxy, CheckLevel level) {
++        this.proxy = proxy;
++        this.level = level;
++      }
+ 
++      @Override public boolean isMultiValued() { return proxy.isMultiValued(); }
+ 
++      @Override public Class getType() { return proxy.getType(); }
+ 
++      @Override public void addValue(Object value) throws CmdLineException {
++        proxy.addValue((String) value);
++        warningGuardSpec.add(level, (String) value);
++      }
++    }
+   }
+ 
+   /**

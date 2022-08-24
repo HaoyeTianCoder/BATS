@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/math3/optimization/linear/SimplexSolver.java
++++ b/src/main/java/org/apache/commons/math3/optimization/linear/SimplexSolver.java
+@@ -125,6 +126,7 @@ public class SimplexSolver extends AbstractLinearOptimizer {
+                         }
+                     }
+                 }
++            }
+ 
+             // 2. apply Bland's rule to prevent cycling:
+             //    take the row for which the corresponding basic variable has the smallest index

@@ -1,0 +1,13 @@
+--- a/src/com/google/javascript/jscomp/NodeUtil.java
++++ b/src/com/google/javascript/jscomp/NodeUtil.java
+@@ -310,7 +310,10 @@ public final class NodeUtil {
+   }
+ 
+   static Double getStringNumberValue(String rawJsString) {
++    if (rawJsString.contains("\u000b")) {
+       // vertical tab is not always whitespace
++      return null;
++    }
+ 
+     String s = trimJsWhiteSpace(rawJsString);
+     // return ScriptRuntime.toNumber(s);

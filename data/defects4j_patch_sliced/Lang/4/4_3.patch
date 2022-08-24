@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/lang3/text/translate/LookupTranslator.java
++++ b/src/main/java/org/apache/commons/lang3/text/translate/LookupTranslator.java
+@@ -74,7 +74,7 @@ public class LookupTranslator extends CharSequenceTranslator {
+         // descend so as to get a greedy algorithm
+         for (int i = max; i >= shortest; i--) {
+             final CharSequence subSeq = input.subSequence(index, index + i);
+-            final CharSequence result = lookupMap.get(subSeq);
++            final CharSequence result = lookupMap.get(subSeq.toString());
+             if (result != null) {
+                 out.write(result.toString());
+                 return i;

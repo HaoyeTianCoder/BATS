@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/FunctionInjector.java
++++ b/src/com/google/javascript/jscomp/FunctionInjector.java
+@@ -205,7 +213,7 @@ class FunctionInjector {
+     }
+ 
+     if (mode == InliningMode.DIRECT) {
+-      return canInlineReferenceDirectly(callNode, fnNode);
++      return canInlineReferenceDirectly(callNode, fnNode, needAliases);
+     } else {
+       return canInlineReferenceAsStatementBlock(
+           t, callNode, fnNode, needAliases);

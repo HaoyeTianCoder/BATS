@@ -1,0 +1,19 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/zip/ZipArchiveEntry.java
++++ b/src/main/java/org/apache/commons/compress/archivers/zip/ZipArchiveEntry.java
+@@ -459,11 +460,13 @@ public class ZipArchiveEntry extends java.util.zip.ZipEntry
+             return false;
+         }
+         ZipArchiveEntry other = (ZipArchiveEntry) obj;
+-        if (name == null) {
+-            if (other.name != null) {
++        String myName = getName();
++        String otherName = other.getName();
++        if (myName == null) {
++            if (otherName != null) {
+                 return false;
+             }
+-        } else if (!name.equals(other.name)) {
++        } else if (!myName.equals(otherName)) {
+             return false;
+         }
+         return true;

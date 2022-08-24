@@ -1,0 +1,13 @@
+--- a/src/main/java/org/jsoup/parser/TokeniserState.java
++++ b/src/main/java/org/jsoup/parser/TokeniserState.java
+@@ -1192,8 +1192,10 @@ enum TokeniserState {
+                 t.emitDoctypePending();
+                 t.advanceTransition(Data);
+             } else if (r.matchConsumeIgnoreCase(DocumentType.PUBLIC_KEY)) {
++                t.doctypePending.pubSysKey = DocumentType.PUBLIC_KEY;
+                 t.transition(AfterDoctypePublicKeyword);
+             } else if (r.matchConsumeIgnoreCase(DocumentType.SYSTEM_KEY)) {
++                t.doctypePending.pubSysKey = DocumentType.SYSTEM_KEY;
+                 t.transition(AfterDoctypeSystemKeyword);
+             } else {
+                 t.error(this);

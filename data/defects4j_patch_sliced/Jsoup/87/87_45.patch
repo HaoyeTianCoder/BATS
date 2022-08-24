@@ -1,0 +1,10 @@
+--- a/src/main/java/org/jsoup/parser/Tag.java
++++ b/src/main/java/org/jsoup/parser/Tag.java
+@@ -14,6 +15,7 @@ public class Tag {
+     private static final Map<String, Tag> tags = new HashMap<>(); // map of known tags
+ 
+     private String tagName;
++    private String normalName; // always the lower case version of this tag, regardless of case preservation mode
+     private boolean isBlock = true; // block or inline
+     private boolean formatAsBlock = true; // should be formatted as a block
+     private boolean canContainInline = true; // only pcdata if not

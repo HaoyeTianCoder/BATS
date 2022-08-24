@@ -1,0 +1,12 @@
+--- a/src/com/google/javascript/jscomp/InlineObjectLiterals.java
++++ b/src/com/google/javascript/jscomp/InlineObjectLiterals.java
+@@ -328,6 +328,9 @@ class InlineObjectLiterals implements CompilerPass {
+       }
+ 
+       Node replacement;
++      if (nodes.isEmpty()) {
++        replacement = new Node(Token.TRUE);
++      } else {
+         // All assignments evaluate to true, so make sure that the
+         // expr statement evaluates to true in case it matters.
+         nodes.add(new Node(Token.TRUE));

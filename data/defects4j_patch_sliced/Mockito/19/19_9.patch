@@ -1,0 +1,10 @@
+--- a/src/org/mockito/internal/configuration/injection/filter/TypeBasedCandidateFilter.java
++++ b/src/org/mockito/internal/configuration/injection/filter/TypeBasedCandidateFilter.java
+@@ -25,6 +25,6 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
+             }
+         }
+ 
+-        return next.filterCandidate(mockTypeMatches, field, fieldInstance);
++        return next.filterCandidate(mockTypeMatches, field, fields, fieldInstance);
+     }
+ }

@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/rhino/jstype/RecordType.java
++++ b/src/com/google/javascript/rhino/jstype/RecordType.java
+@@ -123,7 +123,7 @@ class RecordType extends PrototypeObjectType {
+     }
+     for (String key : keySet) {
+       if (!otherProps.get(key).checkEquivalenceHelper(
+-              properties.get(key), tolerateUnknowns)) {
++              properties.get(key), eqMethod)) {
+         return false;
+       }
+     }

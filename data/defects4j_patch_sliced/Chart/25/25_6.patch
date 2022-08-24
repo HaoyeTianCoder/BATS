@@ -1,0 +1,10 @@
+--- a/source/org/jfree/chart/renderer/category/StatisticalBarRenderer.java
++++ b/source/org/jfree/chart/renderer/category/StatisticalBarRenderer.java
+@@ -484,6 +495,7 @@ public class StatisticalBarRenderer extends BarRenderer
+             line = new Line2D.Double(rectX + rectWidth / 2.0d - 5.0d, lowVal,
+                                      rectX + rectWidth / 2.0d + 5.0d, lowVal);
+             g2.draw(line);
++        }
+         
+         CategoryItemLabelGenerator generator = getItemLabelGenerator(row, 
+                 column);

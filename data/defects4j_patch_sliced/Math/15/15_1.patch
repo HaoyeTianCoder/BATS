@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/math3/util/FastMath.java
++++ b/src/main/java/org/apache/commons/math3/util/FastMath.java
+@@ -310,6 +310,7 @@ public class FastMath {
+     /** 2^52 - double numbers this large must be integral (no fraction) or NaN or Infinite */
+     private static final double TWO_POWER_52 = 4503599627370496.0;
+     /** 2^53 - double numbers this large must be even. */
++    private static final double TWO_POWER_53 = 2 * TWO_POWER_52;
+ 
+     /** Constant: {@value}. */
+     private static final double F_1_3 = 1d / 3d;

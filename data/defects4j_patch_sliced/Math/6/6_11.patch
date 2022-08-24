@@ -1,0 +1,15 @@
+--- a/src/main/java/org/apache/commons/math3/optim/nonlinear/vector/jacobian/LevenbergMarquardtOptimizer.java
++++ b/src/main/java/org/apache/commons/math3/optim/nonlinear/vector/jacobian/LevenbergMarquardtOptimizer.java
+@@ -319,10 +319,10 @@ public class LevenbergMarquardtOptimizer
+         // Outer loop.
+         lmPar = 0;
+         boolean firstIteration = true;
+-        int iter = 0;
+         final ConvergenceChecker<PointVectorValuePair> checker = getConvergenceChecker();
+         while (true) {
+-            ++iter;
++            incrementIterationCount();
++
+             final PointVectorValuePair previous = current;
+ 
+             // QR decomposition of the jacobian matrix

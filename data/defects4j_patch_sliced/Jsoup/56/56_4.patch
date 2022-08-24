@@ -1,0 +1,14 @@
+--- a/src/main/java/org/jsoup/nodes/DocumentType.java
++++ b/src/main/java/org/jsoup/nodes/DocumentType.java
+@@ -55,8 +68,10 @@ public class DocumentType extends Node {
+         }
+         if (has(NAME))
+             accum.append(" ").append(attr(NAME));
++        if (has(PUB_SYS_KEY))
++            accum.append(" ").append(attr(PUB_SYS_KEY));
+         if (has(PUBLIC_ID))
+-            accum.append(" PUBLIC \"").append(attr(PUBLIC_ID)).append('"');
++            accum.append(" \"").append(attr(PUBLIC_ID)).append('"');
+         if (has(SYSTEM_ID))
+             accum.append(" \"").append(attr(SYSTEM_ID)).append('"');
+         accum.append('>');

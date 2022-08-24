@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/parsing/JsDocInfoParser.java
++++ b/src/com/google/javascript/jscomp/parsing/JsDocInfoParser.java
+@@ -1706,6 +1706,7 @@ public final class JsDocInfoParser {
+       }
+     }
+ 
++    restoreLookAhead(token);
+     return reportGenericTypeSyntaxWarning();
+   }
+ 

@@ -1,0 +1,17 @@
+--- a/src/java/org/apache/commons/cli/PosixParser.java
++++ b/src/java/org/apache/commons/cli/PosixParser.java
+@@ -181,10 +179,13 @@ public class PosixParser extends Parser
+      *
+      * @param value The current token
+      */
+-    private void processNonOptionToken(String value)
++    private void processNonOptionToken(String value, boolean stopAtNonOption)
+     {
++        if (stopAtNonOption && (currentOption == null || !currentOption.hasArg()))
++        {
+             eatTheRest = true;
+             tokens.add("--");
++        }
+ 
+         tokens.add(value);
+     }

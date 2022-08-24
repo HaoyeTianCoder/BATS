@@ -1,0 +1,10 @@
+--- a/src/main/java/org/jsoup/parser/Token.java
++++ b/src/main/java/org/jsoup/parser/Token.java
+@@ -43,6 +44,7 @@ abstract class Token {
+         @Override
+         Token reset() {
+             reset(name);
++            pubSysKey = null;
+             reset(publicIdentifier);
+             reset(systemIdentifier);
+             forceQuirks = false;

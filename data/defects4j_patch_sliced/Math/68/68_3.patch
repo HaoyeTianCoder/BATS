@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/math/optimization/general/LevenbergMarquardtOptimizer.java
++++ b/src/main/java/org/apache/commons/math/optimization/general/LevenbergMarquardtOptimizer.java
+@@ -300,7 +303,7 @@ public class LevenbergMarquardtOptimizer extends AbstractLeastSquaresOptimizer {
+             }
+             if (maxCosine <= orthoTolerance) {
+                 // convergence has been reached
+-                return new VectorialPointValuePair(point, objective);
++                return current;
+             }
+ 
+             // rescale if necessary

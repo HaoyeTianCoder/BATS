@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/rhino/jstype/ArrowType.java
++++ b/src/com/google/javascript/rhino/jstype/ArrowType.java
+@@ -184,7 +184,7 @@ final class ArrowType extends JSType {
+         // Both parameter lists give a type for this param, it should be equal
+         if (otherParamType != null &&
+             !thisParamType.checkEquivalenceHelper(
+-                otherParamType, tolerateUnknowns)) {
++                otherParamType, eqMethod)) {
+           return false;
+         }
+       } else {

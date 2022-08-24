@@ -1,0 +1,19 @@
+--- a/src/main/java/org/jsoup/helper/DataUtil.java
++++ b/src/main/java/org/jsoup/helper/DataUtil.java
+@@ -158,10 +169,16 @@ public class DataUtil {
+         Matcher m = charsetPattern.matcher(contentType);
+         if (m.find()) {
+             String charset = m.group(1).trim();
++            charset = charset.replace("charset=", "");
++            if (charset.isEmpty()) return null;
++            try {
+                 if (Charset.isSupported(charset)) return charset;
+                 charset = charset.toUpperCase(Locale.ENGLISH);
+                 if (Charset.isSupported(charset)) return charset;
++            } catch (IllegalCharsetNameException e) {
+                 // if our advanced charset matching fails.... we just take the default
++                return null;
++            }
+         }
+         return null;
+     }

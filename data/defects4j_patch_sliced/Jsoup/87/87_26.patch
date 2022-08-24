@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
+@@ -696,7 +696,7 @@ enum HtmlTreeBuilderState {
+                             return false;
+                         } else {
+                             tb.generateImpliedEndTags();
+-                            if (!tb.currentElement().nodeName().equals(name))
++                            if (!tb.currentElement().normalName().equals(name))
+                                 tb.error(this);
+                             // remove currentForm from stack. will shift anything under up.
+                             tb.removeFromStack(currentForm);

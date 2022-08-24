@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/jsontype/impl/SubTypeValidator.java
++++ b/src/main/java/com/fasterxml/jackson/databind/jsontype/impl/SubTypeValidator.java
+@@ -20,6 +20,7 @@ public class SubTypeValidator
+ {
+     protected final static String PREFIX_SPRING = "org.springframework.";
+ 
++    protected final static String PREFIX_C3P0 = "com.mchange.v2.c3p0.";
+ 
+     /**
+      * Set of well-known "nasty classes", deserialization of which is considered dangerous

@@ -1,0 +1,9 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/impl/FieldProperty.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/impl/FieldProperty.java
+@@ -214,4 +215,4 @@ public final class FieldProperty
+     Object readResolve() {
+         return new FieldProperty(this);
+     }
+-}
++}
+\ No newline at end of file

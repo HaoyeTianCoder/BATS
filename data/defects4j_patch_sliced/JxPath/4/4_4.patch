@@ -1,0 +1,18 @@
+--- a/src/java/org/apache/commons/jxpath/ri/model/jdom/JDOMNodePointer.java
++++ b/src/java/org/apache/commons/jxpath/ri/model/jdom/JDOMNodePointer.java
+@@ -237,7 +237,14 @@ public class JDOMNodePointer extends NodePointer {
+ 
+     public Object getValue() {
+         if (node instanceof Element) {
+-            return ((Element) node).getTextTrim();
++            StringBuffer buf = new StringBuffer();
++            for (NodeIterator children = childIterator(null, false, null); children.setPosition(children.getPosition() + 1);) {
++                NodePointer ptr = children.getNodePointer();
++                if (ptr.getImmediateNode() instanceof Element || ptr.getImmediateNode() instanceof Text) {
++                    buf.append(ptr.getValue());
++                }
++            }
++            return buf.toString();
+         }
+         if (node instanceof Comment) {
+             String text = ((Comment) node).getText();

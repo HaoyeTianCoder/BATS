@@ -1,0 +1,34 @@
+--- a/src/main/java/org/apache/commons/codec/binary/BaseNCodecInputStream.java
++++ b/src/main/java/org/apache/commons/codec/binary/BaseNCodecInputStream.java
+@@ -139,9 +139,31 @@ public class BaseNCodecInputStream extends FilterInputStream {
+      *
+      * @throws IllegalArgumentException if the provided skip length is negative
+      */
++    @Override
++    public long skip(long n) throws IOException {
++        if (n < 0) {
++            throw new IllegalArgumentException("Negative skip length");
++        }
+ 
+         // skip in chunks of 512 bytes
++        final byte[] b = new byte[512];
++        final int max = (int) Math.min(n, Integer.MAX_VALUE);
++        int total = 0;
++
++        while (total < max) {
++            int len = max - total;
++            if (len > b.length) {
++                len = b.length;
++            }
++            len = read(b, 0, len);
++            if (len == EOF) {
++                break;
++            }
++            total += len;
++        }
+ 
++        return total;
++    }
+ 
+     /**
+      * {@inheritDoc}

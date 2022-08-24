@@ -1,0 +1,12 @@
+--- a/src/java/org/apache/commons/jxpath/ri/model/dom/DOMNodePointer.java
++++ b/src/java/org/apache/commons/jxpath/ri/model/dom/DOMNodePointer.java
+@@ -308,6 +307,9 @@ public class DOMNodePointer extends NodePointer {
+         return null;
+     }
+ 
++    protected String getLanguage() {
++        return findEnclosingAttribute(node, "xml:lang");
++    }
+ 
+     /**
+      * Sets contents of the node to the specified value. If the value is

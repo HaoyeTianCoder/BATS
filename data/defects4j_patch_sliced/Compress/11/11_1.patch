@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/ArchiveStreamFactory.java
++++ b/src/main/java/org/apache/commons/compress/archivers/ArchiveStreamFactory.java
+@@ -237,6 +237,7 @@ public class ArchiveStreamFactory {
+                 return new TarArchiveInputStream(in);
+             }
+             // COMPRESS-117 - improve auto-recognition
++            if (signatureLength >= 512) {
+             try {
+                 TarArchiveInputStream tais = new TarArchiveInputStream(new ByteArrayInputStream(tarheader));
+                 tais.getNextEntry();

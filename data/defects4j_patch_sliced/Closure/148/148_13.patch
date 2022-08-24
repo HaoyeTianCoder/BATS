@@ -1,0 +1,28 @@
+--- a/src/com/google/javascript/jscomp/SourceMap.java
++++ b/src/com/google/javascript/jscomp/SourceMap.java
+@@ -402,15 +485,25 @@ public class SourceMap {
+      * @param endCol The ending column
+      * @throws IOException
+      */
++    void visit(Mapping m, int line, int col, int endLine, int endCol)
++        throws IOException;
++  }
+ 
+   /**
+    * Walk the mappings and visit each segment of the mappings, unmapped
+    * segments are visited with a null mapping, unused mapping are not visited.
+    */
++  private class MappingTraversal {
+     // The last line and column written
++    private int line;
++    private int col;
+ 
++    MappingTraversal() {
++    }
+ 
+     // Append the line mapping entries.
++    void traverse(MappingVisitor v) throws IOException {
++      Preconditions.checkState(!mappings.isEmpty());
+ 
+       // The mapping list is ordered as a pre-order traversal.  The mapping
+       // positions give us enough information to rebuild the stack and this

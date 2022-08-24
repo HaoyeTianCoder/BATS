@@ -1,0 +1,15 @@
+--- a/src/java/org/apache/commons/jxpath/ri/compiler/CoreOperationGreaterThan.java
++++ b/src/java/org/apache/commons/jxpath/ri/compiler/CoreOperationGreaterThan.java
+@@ -30,10 +28,8 @@ public class CoreOperationGreaterThan extends CoreOperationRelationalExpression
+         super(new Expression[] { arg1, arg2 });
+     }
+ 
+-    public Object computeValue(EvalContext context) {
+-        double l = InfoSetUtil.doubleValue(args[0].computeValue(context));
+-        double r = InfoSetUtil.doubleValue(args[1].computeValue(context));
+-        return l > r ? Boolean.TRUE : Boolean.FALSE;
++    protected boolean evaluateCompare(int compare) {
++        return compare > 0;
+     }
+ 
+     public String getSymbol() {

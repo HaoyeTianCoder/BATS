@@ -1,0 +1,12 @@
+--- a/src/main/java/com/fasterxml/jackson/core/json/UTF8StreamJsonParser.java
++++ b/src/main/java/com/fasterxml/jackson/core/json/UTF8StreamJsonParser.java
+@@ -316,6 +319,9 @@ public class UTF8StreamJsonParser
+             }
+             return _textBuffer.contentsAsString();
+         }
++        if (_currToken == JsonToken.FIELD_NAME) {
++            return getCurrentName();
++        }
+         return super.getValueAsString(defValue);
+     }
+ 

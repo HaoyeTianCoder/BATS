@@ -1,0 +1,16 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/BeanSerializerFactory.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/BeanSerializerFactory.java
+@@ -392,8 +392,12 @@ public class BeanSerializerFactory
+             TypeSerializer typeSer = createTypeSerializer(config, valueType);
+             // last 2 nulls; don't know key, value serializers (yet)
+             // 23-Feb-2015, tatu: As per [#705], need to support custom serializers
+-            MapSerializer anySer = MapSerializer.construct(null, type, staticTyping, typeSer, null, null, null);
++            JsonSerializer<?> anySer = findSerializerFromAnnotation(prov, anyGetter);
++            if (anySer == null) {
+                 // TODO: support '@JsonIgnoreProperties' with any setter?
++                anySer = MapSerializer.construct(/* ignored props*/ null, type, staticTyping,
++                        typeSer, null, null, /*filterId*/ null);
++            }
+             // TODO: can we find full PropertyName?
+             PropertyName name = new PropertyName(anyGetter.getName());
+             BeanProperty.Std anyProp = new BeanProperty.Std(name, valueType, null,

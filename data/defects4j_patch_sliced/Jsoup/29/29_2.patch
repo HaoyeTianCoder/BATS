@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/nodes/Document.java
++++ b/src/main/java/org/jsoup/nodes/Document.java
+@@ -66,7 +67,7 @@ public class Document extends Element {
+     public String title() {
+         // title is a preserve whitespace tag (for document output), but normalised here
+         Element titleEl = getElementsByTag("title").first();
+-        return titleEl != null ? titleEl.text().trim() : "";
++        return titleEl != null ? StringUtil.normaliseWhitespace(titleEl.text()).trim() : "";
+     }
+ 
+     /**

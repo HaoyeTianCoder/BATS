@@ -1,0 +1,10 @@
+--- a/src/org/mockito/internal/configuration/injection/filter/FinalMockCandidateFilter.java
++++ b/src/org/mockito/internal/configuration/injection/filter/FinalMockCandidateFilter.java
+@@ -10,6 +10,7 @@ import org.mockito.internal.util.reflection.FieldSetter;
+ 
+ import java.lang.reflect.Field;
+ import java.util.Collection;
++import java.util.List;
+ 
+ /**
+  * This node returns an actual injecter which will be either :

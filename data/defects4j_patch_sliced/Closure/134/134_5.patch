@@ -1,0 +1,20 @@
+--- a/src/com/google/javascript/jscomp/AmbiguateProperties.java
++++ b/src/com/google/javascript/jscomp/AmbiguateProperties.java
+@@ -591,12 +590,12 @@ class AmbiguateProperties implements CompilerPass {
+         return;
+       }
+ 
+-      if (type == null) {
+-        type = newType;
+-      } else {
+-        type = type.getLeastSupertype(newType);
++      int typeInt = getIntForType(newType);
++      if (!typesSet.get(typeInt)) {
++        computeRelatedTypes(newType);
++        typesSet.set(typeInt);
++        relatedTypesSet.or(getRelatedTypesOnNonUnion(newType));
+       }
+-      typesSet.set(getIntForType(newType));
+     }
+   }
+ 

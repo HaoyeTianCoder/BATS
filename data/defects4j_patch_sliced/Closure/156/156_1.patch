@@ -1,0 +1,13 @@
+--- a/src/com/google/javascript/jscomp/CollapseProperties.java
++++ b/src/com/google/javascript/jscomp/CollapseProperties.java
+@@ -452,8 +452,8 @@ class CollapseProperties implements CompilerPass {
+     boolean canCollapseChildNames = n.canCollapseUnannotatedChildNames();
+ 
+     // Handle this name first so that nested object literals get unrolled.
+-    if (n.canCollapse() && canCollapseChildNames) {
+-      updateObjLitOrFunctionDeclaration(n, alias);
++    if (n.canCollapse()) {
++      updateObjLitOrFunctionDeclaration(n, alias, canCollapseChildNames);
+     }
+ 
+     if (n.props != null) {

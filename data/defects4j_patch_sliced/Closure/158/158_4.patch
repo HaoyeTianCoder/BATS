@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/CommandLineRunner.java
++++ b/src/com/google/javascript/jscomp/CommandLineRunner.java
+@@ -23,6 +23,7 @@ import com.google.common.collect.Maps;
+ import com.google.common.collect.Sets;
+ import com.google.common.io.Files;
+ import com.google.common.io.LimitInputStream;
++import com.google.javascript.jscomp.AbstractCommandLineRunner.WarningGuardSpec;
+ 
+ import org.kohsuke.args4j.CmdLineException;
+ import org.kohsuke.args4j.CmdLineParser;

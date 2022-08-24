@@ -1,0 +1,15 @@
+--- a/src/java/org/apache/commons/jxpath/ri/model/dom/DOMNodePointer.java
++++ b/src/java/org/apache/commons/jxpath/ri/model/dom/DOMNodePointer.java
+@@ -412,7 +421,11 @@ public class DOMNodePointer extends NodePointer {
+         Element element = (Element) node;
+         String prefix = name.getPrefix();
+         if (prefix != null) {
+-            String ns = getNamespaceURI(prefix);
++            String ns = null;
++            NamespaceResolver nsr = getNamespaceResolver();
++            if (nsr != null) {
++                ns = nsr.getNamespaceURI(prefix);
++            }
+             if (ns == null) {
+                 throw new JXPathException(
+                     "Unknown namespace prefix: " + prefix);

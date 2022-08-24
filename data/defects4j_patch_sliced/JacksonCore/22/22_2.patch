@@ -1,0 +1,12 @@
+--- a/src/main/java/com/fasterxml/jackson/core/filter/FilteringParserDelegate.java
++++ b/src/main/java/com/fasterxml/jackson/core/filter/FilteringParserDelegate.java
+@@ -437,7 +437,9 @@ public class FilteringParserDelegate extends JsonParserDelegate
+                 f = _headContext.checkValue(f);
+                 if ((f == TokenFilter.INCLUDE_ALL)
+                         || ((f != null) && f.includeValue(delegate))) {
++                    if (_verifyAllowedMatches()) {
+                         return (_currToken = t);
++                    }
+                 }
+             }
+             // Otherwise not included (leaves must be explicitly included)

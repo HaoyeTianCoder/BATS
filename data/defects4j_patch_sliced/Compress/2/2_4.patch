@@ -1,0 +1,15 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/ar/ArArchiveInputStream.java
++++ b/src/main/java/org/apache/commons/compress/archivers/ar/ArArchiveInputStream.java
+@@ -111,9 +125,11 @@ public class ArArchiveInputStream extends ArchiveInputStream {
+             }
+         }
+ 
+-        return new ArArchiveEntry(new String(name).trim(),
++        entryOffset = offset;
++        currentEntry = new ArArchiveEntry(new String(name).trim(),
+                                           Long.parseLong(new String(length)
+                                                          .trim()));
++        return currentEntry;
+     }
+ 
+ 

@@ -1,0 +1,9 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/type/MapType.java
++++ b/src/main/java/com/fasterxml/jackson/databind/type/MapType.java
+@@ -1,5 +1,6 @@
+ package com.fasterxml.jackson.databind.type;
+ 
++import java.lang.reflect.TypeVariable;
+ 
+ import com.fasterxml.jackson.databind.JavaType;
+ 

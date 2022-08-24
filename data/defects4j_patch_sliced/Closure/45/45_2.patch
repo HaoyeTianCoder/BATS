@@ -1,0 +1,16 @@
+--- a/src/com/google/javascript/jscomp/RemoveUnusedVars.java
++++ b/src/com/google/javascript/jscomp/RemoveUnusedVars.java
+@@ -736,9 +737,12 @@ class RemoveUnusedVars
+                 assign.assignNode.getLastChild(), true)) {
+               assignedToUnknownValue = true;
+             }
++            if (assign.maybeAliased) {
++              maybeEscaped = true;
++            }
+           }
+ 
+-          if (assignedToUnknownValue && hasPropertyAssign) {
++          if ((assignedToUnknownValue || maybeEscaped) && hasPropertyAssign) {
+             changes = markReferencedVar(var) || changes;
+             maybeUnreferenced.remove(current);
+             current--;

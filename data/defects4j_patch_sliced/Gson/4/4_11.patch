@@ -1,0 +1,11 @@
+--- a/gson/src/main/java/com/google/gson/stream/JsonWriter.java
++++ b/gson/src/main/java/com/google/gson/stream/JsonWriter.java
+@@ -610,7 +610,7 @@ public class JsonWriter implements Closeable, Flushable {
+    * closing bracket or another element.
+    */
+   @SuppressWarnings("fallthrough")
+-  private void beforeValue(boolean root) throws IOException {
++  private void beforeValue() throws IOException {
+     switch (peek()) {
+     case NONEMPTY_DOCUMENT:
+       if (!lenient) {

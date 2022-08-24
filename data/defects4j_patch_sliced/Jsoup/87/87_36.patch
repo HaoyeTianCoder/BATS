@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
+@@ -1004,7 +1004,7 @@ enum HtmlTreeBuilderState {
+                 case EndTag:
+                     Token.EndTag endTag = t.asEndTag();
+                     if (endTag.normalName.equals("colgroup")) {
+-                        if (tb.currentElement().nodeName().equals("html")) {
++                        if (tb.currentElement().normalName().equals("html")) { // frag case
+                             tb.error(this);
+                             return false;
+                         } else {

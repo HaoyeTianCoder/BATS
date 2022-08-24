@@ -1,0 +1,43 @@
+--- a/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
++++ b/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
+@@ -360,18 +387,32 @@ class AnalyzePrototypeProperties implements CompilerPass {
+      * the R-value is used in multiple expressions (i.e., if there's
+      * a prototype property assignment in a more complex expression).
+      */
+-        if (isChainedProperty) {
+-          Node child = n.getFirstChild().getFirstChild().getNext();
++    private String getPrototypePropertyNameFromRValue(Node rValue) {
++      Node lValue = NodeUtil.getBestLValue(rValue);
++      if (lValue == null ||
++          lValue.getParent() == null ||
++          lValue.getParent().getParent() == null ||
++          !(NodeUtil.isObjectLitKey(lValue, lValue.getParent()) ||
++            NodeUtil.isExprAssign(lValue.getParent().getParent()))) {
++        return null;
++      }
+ 
+-          if (child.isString() &&
+-              child.getString().equals("prototype")) {
+-            return true;
+-          }
+-        }
++      String lValueName =
++          NodeUtil.getBestLValueName(NodeUtil.getBestLValue(rValue));
++      if (lValueName == null) {
++        return null;
++      }
++      int lastDot = lValueName.lastIndexOf('.');
++      if (lastDot == -1) {
++        return null;
+       }
+ 
++      String firstPart = lValueName.substring(0, lastDot);
++      if (!firstPart.endsWith(".prototype")) {
++        return null;
++      }
+ 
+-      return false;
++      return lValueName.substring(lastDot + 1);
+     }
+ 
+     /**

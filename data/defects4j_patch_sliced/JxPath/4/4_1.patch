@@ -1,0 +1,17 @@
+--- a/src/java/org/apache/commons/jxpath/ri/model/dom/DOMNodePointer.java
++++ b/src/java/org/apache/commons/jxpath/ri/model/dom/DOMNodePointer.java
+@@ -293,12 +293,11 @@ public class DOMNodePointer extends NodePointer {
+                 : current.toUpperCase().startsWith(lang.toUpperCase());
+     }
+ 
+-    protected String getLanguage() {
+-        Node n = node;
++    protected static String findEnclosingAttribute(Node n, String attrName) {
+         while (n != null) {
+             if (n.getNodeType() == Node.ELEMENT_NODE) {
+                 Element e = (Element) n;
+-                String attr = e.getAttribute("xml:lang");
++                String attr = e.getAttribute(attrName);
+                 if (attr != null && !attr.equals("")) {
+                     return attr;
+                 }

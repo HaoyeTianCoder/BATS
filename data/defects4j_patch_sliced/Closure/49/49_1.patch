@@ -1,0 +1,17 @@
+--- a/src/com/google/javascript/jscomp/MakeDeclaredNamesUnique.java
++++ b/src/com/google/javascript/jscomp/MakeDeclaredNamesUnique.java
+@@ -88,14 +88,6 @@ class MakeDeclaredNamesUnique
+       renamer = nameStack.peek().forChildScope();
+     }
+ 
+-    if (declarationRoot.getType() == Token.FUNCTION) {
+-      for (Node c = declarationRoot.getFirstChild().getNext().getFirstChild(); c != null; c = c.getNext()) {
+-        String name = c.getString();
+-        renamer.addDeclaredName(name);
+-      }
+-      Node functionBody = declarationRoot.getLastChild();
+-      findDeclaredNames(functionBody, null, renamer);
+-    }  else 
+     if (declarationRoot.getType() != Token.FUNCTION) {
+       // Add the block declarations
+       findDeclaredNames(declarationRoot, null, renamer);

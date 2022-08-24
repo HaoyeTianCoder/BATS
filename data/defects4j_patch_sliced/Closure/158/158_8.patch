@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/CommandLineRunner.java
++++ b/src/com/google/javascript/jscomp/CommandLineRunner.java
+@@ -482,6 +527,7 @@ public class CommandLineRunner extends
+     List<String> processedFileArgs
+         = processArgs(argsInFile.toArray(new String[] {}));
+     CmdLineParser parserFileArgs = new CmdLineParser(flags);
++    Flags.warningGuardSpec.clear();
+     parserFileArgs.parseArgument(processedFileArgs.toArray(new String[] {}));
+ 
+     // Currently we are not supporting this (prevent direct/indirect loops)

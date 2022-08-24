@@ -1,0 +1,33 @@
+--- a/src/com/google/javascript/jscomp/SourceMap.java
++++ b/src/com/google/javascript/jscomp/SourceMap.java
+@@ -357,11 +386,30 @@ public class SourceMap {
+     /**
+      * As each segment is visited write out the appropriate line mapping.
+      */
++    public void visit(Mapping m, int line, int col, int nextLine, int nextCol)
++      throws IOException {
+ 
++      int id = (m != null) ? m.id : UNMAPPED;
++      if (lastId != id) {
+         // Prevent the creation of unnecessary temporary stings for often
+         // repeated values.
++        lastIdString = (id == UNMAPPED) ? UNMAPPED_STRING : String.valueOf(id);
++        lastId = id;
++      }
++      String idString = lastIdString;
+ 
++      for (int i = line; i <= nextLine; i++) {
++        if (i == nextLine) {
++          for (int j = col; j < nextCol; j++) {
++            addCharEntry(idString);
++          }
++          break;
++        }
+ 
++        closeLine();
++        openLine();
++      }
++    }
+ 
+     // Append the line mapping entries.
+     void appendLineMappings() throws IOException {

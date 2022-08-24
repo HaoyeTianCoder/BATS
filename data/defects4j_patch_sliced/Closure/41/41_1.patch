@@ -1,0 +1,12 @@
+--- a/src/com/google/javascript/jscomp/FunctionTypeBuilder.java
++++ b/src/com/google/javascript/jscomp/FunctionTypeBuilder.java
+@@ -289,6 +289,9 @@ final class FunctionTypeBuilder {
+       }
+ 
+       // Clone any remaining params that aren't in the function literal.
++      while (oldParams.hasNext()) {
++        paramBuilder.newParameterFromNode(oldParams.next());
++      }
+ 
+       parametersNode = paramBuilder.build();
+     }

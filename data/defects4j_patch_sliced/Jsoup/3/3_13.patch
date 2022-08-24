@@ -1,0 +1,12 @@
+--- a/src/main/java/org/jsoup/parser/Tag.java
++++ b/src/main/java/org/jsoup/parser/Tag.java
+@@ -376,4 +385,9 @@ public class Tag {
+         return this;
+     }
+ 
++    private Tag setParent(String tagName) {
++        parent = Tag.valueOf(tagName);
++        setAncestor(tagName);
++        return this;
++    }
+ }

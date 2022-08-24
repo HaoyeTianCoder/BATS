@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/std/NumberSerializers.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/std/NumberSerializers.java
+@@ -51,6 +51,7 @@ public class NumberSerializers
+     protected abstract static class Base<T> extends StdScalarSerializer<T>
+         implements ContextualSerializer
+     {
++        protected final static Integer EMPTY_INTEGER = Integer.valueOf(0);
+ 
+         protected final JsonParser.NumberType _numberType;
+         protected final String _schemaType;

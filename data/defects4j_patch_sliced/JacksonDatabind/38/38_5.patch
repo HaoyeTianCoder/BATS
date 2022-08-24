@@ -1,0 +1,14 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/type/SimpleType.java
++++ b/src/main/java/com/fasterxml/jackson/databind/type/SimpleType.java
+@@ -113,8 +113,9 @@ public class SimpleType // note: until 2.6 was final
+         if (cls.isArray()) {
+             throw new IllegalArgumentException("Can not construct SimpleType for an array (class: "+cls.getName()+")");
+         }
+-        return new SimpleType(cls, TypeBindings.emptyBindings(),
+-                _bogusSuperClass(cls), null, null, null, false);
++        TypeBindings b = TypeBindings.emptyBindings();
++        return new SimpleType(cls, b,
++                _buildSuperClass(cls.getSuperclass(), b), null, null, null, false);
+     }
+ 
+     @Override

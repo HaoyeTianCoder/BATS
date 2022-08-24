@@ -1,0 +1,33 @@
+--- a/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java
++++ b/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java
+@@ -669,6 +685,30 @@ public class UTF8JsonGenerator
+      *
+      * @since 2.8.2
+      */
++    private void _writeRawSegment(char[] cbuf, int offset, int end) throws IOException
++    {
++        main_loop:
++        while (offset < end) {
++            inner_loop:
++            while (true) {
++                int ch = (int) cbuf[offset];
++                if (ch > 0x7F) {
++                    break inner_loop;
++                }
++                _outputBuffer[_outputTail++] = (byte) ch;
++                if (++offset >= end) {
++                    break main_loop;
++                }
++            }
++            char ch = cbuf[offset++];
++            if (ch < 0x800) { // 2-byte?
++                _outputBuffer[_outputTail++] = (byte) (0xc0 | (ch >> 6));
++                _outputBuffer[_outputTail++] = (byte) (0x80 | (ch & 0x3f));
++            } else {
++                offset = _outputRawMultiByteChar(ch, cbuf, offset, end);
++            }
++        }
++    }
+ 
+     /*
+     /**********************************************************

@@ -1,0 +1,14 @@
+--- a/gson/src/main/java/com/google/gson/internal/$Gson$Types.java
++++ b/gson/src/main/java/com/google/gson/internal/$Gson$Types.java
+@@ -76,7 +76,11 @@ public final class $Gson$Types {
+    */
+   public static WildcardType subtypeOf(Type bound) {
+     Type[] upperBounds;
++    if (bound instanceof WildcardType) {
++      upperBounds = ((WildcardType) bound).getUpperBounds();
++    } else {
+       upperBounds = new Type[] { bound };
++    }
+     return new WildcardTypeImpl(upperBounds, EMPTY_TYPE_ARRAY);
+   }
+ 

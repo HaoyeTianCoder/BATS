@@ -1,0 +1,13 @@
+--- a/src/com/google/javascript/jscomp/type/SemanticReverseAbstractInterpreter.java
++++ b/src/com/google/javascript/jscomp/type/SemanticReverseAbstractInterpreter.java
+@@ -345,8 +345,8 @@ public class SemanticReverseAbstractInterpreter
+       // creating new scope
+       return maybeRestrictTwoNames(
+           blindScope,
+-          left, leftIsRefineable, restrictedLeftType,
+-          right, rightIsRefineable, restrictedRightType);
++          left, leftType, leftIsRefineable ? restrictedLeftType : null,
++          right, rightType, rightIsRefineable ? restrictedRightType : null);
+     }
+     return blindScope;
+   }

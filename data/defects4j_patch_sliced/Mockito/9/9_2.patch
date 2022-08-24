@@ -1,0 +1,13 @@
+--- a/src/org/mockito/internal/stubbing/answers/CallsRealMethods.java
++++ b/src/org/mockito/internal/stubbing/answers/CallsRealMethods.java
+@@ -33,6 +35,9 @@ public class CallsRealMethods implements Answer<Object>, Serializable {
+     private static final long serialVersionUID = 9057165148930624087L;
+ 
+     public Object answer(InvocationOnMock invocation) throws Throwable {
++    	if (Modifier.isAbstract(invocation.getMethod().getModifiers())) {
++    		return new GloballyConfiguredAnswer().answer(invocation);
++    	}
+         return invocation.callRealMethod();
+     }
+ }
+\ No newline at end of file

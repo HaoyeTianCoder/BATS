@@ -1,0 +1,17 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/ar/ArArchiveInputStream.java
++++ b/src/main/java/org/apache/commons/compress/archivers/ar/ArArchiveInputStream.java
+@@ -140,6 +157,14 @@ public class ArArchiveInputStream extends ArchiveInputStream {
+ 
+     public int read(byte[] b, final int off, final int len) throws IOException {
+         int toRead = len;
++        if (currentEntry != null) {
++            final long entryEnd = entryOffset + currentEntry.getLength();
++            if (len > 0 && entryEnd > offset) {
++                toRead = (int) Math.min(len, entryEnd - offset);
++            } else {
++                return -1;
++            }
++        }
+         final int ret = this.input.read(b, off, toRead);
+         offset += (ret > 0 ? ret : 0);
+         return ret;

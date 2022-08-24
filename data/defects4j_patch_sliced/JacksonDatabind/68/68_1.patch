@@ -1,0 +1,15 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializerBase.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializerBase.java
+@@ -1189,9 +1189,10 @@ public abstract class BeanDeserializerBase
+     protected Object deserializeFromObjectUsingNonDefault(JsonParser p,
+             DeserializationContext ctxt) throws IOException
+     {
+-        if (_delegateDeserializer != null) {
++        final JsonDeserializer<Object> delegateDeser = _delegateDeserializer();
++        if (delegateDeser != null) {
+             return _valueInstantiator.createUsingDelegate(ctxt,
+-                    _delegateDeserializer.deserialize(p, ctxt));
++                    delegateDeser.deserialize(p, ctxt));
+         }
+         if (_propertyBasedCreator != null) {
+             return _deserializeUsingPropertyBased(p, ctxt);

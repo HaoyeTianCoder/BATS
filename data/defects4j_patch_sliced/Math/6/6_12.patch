@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/math3/optim/nonlinear/vector/jacobian/LevenbergMarquardtOptimizer.java
++++ b/src/main/java/org/apache/commons/math3/optim/nonlinear/vector/jacobian/LevenbergMarquardtOptimizer.java
+@@ -486,7 +486,7 @@ public class LevenbergMarquardtOptimizer
+                     // tests for convergence.
+                     if (checker != null) {
+                         // we use the vectorial convergence checker
+-                        if (checker.converged(iter, previous, current)) {
++                        if (checker.converged(getIterations(), previous, current)) {
+                             setCost(currentCost);
+                             return current;
+                         }

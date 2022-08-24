@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/parser/CharacterReader.java
++++ b/src/main/java/org/jsoup/parser/CharacterReader.java
+@@ -96,7 +97,7 @@ class CharacterReader {
+     }
+ 
+     String consumeToEnd() {
+-        String data = input.substring(pos, input.length() - 1);
++        String data = input.substring(pos, input.length());
+         pos = input.length();
+         return data;
+     }

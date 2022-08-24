@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/InlineObjectLiterals.java
++++ b/src/com/google/javascript/jscomp/InlineObjectLiterals.java
+@@ -154,6 +154,7 @@ class InlineObjectLiterals implements CompilerPass {
+      */
+     private boolean isInlinableObject(List<Reference> refs) {
+       boolean ret = false;
++      Set<String> validProperties = Sets.newHashSet();
+       for (Reference ref : refs) {
+         Node name = ref.getNode();
+         Node parent = ref.getParent();

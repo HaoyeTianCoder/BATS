@@ -1,0 +1,13 @@
+--- a/src/java/org/apache/commons/jxpath/ri/axes/UnionContext.java
++++ b/src/java/org/apache/commons/jxpath/ri/axes/UnionContext.java
+@@ -17,8 +17,10 @@
+ package org.apache.commons.jxpath.ri.axes;
+ 
+ import java.util.ArrayList;
++import java.util.Iterator;
+ 
+ import org.apache.commons.jxpath.BasicNodeSet;
++import org.apache.commons.jxpath.Pointer;
+ import org.apache.commons.jxpath.ri.EvalContext;
+ import org.apache.commons.jxpath.ri.model.NodePointer;
+ 

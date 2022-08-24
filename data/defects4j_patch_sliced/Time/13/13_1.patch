@@ -1,0 +1,11 @@
+--- a/src/main/java/org/joda/time/format/PeriodFormatterBuilder.java
++++ b/src/main/java/org/joda/time/format/PeriodFormatterBuilder.java
+@@ -1095,7 +1095,7 @@ public class PeriodFormatterBuilder {
+             if (iFieldType >= SECONDS_MILLIS) {
+                 // valueLong contains the seconds and millis fields
+                 // the minimum output is 0.000, which is 4 or 5 digits with a negative
+-                sum = Math.max(sum, 4);
++                sum = (valueLong < 0 ? Math.max(sum, 5) : Math.max(sum, 4));
+                 // plus one for the decimal point
+                 sum++;
+                 if (iFieldType == SECONDS_OPTIONAL_MILLIS &&

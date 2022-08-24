@@ -1,0 +1,21 @@
+--- a/src/main/java/org/jsoup/select/QueryParser.java
++++ b/src/main/java/org/jsoup/select/QueryParser.java
+@@ -98,6 +90,18 @@ class QueryParser {
+             evals.add(new CombiningEvaluator.And(f, new StructuralEvaluator.ImmediatePreviousSibling(e)));
+         else if (combinator == '~')
+             evals.add(new CombiningEvaluator.And(f, new StructuralEvaluator.PreviousSibling(e)));
++        else if (combinator == ',') { // group or
++            CombiningEvaluator.Or or;
++            if (e instanceof CombiningEvaluator.Or) {
++                or = (CombiningEvaluator.Or) e;
++                or.add(f);
++            } else {
++                or = new CombiningEvaluator.Or();
++                or.add(e);
++                or.add(f);
++            }
++            evals.add(or);
++        }
+         else
+             throw new Selector.SelectorParseException("Unknown combinator: " + combinator);
+     }

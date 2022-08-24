@@ -1,0 +1,18 @@
+--- a/src/com/google/javascript/jscomp/parsing/IRFactory.java
++++ b/src/com/google/javascript/jscomp/parsing/IRFactory.java
+@@ -803,6 +821,15 @@ public class IRFactory {
+       }
+     }
+ 
++    private boolean validAssignmentTarget(Node target) {
++      switch (target.getType()) {
++        case Token.NAME:
++        case Token.GETPROP:
++        case Token.GETELEM:
++          return true;
++      }
++      return false;
++    }
+ 
+     @Override
+     Node processVariableDeclaration(VariableDeclaration declarationNode) {

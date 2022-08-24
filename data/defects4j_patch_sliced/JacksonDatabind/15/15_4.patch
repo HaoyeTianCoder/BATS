@@ -1,0 +1,22 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/std/StdDelegatingSerializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/std/StdDelegatingSerializer.java
+@@ -118,13 +118,17 @@ public class StdDelegatingSerializer
+             /* 02-Apr-2015, tatu: For "dynamic case", where type is only specified as
+              *    java.lang.Object (or missing generic), [databind#731]
+              */
++            if (!delegateType.isJavaLangObject()) {
+                 delSer = provider.findValueSerializer(delegateType);
++            }
+         }
+         if (delSer instanceof ContextualSerializer) {
+             delSer = provider.handleSecondaryContextualization(delSer, property);
+         }
+-        return (delSer == _delegateSerializer) ? this
+-                : withDelegate(_converter, delegateType, delSer);
++        if (delSer == _delegateSerializer && delegateType == _delegateType) {
++            return this;
++        }
++        return withDelegate(_converter, delegateType, delSer);
+     }
+ 
+     /*

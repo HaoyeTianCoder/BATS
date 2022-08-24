@@ -1,0 +1,9 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/impl/SetterlessProperty.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/impl/SetterlessProperty.java
+@@ -153,4 +154,4 @@ public final class SetterlessProperty
+         set(instance, value);
+         return instance;
+     }
+-}
++}
+\ No newline at end of file

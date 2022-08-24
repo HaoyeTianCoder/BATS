@@ -1,0 +1,17 @@
+--- a/src/com/google/javascript/jscomp/SourceMap.java
++++ b/src/com/google/javascript/jscomp/SourceMap.java
+@@ -254,14 +281,6 @@ public class SourceMap {
+     prefixPosition = new Position(0, 0);
+   }
+ 
+-  private int findLastLine() {
+-    int maxLine = 0;
+-    for (Mapping mapping : mappings) {
+-      int endPositionLine = mapping.endPosition.getLineNumber();
+-      maxLine = Math.max(maxLine, endPositionLine);
+-    }
+-    return maxLine + prefixPosition.getLineNumber();
+-  }
+   /**
+    * Appends the source map in LavaBug format to the given buffer.
+    *

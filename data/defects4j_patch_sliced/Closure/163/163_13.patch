@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
++++ b/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
+@@ -496,6 +545,7 @@ class AnalyzePrototypeProperties implements CompilerPass {
+     /**
+      * The variable for the root of this symbol.
+      */
++    Var getRootVar();
+ 
+     /**
+      * Returns the module where this appears.

@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/std/JsonValueSerializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/std/JsonValueSerializer.java
+@@ -14,6 +15,7 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitable;
+ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
+ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonStringFormatVisitor;
+ import com.fasterxml.jackson.databind.jsonschema.SchemaAware;
++import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
+ import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
+ import com.fasterxml.jackson.databind.ser.BeanSerializer;
+ import com.fasterxml.jackson.databind.ser.ContextualSerializer;

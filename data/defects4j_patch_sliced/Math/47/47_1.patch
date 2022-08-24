@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/math/complex/Complex.java
++++ b/src/main/java/org/apache/commons/math/complex/Complex.java
+@@ -79,6 +79,7 @@ public class Complex implements FieldElement<Complex>, Serializable  {
+     /** Record whether this complex number is infinite. */
+     private final transient boolean isInfinite;
+     /** Record whether this complex number is zero. */
++    private final transient boolean isZero;
+ 
+     /**
+      * Create a complex number given only the real part.

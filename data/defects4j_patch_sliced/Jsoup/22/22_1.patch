@@ -1,0 +1,19 @@
+--- a/src/main/java/org/jsoup/nodes/Element.java
++++ b/src/main/java/org/jsoup/nodes/Element.java
+@@ -431,8 +431,15 @@ public class Element extends Node {
+      * @return sibling elements
+      */
+     public Elements siblingElements() {
++        if (parentNode == null)
++            return new Elements(0);
+ 
+-        return parent().children();
++        List<Element> elements = parent().children();
++        Elements siblings = new Elements(elements.size() - 1);
++        for (Element el: elements)
++            if (el != this)
++                siblings.add(el);
++        return siblings;
+     }
+ 
+     /**

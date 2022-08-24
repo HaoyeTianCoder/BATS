@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
+@@ -369,7 +369,7 @@ enum HtmlTreeBuilderState {
+                         if (tb.inButtonScope("p")) {
+                             tb.processEndTag("p");
+                         }
+-                        if (StringUtil.inSorted(tb.currentElement().nodeName(), Constants.Headings)) {
++                        if (StringUtil.inSorted(tb.currentElement().normalName(), Constants.Headings)) {
+                             tb.error(this);
+                             tb.pop();
+                         }

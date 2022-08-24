@@ -1,0 +1,13 @@
+--- a/src/com/google/javascript/jscomp/SyntacticScopeCreator.java
++++ b/src/com/google/javascript/jscomp/SyntacticScopeCreator.java
+@@ -122,9 +121,7 @@ class SyntacticScopeCreator implements ScopeCreator {
+         for (Node child = n.getFirstChild();
+              child != null;) {
+           Node next = child.getNext();
+-          Preconditions.checkState(child.getType() == Token.NAME);
+-          String name = child.getString();
+-          declareVar(name, child, n, parent, null, n);
++          declareVar(child);
+           child = next;
+         }
+         return;

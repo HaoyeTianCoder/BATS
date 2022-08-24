@@ -1,0 +1,14 @@
+--- a/src/com/google/javascript/jscomp/AbstractCommandLineRunner.java
++++ b/src/com/google/javascript/jscomp/AbstractCommandLineRunner.java
+@@ -515,11 +516,6 @@ abstract class AbstractCommandLineRunner<A extends Compiler,
+     Result result;
+ 
+     setRunOptions(options);
+-    if (inputCharset == Charsets.UTF_8) {
+-      options.outputCharset = Charsets.US_ASCII;
+-    } else {
+-      options.outputCharset = inputCharset;
+-    }
+ 
+     boolean writeOutputToFile = !options.jsOutputFile.isEmpty();
+     if (writeOutputToFile) {

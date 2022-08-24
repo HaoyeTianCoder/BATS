@@ -1,0 +1,29 @@
+--- a/src/main/java/org/jsoup/select/Evaluator.java
++++ b/src/main/java/org/jsoup/select/Evaluator.java
+@@ -751,6 +753,26 @@ public abstract class Evaluator {
+         }
+     }
+ 
++    public static final class MatchText extends Evaluator {
+ 
++        @Override
++        public boolean matches(Element root, Element element) {
++            if (element instanceof PseudoTextElement)
++                return true;
++
++            List<TextNode> textNodes = element.textNodes();
++            for (TextNode textNode : textNodes) {
++                PseudoTextElement pel = new PseudoTextElement(
++                    org.jsoup.parser.Tag.valueOf(element.tagName()), element.baseUri(), element.attributes());
++                textNode.replaceWith(pel);
++                pel.appendChild(textNode);
++            }
++            return false;
++        }
+ 
++        @Override
++        public String toString() {
++            return ":matchText";
++        }
++    }
+ }

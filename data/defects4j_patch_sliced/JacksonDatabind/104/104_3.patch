@@ -1,0 +1,14 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/util/StdDateFormat.java
++++ b/src/main/java/com/fasterxml/jackson/databind/util/StdDateFormat.java
+@@ -513,7 +529,11 @@ public class StdDateFormat
+         if (h == 0) {
+             buffer.append('0').append('0');
+         } else {
++            if (h > 99) { // [databind#2167]: handle above 9999 correctly
++                buffer.append(h);
++            } else {
+                 pad2(buffer, h);
++            }
+             value -= (100 * h);
+         }
+         pad2(buffer, value);

@@ -1,0 +1,16 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializerBase.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializerBase.java
+@@ -1288,10 +1291,11 @@ public abstract class BeanDeserializerBase
+         NumberType t = p.getNumberType();
+         // no separate methods for taking float...
+         if ((t == NumberType.DOUBLE) || (t == NumberType.FLOAT)) {
+-            if (_delegateDeserializer != null) {
++            JsonDeserializer<Object> delegateDeser = _delegateDeserializer();
++            if (delegateDeser != null) {
+                 if (!_valueInstantiator.canCreateFromDouble()) {
+                     Object bean = _valueInstantiator.createUsingDelegate(ctxt,
+-                            _delegateDeserializer.deserialize(p, ctxt));
++                            delegateDeser.deserialize(p, ctxt));
+                     if (_injectables != null) {
+                         injectValues(ctxt, bean);
+                     }

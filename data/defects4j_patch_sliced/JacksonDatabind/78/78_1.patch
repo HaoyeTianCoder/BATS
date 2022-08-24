@@ -1,0 +1,31 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializerFactory.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializerFactory.java
+@@ -45,14 +45,28 @@ public class BeanDeserializerFactory
+      *
+      * @since 2.8.9
+      */
++    protected final static Set<String> DEFAULT_NO_DESER_CLASS_NAMES;
++    static {
++        Set<String> s = new HashSet<>();
+         // Courtesy of [https://github.com/kantega/notsoserial]:
+         // (and wrt [databind#1599]
++        s.add("org.apache.commons.collections.functors.InvokerTransformer");
++        s.add("org.apache.commons.collections.functors.InstantiateTransformer");
++        s.add("org.apache.commons.collections4.functors.InvokerTransformer");
++        s.add("org.apache.commons.collections4.functors.InstantiateTransformer");
++        s.add("org.codehaus.groovy.runtime.ConvertedClosure");
++        s.add("org.codehaus.groovy.runtime.MethodClosure");
++        s.add("org.springframework.beans.factory.ObjectFactory");
++        s.add("com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl");
++        DEFAULT_NO_DESER_CLASS_NAMES = Collections.unmodifiableSet(s);
++    }
+ 
+     /**
+      * Set of class names of types that are never to be deserialized.
+      *
+      * @since 2.8.9
+      */
++    protected Set<String> _cfgIllegalClassNames = DEFAULT_NO_DESER_CLASS_NAMES;
+ 
+     /*
+     /**********************************************************

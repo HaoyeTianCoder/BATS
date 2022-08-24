@@ -1,0 +1,15 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/std/StdDelegatingSerializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/std/StdDelegatingSerializer.java
+@@ -158,7 +162,11 @@ public class StdDelegatingSerializer
+             return;
+         }
+         // 02-Apr-2015, tatu: As per [databind#731] may need to do dynamic lookup
+-        _delegateSerializer.serialize(delegateValue, gen, provider);
++        JsonSerializer<Object> ser = _delegateSerializer;
++        if (ser == null) {
++            ser = _findSerializer(delegateValue, provider);
++        }
++        ser.serialize(delegateValue, gen, provider);
+     }
+ 
+     @Override

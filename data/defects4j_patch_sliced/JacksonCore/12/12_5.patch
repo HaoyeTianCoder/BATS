@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/core/json/ReaderBasedJsonParser.java
++++ b/src/main/java/com/fasterxml/jackson/core/json/ReaderBasedJsonParser.java
+@@ -914,6 +918,7 @@ public class ReaderBasedJsonParser // final in 2.3, earlier
+     private final void _isNextTokenNameYes(int i) throws IOException
+     {
+         _currToken = JsonToken.FIELD_NAME;
++        _updateLocation();
+ 
+         switch (i) {
+         case '"':

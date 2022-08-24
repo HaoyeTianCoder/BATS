@@ -1,0 +1,11 @@
+--- a/src/java/org/apache/commons/cli/PosixParser.java
++++ b/src/java/org/apache/commons/cli/PosixParser.java
+@@ -259,7 +263,7 @@ public class PosixParser extends Parser
+             }
+             else if (stopAtNonOption)
+             {
+-                processNonOptionToken(token.substring(i));
++                processNonOptionToken(token.substring(i), true);
+                 break;
+             }
+             else

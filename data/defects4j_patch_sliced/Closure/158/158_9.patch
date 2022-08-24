@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/CommandLineRunner.java
++++ b/src/com/google/javascript/jscomp/CommandLineRunner.java
+@@ -497,6 +543,7 @@ public class CommandLineRunner extends
+     List<String> processedArgs = processArgs(args);
+ 
+     CmdLineParser parser = new CmdLineParser(flags);
++    Flags.warningGuardSpec.clear();
+     isConfigValid = true;
+     try {
+       parser.parseArgument(processedArgs.toArray(new String[] {}));

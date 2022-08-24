@@ -1,0 +1,10 @@
+--- a/src/java/org/apache/commons/cli2/Option.java
++++ b/src/java/org/apache/commons/cli2/Option.java
+@@ -203,6 +203,7 @@ public interface Option {
+      *
+      * @return the parent of this option
+      */
++    Option getParent();
+ 
+     /**
+      * Sets the parent of this option. This method is called when the option is

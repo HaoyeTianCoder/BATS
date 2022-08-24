@@ -1,0 +1,32 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/util/StdDateFormat.java
++++ b/src/main/java/com/fasterxml/jackson/databind/util/StdDateFormat.java
+@@ -403,10 +403,26 @@ public class StdDateFormat
+                 // Milliseconds partial or missing; and even seconds are optional
+                 len = dateStr.length();
+                 // remove 'T', '+'/'-' and 4-digit timezone-offset
+-                c = dateStr.charAt(len-9);
+-                if (Character.isDigit(c)) {
++                int timeLen = len - dateStr.lastIndexOf('T') - 6;
++                if (timeLen < 12) { // 8 for hh:mm:ss, 4 for .sss
++                    int offset = len - 5; // insertion offset, before tz-offset
+                     StringBuilder sb = new StringBuilder(dateStr);
+-                    sb.insert(len-5, ".000");
++                    switch (timeLen) {
++                    case 11:
++                        sb.insert(offset, '0'); break;
++                    case 10:
++                        sb.insert(offset, "00"); break;
++                    case 9: // is this legal? (just second fraction marker)
++                        sb.insert(offset, "000"); break;
++                    case 8:
++                        sb.insert(offset, ".000"); break;
++                    case 7: // not legal to have single-digit second
++                        break;
++                    case 6: // probably not legal, but let's allow
++                        sb.insert(offset, "00.000");
++                    case 5: // is legal to omit seconds
++                        sb.insert(offset, ":00.000");
++                    }
+                     dateStr = sb.toString();
+                 }
+                 df = _formatISO8601;

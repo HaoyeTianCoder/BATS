@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilder.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilder.java
+@@ -514,7 +514,7 @@ public class HtmlTreeBuilder extends TreeBuilder {
+     boolean inSelectScope(String targetName) {
+         for (int pos = stack.size() -1; pos >= 0; pos--) {
+             Element el = stack.get(pos);
+-            String elName = el.nodeName();
++            String elName = el.normalName();
+             if (elName.equals(targetName))
+                 return true;
+             if (!inSorted(elName, TagSearchSelectScope)) // all elements except

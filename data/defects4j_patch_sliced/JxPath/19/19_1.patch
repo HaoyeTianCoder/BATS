@@ -1,0 +1,28 @@
+--- a/src/java/org/apache/commons/jxpath/ri/model/dom/DOMNodePointer.java
++++ b/src/java/org/apache/commons/jxpath/ri/model/dom/DOMNodePointer.java
+@@ -557,17 +557,21 @@ public class DOMNodePointer extends NodePointer {
+         int count = 1;
+         Node n = node.getPreviousSibling();
+         while (n != null) {
+-            if (n.getNodeType() == Node.ELEMENT_NODE) {
+-                String nm = n.getNodeName();
+-                if (nm.equals(node.getNodeName())) {
++            if (n.getNodeType() == Node.ELEMENT_NODE && matchesQName(n)) {
+                 count++;
+-                }
+             }
+             n = n.getPreviousSibling();
+         }
+         return count;
+     }
+ 
++    private boolean matchesQName(Node n) {
++        if (getNamespaceURI() != null) {
++            return equalStrings(getNamespaceURI(n), getNamespaceURI())
++                    && equalStrings(node.getLocalName(), n.getLocalName());
++        }
++        return equalStrings(node.getNodeName(), n.getNodeName());
++    }
+ 
+     /**
+      * Get relative position of this among all siblings.

@@ -1,0 +1,12 @@
+--- a/src/main/java/com/fasterxml/jackson/core/sym/ByteQuadsCanonicalizer.java
++++ b/src/main/java/com/fasterxml/jackson/core/sym/ByteQuadsCanonicalizer.java
+@@ -922,7 +922,8 @@ public final class ByteQuadsCanonicalizer
+         /* 31-Jul-2015, tatu: Note that spillover area does NOT end at end of array,
+          *   since "long names" area follows. Instead, need to calculate from hash size.
+          */
+-        if (_spilloverEnd >= hashArea.length) {
++        final int end = (_hashSize << 3);
++        if (_spilloverEnd >= end) {
+             if (_failOnDoS) {
+                 _reportTooManyCollisions();
+             }

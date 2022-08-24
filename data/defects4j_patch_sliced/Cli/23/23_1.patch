@@ -1,0 +1,10 @@
+--- a/src/java/org/apache/commons/cli/HelpFormatter.java
++++ b/src/java/org/apache/commons/cli/HelpFormatter.java
+@@ -821,7 +821,6 @@ public class HelpFormatter
+ 
+         while (true)
+         {
+-            int lastPos = pos;
+             text = padding + text.substring(pos).trim();
+             pos = findWrapPos(text, width, 0);
+ 

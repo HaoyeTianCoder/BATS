@@ -1,0 +1,18 @@
+--- a/src/main/java/org/apache/commons/codec/net/QuotedPrintableCodec.java
++++ b/src/main/java/org/apache/commons/codec/net/QuotedPrintableCodec.java
+@@ -141,6 +152,15 @@ public class QuotedPrintableCodec implements BinaryEncoder, BinaryDecoder, Strin
+      *                  the buffer to write to
+      * @return the number of bytes that have been written to the buffer
+      */
++    private static int encodeByte(final int b, final boolean encode,
++                                  final ByteArrayOutputStream buffer) {
++        if (encode) {
++            return encodeQuotedPrintable(b, buffer);
++        } else {
++            buffer.write(b);
++            return 1;
++        }
++    }
+ 
+     /**
+      * Checks whether the given byte is whitespace.

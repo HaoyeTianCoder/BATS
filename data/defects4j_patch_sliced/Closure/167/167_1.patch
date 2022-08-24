@@ -1,0 +1,13 @@
+--- a/src/com/google/javascript/jscomp/type/SemanticReverseAbstractInterpreter.java
++++ b/src/com/google/javascript/jscomp/type/SemanticReverseAbstractInterpreter.java
+@@ -298,8 +298,8 @@ public class SemanticReverseAbstractInterpreter
+     if (merged != null) {
+       return maybeRestrictTwoNames(
+           blindScope,
+-          left, leftIsRefineable, merged.typeA,
+-          right, rightIsRefineable, merged.typeB);
++          left, leftType, leftIsRefineable ? merged.typeA : null,
++          right, rightType, rightIsRefineable ? merged.typeB : null);
+     }
+     return blindScope;
+   }

@@ -1,0 +1,10 @@
+--- a/src/java/org/apache/commons/jxpath/ri/model/dom/DOMNodePointer.java
++++ b/src/java/org/apache/commons/jxpath/ri/model/dom/DOMNodePointer.java
+@@ -58,6 +59,7 @@ public class DOMNodePointer extends NodePointer {
+     private Map namespaces;
+     private String defaultNamespace;
+     private String id;
++    private NamespaceResolver localNamespaceResolver;
+ 
+     public static final String XML_NAMESPACE_URI = 
+             "http://www.w3.org/XML/1998/namespace";

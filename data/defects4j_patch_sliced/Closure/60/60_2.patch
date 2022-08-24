@@ -1,0 +1,13 @@
+--- a/src/com/google/javascript/jscomp/NodeUtil.java
++++ b/src/com/google/javascript/jscomp/NodeUtil.java
+@@ -133,7 +135,10 @@ public final class NodeUtil {
+         return TernaryValue.FALSE;
+ 
+       case Token.VOID:
++        if (!mayHaveSideEffects(n.getFirstChild())) {
+           return TernaryValue.FALSE;
++        }
++        break;
+ 
+       case Token.NAME:
+         String name = n.getString();

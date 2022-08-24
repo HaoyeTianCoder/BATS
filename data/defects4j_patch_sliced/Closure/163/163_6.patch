@@ -1,0 +1,36 @@
+--- a/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
++++ b/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
+@@ -335,23 +363,22 @@ class AnalyzePrototypeProperties implements CompilerPass {
+     private boolean isGlobalFunctionDeclaration(NodeTraversal t, Node n) {
+       // Make sure we're either in the global scope, or the function
+       // we're looking at is the root of the current local scope.
++      Scope s = t.getScope();
++      if (!(s.isGlobal() ||
++            s.getDepth() == 1 && s.getRootNode() == n)) {
++        return false;
++      }
+ 
+-      return t.inGlobalScope() &&
+-          (NodeUtil.isFunctionDeclaration(n) ||
+-           n.isFunction() &&
+-           n.getParent().isName());
++      return NodeUtil.isFunctionDeclaration(n) ||
++          n.isFunction() && n.getParent().isName();
+     }
+ 
+     /**
+      * Returns true if this is the r-value of an assignment.
+      */
+-    private boolean isPrototypePropertyAssign(Node assign) {
+-      Node n = assign.getFirstChild();
+-      if (n != null && NodeUtil.isVarOrSimpleAssignLhs(n, assign)
+-          && n.isGetProp()
+-          && assign.getParent().isExprResult()) {
+-        boolean isChainedProperty =
+-            n.getFirstChild().isGetProp();
++    private boolean isAssignRValue(Node n, Node parent) {
++      return parent != null && parent.isAssign() && parent.getFirstChild() != n;
++    }
+ 
+     /**
+      * Returns the name of a prototype property being assigned to this r-value.

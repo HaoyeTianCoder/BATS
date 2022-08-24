@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/ScopedAliases.java
++++ b/src/com/google/javascript/jscomp/ScopedAliases.java
+@@ -465,7 +471,7 @@ class ScopedAliases implements HotSwapCompilerPass {
+         Var aliasVar = aliases.get(baseName);
+         if (aliasVar != null) {
+           Node aliasedNode = aliasVar.getInitialValue();
+-          aliasUsages.add(new AliasedTypeNode(typeNode, aliasedNode.getQualifiedName() + name.substring(endIndex)));
++          aliasUsages.add(new AliasedTypeNode(typeNode, aliasedNode, baseName));
+         }
+       }
+ 

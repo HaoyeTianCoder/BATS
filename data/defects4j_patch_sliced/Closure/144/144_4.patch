@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/FunctionTypeBuilder.java
++++ b/src/com/google/javascript/jscomp/FunctionTypeBuilder.java
+@@ -493,7 +524,7 @@ final class FunctionTypeBuilder {
+           .withName(fnName)
+           .withSourceNode(sourceNode)
+           .withParamsNode(parametersNode)
+-          .withReturnType(returnType)
++          .withReturnType(returnType, returnTypeInferred)
+           .withTypeOfThis(thisType)
+           .withTemplateName(templateTypeName)
+           .build();

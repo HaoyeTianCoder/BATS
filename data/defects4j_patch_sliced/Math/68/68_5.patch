@@ -1,0 +1,24 @@
+--- a/src/main/java/org/apache/commons/math/optimization/general/LevenbergMarquardtOptimizer.java
++++ b/src/main/java/org/apache/commons/math/optimization/general/LevenbergMarquardtOptimizer.java
+@@ -410,14 +414,20 @@ public class LevenbergMarquardtOptimizer extends AbstractLeastSquaresOptimizer {
+                 }
+ 
+                 // tests for convergence.
++                if (checker != null) {
+                     // we use the vectorial convergence checker
++                    if (checker.converged(getIterations(), previous, current)) {
++                        return current;                        
++                    }
++                } else {
+                     // we use the Levenberg-Marquardt specific convergence parameters
+                     if (((Math.abs(actRed) <= costRelativeTolerance) &&
+                          (preRed <= costRelativeTolerance) &&
+                          (ratio <= 2.0)) ||
+                         (delta <= parRelativeTolerance * xNorm)) {
+-                        return new VectorialPointValuePair(point, objective);
++                        return current;
+                     }
++                }
+ 
+                 // tests for termination and stringent tolerances
+                 // (2.2204e-16 is the machine epsilon for IEEE754)

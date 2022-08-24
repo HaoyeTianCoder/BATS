@@ -1,0 +1,12 @@
+--- a/src/main/java/org/apache/commons/math/optimization/general/LevenbergMarquardtOptimizer.java
++++ b/src/main/java/org/apache/commons/math/optimization/general/LevenbergMarquardtOptimizer.java
+@@ -431,6 +446,9 @@ public class LevenbergMarquardtOptimizer extends AbstractLeastSquaresOptimizer {
+                     tmpVec    = residuals;
+                     residuals = oldRes;
+                     oldRes    = tmpVec;
++                    tmpVec    = objective;
++                    objective = oldObj;
++                    oldObj    = tmpVec;
+                 }
+                 if (checker==null) {
+                 	if (((Math.abs(actRed) <= costRelativeTolerance) &&

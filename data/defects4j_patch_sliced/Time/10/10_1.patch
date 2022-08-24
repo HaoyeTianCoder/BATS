@@ -1,0 +1,10 @@
+--- a/src/main/java/org/joda/time/base/BaseSingleFieldPeriod.java
++++ b/src/main/java/org/joda/time/base/BaseSingleFieldPeriod.java
+@@ -49,6 +49,7 @@ public abstract class BaseSingleFieldPeriod
+     /** Serialization version. */
+     private static final long serialVersionUID = 9386874258972L;
+     /** The start of 1972. */
++    private static final long START_1972 = 2L * 365L * 86400L * 1000L;
+ 
+     /** The period in the units of this period. */
+     private volatile int iPeriod;

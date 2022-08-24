@@ -1,0 +1,14 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializer.java
+@@ -462,6 +472,11 @@ public class BeanDeserializer
+             wrapInstantiationProblem(e, ctxt);
+             bean = null; // never gets here
+         }
++        if (referrings != null) {
++            for (BeanReferring referring : referrings) {
++               referring.setBean(bean);
++            }
++        }
+         if (unknown != null) {
+             // polymorphic?
+             if (bean.getClass() != _beanType.getRawClass()) {

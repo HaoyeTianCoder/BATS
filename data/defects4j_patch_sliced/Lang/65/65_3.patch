@@ -1,0 +1,12 @@
+--- a/src/java/org/apache/commons/lang/time/DateUtils.java
++++ b/src/java/org/apache/commons/lang/time/DateUtils.java
+@@ -706,7 +734,9 @@ public class DateUtils {
+                 roundUp = offset > ((max - min) / 2);
+             }
+             //We need to remove this field
++            if (offset != 0) {
+                 val.set(fields[i][0], val.get(fields[i][0]) - offset);
++            }
+         }
+         throw new IllegalArgumentException("The field " + field + " is not supported");
+ 

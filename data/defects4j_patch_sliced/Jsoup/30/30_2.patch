@@ -1,0 +1,24 @@
+--- a/src/main/java/org/jsoup/safety/Cleaner.java
++++ b/src/main/java/org/jsoup/safety/Cleaner.java
+@@ -67,11 +69,17 @@ public class Cleaner {
+     /**
+      Iterates the input and copies trusted nodes (tags, attributes, text) into the destination.
+      */
+-    private int copySafeNodes(Element root, Element destination) {
+-        List<Node> sourceChildren = root.childNodes();
+-        int numDiscarded = 0;
++    private final class CleaningVisitor implements NodeVisitor {
++        private int numDiscarded = 0;
++        private final Element root;
++        private Element destination; // current element to append nodes to
++
++        private CleaningVisitor(Element root, Element destination) {
++            this.root = root;
++            this.destination = destination;
++        }
+ 
+-        for (Node source : sourceChildren) {
++        public void head(Node source, int depth) {
+             if (source instanceof Element) {
+                 Element sourceEl = (Element) source;
+ 

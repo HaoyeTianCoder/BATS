@@ -1,0 +1,12 @@
+--- a/src/java/org/apache/commons/jxpath/ri/compiler/CoreOperationEqual.java
++++ b/src/java/org/apache/commons/jxpath/ri/compiler/CoreOperationEqual.java
+@@ -29,9 +28,6 @@ public class CoreOperationEqual extends CoreOperationCompare {
+         super(arg1, arg2);
+     }
+ 
+-    public Object computeValue(EvalContext context) {
+-        return equal(context, args[0], args[1]) ? Boolean.TRUE : Boolean.FALSE;
+-    }
+     public String getSymbol() {
+         return "=";
+     }

@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/BasicSerializerFactory.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/BasicSerializerFactory.java
+@@ -652,6 +663,8 @@ public abstract class BasicSerializerFactory
+         }
+ 
+         if (ser == null) {
++            ser = findSerializerByAnnotations(prov, type, beanDesc); // (2) Annotations
++            if (ser == null) {
+                 // We may also want to use serialize Collections "as beans", if (and only if)
+                 // this is specified with `@JsonFormat(shape=Object)`
+                 JsonFormat.Value format = beanDesc.findExpectedFormat(null);

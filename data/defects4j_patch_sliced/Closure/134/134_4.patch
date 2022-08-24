@@ -1,0 +1,15 @@
+--- a/src/com/google/javascript/jscomp/AmbiguateProperties.java
++++ b/src/com/google/javascript/jscomp/AmbiguateProperties.java
+@@ -550,11 +549,11 @@ class AmbiguateProperties implements CompilerPass {
+   /** Encapsulates the information needed for renaming a property. */
+   private class Property {
+     final String oldName;
+-    JSType type;
+     String newName;
+     int numOccurrences;
+     boolean skipAmbiguating;
+     JSTypeBitSet typesSet = new JSTypeBitSet(intForType.size());
++    JSTypeBitSet relatedTypesSet = new JSTypeBitSet(intForType.size());
+ 
+     Property(String name) {
+       this.oldName = name;

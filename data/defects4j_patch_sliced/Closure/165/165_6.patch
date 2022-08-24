@@ -1,0 +1,12 @@
+--- a/src/com/google/javascript/rhino/jstype/RecordType.java
++++ b/src/com/google/javascript/rhino/jstype/RecordType.java
+@@ -99,6 +110,9 @@ class RecordType extends PrototypeObjectType {
+   }
+ 
+   /** @return Is this synthesized for internal bookkeeping? */
++  boolean isSynthetic() {
++    return !declared;
++  }
+ 
+   @Override
+   public boolean isEquivalentTo(JSType other) {

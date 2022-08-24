@@ -1,0 +1,15 @@
+--- a/src/com/google/javascript/jscomp/ReferenceCollectingCallback.java
++++ b/src/com/google/javascript/jscomp/ReferenceCollectingCallback.java
+@@ -542,10 +550,12 @@ class ReferenceCollectingCallback implements ScopedCallback, CompilerPass {
+     /**
+      * Whether this block denotes a function scope.
+      */
++    private final boolean isFunction;
+ 
+     /**
+      * Whether this block denotes a loop.
+      */
++    private final boolean isLoop;
+ 
+     /**
+      * Creates a new block.

@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/csv/CSVFormat.java
++++ b/src/main/java/org/apache/commons/csv/CSVFormat.java
+@@ -316,7 +316,7 @@ public final class CSVFormat implements Serializable {
+      *      http://dev.mysql.com/doc/refman/5.1/en/load-data.html</a>
+      */
+     public static final CSVFormat MYSQL = DEFAULT.withDelimiter(TAB).withEscape(BACKSLASH).withIgnoreEmptyLines(false)
+-            .withQuote(null).withRecordSeparator(LF);
++            .withQuote(null).withRecordSeparator(LF).withNullString("\\N");
+ 
+     /**
+      * Returns true if the given character is a line break character.

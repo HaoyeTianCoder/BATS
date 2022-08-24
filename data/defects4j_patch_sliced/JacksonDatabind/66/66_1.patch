@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/std/StdKeyDeserializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/std/StdKeyDeserializer.java
+@@ -8,6 +8,7 @@ import java.net.URI;
+ import java.net.URL;
+ import java.util.*;
+ 
++import com.fasterxml.jackson.core.JsonParser;
+ import com.fasterxml.jackson.core.JsonProcessingException;
+ import com.fasterxml.jackson.core.io.NumberInput;
+ import com.fasterxml.jackson.databind.*;

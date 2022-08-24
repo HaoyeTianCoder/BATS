@@ -1,0 +1,16 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializerBase.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializerBase.java
+@@ -1396,6 +1387,13 @@ public abstract class BeanDeserializerBase
+     /**
+      * @since 2.9
+      */
++    private final JsonDeserializer<Object> _delegateDeserializer() {
++        JsonDeserializer<Object> deser = _delegateDeserializer;
++        if (deser == null) {
++            deser = _arrayDelegateDeserializer;
++        }
++        return deser;
++    }
+ 
+     /*
+     /**********************************************************

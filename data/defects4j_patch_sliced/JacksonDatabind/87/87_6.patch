@@ -1,0 +1,14 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/util/StdDateFormat.java
++++ b/src/main/java/com/fasterxml/jackson/databind/util/StdDateFormat.java
+@@ -511,10 +517,10 @@ public class StdDateFormat
+                 }
+             } else {
+                 // If not, plain date, no timezone
+-                StringBuilder sb = new StringBuilder(dateStr);
+                 int timeLen = len - dateStr.lastIndexOf('T') - 1;
+                 // And possible also millisecond part if missing
+                 if (timeLen < 12) { // missing, or partial
++                    StringBuilder sb = new StringBuilder(dateStr);
+                     switch (timeLen) {
+                     case 11: sb.append('0');
+                     case 10: sb.append('0');

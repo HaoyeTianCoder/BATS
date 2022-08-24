@@ -1,0 +1,9 @@
+--- a/src/java/org/apache/commons/jxpath/ri/NamespaceResolver.java
++++ b/src/java/org/apache/commons/jxpath/ri/NamespaceResolver.java
+@@ -197,4 +208,4 @@ public class NamespaceResolver implements Cloneable {
+         }
+     }
+ 
+-}
++}
+\ No newline at end of file

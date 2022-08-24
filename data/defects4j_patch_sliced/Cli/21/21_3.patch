@@ -1,0 +1,11 @@
+--- a/src/java/org/apache/commons/cli2/commandline/WriteableCommandLineImpl.java
++++ b/src/java/org/apache/commons/cli2/commandline/WriteableCommandLineImpl.java
+@@ -48,6 +48,8 @@ public class WriteableCommandLineImpl
+     private final Map defaultSwitches = new HashMap();
+     private final List normalised;
+     private final Set prefixes;
++    private Option currentOption;
++    private String checkForOption;
+ 
+     /**
+      * Creates a new WriteableCommandLineImpl rooted on the specified Option, to

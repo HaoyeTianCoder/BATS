@@ -1,0 +1,13 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
+@@ -1093,7 +1095,9 @@ enum HtmlTreeBuilderState {
+                 Token.StartTag startTag = t.asStartTag();
+                 String name = startTag.normalName();
+ 
+-                if (StringUtil.in(name, "th", "td")) {
++                if (name.equals("template")) {
++                    tb.insert(startTag);
++                } else if (StringUtil.in(name, "th", "td")) {
+                     tb.clearStackToTableRowContext();
+                     tb.insert(startTag);
+                     tb.transition(InCell);

@@ -1,0 +1,15 @@
+--- a/src/java/org/apache/commons/jxpath/ri/model/beans/NullPropertyPointer.java
++++ b/src/java/org/apache/commons/jxpath/ri/model/beans/NullPropertyPointer.java
+@@ -221,4 +229,10 @@ public class NullPropertyPointer extends PropertyPointer {
+         }
+         return string;
+     }
+-}
++
++    private JXPathAbstractFactoryException createBadFactoryException(AbstractFactory factory) {
++        return new JXPathAbstractFactoryException("Factory " + factory
++                + " reported success creating object for path: " + asPath()
++                + " but object was null.  Terminating to avoid stack recursion.");
++    }
++}
+\ No newline at end of file

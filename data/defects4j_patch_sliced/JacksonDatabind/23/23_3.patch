@@ -1,0 +1,13 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/std/NumberSerializers.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/std/NumberSerializers.java
+@@ -156,6 +162,10 @@ public class NumberSerializers
+             serialize(value, gen, provider);            
+         }
+ 
++        @Override
++        public boolean isEmpty(SerializerProvider prov, Object value) {
++            return EMPTY_INTEGER.equals(value);
++        }
+     }
+ 
+     /**

@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/zip/ZipArchiveEntry.java
++++ b/src/main/java/org/apache/commons/compress/archivers/zip/ZipArchiveEntry.java
+@@ -294,7 +294,7 @@ public int getUnixMode() {
+      * @return true if the entry represents a unix symlink, false otherwise.
+      */
+     public boolean isUnixSymlink() {
+-        return (getUnixMode() & UnixStat.LINK_FLAG) == UnixStat.LINK_FLAG;
++        return (getUnixMode() & UnixStat.FILE_TYPE_FLAG) == UnixStat.LINK_FLAG;
+     }
+ 
+     /**

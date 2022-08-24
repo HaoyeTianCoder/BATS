@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/PowellOptimizer.java
++++ b/src/main/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/PowellOptimizer.java
+@@ -224,7 +223,7 @@ public class PowellOptimizer
+             final PointValuePair current = new PointValuePair(x, fVal);
+             if (!stop) { // User-defined stopping criteria.
+                 if (checker != null) {
+-                    stop = checker.converged(iter, previous, current);
++                    stop = checker.converged(getIterations(), previous, current);
+                 }
+             }
+             if (stop) {

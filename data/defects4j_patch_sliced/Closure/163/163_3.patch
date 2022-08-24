@@ -1,0 +1,12 @@
+--- a/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
++++ b/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
+@@ -275,8 +300,7 @@ class AnalyzePrototypeProperties implements CompilerPass {
+             if (var.getInitialValue() != null &&
+                 var.getInitialValue().isFunction()) {
+               if (t.inGlobalScope()) {
+-                if (!processGlobalFunctionDeclaration(t, n, parent,
+-                        parent.getParent())) {
++                if (!processGlobalFunctionDeclaration(t, n, var)) {
+                   addGlobalUseOfSymbol(name, t.getModule(), VAR);
+                 }
+               } else {

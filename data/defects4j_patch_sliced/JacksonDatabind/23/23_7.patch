@@ -1,0 +1,19 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/std/NumberSerializers.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/std/NumberSerializers.java
+@@ -219,11 +243,16 @@ public class NumberSerializers
+     @JacksonStdImpl
+     public final static class DoubleSerializer extends Base<Object>
+     {
++        private final static Double EMPTY = 0d;
+ 
+         final static DoubleSerializer instance = new DoubleSerializer();
+     
+         public DoubleSerializer() { super(Double.class, JsonParser.NumberType.DOUBLE, "number"); }
+ 
++        @Override
++        public boolean isEmpty(SerializerProvider prov, Object value) {
++            return EMPTY.equals(value);
++        }
+ 
+         @Override
+         public void serialize(Object value, JsonGenerator gen, SerializerProvider provider) throws IOException {

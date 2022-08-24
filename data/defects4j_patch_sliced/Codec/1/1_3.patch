@@ -1,0 +1,11 @@
+--- a/src/java/org/apache/commons/codec/language/SoundexUtils.java
++++ b/src/java/org/apache/commons/codec/language/SoundexUtils.java
+@@ -50,7 +50,7 @@ final class SoundexUtils {
+             }
+         }
+         if (count == len) {
+-            return str.toUpperCase();
++            return str.toUpperCase(java.util.Locale.ENGLISH);
+         }
+         return new String(chars, 0, count).toUpperCase(java.util.Locale.ENGLISH);
+     }

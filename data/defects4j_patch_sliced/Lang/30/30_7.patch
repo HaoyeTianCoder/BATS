@@ -1,0 +1,28 @@
+--- a/src/main/java/org/apache/commons/lang3/StringUtils.java
++++ b/src/main/java/org/apache/commons/lang3/StringUtils.java
+@@ -1675,14 +1702,25 @@ public class StringUtils {
+             return true;
+         }
+         int csLen = cs.length();
++        int csLast = csLen - 1;
+         int searchLen = searchChars.length;
++        int searchLast = searchLen - 1;
+         for (int i = 0; i < csLen; i++) {
+             char ch = cs.charAt(i);
+             for (int j = 0; j < searchLen; j++) {
+                 if (searchChars[j] == ch) {
++                    if (Character.isHighSurrogate(ch)) {
++                        if (j == searchLast) {
+                             // missing low surrogate, fine, like String.indexOf(String)
++                            return false;
++                        }
++                        if (i < csLast && searchChars[j + 1] == cs.charAt(i + 1)) {
++                            return false;
++                        }
++                    } else {
+                         // ch is in the Basic Multilingual Plane
+                         return false;
++                    }
+                 }
+             }
+         }

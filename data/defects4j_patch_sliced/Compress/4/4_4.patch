@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/compress/changes/ChangeSetPerformer.java
++++ b/src/main/java/org/apache/commons/compress/changes/ChangeSetPerformer.java
+@@ -125,6 +125,7 @@ public class ChangeSetPerformer {
+                 results.addedFromChangeSet(change.getEntry().getName());
+             }
+         }
++        out.finish();
+         return results;
+     }
+ 

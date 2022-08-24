@@ -1,0 +1,12 @@
+--- a/src/main/java/org/joda/time/DateTimeZone.java
++++ b/src/main/java/org/joda/time/DateTimeZone.java
+@@ -279,6 +283,9 @@ public abstract class DateTimeZone implements Serializable {
+      * @return the DateTimeZone object for the offset
+      */
+     public static DateTimeZone forOffsetMillis(int millisOffset) {
++        if (millisOffset < -MAX_MILLIS || millisOffset > MAX_MILLIS) {
++            throw new IllegalArgumentException("Millis out of range: " + millisOffset);
++        }
+         String id = printOffset(millisOffset);
+         return fixedOffsetZone(id, millisOffset);
+     }

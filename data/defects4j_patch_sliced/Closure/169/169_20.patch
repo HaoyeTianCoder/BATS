@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/rhino/jstype/RecordType.java
++++ b/src/com/google/javascript/rhino/jstype/RecordType.java
+@@ -265,7 +264,6 @@ class RecordType extends PrototypeObjectType {
+ 
+       JSType propA = typeA.getPropertyType(property);
+       JSType propB = typeB.getPropertyType(property);
+-      if (!propA.isUnknownType() && !propB.isUnknownType()) {
+       if (typeA.isPropertyTypeDeclared(property)) {
+         // If one declared property isn't invariant,
+         // then the whole record isn't covariant.

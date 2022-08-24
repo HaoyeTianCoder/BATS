@@ -1,0 +1,12 @@
+--- a/src/com/google/javascript/rhino/jstype/RecordTypeBuilder.java
++++ b/src/com/google/javascript/rhino/jstype/RecordTypeBuilder.java
+@@ -59,6 +60,9 @@ public class RecordTypeBuilder {
+   }
+ 
+   /** See the comments on RecordType about synthetic types. */
++  void setSynthesized(boolean synthesized) {
++    isDeclared = !synthesized;
++  }
+ 
+   /**
+    * Adds a property with the given name and type to the record type.

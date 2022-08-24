@@ -1,0 +1,12 @@
+--- a/src/main/java/org/joda/time/Partial.java
++++ b/src/main/java/org/joda/time/Partial.java
+@@ -446,6 +446,9 @@ public final class Partial
+                         if (compare > 0) {
+                             break;
+                         } else if (compare == 0) {
++                            if (fieldType.getRangeDurationType() == null) {
++                                break;
++                            }
+                             DurationField rangeField = fieldType.getRangeDurationType().getField(iChronology);
+                             DurationField loopRangeField = loopType.getRangeDurationType().getField(iChronology);
+                             if (rangeField.compareTo(loopRangeField) > 0) {

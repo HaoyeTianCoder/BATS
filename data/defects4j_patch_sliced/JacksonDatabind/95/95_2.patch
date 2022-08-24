@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/type/TypeFactory.java
++++ b/src/main/java/com/fasterxml/jackson/databind/type/TypeFactory.java
+@@ -363,7 +363,7 @@ public final class TypeFactory
+ 
+             // (1) Original target type has no generics -- just resolve subtype
+             if (baseType.getBindings().isEmpty()) {
+-                newType = _fromClass(null, subclass, TypeBindings.emptyBindings());     
++                newType = _fromClass(null, subclass, EMPTY_BINDINGS);     
+                 break;
+             }
+             // (2) A small set of "well-known" List/Map subtypes where can take a short-cut

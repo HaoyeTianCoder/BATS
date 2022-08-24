@@ -1,0 +1,29 @@
+--- a/src/com/google/javascript/jscomp/parsing/IRFactory.java
++++ b/src/com/google/javascript/jscomp/parsing/IRFactory.java
+@@ -252,9 +252,26 @@ public class IRFactory {
+     return irNode;
+   }
+ 
++  private Node transformNumberAsString(NumberLiteral literalNode) {
++    JSDocInfo jsDocInfo = handleJsDoc(literalNode);
++    Node irNode = newStringNode(getStringValue(literalNode.getNumber()));
++    if (jsDocInfo != null) {
++      irNode.setJSDocInfo(jsDocInfo);
++    }
++    setSourceInfo(irNode, literalNode);
++    return irNode;
++  }
+ 
++  private static String getStringValue(double value) {
++    long longValue = (long) value;
+ 
+     // Return "1" instead of "1.0"
++    if (longValue == value) {
++      return Long.toString(longValue);
++    } else {
++      return Double.toString(value);
++    }
++  }
+ 
+   private void setSourceInfo(Node irNode, AstNode node) {
+     // If we have a named function, set the position to that of the name.

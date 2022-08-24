@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/Compiler.java
++++ b/src/com/google/javascript/jscomp/Compiler.java
+@@ -261,6 +261,7 @@ public class Compiler extends AbstractCompiler {
+     initOptions(options);
+ 
+     checkFirstModule(modules);
++    fillEmptyModules(modules);
+ 
+     this.externs = makeCompilerInput(externs, true);
+     this.modules = modules;

@@ -1,0 +1,10 @@
+--- a/src/main/java/org/jsoup/parser/TokeniserState.java
++++ b/src/main/java/org/jsoup/parser/TokeniserState.java
+@@ -578,7 +584,6 @@ enum TokeniserState {
+                     break;
+                 case '"':
+                 case '\'':
+-                case '<':
+                 case '=':
+                     t.error(this);
+                     t.tagPending.newAttribute();

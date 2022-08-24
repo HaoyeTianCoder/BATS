@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/introspect/ObjectIdInfo.java
++++ b/src/main/java/com/fasterxml/jackson/databind/introspect/ObjectIdInfo.java
+@@ -22,6 +22,7 @@ public class ObjectIdInfo
+     /**
+      * @since 2.8.9
+      */
++    private final static ObjectIdInfo EMPTY = new ObjectIdInfo(PropertyName.NO_NAME, Object.class, null, false, null);
+ 
+     public ObjectIdInfo(PropertyName name, Class<?> scope, Class<? extends ObjectIdGenerator<?>> gen,
+             Class<? extends ObjectIdResolver> resolver)

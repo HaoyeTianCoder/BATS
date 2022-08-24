@@ -1,0 +1,10 @@
+--- a/src/main/java/org/jsoup/nodes/LeafNode.java
++++ b/src/main/java/org/jsoup/nodes/LeafNode.java
+@@ -91,6 +93,6 @@ abstract class LeafNode extends Node {
+ 
+     @Override
+     protected List<Node> ensureChildNodes() {
+-        throw new UnsupportedOperationException("Leaf Nodes do not have child nodes.");
++        return EmptyNodes;
+     }
+ }

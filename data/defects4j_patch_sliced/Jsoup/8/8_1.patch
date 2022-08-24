@@ -1,0 +1,17 @@
+--- a/src/main/java/org/jsoup/nodes/Node.java
++++ b/src/main/java/org/jsoup/nodes/Node.java
+@@ -360,10 +360,13 @@ public abstract class Node {
+     }
+ 
+     protected void outerHtml(StringBuilder accum) {
+-        new NodeTraversor(new OuterHtmlVisitor(accum, ownerDocument().outputSettings())).traverse(this);
++        new NodeTraversor(new OuterHtmlVisitor(accum, getOutputSettings())).traverse(this);
+     }
+ 
+     // if this node has no document (or parent), retrieve the default output settings
++    private Document.OutputSettings getOutputSettings() {
++        return ownerDocument() != null ? ownerDocument().outputSettings() : (new Document("")).outputSettings();
++    }
+ 
+     /**
+      Get the outer HTML of this node.

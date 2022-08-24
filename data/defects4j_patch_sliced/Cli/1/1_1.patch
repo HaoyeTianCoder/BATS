@@ -1,0 +1,16 @@
+--- a/src/java/org/apache/commons/cli/CommandLine.java
++++ b/src/java/org/apache/commons/cli/CommandLine.java
+@@ -16,11 +16,11 @@
+ package org.apache.commons.cli;
+ 
+ import java.util.Collection;
+-import java.util.HashMap;
+ import java.util.Iterator;
+ import java.util.LinkedList;
+ import java.util.List;
+-import java.util.Map;
++import java.util.Set;
++import java.util.HashSet;
+ 
+ /** 
+  * <p>Represents list of arguments parsed against

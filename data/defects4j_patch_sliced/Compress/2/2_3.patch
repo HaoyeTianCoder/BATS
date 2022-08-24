@@ -1,0 +1,23 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/ar/ArArchiveInputStream.java
++++ b/src/main/java/org/apache/commons/compress/archivers/ar/ArArchiveInputStream.java
+@@ -74,15 +86,17 @@ public class ArArchiveInputStream extends ArchiveInputStream {
+             }
+         }
+ 
++        if (offset % 2 != 0) {
++            if (read() < 0) {
+                 // hit eof
++                return null;
++            }
++        }
+ 
+         if (input.available() == 0) {
+             return null;
+         }
+ 
+-        if (offset % 2 != 0) {
+-            read();
+-        }
+         final byte[] name = new byte[16];
+         final byte[] lastmodified = new byte[12];
+         final byte[] userid = new byte[6];

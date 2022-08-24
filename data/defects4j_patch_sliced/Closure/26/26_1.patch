@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/ProcessCommonJSModules.java
++++ b/src/com/google/javascript/jscomp/ProcessCommonJSModules.java
+@@ -125,6 +125,7 @@ public class ProcessCommonJSModules implements CompilerPass {
+       AbstractPostOrderCallback {
+ 
+     private int scriptNodeCount = 0;
++    private Set<String> modulesWithExports = Sets.newHashSet();
+ 
+     @Override
+     public void visit(NodeTraversal t, Node n, Node parent) {

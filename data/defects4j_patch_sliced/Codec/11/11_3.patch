@@ -1,0 +1,16 @@
+--- a/src/main/java/org/apache/commons/codec/net/QuotedPrintableCodec.java
++++ b/src/main/java/org/apache/commons/codec/net/QuotedPrintableCodec.java
+@@ -129,6 +133,13 @@ public class QuotedPrintableCodec implements BinaryEncoder, BinaryDecoder, Strin
+      *                  the byte array
+      * @return the unsigned octet at position <code>index</code> from the array
+      */
++    private static int getUnsignedOctet(final int index, final byte[] bytes) {
++        int b = bytes[index];
++        if (b < 0) {
++            b = 256 + b;
++        }
++        return b;
++    }
+ 
+     /**
+      * Write a byte to the buffer.

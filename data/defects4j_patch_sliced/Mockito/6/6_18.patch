@@ -1,0 +1,11 @@
+--- a/src/org/mockito/Matchers.java
++++ b/src/org/mockito/Matchers.java
+@@ -424,7 +424,7 @@ public class Matchers {
+      * @return empty Map.
+      */
+     public static <K, V>  Map<K, V> anyMapOf(Class<K> keyClazz, Class<V> valueClazz) {
+-        return reportMatcher(Any.ANY).returnMap();
++        return anyMap();
+     }
+     
+     /**

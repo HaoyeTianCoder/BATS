@@ -1,0 +1,21 @@
+--- a/src/com/google/javascript/jscomp/TypeValidator.java
++++ b/src/com/google/javascript/jscomp/TypeValidator.java
+@@ -753,18 +765,6 @@ class TypeValidator {
+       }
+     }
+ 
+-    JSType type = getJSType(n);
+-    if (dereference) {
+-      ObjectType dereferenced = type.dereference();
+-      if (dereferenced != null) {
+-        type = dereferenced;
+-      }
+-    }
+-    if (type.isFunctionPrototypeType() ||
+-        (type.toObjectType() != null &&
+-         type.toObjectType().getConstructor() != null)) {
+-      return type.toString();
+-    }
+     String qualifiedName = n.getQualifiedName();
+     if (qualifiedName != null) {
+       return qualifiedName;

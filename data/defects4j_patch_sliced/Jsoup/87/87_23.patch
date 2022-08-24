@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
+@@ -630,7 +630,7 @@ enum HtmlTreeBuilderState {
+                                 lastNode = node;
+                             }
+ 
+-                            if (StringUtil.inSorted(commonAncestor.nodeName(), Constants.InBodyEndTableFosters)) {
++                            if (StringUtil.inSorted(commonAncestor.normalName(), Constants.InBodyEndTableFosters)) {
+                                 if (lastNode.parent() != null)
+                                     lastNode.remove();
+                                 tb.insertInFosterParent(lastNode);

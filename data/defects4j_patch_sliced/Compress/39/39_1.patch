@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/compress/utils/ArchiveUtils.java
++++ b/src/main/java/org/apache/commons/compress/utils/ArchiveUtils.java
+@@ -28,6 +28,7 @@ import org.apache.commons.compress.archivers.ArchiveEntry;
+  */
+ public class ArchiveUtils {
+ 
++    private static final int MAX_SANITIZED_NAME_LENGTH = 255;
+ 
+     /** Private constructor to prevent instantiation of this utility class. */
+     private ArchiveUtils(){

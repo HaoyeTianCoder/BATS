@@ -1,0 +1,10 @@
+--- a/src/java/org/apache/commons/jxpath/ri/compiler/Expression.java
++++ b/src/java/org/apache/commons/jxpath/ri/compiler/Expression.java
+@@ -16,6 +16,7 @@
+  */
+ package org.apache.commons.jxpath.ri.compiler;
+ 
++import org.apache.commons.jxpath.NodeSet;
+ import org.apache.commons.jxpath.Pointer;
+ import org.apache.commons.jxpath.ri.EvalContext;
+ import org.apache.commons.jxpath.ri.model.NodePointer;

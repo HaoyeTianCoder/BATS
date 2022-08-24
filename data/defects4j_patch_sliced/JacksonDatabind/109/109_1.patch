@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/std/NumberSerializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/std/NumberSerializer.java
+@@ -34,6 +34,7 @@ public class NumberSerializer
+     /**
+      * Copied from `jackson-core` class `GeneratorBase`
+      */
++    protected final static int MAX_BIG_DECIMAL_SCALE = 9999;
+     
+     protected final boolean _isInt;
+ 

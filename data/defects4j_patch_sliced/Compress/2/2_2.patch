@@ -1,0 +1,21 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/ar/ArArchiveInputStream.java
++++ b/src/main/java/org/apache/commons/compress/archivers/ar/ArArchiveInputStream.java
+@@ -57,8 +59,18 @@ public class ArArchiveInputStream extends ArchiveInputStream {
+      *             if the entry could not be read
+      */
+     public ArArchiveEntry getNextArEntry() throws IOException {
++        if (currentEntry != null) {
++            final long entryEnd = entryOffset + currentEntry.getLength();
++            while (offset < entryEnd) {
++                int x = read();
++                if (x == -1) {
+                     // hit EOF before previous entry was complete
+                     // TODO: throw an exception instead?
++                    return null;
++                }
++            }
++            currentEntry = null;
++        }
+ 
+         if (offset == 0) {
+             final byte[] expected = ArArchiveEntry.HEADER.getBytes();

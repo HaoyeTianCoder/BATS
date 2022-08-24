@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/std/StdKeyDeserializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/std/StdKeyDeserializer.java
+@@ -15,6 +16,7 @@ import com.fasterxml.jackson.databind.annotation.JacksonStdImpl;
+ import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
+ import com.fasterxml.jackson.databind.util.ClassUtil;
+ import com.fasterxml.jackson.databind.util.EnumResolver;
++import com.fasterxml.jackson.databind.util.TokenBuffer;
+ 
+ /**
+  * Default {@link KeyDeserializer} implementation used for most {@link java.util.Map}

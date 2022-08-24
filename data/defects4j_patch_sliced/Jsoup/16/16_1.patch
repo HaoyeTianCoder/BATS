@@ -1,0 +1,10 @@
+--- a/src/main/java/org/jsoup/nodes/DocumentType.java
++++ b/src/main/java/org/jsoup/nodes/DocumentType.java
+@@ -1,6 +1,7 @@
+ package org.jsoup.nodes;
+ 
+ import org.jsoup.helper.StringUtil;
++import org.jsoup.helper.Validate;
+ 
+ /**
+  * A {@code <!DOCTPYE>} node.

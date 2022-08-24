@@ -1,0 +1,9 @@
+--- a/src/java/org/apache/commons/jxpath/ri/compiler/Expression.java
++++ b/src/java/org/apache/commons/jxpath/ri/compiler/Expression.java
+@@ -142,4 +151,4 @@ public abstract class Expression {
+             throw new UnsupportedOperationException();
+         }
+     }
+-}
++}
+\ No newline at end of file

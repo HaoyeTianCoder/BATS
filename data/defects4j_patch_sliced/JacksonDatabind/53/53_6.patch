@@ -1,0 +1,23 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/type/TypeFactory.java
++++ b/src/main/java/com/fasterxml/jackson/databind/type/TypeFactory.java
+@@ -1157,12 +1167,16 @@ public final class TypeFactory
+             return result;
+         }
+         // Barring that, we may have recently constructed an instance
+-        boolean cachable = (bindings == null) || bindings.isEmpty();
+-        if (cachable) {
+-            result = _typeCache.get(rawType);
++        final Object key;
++        if ((bindings == null) || bindings.isEmpty()) {
++            key = rawType;
++            result = _typeCache.get(key); // ok, cache object is synced
++        } else {
++            key = bindings.asKey(rawType);
++        }
++        result = _typeCache.get(key); // ok, cache object is synced
+         if (result != null) {
+             return result;
+-            }
+         }
+ 
+         // 15-Oct-2015, tatu: recursive reference?

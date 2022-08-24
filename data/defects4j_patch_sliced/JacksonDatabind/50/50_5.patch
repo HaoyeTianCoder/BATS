@@ -1,0 +1,19 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializer.java
+@@ -476,6 +491,16 @@ public class BeanDeserializer
+     /**
+      * @since 2.8
+      */
++    private BeanReferring handleUnresolvedReference(JsonParser p,
++            SettableBeanProperty prop, PropertyValueBuffer buffer,
++            UnresolvedForwardReference reference)
++        throws JsonMappingException
++    {
++        BeanReferring referring = new BeanReferring(reference, prop.getType().getRawClass(),
++                buffer, prop);
++        reference.getRoid().appendReferring(referring);
++        return referring;
++    }
+ 
+     protected final Object _deserializeWithErrorWrapping(JsonParser p,
+             DeserializationContext ctxt, SettableBeanProperty prop)

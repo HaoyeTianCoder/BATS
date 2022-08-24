@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/std/StdKeyDeserializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/std/StdKeyDeserializer.java
+@@ -132,7 +132,7 @@ public class StdKeyDeserializer extends KeyDeserializer
+         } catch (Exception re) {
+             return ctxt.handleWeirdKey(_keyClass, key, "not a valid representation, problem: (%s) %s",
+                     re.getClass().getName(),
+-                    re.getMessage());
++                    ClassUtil.exceptionMessage(re));
+         }
+         if (_keyClass.isEnum() && ctxt.getConfig().isEnabled(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL)) {
+             return null;

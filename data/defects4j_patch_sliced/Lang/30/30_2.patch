@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/lang3/StringUtils.java
++++ b/src/main/java/org/apache/commons/lang3/StringUtils.java
+@@ -1440,7 +1448,7 @@ public class StringUtils {
+      * <code>false</code> if no match or null input
+      * @since 2.4
+      */
+-    public static boolean containsAny(CharSequence cs, char[] searchChars) {
++    public static boolean containsAny(String cs, char[] searchChars) {
+         if (isEmpty(cs) || ArrayUtils.isEmpty(searchChars)) {
+             return false;
+         }

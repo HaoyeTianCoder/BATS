@@ -1,0 +1,49 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/type/TypeBindings.java
++++ b/src/main/java/com/fasterxml/jackson/databind/type/TypeBindings.java
+@@ -425,6 +428,46 @@ name, i, t.getRawClass()));
+      *
+      * @since 2.8
+      */
++    final static class AsKey {
++        private final Class<?> _raw;
++        private final JavaType[] _params;
++        private final int _hash;
++
++        public AsKey(Class<?> raw, JavaType[] params, int hash) {
++            _raw = raw ;
++            _params = params;
++            _hash = hash;
++        }
+ 
++        @Override
++        public int hashCode() { return _hash; }
++
++        @Override
++        public boolean equals(Object o) {
++            if (o == this) return true;
++            if (o == null) return false;
++            if (o.getClass() != getClass()) return false;
++            AsKey other = (AsKey) o;
++
++            if ((_hash == other._hash) && (_raw == other._raw)) {
++                final JavaType[] otherParams = other._params;
++                final int len = _params.length;
++
++                if (len == otherParams.length) {
++                    for (int i = 0; i < len; ++i) {
++                        if (!_params[i].equals(otherParams[i])) {
++                            return false;
++                        }
++                    }
++                    return true;
++                }
++            }
++            return false;
++        }
+ 
++        @Override
++        public String toString() {
++            return _raw.getName()+"<>";
++        }
++    }
+ }

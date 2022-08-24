@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializer.java
+@@ -6,6 +6,7 @@ import java.util.*;
+ import com.fasterxml.jackson.core.*;
+ import com.fasterxml.jackson.databind.*;
+ import com.fasterxml.jackson.databind.deser.impl.*;
++import com.fasterxml.jackson.databind.deser.impl.ReadableObjectId.Referring;
+ import com.fasterxml.jackson.databind.util.NameTransformer;
+ import com.fasterxml.jackson.databind.util.TokenBuffer;
+ 

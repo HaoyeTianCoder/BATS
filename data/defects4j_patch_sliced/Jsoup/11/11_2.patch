@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/select/Selector.java
++++ b/src/main/java/org/jsoup/select/Selector.java
+@@ -178,6 +180,8 @@ public class Selector {
+             return matches(false);
+         } else if (tq.matches(":matchesOwn(")) {
+             return matches(true);
++        } else if (tq.matches(":not(")) {
++            return not();
+         } else { // unhandled
+             throw new SelectorParseException("Could not parse query '%s': unexpected token at '%s'", query, tq.remainder());
+         }

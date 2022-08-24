@@ -1,0 +1,9 @@
+--- a/src/main/java/org/jsoup/nodes/Entities.java
++++ b/src/main/java/org/jsoup/nodes/Entities.java
+@@ -1,5 +1,6 @@
+ package org.jsoup.nodes;
+ 
++import org.jsoup.parser.Parser;
+ 
+ import java.io.IOException;
+ import java.io.InputStream;

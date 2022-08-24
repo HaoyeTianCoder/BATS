@@ -1,0 +1,19 @@
+--- a/src/com/google/javascript/jscomp/TypedScopeCreator.java
++++ b/src/com/google/javascript/jscomp/TypedScopeCreator.java
+@@ -577,7 +585,16 @@ final class TypedScopeCreator implements ScopeCreator {
+           break;
+ 
+         case Token.OBJECTLIT:
++          JSDocInfo info = n.getJSDocInfo();
++          if (info != null &&
++              info.getLendsName() != null) {
++            if (lentObjectLiterals == null) {
++              lentObjectLiterals = Lists.newArrayList();
++            }
++            lentObjectLiterals.add(n);
++          } else {
+             defineObjectLiteral(n);
++          }
+           break;
+ 
+           // NOTE(nicksantos): If we ever support Array tuples,

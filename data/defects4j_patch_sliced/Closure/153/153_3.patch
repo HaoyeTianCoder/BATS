@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/Normalize.java
++++ b/src/com/google/javascript/jscomp/Normalize.java
+@@ -666,7 +674,7 @@ class Normalize implements CompilerPass {
+             name);
+         compiler.report(
+             JSError.make(
+-                NodeUtil.getSourceName(nodeWithLineNumber), nodeWithLineNumber,
++                input.getName(), n,
+                 CATCH_BLOCK_VAR_ERROR, name));
+       } else if (v != null && parent.getType() == Token.FUNCTION) {
+         if (v.getParentNode().getType() == Token.VAR) {

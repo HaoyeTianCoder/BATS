@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/introspect/JacksonAnnotationIntrospector.java
++++ b/src/main/java/com/fasterxml/jackson/databind/introspect/JacksonAnnotationIntrospector.java
+@@ -1,6 +1,7 @@
+ package com.fasterxml.jackson.databind.introspect;
+ 
+ import java.lang.annotation.Annotation;
++import java.lang.reflect.Field;
+ import java.util.*;
+ 
+ import com.fasterxml.jackson.annotation.*;

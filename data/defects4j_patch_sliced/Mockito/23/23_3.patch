@@ -1,0 +1,10 @@
+--- a/src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java
++++ b/src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java
+@@ -97,6 +109,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
+                 : withSettings();
+ 
+         return mockSettings
++		        .serializable()
+                 .defaultAnswer(returnsDeepStubsAnswerUsing(returnTypeGenericMetadata));
+     }
+ 

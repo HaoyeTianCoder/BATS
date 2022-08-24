@@ -1,0 +1,13 @@
+--- a/src/java/org/apache/commons/cli/PosixParser.java
++++ b/src/java/org/apache/commons/cli/PosixParser.java
+@@ -208,6 +209,10 @@ public class PosixParser extends Parser
+             eatTheRest = true;
+         }
+ 
++        if (options.hasOption(token))
++        {
++            currentOption = options.getOption(token);
++        }
+ 
+         tokens.add(token);
+     }

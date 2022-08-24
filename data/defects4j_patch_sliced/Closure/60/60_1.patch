@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/NodeUtil.java
++++ b/src/com/google/javascript/jscomp/NodeUtil.java
+@@ -105,6 +105,8 @@ public final class NodeUtil {
+         // ignoring side-effects
+         return TernaryValue.TRUE;
+ 
++      case Token.VOID:
++        return TernaryValue.FALSE;
+ 
+       default:
+         return getPureBooleanValue(n);

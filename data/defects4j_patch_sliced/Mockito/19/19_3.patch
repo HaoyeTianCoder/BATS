@@ -1,0 +1,11 @@
+--- a/src/org/mockito/internal/configuration/injection/filter/FinalMockCandidateFilter.java
++++ b/src/org/mockito/internal/configuration/injection/filter/FinalMockCandidateFilter.java
+@@ -20,7 +21,7 @@ import java.util.Collection;
+  * </ul>
+  */
+ public class FinalMockCandidateFilter implements MockCandidateFilter {
+-    public OngoingInjecter filterCandidate(final Collection<Object> mocks, final Field field, final Object fieldInstance) {
++    public OngoingInjecter filterCandidate(final Collection<Object> mocks, final Field field, List<Field> fields, final Object fieldInstance) {
+         if(mocks.size() == 1) {
+             final Object matchingMock = mocks.iterator().next();
+ 

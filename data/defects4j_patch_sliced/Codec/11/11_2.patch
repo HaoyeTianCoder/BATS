@@ -1,0 +1,17 @@
+--- a/src/main/java/org/apache/commons/codec/net/QuotedPrintableCodec.java
++++ b/src/main/java/org/apache/commons/codec/net/QuotedPrintableCodec.java
+@@ -111,12 +114,13 @@ public class QuotedPrintableCodec implements BinaryEncoder, BinaryDecoder, Strin
+      *            the buffer to write to
+      * @return The number of bytes written to the <code>buffer</code>
+      */
+-    private static final void encodeQuotedPrintable(int b, ByteArrayOutputStream buffer) {
++    private static final int encodeQuotedPrintable(int b, ByteArrayOutputStream buffer) {
+         buffer.write(ESCAPE_CHAR);
+         char hex1 = Character.toUpperCase(Character.forDigit((b >> 4) & 0xF, 16));
+         char hex2 = Character.toUpperCase(Character.forDigit(b & 0xF, 16));
+         buffer.write(hex1);
+         buffer.write(hex2);
++        return 3;
+     }
+ 
+     /**

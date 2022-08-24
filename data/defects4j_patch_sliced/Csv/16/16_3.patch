@@ -1,0 +1,14 @@
+--- a/src/main/java/org/apache/commons/csv/CSVParser.java
++++ b/src/main/java/org/apache/commons/csv/CSVParser.java
+@@ -520,7 +522,10 @@ public final class CSVParser implements Iterable<CSVRecord>, Closeable {
+      */
+     @Override
+     public Iterator<CSVRecord> iterator() {
+-        return new Iterator<CSVRecord>() {
++        return csvRecordIterator;
++    }
++    
++    class CSVRecordIterator implements Iterator<CSVRecord> {
+         private CSVRecord current;
+   
+         private CSVRecord getNextRecord() {

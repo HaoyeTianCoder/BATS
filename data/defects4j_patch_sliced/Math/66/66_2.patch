@@ -1,0 +1,21 @@
+--- a/src/main/java/org/apache/commons/math/optimization/univariate/BrentOptimizer.java
++++ b/src/main/java/org/apache/commons/math/optimization/univariate/BrentOptimizer.java
+@@ -54,17 +54,10 @@ public class BrentOptimizer extends AbstractUnivariateRealOptimizer {
+      */
+     protected double doOptimize()
+         throws MaxIterationsExceededException, FunctionEvaluationException {
+-        throw new UnsupportedOperationException();
+-    }
+-    public double optimize(final UnivariateRealFunction f, final GoalType goalType, final double min, final double max, final double startValue) throws MaxIterationsExceededException, FunctionEvaluationException {
+-        clearResult();
+         return localMin(getGoalType() == GoalType.MINIMIZE,
+-                        f, goalType, min, startValue, max,
++                        getMin(), getStartValue(), getMax(),
+                         getRelativeAccuracy(), getAbsoluteAccuracy());
+     }
+-    public double optimize(final UnivariateRealFunction f, final GoalType goalType, final double min, final double max) throws MaxIterationsExceededException, FunctionEvaluationException {
+-        return optimize(f, goalType, min, max, min + GOLDEN_SECTION * (max - min));
+-    }
+ 
+     /**
+      * Find the minimum of the function within the interval {@code (lo, hi)}.

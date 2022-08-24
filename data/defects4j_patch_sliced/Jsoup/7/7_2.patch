@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/nodes/Document.java
++++ b/src/main/java/org/jsoup/nodes/Document.java
+@@ -110,6 +111,8 @@ public class Document extends Element {
+         normaliseTextNodes(htmlEl);
+         normaliseTextNodes(this);
+ 
++        normaliseStructure("head", htmlEl);
++        normaliseStructure("body", htmlEl);
+         
+         return this;
+     }

@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/tar/TarArchiveOutputStream.java
++++ b/src/main/java/org/apache/commons/compress/archivers/tar/TarArchiveOutputStream.java
+@@ -152,6 +153,7 @@ public class TarArchiveOutputStream extends ArchiveOutputStream {
+     public TarArchiveOutputStream(OutputStream os, int blockSize,
+                                   int recordSize, String encoding) {
+         out = new CountingOutputStream(os);
++        this.encoding = encoding;
+         this.zipEncoding = ZipEncodingHelper.getZipEncoding(encoding);
+ 
+         this.assemLen = 0;

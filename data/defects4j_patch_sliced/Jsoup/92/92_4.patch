@@ -1,0 +1,27 @@
+--- a/src/main/java/org/jsoup/nodes/Attributes.java
++++ b/src/main/java/org/jsoup/nodes/Attributes.java
+@@ -394,6 +399,24 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
+      * @param settings case sensitivity
+      * @return number of removed dupes
+      */
++    public int deduplicate(ParseSettings settings) {
++        if (isEmpty())
++            return 0;
++        boolean preserve = settings.preserveAttributeCase();
++        int dupes = 0;
++        OUTER: for (int i = 0; i < keys.length; i++) {
++            for (int j = i + 1; j < keys.length; j++) {
++                if (keys[j] == null)
++                    continue OUTER; // keys.length doesn't shrink when removing, so re-test
++                if ((preserve && keys[i].equals(keys[j])) || (!preserve && keys[i].equalsIgnoreCase(keys[j]))) {
++                    dupes++;
++                    remove(j);
++                    j--;
++                }
++            }
++        }
++        return dupes;
++    }
+ 
+     private static class Dataset extends AbstractMap<String, String> {
+         private final Attributes attributes;

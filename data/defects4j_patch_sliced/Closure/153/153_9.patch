@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/SyntacticScopeCreator.java
++++ b/src/com/google/javascript/jscomp/SyntacticScopeCreator.java
+@@ -139,7 +136,7 @@ class SyntacticScopeCreator implements ScopeCreator {
+           // This is invalid, but allow it so the checks can catch it.
+           return;
+         }
+-        declareVar(fnName, n.getFirstChild(), n, parent, null, n);
++        declareVar(n.getFirstChild());
+         return;   // should not examine function's children
+ 
+       case Token.CATCH:

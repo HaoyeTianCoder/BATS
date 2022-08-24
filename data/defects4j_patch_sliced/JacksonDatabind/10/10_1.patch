@@ -1,0 +1,24 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/AnyGetterWriter.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/AnyGetterWriter.java
+@@ -21,16 +21,20 @@ public class AnyGetterWriter
+      */
+     protected final AnnotatedMember _accessor;
+ 
++    protected JsonSerializer<Object> _serializer;
+ 
+     protected MapSerializer _mapSerializer;
+     
+     @SuppressWarnings("unchecked")
+     public AnyGetterWriter(BeanProperty property,
+-            AnnotatedMember accessor, MapSerializer serializer)
++            AnnotatedMember accessor, JsonSerializer<?> serializer)
+     {
+         _accessor = accessor;
+         _property = property;
++        _serializer = (JsonSerializer<Object>) serializer;
++        if (serializer instanceof MapSerializer) {
+             _mapSerializer = (MapSerializer) serializer;
++        }
+     }
+ 
+     public void getAndSerialize(Object bean, JsonGenerator gen, SerializerProvider provider)

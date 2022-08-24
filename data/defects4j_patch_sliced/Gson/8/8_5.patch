@@ -1,0 +1,16 @@
+--- a/gson/src/main/java/com/google/gson/internal/UnsafeAllocator.java
++++ b/gson/src/main/java/com/google/gson/internal/UnsafeAllocator.java
+@@ -107,4 +111,13 @@ public abstract class UnsafeAllocator {
+    * throw an {@link java.lang.UnsupportedOperationException}
+    * @param c instance of the class to be checked
+    */
++  private static void assertInstantiable(Class<?> c) {
++    int modifiers = c.getModifiers();
++    if (Modifier.isInterface(modifiers)) {
++      throw new UnsupportedOperationException("Interface can't be instantiated! Interface name: " + c.getName());
++    }
++    if (Modifier.isAbstract(modifiers)) {
++      throw new UnsupportedOperationException("Abstract class can't be instantiated! Class name: " + c.getName());
++    }
++  }
+ }

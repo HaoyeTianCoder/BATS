@@ -1,0 +1,17 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/util/TokenBuffer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/util/TokenBuffer.java
+@@ -736,12 +736,12 @@ sb.append("NativeObjectIds=").append(_hasNativeObjectIds).append(",");
+         if (offset > 0 || len != text.length()) {
+             text = text.substring(offset, offset+len);
+         }
+-        _append(JsonToken.VALUE_EMBEDDED_OBJECT, new RawValue(text));
++        _appendValue(JsonToken.VALUE_EMBEDDED_OBJECT, new RawValue(text));
+     }
+ 
+     @Override
+     public void writeRawValue(char[] text, int offset, int len) throws IOException {
+-        _append(JsonToken.VALUE_EMBEDDED_OBJECT, new String(text, offset, len));
++        _appendValue(JsonToken.VALUE_EMBEDDED_OBJECT, new String(text, offset, len));
+     }
+ 
+     /*

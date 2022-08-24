@@ -1,0 +1,14 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/ArchiveStreamFactory.java
++++ b/src/main/java/org/apache/commons/compress/archivers/ArchiveStreamFactory.java
+@@ -294,7 +294,11 @@ public class ArchiveStreamFactory {
+             }
+         }
+         if (JAR.equalsIgnoreCase(archiverName)) {
++            if (entryEncoding != null) {
++                return new JarArchiveOutputStream(out, entryEncoding);
++            } else {
+                 return new JarArchiveOutputStream(out);
++            }
+         }
+         if (CPIO.equalsIgnoreCase(archiverName)) {
+             if (entryEncoding != null) {

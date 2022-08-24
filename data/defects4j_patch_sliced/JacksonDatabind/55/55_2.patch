@@ -1,0 +1,12 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/std/StdKeySerializers.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/std/StdKeySerializers.java
+@@ -79,7 +80,8 @@ public class StdKeySerializers
+                 return new Dynamic();
+             }
+             if (rawKeyType.isEnum()) {
+-                return new Default(Default.TYPE_ENUM, rawKeyType);
++                return EnumKeySerializer.construct(rawKeyType,
++                        EnumValues.constructFromName(config, (Class<Enum<?>>) rawKeyType));
+             }
+         }
+         return DEFAULT_KEY_SERIALIZER;

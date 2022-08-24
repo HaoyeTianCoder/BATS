@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
+@@ -728,7 +728,7 @@ enum HtmlTreeBuilderState {
+                             return false;
+                         } else {
+                             tb.generateImpliedEndTags(name);
+-                            if (!tb.currentElement().nodeName().equals(name))
++                            if (!tb.currentElement().normalName().equals(name))
+                                 tb.error(this);
+                             tb.popStackToClose(Constants.Headings);
+                         }

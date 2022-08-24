@@ -1,0 +1,12 @@
+--- a/src/main/java/org/jsoup/select/Elements.java
++++ b/src/main/java/org/jsoup/select/Elements.java
+@@ -19,6 +19,9 @@ public class Elements implements List<Element>, Cloneable {
+         contents = new ArrayList<Element>();
+     }
+ 
++    public Elements(int initialCapacity) {
++        contents = new ArrayList<Element>(initialCapacity);
++    }
+ 
+     public Elements(Collection<Element> elements) {
+         contents = new ArrayList<Element>(elements);

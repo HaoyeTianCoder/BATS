@@ -1,0 +1,14 @@
+--- a/src/main/java/org/apache/commons/compress/utils/BitInputStream.java
++++ b/src/main/java/org/apache/commons/compress/utils/BitInputStream.java
+@@ -105,6 +127,11 @@ public class BitInputStream implements Closeable {
+                 bitsOut = (bitsCached >> (bitsCachedSize - count)) & MASKS[count];
+             }
+             bitsCachedSize -= count;
++        } else {
++            bitsOut = bitsCached & MASKS[count];
++            bitsCached = overflow;
++            bitsCachedSize = overflowBits;
++        }
+         return bitsOut;
+     }
+ }

@@ -1,0 +1,12 @@
+--- a/source/org/jfree/chart/plot/PiePlot.java
++++ b/source/org/jfree/chart/plot/PiePlot.java
+@@ -1375,6 +1375,9 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
+      * @return The percent.
+      */
+     public double getMaximumExplodePercent() {
++        if (this.dataset == null) {
++            return 0.0;
++        }
+         double result = 0.0;
+         Iterator iterator = this.dataset.getKeys().iterator();
+         while (iterator.hasNext()) {

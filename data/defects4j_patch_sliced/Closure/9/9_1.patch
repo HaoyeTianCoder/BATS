@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/ProcessCommonJSModules.java
++++ b/src/com/google/javascript/jscomp/ProcessCommonJSModules.java
+@@ -116,6 +116,7 @@ public class ProcessCommonJSModules implements CompilerPass {
+   private String normalizeSourceName(String filename) {
+     // The DOS command shell will normalize "/" to "\", so we have to
+     // wrestle it back.
++    filename = filename.replace("\\", "/");
+ 
+     if (filename.indexOf(filenamePrefix) == 0) {
+       filename = filename.substring(filenamePrefix.length());

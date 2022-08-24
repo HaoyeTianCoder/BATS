@@ -1,0 +1,23 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
+@@ -1380,17 +1380,17 @@ enum HtmlTreeBuilderState {
+                         return false;
+                 }
+             } else if (t.isEndTag() && t.asEndTag().normalName().equals("frameset")) {
+-                if (tb.currentElement().nodeName().equals("html")) {
++                if (tb.currentElement().normalName().equals("html")) { // frag
+                     tb.error(this);
+                     return false;
+                 } else {
+                     tb.pop();
+-                    if (!tb.isFragmentParsing() && !tb.currentElement().nodeName().equals("frameset")) {
++                    if (!tb.isFragmentParsing() && !tb.currentElement().normalName().equals("frameset")) {
+                         tb.transition(AfterFrameset);
+                     }
+                 }
+             } else if (t.isEOF()) {
+-                if (!tb.currentElement().nodeName().equals("html")) {
++                if (!tb.currentElement().normalName().equals("html")) {
+                     tb.error(this);
+                     return true;
+                 }

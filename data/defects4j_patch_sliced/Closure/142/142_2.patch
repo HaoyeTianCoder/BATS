@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/parsing/JsDocInfoParser.java
++++ b/src/com/google/javascript/jscomp/parsing/JsDocInfoParser.java
+@@ -1165,6 +1165,8 @@ public final class JsDocInfoParser {
+         case EOF:
+           // When we're capturing a license block, annotations
+           // in the block are ok.
++          if (!(option == WhitespaceOption.PRESERVE &&
++                token == JsDocToken.ANNOTATION)) {
+             String multilineText = builder.toString();
+ 
+             if (option != WhitespaceOption.PRESERVE) {

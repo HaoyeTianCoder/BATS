@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/cpio/CpioArchiveInputStream.java
++++ b/src/main/java/org/apache/commons/compress/archivers/cpio/CpioArchiveInputStream.java
+@@ -344,7 +344,7 @@ public class CpioArchiveInputStream extends ArchiveInputStream implements
+         ret.setChksum(readAsciiLong(8, 16));
+         String name = readCString((int) namesize);
+         ret.setName(name);
+-        if (mode == 0 && !name.equals(CPIO_TRAILER)){
++        if (CpioUtil.fileType(mode) == 0 && !name.equals(CPIO_TRAILER)){
+             throw new IOException("Mode 0 only allowed in the trailer. Found entry name: "+name + " Occured at byte: " + getBytesRead());
+         }
+         skip(ret.getHeaderPadCount());

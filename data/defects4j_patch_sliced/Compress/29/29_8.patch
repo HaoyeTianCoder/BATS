@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/dump/DumpArchiveInputStream.java
++++ b/src/main/java/org/apache/commons/compress/archivers/dump/DumpArchiveInputStream.java
+@@ -101,6 +102,7 @@ public class DumpArchiveInputStream extends ArchiveInputStream {
+         throws ArchiveException {
+         this.raw = new TapeInputStream(is);
+         this.hasHitEOF = false;
++        this.encoding = encoding;
+         this.zipEncoding = ZipEncodingHelper.getZipEncoding(encoding);
+ 
+         try {

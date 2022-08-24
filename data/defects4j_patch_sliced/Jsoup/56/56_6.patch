@@ -1,0 +1,10 @@
+--- a/src/main/java/org/jsoup/parser/Token.java
++++ b/src/main/java/org/jsoup/parser/Token.java
+@@ -32,6 +32,7 @@ abstract class Token {
+ 
+     static final class Doctype extends Token {
+         final StringBuilder name = new StringBuilder();
++        String pubSysKey = null;
+         final StringBuilder publicIdentifier = new StringBuilder();
+         final StringBuilder systemIdentifier = new StringBuilder();
+         boolean forceQuirks = false;

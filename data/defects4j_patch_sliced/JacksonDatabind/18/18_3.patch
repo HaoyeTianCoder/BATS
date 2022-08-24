@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/MappingIterator.java
++++ b/src/main/java/com/fasterxml/jackson/databind/MappingIterator.java
+@@ -95,7 +100,7 @@ public class MappingIterator<T> implements Iterator<T>, Closeable
+     /**
+      * State of the iterator
+      */
+-    protected boolean _hasNextChecked;
++    protected int _state;
+ 
+     /*
+     /**********************************************************

@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/jsontype/impl/StdSubtypeResolver.java
++++ b/src/main/java/com/fasterxml/jackson/databind/jsontype/impl/StdSubtypeResolver.java
+@@ -83,6 +84,7 @@ public class StdSubtypeResolver
+                             nt.getType());
+                     _collectAndResolve(ac, nt, config, ai, collected);
+                 }            
++            }
+         }
+ 
+         NamedType rootType = new NamedType(rawBase, null);

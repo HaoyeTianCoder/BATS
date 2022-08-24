@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/std/NumberSerializers.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/std/NumberSerializers.java
+@@ -2,6 +2,7 @@ package com.fasterxml.jackson.databind.ser.std;
+ 
+ import java.io.IOException;
+ import java.lang.reflect.Type;
++import java.math.BigDecimal;
+ import java.util.Map;
+ 
+ import com.fasterxml.jackson.annotation.JsonFormat;

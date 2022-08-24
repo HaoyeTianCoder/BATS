@@ -1,0 +1,17 @@
+--- a/src/com/google/javascript/jscomp/parsing/JsDocInfoParser.java
++++ b/src/com/google/javascript/jscomp/parsing/JsDocInfoParser.java
+@@ -1355,12 +1355,14 @@ public final class JsDocInfoParser {
+     // Track the start of the line to count whitespace that
+     // the tokenizer skipped. Because this case is rare, it's easier
+     // to do this here than in the tokenizer.
++    int lineStartChar = -1;
+ 
+     do {
+       switch (token) {
+         case STAR:
+           if (ignoreStar) {
+             // Mark the position after the star as the new start of the line.
++            lineStartChar = stream.getCharno() + 1;
+           } else {
+             // The star is part of the comment.
+             if (builder.length() > 0) {

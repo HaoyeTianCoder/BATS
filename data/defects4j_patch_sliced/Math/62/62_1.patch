@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/math/optimization/univariate/MultiStartUnivariateRealOptimizer.java
++++ b/src/main/java/org/apache/commons/math/optimization/univariate/MultiStartUnivariateRealOptimizer.java
+@@ -143,7 +143,7 @@ public class MultiStartUnivariateRealOptimizer<FUNC extends UnivariateRealFuncti
+                                                  final GoalType goal,
+                                                  final double min, final double max)
+         throws FunctionEvaluationException {
+-        return optimize(f, goal, min, max, 0);
++        return optimize(f, goal, min, max, min + 0.5 * (max - min));
+     }
+ 
+     /** {@inheritDoc} */

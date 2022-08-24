@@ -1,0 +1,22 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/util/TokenBuffer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/util/TokenBuffer.java
+@@ -1088,6 +1088,19 @@ sb.append("NativeObjectIds=").append(_hasNativeObjectIds).append(",");
+      *
+      * @since 2.6.4
+      */
++    protected final void _appendValue(JsonToken type)
++    {
++        _writeContext.writeValue();
++        Segment next = _hasNativeId
++                ? _last.append(_appendAt, type, _objectId, _typeId)
++                : _last.append(_appendAt, type);
++        if (next == null) {
++            ++_appendAt;
++        } else {
++            _last = next;
++            _appendAt = 1; // since we added first at 0
++        }
++    }
+ 
+     /**
+      * Similar to {@link #_append(JsonToken,Object)} but also updates context with

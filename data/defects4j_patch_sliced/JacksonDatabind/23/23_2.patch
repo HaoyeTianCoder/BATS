@@ -1,0 +1,18 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/std/NumberSerializers.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/std/NumberSerializers.java
+@@ -117,10 +118,15 @@ public class NumberSerializers
+     @JacksonStdImpl
+     public final static class ShortSerializer extends Base<Short>
+     {
++        private final static Short EMPTY = (short) 0;
+         final static ShortSerializer instance = new ShortSerializer();
+ 
+         public ShortSerializer() { super(Short.class, JsonParser.NumberType.INT, "number"); }
+ 
++        @Override
++        public boolean isEmpty(SerializerProvider prov, Short value) {
++            return EMPTY.equals(value);
++        }
+ 
+         @Override
+         public void serialize(Short value, JsonGenerator gen, SerializerProvider provider) throws IOException {

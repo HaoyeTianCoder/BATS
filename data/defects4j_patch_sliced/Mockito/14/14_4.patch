@@ -1,0 +1,11 @@
+--- a/src/org/mockito/internal/MockitoCore.java
++++ b/src/org/mockito/internal/MockitoCore.java
+@@ -70,7 +71,7 @@ public class MockitoCore {
+         } else if (!mockUtil.isMock(mock)) {
+             reporter.notAMockPassedToVerify();
+         }
+-        mockingProgress.verificationStarted(mode);
++        mockingProgress.verificationStarted(new MockAwareVerificationMode(mock, mode));
+         return mock;
+     }
+     

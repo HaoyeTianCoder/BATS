@@ -1,0 +1,16 @@
+--- a/src/java/org/apache/commons/jxpath/ri/compiler/CoreOperationNotEqual.java
++++ b/src/java/org/apache/commons/jxpath/ri/compiler/CoreOperationNotEqual.java
+@@ -26,12 +25,9 @@ import org.apache.commons.jxpath.ri.EvalContext;
+ public class CoreOperationNotEqual extends CoreOperationCompare {
+ 
+     public CoreOperationNotEqual(Expression arg1, Expression arg2) {
+-        super(arg1, arg2);
++        super(arg1, arg2, true);
+     }
+ 
+-    public Object computeValue(EvalContext context) {
+-        return equal(context, args[0], args[1]) ? Boolean.FALSE : Boolean.TRUE;
+-    }
+     public String getSymbol() {
+         return "!=";
+     }

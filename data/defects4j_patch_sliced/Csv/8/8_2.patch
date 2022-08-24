@@ -1,0 +1,16 @@
+--- a/src/main/java/org/apache/commons/csv/CSVFormat.java
++++ b/src/main/java/org/apache/commons/csv/CSVFormat.java
+@@ -662,13 +668,6 @@ public final class CSVFormat implements Serializable {
+             throw new IllegalStateException("No quotes mode set but no escape character is set");
+         }
+ 
+-        if (header != null) {
+-            final Set<String> set = new HashSet<String>(header.length);
+-            set.addAll(Arrays.asList(header));
+-            if (set.size() != header.length) {
+-                throw new IllegalStateException("The header contains duplicate names: " + Arrays.toString(header));
+-            }
+-        }
+     }
+ 
+     /**

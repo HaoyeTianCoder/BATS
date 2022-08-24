@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/parser/Token.java
++++ b/src/main/java/org/jsoup/parser/Token.java
+@@ -113,7 +113,7 @@ abstract class Token {
+                     else
+                         value = null;
+                     // note that we add, not put. So that the first is kept, and rest are deduped, once in a context where case sensitivity is known (the appropriate tree builder).
+-                    attributes.put(pendingAttributeName, value);
++                    attributes.add(pendingAttributeName, value);
+                 }
+             }
+             pendingAttributeName = null;

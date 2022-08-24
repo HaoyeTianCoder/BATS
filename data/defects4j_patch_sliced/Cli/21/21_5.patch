@@ -1,0 +1,38 @@
+--- a/src/java/org/apache/commons/cli2/commandline/WriteableCommandLineImpl.java
++++ b/src/java/org/apache/commons/cli2/commandline/WriteableCommandLineImpl.java
+@@ -231,18 +240,35 @@ public class WriteableCommandLineImpl
+      */
+     public boolean looksLikeOption(final String trigger)
+     {
++        if (checkForOption != null)
++        {
+             // this is a reentrant call
++            return !checkForOption.equals(trigger);
++        }
+ 
++        checkForOption = trigger;
++        try
++        {
+             for (final Iterator i = prefixes.iterator(); i.hasNext();)
+             {
+                 final String prefix = (String) i.next();
+ 
+                 if (trigger.startsWith(prefix))
+                 {
++                    if (getCurrentOption().canProcess(this, trigger)
++                            || getCurrentOption().findOption(trigger) != null)
++                    {
+                         return true;
++                    }
+                 }
+             }
++
+             return false;
++        }
++        finally
++        {
++            checkForOption = null;
++        }
+     }
+ 
+     public String toString() {

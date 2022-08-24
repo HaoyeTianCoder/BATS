@@ -1,0 +1,32 @@
+--- a/source/org/jfree/data/KeyedObjects2D.java
++++ b/source/org/jfree/data/KeyedObjects2D.java
+@@ -315,8 +316,29 @@ public class KeyedObjects2D implements Cloneable, Serializable {
+         }
+         
+         // 2. check whether the column is now empty.
++        allNull = true;
+         
++        for (int item = 0, itemCount = this.rows.size(); item < itemCount; 
++             item++) {
++            row = (KeyedObjects) this.rows.get(item);
++            int columnIndex = row.getIndex(columnKey);
++            if (columnIndex >= 0 && row.getObject(columnIndex) != null) {
++                allNull = false;
++                break;
++            }
++        }
+         
++        if (allNull) {
++            for (int item = 0, itemCount = this.rows.size(); item < itemCount; 
++                 item++) {
++                row = (KeyedObjects) this.rows.get(item);
++                int columnIndex = row.getIndex(columnKey);
++                if (columnIndex >= 0) {
++                    row.removeValue(columnIndex);
++                }
++            }
++            this.columnKeys.remove(columnKey);
++        }
+     }
+ 
+     /**

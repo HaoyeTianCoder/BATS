@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
+@@ -1086,7 +1086,7 @@ enum HtmlTreeBuilderState {
+                 return false;
+             }
+             tb.clearStackToTableBodyContext();
+-            tb.processEndTag(tb.currentElement().nodeName());
++            tb.processEndTag(tb.currentElement().normalName()); // tbody, tfoot, thead
+             return tb.process(t);
+         }
+ 

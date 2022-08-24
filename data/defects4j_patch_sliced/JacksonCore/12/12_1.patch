@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/core/json/ReaderBasedJsonParser.java
++++ b/src/main/java/com/fasterxml/jackson/core/json/ReaderBasedJsonParser.java
+@@ -619,7 +619,6 @@ public class ReaderBasedJsonParser // final in 2.3, earlier
+         if (_parsingContext.expectComma()) {
+             i = _skipComma(i);
+         }
+-        _updateLocation();
+ 
+         /* And should we now have a name? Always true for Object contexts, since
+          * the intermediate 'expect-value' state is never retained.

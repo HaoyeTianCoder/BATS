@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/DeserializationContext.java
++++ b/src/main/java/com/fasterxml/jackson/databind/DeserializationContext.java
+@@ -1600,7 +1600,7 @@ trailingToken, ClassUtil.nameOf(targetType)
+         String excMsg;
+         if (cause == null) {
+             excMsg = "N/A";
+-        } else if ((excMsg = cause.getMessage()) == null) {
++        } else if ((excMsg = ClassUtil.exceptionMessage(cause)) == null) {
+             excMsg = ClassUtil.nameOf(cause.getClass());
+         }
+         String msg = String.format("Cannot construct instance of %s, problem: %s",

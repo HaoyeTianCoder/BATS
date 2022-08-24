@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/SourceMap.java
++++ b/src/com/google/javascript/jscomp/SourceMap.java
+@@ -38,6 +38,7 @@ import java.util.List;
+  */
+ public class SourceMap {
+ 
++  private final static int UNMAPPED = -1;
+ 
+   /**
+    * A mapping from a given position in an input source file to a given position

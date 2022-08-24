@@ -1,0 +1,19 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
+@@ -765,13 +765,13 @@ enum HtmlTreeBuilderState {
+         }
+ 
+         boolean anyOtherEndTag(Token t, HtmlTreeBuilder tb) {
+-            String name = tb.settings.normalizeTag(t.asEndTag().name());
++            String name = t.asEndTag().normalName; // case insensitive search - goal is to preserve output case, not for the parse to be case sensitive
+             ArrayList<Element> stack = tb.getStack();
+             for (int pos = stack.size() -1; pos >= 0; pos--) {
+                 Element node = stack.get(pos);
+-                if (node.nodeName().equals(name)) {
++                if (node.normalName().equals(name)) {
+                     tb.generateImpliedEndTags(name);
+-                    if (!name.equals(tb.currentElement().nodeName()))
++                    if (!name.equals(tb.currentElement().normalName()))
+                         tb.error(this);
+                     tb.popStackToClose(name);
+                     break;

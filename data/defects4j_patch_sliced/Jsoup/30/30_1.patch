@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/safety/Cleaner.java
++++ b/src/main/java/org/jsoup/safety/Cleaner.java
+@@ -3,6 +3,8 @@ package org.jsoup.safety;
+ import org.jsoup.helper.Validate;
+ import org.jsoup.nodes.*;
+ import org.jsoup.parser.Tag;
++import org.jsoup.select.NodeTraversor;
++import org.jsoup.select.NodeVisitor;
+ 
+ import java.util.List;
+ 

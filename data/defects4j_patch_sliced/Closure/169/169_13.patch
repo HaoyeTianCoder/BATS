@@ -1,0 +1,23 @@
+--- a/src/com/google/javascript/rhino/jstype/JSType.java
++++ b/src/com/google/javascript/rhino/jstype/JSType.java
+@@ -542,17 +544,17 @@ public abstract class JSType implements Serializable {
+ 
+     if (isUnionType() && that.isUnionType()) {
+       return this.toMaybeUnionType().checkUnionEquivalenceHelper(
+-          that.toMaybeUnionType(), tolerateUnknowns);
++          that.toMaybeUnionType(), eqMethod);
+     }
+ 
+     if (isFunctionType() && that.isFunctionType()) {
+       return this.toMaybeFunctionType().checkFunctionEquivalenceHelper(
+-          that.toMaybeFunctionType(), tolerateUnknowns);
++          that.toMaybeFunctionType(), eqMethod);
+     }
+ 
+     if (isRecordType() && that.isRecordType()) {
+       return this.toMaybeRecordType().checkRecordEquivalenceHelper(
+-          that.toMaybeRecordType(), tolerateUnknowns);
++          that.toMaybeRecordType(), eqMethod);
+     }
+ 
+     ParameterizedType thisParamType = toMaybeParameterizedType();

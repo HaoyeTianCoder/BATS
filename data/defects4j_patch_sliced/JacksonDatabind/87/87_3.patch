@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/util/StdDateFormat.java
++++ b/src/main/java/com/fasterxml/jackson/databind/util/StdDateFormat.java
+@@ -81,6 +83,7 @@ public class StdDateFormat
+ 
+     protected final static DateFormat DATE_FORMAT_ISO8601;
+     protected final static DateFormat DATE_FORMAT_ISO8601_Z;
++    protected final static DateFormat DATE_FORMAT_ISO8601_NO_TZ; // since 2.8.10
+ 
+     protected final static DateFormat DATE_FORMAT_PLAIN;
+ 

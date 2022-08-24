@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/zip/ZipArchiveEntry.java
++++ b/src/main/java/org/apache/commons/compress/archivers/zip/ZipArchiveEntry.java
+@@ -61,6 +61,7 @@ public class ZipArchiveEntry extends java.util.zip.ZipEntry
+      */
+     public ZipArchiveEntry(String name) {
+         super(name);
++        setName(name);
+     }
+ 
+     /**

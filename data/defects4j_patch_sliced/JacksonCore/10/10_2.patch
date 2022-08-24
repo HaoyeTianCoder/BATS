@@ -1,0 +1,12 @@
+--- a/src/main/java/com/fasterxml/jackson/core/sym/ByteQuadsCanonicalizer.java
++++ b/src/main/java/com/fasterxml/jackson/core/sym/ByteQuadsCanonicalizer.java
+@@ -981,7 +982,8 @@ public final class ByteQuadsCanonicalizer
+          *    to work it out, but this is the simplest, fast and seems to do ok.
+          */
+         hash += (hash >>> 16); // to xor hi- and low- 16-bits
+-        hash ^= (hash >>> 12);
++        hash ^= (hash << 3); // shuffle back a bit
++        hash += (hash >>> 12); // and bit more
+         return hash;
+     }
+ 

@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/SettableBeanProperty.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/SettableBeanProperty.java
+@@ -608,7 +608,7 @@ public abstract class SettableBeanProperty
+         ClassUtil.throwIfRTE(e);
+         // let's wrap the innermost problem
+         Throwable th = ClassUtil.getRootCause(e);
+-        throw JsonMappingException.from(p, th.getMessage(), th);
++        throw JsonMappingException.from(p, ClassUtil.exceptionMessage(th), th);
+     }
+ 
+     @Deprecated // since 2.7

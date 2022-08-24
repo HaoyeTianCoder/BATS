@@ -1,0 +1,30 @@
+--- a/src/main/java/com/fasterxml/jackson/core/util/JsonParserSequence.java
++++ b/src/main/java/com/fasterxml/jackson/core/util/JsonParserSequence.java
+@@ -101,15 +103,21 @@ public class JsonParserSequence extends JsonParserDelegate
+     }
+ 
+     @Override
+-    public JsonToken nextToken() throws IOException, JsonParseException
++    public JsonToken nextToken() throws IOException
+     {
++        if (delegate == null) {
++            return null;
++        }
++        if (_suppressNextToken) {
++            _suppressNextToken = false;
++            return delegate.currentToken();
++        }
+         JsonToken t = delegate.nextToken();
+-        if (t != null) return t;
+-        while (switchToNext()) {
+-            t = delegate.nextToken();
+-            if (t != null) return t;
++        while ((t == null) && switchToNext()) {
++            t = delegate.hasCurrentToken()
++                    ? delegate.currentToken() : delegate.nextToken();
+         }
+-        return null;
++        return t;
+     }
+ 
+     /*

@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
+@@ -350,7 +350,7 @@ enum HtmlTreeBuilderState {
+                     } else if (name.equals("frameset")) {
+                         tb.error(this);
+                         ArrayList<Element> stack = tb.getStack();
+-                        if (stack.size() == 1 || (stack.size() > 2 && !stack.get(1).nodeName().equals("body"))) {
++                        if (stack.size() == 1 || (stack.size() > 2 && !stack.get(1).normalName().equals("body"))) {
+                             // only in fragment case
+                             return false; // ignore
+                         } else if (!tb.framesetOk()) {

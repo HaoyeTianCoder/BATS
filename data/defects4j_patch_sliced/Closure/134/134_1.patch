@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/AmbiguateProperties.java
++++ b/src/com/google/javascript/jscomp/AmbiguateProperties.java
+@@ -207,7 +207,6 @@ class AmbiguateProperties implements CompilerPass {
+     for (Property p : propertyMap.values()) {
+       if (!p.skipAmbiguating) {
+         ++numRenamedPropertyNames;
+-        computeRelatedTypes(p.type);
+         propsByFreq.add(p);
+       } else {
+         ++numSkippedPropertyNames;

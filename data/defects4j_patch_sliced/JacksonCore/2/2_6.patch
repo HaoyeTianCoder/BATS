@@ -1,0 +1,12 @@
+--- a/src/main/java/com/fasterxml/jackson/core/json/UTF8StreamJsonParser.java
++++ b/src/main/java/com/fasterxml/jackson/core/json/UTF8StreamJsonParser.java
+@@ -1404,6 +1410,9 @@ public final class UTF8StreamJsonParser
+         if (!eof) {
+             --_inputPtr;
+             // As per #105, need separating space between root values; check here
++            if (_parsingContext.inRoot()) {
++                _verifyRootSpace(c);
++            }
+         }
+         _textBuffer.setCurrentLength(outPtr);
+ 

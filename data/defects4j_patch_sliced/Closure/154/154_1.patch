@@ -1,0 +1,16 @@
+--- a/src/com/google/javascript/jscomp/TypeCheck.java
++++ b/src/com/google/javascript/jscomp/TypeCheck.java
+@@ -182,13 +182,6 @@ public class TypeCheck implements NodeTraversal.Callback, CompilerPass {
+           "original: {2}\n" +
+           "override: {3}");
+ 
+-  static final DiagnosticType HIDDEN_INTERFACE_PROPERTY_MISMATCH =
+-      DiagnosticType.warning(
+-          "JSC_HIDDEN_INTERFACE_PROPERTY_MISMATCH",
+-          "mismatch of the {0} property type and the type " +
+-          "of the property it overrides from interface {1}\n" +
+-          "original: {2}\n" +
+-          "override: {3}");
+   static final DiagnosticType UNKNOWN_OVERRIDE =
+       DiagnosticType.warning(
+           "JSC_UNKNOWN_OVERRIDE",

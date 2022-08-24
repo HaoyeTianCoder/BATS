@@ -1,0 +1,49 @@
+--- a/src/com/google/javascript/jscomp/InlineVariables.java
++++ b/src/com/google/javascript/jscomp/InlineVariables.java
+@@ -217,17 +219,44 @@ class InlineVariables implements CompilerPass {
+           // inlining heuristics. See InlineConstantsTest.
+           continue;
+         } else {
+-          inlineNonConstants(v, referenceInfo);
++          inlineNonConstants(v, referenceInfo, maybeModifiedArguments);
+         }
+       }
+     }
+ 
++    private boolean maybeEscapedOrModifiedArguments(
++        Scope scope, Map<Var, ReferenceCollection> referenceMap) {
++      if (scope.isLocal()) {
++        Var arguments = scope.getArgumentsVar();
++        ReferenceCollection refs = referenceMap.get(arguments);
++        if (refs != null && !refs.references.isEmpty()) {
++          for (Reference ref : refs.references) {
++            Node refNode = ref.getNameNode();
++            Node refParent = ref.getParent();
+             // Any reference that is not a read of the arguments property
+             // consider a escape of the arguments object.
++            if (!(NodeUtil.isGet(refParent)
++                && refNode == ref.getParent().getFirstChild()
++                && !isLValue(refParent))) {
++              return true;
++            }
++          }
++        }
++      }
++      return false;
++    }
+ 
++    private boolean isLValue(Node n) {
++      Node parent = n.getParent();
++      return (parent.getType() == Token.INC
++          || parent.getType() == Token.DEC
++          || (NodeUtil.isAssignmentOp(parent)
++          && parent.getFirstChild() == n));
++    }
+ 
+     private void inlineNonConstants(
+-        Var v, ReferenceCollection referenceInfo) {
++        Var v, ReferenceCollection referenceInfo,
++        boolean maybeModifiedArguments) {
+       int refCount = referenceInfo.references.size();
+       Reference declaration = referenceInfo.references.get(0);
+       Reference init = referenceInfo.getInitializingReference();

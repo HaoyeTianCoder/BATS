@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/parser/Tag.java
++++ b/src/main/java/org/jsoup/parser/Tag.java
+@@ -96,6 +97,8 @@ public class Tag {
+             return false;
+ 
+         // don't allow children to contain their parent (directly)
++        if (this.requiresSpecificParent() && this.getImplicitParent().equals(child))
++            return false;
+         
+         return true;
+     }

@@ -1,0 +1,17 @@
+--- a/src/com/google/javascript/jscomp/Compiler.java
++++ b/src/com/google/javascript/jscomp/Compiler.java
+@@ -325,6 +326,14 @@ public class Compiler extends AbstractCompiler {
+    * Fill any empty modules with a place holder file. It makes any cross module
+    * motion easier.
+    */
++  private void fillEmptyModules(JSModule[] modules) {
++    for (int i = 1; i < modules.length; i ++) {
++      JSModule module = modules[i];
++      if (module.getInputs().isEmpty()) {
++        module.add(JSSourceFile.fromCode("[" + module.getName() + "]", ""));
++      }
++    }
++  }
+   
+   static final DiagnosticType DUPLICATE_INPUT_IN_MODULES =
+       DiagnosticType.error("JSC_DUPLICATE_INPUT_IN_MODULES_ERROR",

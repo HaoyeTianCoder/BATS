@@ -1,0 +1,13 @@
+--- a/src/java/org/apache/commons/lang/time/FastDateFormat.java
++++ b/src/java/org/apache/commons/lang/time/FastDateFormat.java
+@@ -1019,6 +1019,10 @@ public class FastDateFormat extends Format {
+ 
+     // Serializing
+     //-----------------------------------------------------------------------
++    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
++        in.defaultReadObject();
++        init();
++    }
+     
+     // Rules
+     //-----------------------------------------------------------------------

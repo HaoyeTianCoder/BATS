@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/CollapseProperties.java
++++ b/src/com/google/javascript/jscomp/CollapseProperties.java
+@@ -606,7 +608,7 @@ class CollapseProperties implements CompilerPass {
+    * @param alias The flattened name for {@code n} (e.g. "a", "a$b$c")
+    */
+   private void updateObjLitOrFunctionDeclarationAtAssignNode(
+-      Name n, String alias) {
++      Name n, String alias, boolean canCollapseChildNames) {
+     // NOTE: It's important that we don't add additional nodes
+     // (e.g. a var node before the exprstmt) because the exprstmt might be
+     // the child of an if statement that's not inside a block).

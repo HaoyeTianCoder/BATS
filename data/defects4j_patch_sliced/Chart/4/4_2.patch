@@ -1,0 +1,10 @@
+--- a/source/org/jfree/chart/plot/XYPlot.java
++++ b/source/org/jfree/chart/plot/XYPlot.java
+@@ -4498,6 +4499,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable,
+                             includedAnnotations.add(a);
+                         }
+                     }
++                }
+             }
+         }
+ 

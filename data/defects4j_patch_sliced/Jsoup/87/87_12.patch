@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilder.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilder.java
+@@ -615,7 +615,7 @@ public class HtmlTreeBuilder extends TreeBuilder {
+ 
+     private boolean isSameFormattingElement(Element a, Element b) {
+         // same if: same namespace, tag, and attributes. Element.equals only checks tag, might in future check children
+-        return a.nodeName().equals(b.nodeName()) &&
++        return a.normalName().equals(b.normalName()) &&
+                 // a.namespace().equals(b.namespace()) &&
+                 a.attributes().equals(b.attributes());
+         // todo: namespaces

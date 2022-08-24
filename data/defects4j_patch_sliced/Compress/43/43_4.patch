@@ -1,0 +1,13 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/zip/ZipArchiveOutputStream.java
++++ b/src/main/java/org/apache/commons/compress/archivers/zip/ZipArchiveOutputStream.java
+@@ -1489,8 +1489,8 @@ private int versionNeededToExtract(final int zipMethod, final boolean zip64, fin
+         return versionNeededToExtractMethod(zipMethod);
+     }
+ 
+-    private boolean usesDataDescriptor(final int zipMethod) {
+-        return zipMethod == DEFLATED && channel == null;
++    private boolean usesDataDescriptor(final int zipMethod, boolean phased) {
++        return !phased && zipMethod == DEFLATED && channel == null;
+     }
+ 
+     private int versionNeededToExtractMethod(int zipMethod) {

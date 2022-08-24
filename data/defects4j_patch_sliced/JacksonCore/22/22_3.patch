@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/core/filter/FilteringParserDelegate.java
++++ b/src/main/java/com/fasterxml/jackson/core/filter/FilteringParserDelegate.java
+@@ -572,7 +574,7 @@ public class FilteringParserDelegate extends JsonParserDelegate
+                     }
+                     _itemFilter = f;
+                     if (f == TokenFilter.INCLUDE_ALL) {
+-                        if (_includePath) {
++                        if (_verifyAllowedMatches() && _includePath) {
+                             return (_currToken = t);
+                         }
+ //                        if (_includeImmediateParent) { ...

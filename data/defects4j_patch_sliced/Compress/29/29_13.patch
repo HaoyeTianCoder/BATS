@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/zip/ZipArchiveInputStream.java
++++ b/src/main/java/org/apache/commons/compress/archivers/zip/ZipArchiveInputStream.java
+@@ -62,6 +62,7 @@ public class ZipArchiveInputStream extends ArchiveInputStream {
+     private final ZipEncoding zipEncoding;
+ 
+     // the provided encoding (for unit tests)
++    final String encoding;
+ 
+     /** Whether to look for and use Unicode extra fields. */
+     private final boolean useUnicodeExtraFields;

@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/std/JsonValueSerializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/std/JsonValueSerializer.java
+@@ -6,6 +6,7 @@ import java.lang.reflect.Type;
+ import java.util.LinkedHashSet;
+ import java.util.Set;
+ 
++import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
+ import com.fasterxml.jackson.core.*;
+ import com.fasterxml.jackson.databind.*;
+ import com.fasterxml.jackson.databind.annotation.JacksonStdImpl;

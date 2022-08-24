@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/nodes/Element.java
++++ b/src/main/java/org/jsoup/nodes/Element.java
+@@ -86,7 +86,7 @@ public class Element extends Node {
+ 
+     protected List<Node> ensureChildNodes() {
+         if (childNodes == EMPTY_NODES) {
+-            childNodes = new NodeList(4);
++            childNodes = new NodeList(this, 4);
+         }
+         return childNodes;
+     }

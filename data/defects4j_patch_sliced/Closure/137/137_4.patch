@@ -1,0 +1,146 @@
+--- a/src/com/google/javascript/jscomp/MakeDeclaredNamesUnique.java
++++ b/src/com/google/javascript/jscomp/MakeDeclaredNamesUnique.java
+@@ -263,86 +266,105 @@ class MakeDeclaredNamesUnique
+     private boolean containsSeparator(String name) {
+       return name.indexOf(ContextualRenamer.UNIQUE_ID_SEPARATOR) != -1;
+     }
+-    private static String getOrginalNameInternal(String name, int index) {
+-      return name.substring(0, index);
+-    }
+ 
+     /**
+      * Prepare a set for the new scope.
+      */
++    public void enterScope(NodeTraversal t) {
++      if (t.inGlobalScope()) {
++        return;
++      }
+ 
+-    private static String getNameSuffix(String name, int index) {
+-      return name.substring(
+-          index + ContextualRenamer.UNIQUE_ID_SEPARATOR.length(),
+-          name.length());
++      referenceStack.push(referencedNames);
++      referencedNames = Sets.newHashSet();
+     }
+ 
+     /**
+      * Rename vars for the current scope, and merge any referenced 
+      * names into the parent scope reference set.
+      */
+-    @Override
+-    public void visit(NodeTraversal t, Node node, Node parent) {
+-      if (node.getType() == Token.NAME) {
+-        String oldName = node.getString();
+-        if (containsSeparator(oldName)) {
+-          Scope scope = t.getScope();
+-          Var var = t.getScope().getVar(oldName);
+-          if (var == null || var.isGlobal()) {
++    public void exitScope(NodeTraversal t) {
++      if (t.inGlobalScope()) {
+         return;
+       }
+ 
+-          if (nameMap.containsKey(var)) {
+-            node.setString(nameMap.get(var));
+-          } else {
+-            int index = indexOfSeparator(oldName);
+-            String newName = getOrginalNameInternal(oldName, index);
+-            String suffix = getNameSuffix(oldName, index);
++      for (Iterator<Var> it = t.getScope().getVars(); it.hasNext();) {
++        Var v = it.next();
++        handleScopeVar(v);
++      }
+ 
+       // Merge any names that were referenced but not declared in the current
+       // scope.
++      Set<String> current = referencedNames;
++      referencedNames = referenceStack.pop();
+       // If there isn't anything left in the stack we will be going into the
+       // global scope: don't try to build a set of referenced names for the
+       // global scope.
+-            boolean recurseScopes = false;
+-            if (!suffix.matches("\\d+")) {
+-              recurseScopes = true;
+-            }
++      if (!referenceStack.isEmpty()) {
++        referencedNames.addAll(current);
++      }
++    }
+ 
+     /**
+      * For the Var declared in the current scope determine if it is possible
+      * to revert the name to its orginal form without conflicting with other
+      * values.
+      */
++    void handleScopeVar(Var v) {
++      String name  = v.getName();
++      if (containsSeparator(name)) {
++        String newName = getOrginalName(name);
+         // Check if the new name is valid and if it would cause conflicts.
+-            if (var.scope.isDeclared(newName, recurseScopes) ||
+-                !TokenStream.isJSIdentifier(newName)) {
+-              newName = oldName;
+-            } else {
+-              var.scope.declare(newName, var.nameNode, null, null);
++        if (TokenStream.isJSIdentifier(newName) &&
++            !referencedNames.contains(newName) && 
++            !newName.equals(ARGUMENTS)) {
++          referencedNames.remove(name);
+           // Adding a reference to the new name to prevent either the parent
+           // scopes or the current scope renaming another var to this new name.
+-              Node parentNode = var.getParentNode();
+-              if (parentNode.getType() == Token.FUNCTION &&
+-                  parentNode == var.scope.getRootNode()) {
+-                var.getNameNode().setString(newName);
+-              }
+-
+-              node.setString(newName);
++          referencedNames.add(newName);
++          List<Node> references = nameMap.get(name);
++          Preconditions.checkState(references != null);
++          for (Node n : references) {
++            Preconditions.checkState(n.getType() == Token.NAME);
++            n.setString(newName);
++          }
+           compiler.reportCodeChange();
+         }
++        nameMap.remove(name);
++      }
++    }
+ 
+-            nameMap.put(var, newName);
++    @Override
++    public boolean shouldTraverse(NodeTraversal t, Node n, Node parent) {
++      return true;
++    }
+ 
++    @Override
++    public void visit(NodeTraversal t, Node node, Node parent) {
++      if (t.inGlobalScope()) {
++        return;
+       }
+ 
++      if (NodeUtil.isReferenceName(node)) {
++        String name = node.getString();
+         // Add all referenced names to the set so it is possible to check for
+         // conflicts.
++        referencedNames.add(name);
+         // Store only references to candidate names in the node map.
++        if (containsSeparator(name)) {
++          addCandidateNameReference(name, node);
+         }
+       }
+     }
+ 
++    private void addCandidateNameReference(String name, Node n) {
++      List<Node> nodes = nameMap.get(name);
++      if (null == nodes) {
++        nodes = Lists.newLinkedList();
++        nameMap.put(name, nodes);
++      }
++      nodes.add(n);
++    }
+   }
+ 
+   /**

@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/SimplexOptimizer.java
++++ b/src/main/java/org/apache/commons/math3/optim/nonlinear/scalar/noderiv/SimplexOptimizer.java
+@@ -172,7 +172,7 @@ public class SimplexOptimizer extends MultivariateOptimizer {
+             previous = simplex.getPoints();
+             simplex.iterate(evalFunc, comparator);
+ 
+-			++iteration;
++            incrementIterationCount();
+         }
+     }
+ 

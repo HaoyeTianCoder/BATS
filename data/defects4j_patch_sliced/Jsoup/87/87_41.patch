@@ -1,0 +1,21 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
+@@ -1266,15 +1266,15 @@ enum HtmlTreeBuilderState {
+                     name = end.normalName();
+                     switch (name) {
+                         case "optgroup":
+-                            if (tb.currentElement().nodeName().equals("option") && tb.aboveOnStack(tb.currentElement()) != null && tb.aboveOnStack(tb.currentElement()).nodeName().equals("optgroup"))
++                            if (tb.currentElement().normalName().equals("option") && tb.aboveOnStack(tb.currentElement()) != null && tb.aboveOnStack(tb.currentElement()).normalName().equals("optgroup"))
+                                 tb.processEndTag("option");
+-                            if (tb.currentElement().nodeName().equals("optgroup"))
++                            if (tb.currentElement().normalName().equals("optgroup"))
+                                 tb.pop();
+                             else
+                                 tb.error(this);
+                             break;
+                         case "option":
+-                            if (tb.currentElement().nodeName().equals("option"))
++                            if (tb.currentElement().normalName().equals("option"))
+                                 tb.pop();
+                             else
+                                 tb.error(this);

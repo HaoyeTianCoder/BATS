@@ -1,0 +1,17 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/std/StdValueInstantiator.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/std/StdValueInstantiator.java
+@@ -229,6 +229,14 @@ public class StdValueInstantiator
+         return (_withArgsCreator != null);
+     }
+ 
++    @Override
++    public boolean canInstantiate() {
++        return canCreateUsingDefault()
++                || canCreateUsingDelegate() || canCreateUsingArrayDelegate()
++                || canCreateFromObjectWith() || canCreateFromString()
++                || canCreateFromInt() || canCreateFromLong()
++                || canCreateFromDouble() || canCreateFromBoolean();
++    }
+ 
+     @Override
+     public JavaType getDelegateType(DeserializationConfig config) {

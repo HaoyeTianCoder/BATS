@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/util/StdDateFormat.java
++++ b/src/main/java/com/fasterxml/jackson/databind/util/StdDateFormat.java
+@@ -99,6 +102,8 @@ public class StdDateFormat
+         DATE_FORMAT_ISO8601.setTimeZone(DEFAULT_TIMEZONE);
+         DATE_FORMAT_ISO8601_Z = new SimpleDateFormat(DATE_FORMAT_STR_ISO8601_Z, DEFAULT_LOCALE);
+         DATE_FORMAT_ISO8601_Z.setTimeZone(DEFAULT_TIMEZONE);
++        DATE_FORMAT_ISO8601_NO_TZ = new SimpleDateFormat(DATE_FORMAT_STR_ISO8601_NO_TZ, DEFAULT_LOCALE);
++        DATE_FORMAT_ISO8601_NO_TZ.setTimeZone(DEFAULT_TIMEZONE);
+         DATE_FORMAT_PLAIN = new SimpleDateFormat(DATE_FORMAT_STR_PLAIN, DEFAULT_LOCALE);
+         DATE_FORMAT_PLAIN.setTimeZone(DEFAULT_TIMEZONE);
+     }

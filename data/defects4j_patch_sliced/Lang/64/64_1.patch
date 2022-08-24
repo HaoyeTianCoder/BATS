@@ -1,0 +1,19 @@
+--- a/src/java/org/apache/commons/lang/enums/ValuedEnum.java
++++ b/src/java/org/apache/commons/lang/enums/ValuedEnum.java
+@@ -180,6 +180,16 @@ public abstract class ValuedEnum extends Enum {
+      * @throws NullPointerException if other is <code>null</code>
+      */
+     public int compareTo(Object other) {
++        if (other == this) {
++            return 0;
++        }
++        if (other.getClass() != this.getClass()) {
++            if (other.getClass().getName().equals(this.getClass().getName())) {
++                return iValue - getValueInOtherClassLoader(other);
++            }
++            throw new ClassCastException(
++                    "Different enum class '" + ClassUtils.getShortClassName(other.getClass()) + "'");
++        }
+         return iValue - ((ValuedEnum) other).iValue;
+     }
+ 

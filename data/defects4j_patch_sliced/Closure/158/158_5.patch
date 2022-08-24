@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/CommandLineRunner.java
++++ b/src/com/google/javascript/jscomp/CommandLineRunner.java
+@@ -91,6 +92,8 @@ public class CommandLineRunner extends
+   // I don't really care about unchecked warnings in this class.
+   @SuppressWarnings("unchecked")
+   private static class Flags {
++    private static final WarningGuardSpec warningGuardSpec =
++        new WarningGuardSpec();
+ 
+     @Option(name = "--help",
+         handler = BooleanOptionHandler.class,

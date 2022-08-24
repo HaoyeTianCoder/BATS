@@ -1,0 +1,17 @@
+--- a/src/com/google/javascript/jscomp/TypeInference.java
++++ b/src/com/google/javascript/jscomp/TypeInference.java
+@@ -1052,13 +1052,11 @@ class TypeInference
+         }
+         if (ct != null && ct.isConstructor()) {
+           type = ct.getInstanceType();
++          backwardsInferenceFromCallSite(n, ct);
+         }
+       }
+     }
+     n.setJSType(type);
+-    for (Node arg = constructor.getNext(); arg != null; arg = arg.getNext()) {
+-      scope = traverse(arg, scope);
+-    }
+     return scope;
+   }
+ 

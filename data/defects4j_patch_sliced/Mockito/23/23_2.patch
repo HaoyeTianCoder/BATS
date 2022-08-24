@@ -1,0 +1,20 @@
+--- a/src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java
++++ b/src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java
+@@ -56,7 +58,17 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
+         return getMock(invocation, returnTypeGenericMetadata);
+     }
+ 
++    private synchronized void instantiateMockitoCoreIfNeeded() {
++        if (mockitoCore == null) {
++            mockitoCore = new MockitoCore();
++        }
++    }
+ 
++    private synchronized void instantiateDelegateIfNeeded() {
++        if (delegate == null) {
++            delegate = new ReturnsEmptyValues();
++        }
++    }
+ 
+     private Object getMock(InvocationOnMock invocation, GenericMetadataSupport returnTypeGenericMetadata) throws Throwable {
+     	InternalMockHandler<Object> handler = new MockUtil().getMockHandler(invocation.getMock());

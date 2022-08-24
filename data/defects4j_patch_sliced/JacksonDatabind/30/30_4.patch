@@ -1,0 +1,20 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/util/TokenBuffer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/util/TokenBuffer.java
+@@ -185,11 +186,17 @@ public class TokenBuffer
+         _hasNativeTypeIds = p.canReadTypeId();
+         _hasNativeObjectIds = p.canReadObjectId();
+         _mayHaveNativeIds = _hasNativeTypeIds | _hasNativeObjectIds;
++        _forceBigDecimal = (ctxt == null) ? false
++                : ctxt.isEnabled(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
+     }
+ 
+     /**
+      * @since 2.7
+      */
++    public TokenBuffer forceUseOfBigDecimal(boolean b) {
++        _forceBigDecimal = b;
++        return this;
++    }
+ 
+     @Override
+     public Version version() {

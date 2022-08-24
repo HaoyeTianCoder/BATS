@@ -1,0 +1,12 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/introspect/JacksonAnnotationIntrospector.java
++++ b/src/main/java/com/fasterxml/jackson/databind/introspect/JacksonAnnotationIntrospector.java
+@@ -761,7 +761,9 @@ public class JacksonAnnotationIntrospector
+                         type = tf.constructGeneralizedType(type, serClass);
+                     } else if (currRaw.isAssignableFrom(serClass)) { // specialization, ok as well
+                         type = tf.constructSpecializedType(type, serClass);
++                    } else if (_primitiveAndWrapper(currRaw, serClass)) {
+                         // 27-Apr-2017, tatu: [databind#1592] ignore primitive<->wrapper refinements
++                        type = type.withStaticTyping();
+                     } else {
+                         throw new JsonMappingException(null,
+                                 String.format("Can not refine serialization type %s into %s; types not related",

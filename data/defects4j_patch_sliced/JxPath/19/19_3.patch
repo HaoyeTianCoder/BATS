@@ -1,0 +1,18 @@
+--- a/src/java/org/apache/commons/jxpath/ri/model/jdom/JDOMNodePointer.java
++++ b/src/java/org/apache/commons/jxpath/ri/model/jdom/JDOMNodePointer.java
+@@ -706,6 +705,15 @@ public class JDOMNodePointer extends NodePointer {
+         return 1;
+     }
+ 
++    private boolean matchesQName(Element element) {
++        if (getNamespaceURI() != null) {
++            String ns = getNamespaceURI(element);
++            if (ns == null || !ns.equals(getNamespaceURI())) {
++                return false;
++            }
++        }
++        return element.getName().equals(((Element) node).getName());
++    }
+ 
+     /**
+      * Get relative position of this among all siblings.

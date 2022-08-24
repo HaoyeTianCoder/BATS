@@ -1,0 +1,10 @@
+--- a/src/java/org/apache/commons/codec/binary/Base64InputStream.java
++++ b/src/java/org/apache/commons/codec/binary/Base64InputStream.java
+@@ -161,6 +162,7 @@ public class Base64InputStream extends FilterInputStream {
+              -----
+              This is a fix for CODEC-101
+             */
++            while (readLen == 0) {
+                 if (!base64.hasData()) {
+                     byte[] buf = new byte[doEncode ? 4096 : 8192];
+                     int c = in.read(buf);

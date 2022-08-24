@@ -1,0 +1,17 @@
+--- a/src/main/java/org/apache/commons/lang3/StringUtils.java
++++ b/src/main/java/org/apache/commons/lang3/StringUtils.java
+@@ -1452,9 +1460,12 @@ public class StringUtils {
+             char ch = cs.charAt(i);
+             for (int j = 0; j < searchLength; j++) {
+                 if (searchChars[j] == ch) {
+-                    if (i < csLast && j < searchLast && ch >= Character.MIN_HIGH_SURROGATE && ch <= Character.MAX_HIGH_SURROGATE) {
++                    if (Character.isHighSurrogate(ch)) {
++                        if (j == searchLast) {
+                             // missing low surrogate, fine, like String.indexOf(String)
+-                        if (searchChars[j + 1] == cs.charAt(i + 1)) {
++                            return true;
++                        }
++                        if (i < csLast && searchChars[j + 1] == cs.charAt(i + 1)) {
+                             return true;
+                         }
+                     } else {

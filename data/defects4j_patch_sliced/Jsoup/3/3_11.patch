@@ -1,0 +1,13 @@
+--- a/src/main/java/org/jsoup/parser/Tag.java
++++ b/src/main/java/org/jsoup/parser/Tag.java
+@@ -221,8 +230,8 @@ public class Tag {
+         createBlock("TITLE").setAncestor("HEAD", "BODY").setContainDataOnly();
+         createInline("BASE").setAncestor("HEAD", "BODY").setEmpty();
+ 
+-        createBlock("FRAME").setAncestor("FRAMESET").setEmpty();
+-        createBlock("NOFRAMES").setAncestor("FRAMESET").setContainDataOnly();
++        createBlock("FRAME").setParent("FRAMESET").setEmpty();
++        createBlock("NOFRAMES").setParent("FRAMESET").setContainDataOnly();
+ 
+ 
+ 

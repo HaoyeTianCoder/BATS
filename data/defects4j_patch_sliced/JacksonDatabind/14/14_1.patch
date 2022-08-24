@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ObjectReader.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ObjectReader.java
+@@ -1473,7 +1473,7 @@ public class ObjectReader
+             result = NullNode.instance;
+         } else {
+             DeserializationContext ctxt = createDeserializationContext(jp, _config);
+-            JsonDeserializer<Object> deser = _findRootDeserializer(ctxt, JSON_NODE_TYPE);
++            JsonDeserializer<Object> deser = _findTreeDeserializer(ctxt);
+             if (_unwrapRoot) {
+                 result = (JsonNode) _unwrapAndDeserialize(jp, ctxt, JSON_NODE_TYPE, deser);
+             } else {

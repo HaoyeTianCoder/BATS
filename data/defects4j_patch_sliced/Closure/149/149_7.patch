@@ -1,0 +1,12 @@
+--- a/src/com/google/javascript/jscomp/CompilerOptions.java
++++ b/src/com/google/javascript/jscomp/CompilerOptions.java
+@@ -957,6 +957,9 @@ public class CompilerOptions implements Serializable, Cloneable {
+   /**
+    * Sets the output charset by name.
+    */
++  public void setOutputCharset(String charsetName) {
++    this.outputCharset = charsetName;
++  }
+ 
+   /**
+    * Whether to include "undefined" in the default types.

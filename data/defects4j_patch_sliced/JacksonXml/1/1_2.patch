@@ -1,0 +1,16 @@
+--- a/src/main/java/com/fasterxml/jackson/dataformat/xml/deser/FromXmlParser.java
++++ b/src/main/java/com/fasterxml/jackson/dataformat/xml/deser/FromXmlParser.java
+@@ -547,10 +552,9 @@ public class FromXmlParser
+                         // 06-Jan-2015, tatu: as per [dataformat-xml#180], need to
+                         //    expose as empty Object, not null (or, worse, as used to
+                         //    be done, by swallowing the token)
+-                        _currToken = JsonToken.END_ARRAY;
+-                        _parsingContext = _parsingContext.getParent();
+-                        _namesToWrap = _parsingContext.getNamesToWrap();
+-                        return _currToken;
++                        _nextToken = JsonToken.END_OBJECT;
++                        _parsingContext = _parsingContext.createChildObjectContext(-1, -1);
++                        return (_currToken = JsonToken.START_OBJECT);
+                     }
+                 }
+                 return (_currToken = JsonToken.VALUE_STRING);

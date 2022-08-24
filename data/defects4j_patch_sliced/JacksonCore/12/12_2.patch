@@ -1,0 +1,16 @@
+--- a/src/main/java/com/fasterxml/jackson/core/json/ReaderBasedJsonParser.java
++++ b/src/main/java/com/fasterxml/jackson/core/json/ReaderBasedJsonParser.java
+@@ -627,11 +626,13 @@ public class ReaderBasedJsonParser // final in 2.3, earlier
+         boolean inObject = _parsingContext.inObject();
+         if (inObject) {
+             // First, field name itself:
++            _updateNameLocation();
+             String name = (i == INT_QUOTE) ? _parseName() : _handleOddName(i);
+             _parsingContext.setCurrentName(name);
+             _currToken = JsonToken.FIELD_NAME;
+             i = _skipColon();
+         }
++        _updateLocation();
+ 
+         // Ok: we must have a value... what is it?
+ 

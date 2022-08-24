@@ -1,0 +1,9 @@
+--- a/src/java/org/apache/commons/cli/CommandLine.java
++++ b/src/java/org/apache/commons/cli/CommandLine.java
+@@ -314,4 +314,4 @@ public class CommandLine {
+         // return the array
+         return (Option[]) processed.toArray(optionsArray);
+     }
+-}
++}
+\ No newline at end of file

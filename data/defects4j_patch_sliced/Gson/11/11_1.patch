@@ -1,0 +1,10 @@
+--- a/gson/src/main/java/com/google/gson/internal/bind/TypeAdapters.java
++++ b/gson/src/main/java/com/google/gson/internal/bind/TypeAdapters.java
+@@ -368,6 +368,7 @@ public final class TypeAdapters {
+         in.nextNull();
+         return null;
+       case NUMBER:
++      case STRING:
+         return new LazilyParsedNumber(in.nextString());
+       default:
+         throw new JsonSyntaxException("Expecting number, got: " + jsonToken);

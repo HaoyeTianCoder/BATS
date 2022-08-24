@@ -1,0 +1,13 @@
+--- a/src/main/java/org/apache/commons/math/optimization/univariate/BrentOptimizer.java
++++ b/src/main/java/org/apache/commons/math/optimization/univariate/BrentOptimizer.java
+@@ -197,8 +187,8 @@ public class BrentOptimizer extends AbstractUnivariateRealOptimizer {
+                     u = x + d;
+                 }
+ 
+-                double fu = computeObjectiveValue(f, u);
+-                if (goalType == GoalType.MAXIMIZE) {
++                double fu = computeObjectiveValue(u);
++                if (!isMinim) {
+                     fu = -fu;
+                 }
+ 

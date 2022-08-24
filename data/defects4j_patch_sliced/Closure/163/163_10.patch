@@ -1,0 +1,14 @@
+--- a/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
++++ b/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
+@@ -409,8 +451,10 @@ class AnalyzePrototypeProperties implements CompilerPass {
+      * under an assignment (in the case of Foo.prototype = ...).
+      * @return True if a declaration was added.
+      */
+-    private void processPrototypeParent(NodeTraversal t, Node n) {
++    private boolean processPrototypeRef(NodeTraversal t, Node ref) {
++      Node root = NodeUtil.getRootOfQualifiedName(ref);
+ 
++      Node n = ref.getParent();
+       switch (n.getType()) {
+         // Foo.prototype.getBar = function() { ... }
+         case Token.GETPROP:

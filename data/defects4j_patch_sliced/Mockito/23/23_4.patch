@@ -1,0 +1,11 @@
+--- a/src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java
++++ b/src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java
+@@ -111,7 +124,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
+ 
+     private Object recordDeepStubMock(final Object mock, InvocationContainerImpl container) throws Throwable {
+ 
+-        container.addAnswer(new Answer<Object>() {
++        container.addAnswer(new SerializableAnswer() {
+             public Object answer(InvocationOnMock invocation) throws Throwable {
+                 return mock;
+             }

@@ -1,0 +1,15 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/MappingIterator.java
++++ b/src/main/java/com/fasterxml/jackson/databind/MappingIterator.java
+@@ -186,9 +204,12 @@ public class MappingIterator<T> implements Iterator<T>, Closeable
+     
+     @Override
+     public void close() throws IOException {
++        if (_state != STATE_CLOSED) {
++            _state = STATE_CLOSED;
+             if (_parser != null) {
+                 _parser.close();
+             }
++        }
+     }
+ 
+     /*

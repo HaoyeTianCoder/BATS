@@ -1,0 +1,20 @@
+--- a/src/java/org/apache/commons/math/util/MathUtils.java
++++ b/src/java/org/apache/commons/math/util/MathUtils.java
+@@ -274,11 +311,17 @@ public final class MathUtils {
+          * For values small enough to do exact integer computation,
+          * return the log of the exact value 
+          */
++        if (n < 67) {  
++            return Math.log(binomialCoefficient(n,k));
++        }
+         
+         /*
+          * Return the log of binomialCoefficientDouble for values that will not
+          * overflow binomialCoefficientDouble
+          */
++        if (n < 1030) { 
++            return Math.log(binomialCoefficientDouble(n, k));
++        } 
+         
+         /*
+          * Sum logs for values that could overflow

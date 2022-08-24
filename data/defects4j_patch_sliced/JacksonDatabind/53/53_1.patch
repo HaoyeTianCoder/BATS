@@ -1,0 +1,14 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/type/TypeBindings.java
++++ b/src/main/java/com/fasterxml/jackson/databind/type/TypeBindings.java
+@@ -299,8 +299,11 @@ name, i, t.getRawClass()));
+      *
+      * @since 2.8
+      */
++    public Object asKey(Class<?> rawBase) {
+         // safe to pass _types array without copy since it is not exposed via
+         // any access, nor modified by this class
++        return new AsKey(rawBase, _types, _hashCode);
++    }
+ 
+     /*
+     /**********************************************************************

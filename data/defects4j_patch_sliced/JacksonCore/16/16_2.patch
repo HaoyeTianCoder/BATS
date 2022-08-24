@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/core/util/JsonParserSequence.java
++++ b/src/main/java/com/fasterxml/jackson/core/util/JsonParserSequence.java
+@@ -42,6 +43,7 @@ public class JsonParserSequence extends JsonParserDelegate
+     protected JsonParserSequence(JsonParser[] parsers)
+     {
+         super(parsers[0]);
++        _suppressNextToken = delegate.hasCurrentToken();
+         _parsers = parsers;
+         _nextParser = 1;
+     }

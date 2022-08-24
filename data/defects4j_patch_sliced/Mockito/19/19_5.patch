@@ -1,0 +1,11 @@
+--- a/src/org/mockito/internal/configuration/injection/filter/NameBasedCandidateFilter.java
++++ b/src/org/mockito/internal/configuration/injection/filter/NameBasedCandidateFilter.java
+@@ -20,7 +20,7 @@ public class NameBasedCandidateFilter implements MockCandidateFilter {
+ 	}
+ 
+ 	public OngoingInjecter filterCandidate(Collection<Object> mocks,
+-			Field field, Object fieldInstance) {
++			Field field, List<Field> fields, Object fieldInstance) {
+ 		List<Object> mockNameMatches = new ArrayList<Object>();
+ 		if (mocks.size() > 1) {
+ 			for (Object mock : mocks) {

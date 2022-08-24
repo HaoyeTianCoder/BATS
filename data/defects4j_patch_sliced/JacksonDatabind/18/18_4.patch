@@ -1,0 +1,29 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/MappingIterator.java
++++ b/src/main/java/com/fasterxml/jackson/databind/MappingIterator.java
+@@ -135,12 +140,25 @@ public class MappingIterator<T> implements Iterator<T>, Closeable
+          * and if not, caller needs to hand us JsonParser instead, pointing to
+          * the first token of the first element.
+          */
+-        if (managedParser && (p != null) && p.isExpectedStartArrayToken()) {
++        if (p == null) { // can this occur?
++            _seqContext = null;
++            _state = STATE_CLOSED;
++        } else {
++            JsonStreamContext sctxt = p.getParsingContext();
++            if (managedParser && p.isExpectedStartArrayToken()) {
+                 // If pointing to START_ARRAY, context should be that ARRAY
+                 p.clearCurrentToken();
++            } else {
+                 // regardless, recovery context should be whatever context we have now,
+                 // with sole exception of pointing to a start marker, in which case it's
+                 // the parent
++                JsonToken t = p.getCurrentToken();
++                if ((t == JsonToken.START_OBJECT) || (t == JsonToken.START_ARRAY)) {
++                    sctxt = sctxt.getParent();
++                }
++            }
++            _seqContext = sctxt;
++            _state = STATE_MAY_HAVE_VALUE;
+         }
+     }
+ 

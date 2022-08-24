@@ -1,0 +1,10 @@
+--- a/src/java/org/apache/commons/jxpath/ri/compiler/CoreOperationNotEqual.java
++++ b/src/java/org/apache/commons/jxpath/ri/compiler/CoreOperationNotEqual.java
+@@ -16,7 +16,6 @@
+  */
+ package org.apache.commons.jxpath.ri.compiler;
+ 
+-import org.apache.commons.jxpath.ri.EvalContext;
+ /**
+  * Implementation of Expression for the operation "!=".
+  *

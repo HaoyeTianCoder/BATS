@@ -1,0 +1,12 @@
+--- a/src/java/org/apache/commons/lang/StringEscapeUtils.java
++++ b/src/java/org/apache/commons/lang/StringEscapeUtils.java
+@@ -241,7 +242,9 @@ public class StringEscapeUtils {
+                         out.write('\\');
+                         break;
+                     case '/' :
++                        if (escapeForwardSlash) {
+                             out.write('\\');
++                        }
+                         out.write('/');
+                         break;
+                     default :

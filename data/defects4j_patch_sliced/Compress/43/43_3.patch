@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/zip/ZipArchiveOutputStream.java
++++ b/src/main/java/org/apache/commons/compress/archivers/zip/ZipArchiveOutputStream.java
+@@ -1168,7 +1168,7 @@ private void addUnicodeExtraFields(final ZipArchiveEntry ze, final boolean encod
+      * @throws IOException on error
+      */
+     protected void writeDataDescriptor(final ZipArchiveEntry ze) throws IOException {
+-        if (ze.getMethod() != DEFLATED || channel != null) {
++        if (!usesDataDescriptor(ze.getMethod(), false)) {
+             return;
+         }
+         writeCounted(DD_SIG);

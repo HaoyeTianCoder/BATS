@@ -1,0 +1,23 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/util/StdDateFormat.java
++++ b/src/main/java/com/fasterxml/jackson/databind/util/StdDateFormat.java
+@@ -480,11 +487,20 @@ public class StdDateFormat
+         }
+     }
+ 
++    protected void _formatBCEYear(StringBuffer buffer, int bceYearNoSign) {
+         // Ok. First of all, BCE 1 output (given as value `1` in era BCE) needs to become
+         // "+0000", but rest (from `2` up, in that era) need minus sign.
++        if (bceYearNoSign == 1) {
++            buffer.append("+0000");
++            return;
++        }
++        final int isoYear = bceYearNoSign - 1;
++        buffer.append('-');
+         // as with CE, 4 digit variant needs padding; beyond that not (although that part is
+         // open to debate, needs agreement with receiver)
+         // But `pad4()` deals with "big" numbers now so:
++        pad4(buffer, isoYear);
++    }
+ 
+     private static void pad2(StringBuffer buffer, int value) {
+         int tens = value / 10;

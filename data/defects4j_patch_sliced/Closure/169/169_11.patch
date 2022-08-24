@@ -1,0 +1,18 @@
+--- a/src/com/google/javascript/rhino/jstype/JSType.java
++++ b/src/com/google/javascript/rhino/jstype/JSType.java
+@@ -511,13 +511,13 @@ public abstract class JSType implements Serializable {
+    *     unknowns</a>
+    */
+   public final boolean differsFrom(JSType that) {
+-    return !checkEquivalenceHelper(that, true);
++    return !checkEquivalenceHelper(that, EquivalenceMethod.DATA_FLOW);
+   }
+ 
+   /**
+    * An equivalence visitor.
+    */
+-  boolean checkEquivalenceHelper(JSType that, boolean tolerateUnknowns) {
++  boolean checkEquivalenceHelper(JSType that, EquivalenceMethod eqMethod) {
+     if (this == that) {
+       return true;
+     }

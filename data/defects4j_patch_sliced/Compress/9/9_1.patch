@@ -1,0 +1,19 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/tar/TarArchiveOutputStream.java
++++ b/src/main/java/org/apache/commons/compress/archivers/tar/TarArchiveOutputStream.java
+@@ -105,7 +105,16 @@ public class TarArchiveOutputStream extends ArchiveOutputStream {
+     }
+ 
+ 
++    @Deprecated
++    @Override
++    public int getCount() {
++        return (int) getBytesWritten();
++    }
+ 
++    @Override
++    public long getBytesWritten() {
++        return ((CountingOutputStream) out).getBytesWritten();
++    }
+ 
+     /**
+      * Ends the TAR archive without closing the underlying OutputStream.

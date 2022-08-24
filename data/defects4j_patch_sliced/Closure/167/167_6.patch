@@ -1,0 +1,12 @@
+--- a/src/com/google/javascript/rhino/jstype/JSType.java
++++ b/src/com/google/javascript/rhino/jstype/JSType.java
+@@ -880,6 +880,9 @@ public abstract class JSType implements Serializable {
+    * method of types to get the restricted type.
+    */
+   public JSType getRestrictedTypeGivenToBooleanOutcome(boolean outcome) {
++    if (outcome && this == getNativeType(JSTypeNative.UNKNOWN_TYPE)) {
++      return getNativeType(JSTypeNative.CHECKED_UNKNOWN_TYPE);
++    }
+ 
+     BooleanLiteralSet literals = getPossibleToBooleanOutcomes();
+     if (literals.contains(outcome)) {

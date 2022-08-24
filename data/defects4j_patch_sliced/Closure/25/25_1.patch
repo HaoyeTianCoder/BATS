@@ -1,0 +1,13 @@
+--- a/src/com/google/javascript/jscomp/TypeInference.java
++++ b/src/com/google/javascript/jscomp/TypeInference.java
+@@ -1033,9 +1033,9 @@ class TypeInference
+   }
+ 
+   private FlowScope traverseNew(Node n, FlowScope scope) {
++    scope = traverseChildren(n, scope);
+ 
+     Node constructor = n.getFirstChild();
+-    scope = traverse(constructor, scope);
+     JSType constructorType = constructor.getJSType();
+     JSType type = null;
+     if (constructorType != null) {

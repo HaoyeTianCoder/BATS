@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/math3/linear/RectangularCholeskyDecomposition.java
++++ b/src/main/java/org/apache/commons/math3/linear/RectangularCholeskyDecomposition.java
+@@ -66,7 +66,6 @@ public class RectangularCholeskyDecomposition {
+         final double[][] c = matrix.getData();
+         final double[][] b = new double[order][order];
+ 
+-        int[] swap  = new int[order];
+         int[] index = new int[order];
+         for (int i = 0; i < order; ++i) {
+             index[i] = i;

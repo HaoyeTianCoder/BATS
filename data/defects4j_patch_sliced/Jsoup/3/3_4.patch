@@ -1,0 +1,10 @@
+--- a/src/main/java/org/jsoup/parser/Parser.java
++++ b/src/main/java/org/jsoup/parser/Parser.java
+@@ -23,6 +23,7 @@ public class Parser {
+     private final TokenQueue tq;
+     private final Document doc;
+     private String baseUri;
++    private boolean relaxed = false;
+ 
+     private Parser(String html, String baseUri, boolean isBodyFragment) {
+         Validate.notNull(html);

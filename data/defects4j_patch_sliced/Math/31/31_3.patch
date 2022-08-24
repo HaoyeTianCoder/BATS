@@ -1,0 +1,17 @@
+--- a/src/main/java/org/apache/commons/math3/util/ContinuedFraction.java
++++ b/src/main/java/org/apache/commons/math3/util/ContinuedFraction.java
+@@ -182,11 +164,9 @@ public abstract class ContinuedFraction {
+                 break;
+             }
+ 
+-            dPrev = q1;
+-            cPrev = cN / q2;
+-            p0 = hPrev;
+-            hPrev = cN;
+-            q1 = q2;
++            dPrev = dN;
++            cPrev = cN;
++            hPrev = hN;
+             n++;
+         }
+ 

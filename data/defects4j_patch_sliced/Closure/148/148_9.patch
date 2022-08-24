@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/SourceMap.java
++++ b/src/com/google/javascript/jscomp/SourceMap.java
+@@ -301,7 +320,7 @@ public class SourceMap {
+     // 11) ["c.js", 1, 4]
+     // 12) ["d.js", 3, 78, "foo"]
+ 
+-    int maxLine = findLastLine();
++    int maxLine = prepMappings();
+ 
+     // Add the line character maps.
+     out.append("/** Begin line maps. **/{ \"file\" : ");

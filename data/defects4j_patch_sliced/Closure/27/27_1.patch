@@ -1,0 +1,12 @@
+--- a/src/com/google/javascript/rhino/IR.java
++++ b/src/com/google/javascript/rhino/IR.java
+@@ -108,6 +108,9 @@ public class IR {
+     return block;
+   }
+ 
++  private static Node blockUnchecked(Node stmt) {
++    return new Node(Token.BLOCK, stmt);
++  }
+ 
+   public static Node script(Node ... stmts) {
+     // TODO(johnlenz): finish setting up the SCRIPT node

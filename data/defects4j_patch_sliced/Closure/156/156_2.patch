@@ -1,0 +1,12 @@
+--- a/src/com/google/javascript/jscomp/CollapseProperties.java
++++ b/src/com/google/javascript/jscomp/CollapseProperties.java
+@@ -571,7 +571,8 @@ class CollapseProperties implements CompilerPass {
+    *     this name. (This is mostly passed for convenience; it's equivalent to
+    *     n.canCollapseChildNames()).
+    */
+-  private void updateObjLitOrFunctionDeclaration(Name n, String alias) {
++  private void updateObjLitOrFunctionDeclaration(
++      Name n, String alias, boolean canCollapseChildNames) {
+     if (n.declaration == null) {
+       // Some names do not have declarations, because they
+       // are only defined in local scopes.

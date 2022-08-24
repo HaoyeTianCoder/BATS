@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/util/TokenBuffer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/util/TokenBuffer.java
+@@ -77,6 +77,7 @@ public class TokenBuffer
+      *
+      * @since 2.7
+      */
++    protected boolean _forceBigDecimal;
+     
+     /*
+     /**********************************************************

@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/impl/CreatorCollector.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/impl/CreatorCollector.java
+@@ -296,7 +299,7 @@ public class CreatorCollector
+     /**
+      * @return True if specified Creator is to be used
+      */
+-    protected void verifyNonDup(AnnotatedWithParams newOne, int typeIndex, boolean explicit)
++    protected boolean verifyNonDup(AnnotatedWithParams newOne, int typeIndex, boolean explicit)
+     {
+         final int mask = (1 << typeIndex);
+         _hasNonDefaultCreator = true;

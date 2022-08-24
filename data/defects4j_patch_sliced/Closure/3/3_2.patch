@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/FlowSensitiveInlineVariables.java
++++ b/src/com/google/javascript/jscomp/FlowSensitiveInlineVariables.java
+@@ -277,7 +277,7 @@ class FlowSensitiveInlineVariables extends AbstractPostOrderCallback
+       return defMetadata.node;
+     }
+ 
+-    private boolean canInline() {
++    private boolean canInline(final Scope scope) {
+       // Cannot inline a parameter.
+       if (getDefCfgNode().isFunction()) {
+         return false;

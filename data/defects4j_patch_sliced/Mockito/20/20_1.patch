@@ -1,0 +1,14 @@
+--- a/src/org/mockito/internal/creation/bytebuddy/ByteBuddyMockMaker.java
++++ b/src/org/mockito/internal/creation/bytebuddy/ByteBuddyMockMaker.java
+@@ -29,9 +29,10 @@ public class ByteBuddyMockMaker implements MockMaker {
+                 settings.getTypeToMock(),
+                 settings.getExtraInterfaces()
+         );
++        Instantiator instantiator = new InstantiatorProvider().getInstantiator(settings);
+         T mockInstance = null;
+         try {
+-            mockInstance = classInstantiator.instantiate(mockedProxyType);
++            mockInstance = instantiator.newInstance(mockedProxyType);
+             MockMethodInterceptor.MockAccess mockAccess = (MockMethodInterceptor.MockAccess) mockInstance;
+             mockAccess.setMockitoInterceptor(new MockMethodInterceptor(asInternalMockHandler(handler), settings));
+ 

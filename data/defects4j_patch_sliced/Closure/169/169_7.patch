@@ -1,0 +1,13 @@
+--- a/src/com/google/javascript/rhino/jstype/FunctionType.java
++++ b/src/com/google/javascript/rhino/jstype/FunctionType.java
+@@ -905,8 +905,8 @@ public class FunctionType extends PrototypeObjectType {
+     }
+ 
+     return typeOfThis.checkEquivalenceHelper(
+-        that.typeOfThis, tolerateUnknowns) &&
+-        call.checkArrowEquivalenceHelper(that.call, tolerateUnknowns);
++        that.typeOfThis, eqMethod) &&
++        call.checkArrowEquivalenceHelper(that.call, eqMethod);
+   }
+ 
+   @Override

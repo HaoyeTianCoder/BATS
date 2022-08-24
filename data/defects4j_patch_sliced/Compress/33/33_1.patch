@@ -1,0 +1,12 @@
+--- a/src/main/java/org/apache/commons/compress/compressors/CompressorStreamFactory.java
++++ b/src/main/java/org/apache/commons/compress/compressors/CompressorStreamFactory.java
+@@ -237,6 +237,9 @@ public class CompressorStreamFactory {
+                 return new ZCompressorInputStream(in);
+             }
+ 
++            if (DeflateCompressorInputStream.matches(signature, signatureLength)) {
++                return new DeflateCompressorInputStream(in);
++            }
+ 
+             if (XZUtils.matches(signature, signatureLength) &&
+                 XZUtils.isXZCompressionAvailable()) {

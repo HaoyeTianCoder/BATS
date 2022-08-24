@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/lang3/ArrayUtils.java
++++ b/src/main/java/org/apache/commons/lang3/ArrayUtils.java
+@@ -3571,7 +3571,7 @@ public class ArrayUtils {
+         } else if (element != null) {
+             clss = element.getClass();
+         } else {
+-            return (T[]) new Object[] { null };
++            throw new IllegalArgumentException("Array and element cannot both be null");            
+         }
+         @SuppressWarnings("unchecked") // the add method creates an array of type clss, which is type T
+         final T[] newArray = (T[]) add(array, index, element, clss);

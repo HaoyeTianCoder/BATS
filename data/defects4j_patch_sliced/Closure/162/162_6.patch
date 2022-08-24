@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/ScopedAliases.java
++++ b/src/com/google/javascript/jscomp/ScopedAliases.java
+@@ -352,7 +370,6 @@ class ScopedAliases implements HotSwapCompilerPass {
+           // with <code>g.dom.createElement('DIV')</code>.
+           Node aliasedNode = aliasVar.getInitialValue();
+           aliasUsages.add(new AliasedNode(n, aliasedNode));
+-          }
+         }
+ 
+         JSDocInfo info = n.getJSDocInfo();

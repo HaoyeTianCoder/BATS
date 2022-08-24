@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/SourceMap.java
++++ b/src/com/google/javascript/jscomp/SourceMap.java
+@@ -200,6 +226,7 @@ public class SourceMap {
+       mapping.endPosition =
+           new Position(endPosition.getLineNumber() + offsetLine,
+                        endPosition.getCharacterIndex() + endOffsetPosition);
++    }
+ 
+     mappings.add(mapping);
+   }

@@ -1,0 +1,18 @@
+--- a/src/main/java/org/apache/commons/lang3/SerializationUtils.java
++++ b/src/main/java/org/apache/commons/lang3/SerializationUtils.java
+@@ -249,6 +251,15 @@ public class SerializationUtils {
+             super(in);
+             this.classLoader = classLoader;
+ 
++            primitiveTypes.put("byte", byte.class);
++            primitiveTypes.put("short", short.class);
++            primitiveTypes.put("int", int.class);
++            primitiveTypes.put("long", long.class);
++            primitiveTypes.put("float", float.class);
++            primitiveTypes.put("double", double.class);
++            primitiveTypes.put("boolean", boolean.class);
++            primitiveTypes.put("char", char.class);
++            primitiveTypes.put("void", void.class);
+         }
+ 
+         /**

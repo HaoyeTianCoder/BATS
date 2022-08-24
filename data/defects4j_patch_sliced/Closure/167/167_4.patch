@@ -1,0 +1,19 @@
+--- a/src/com/google/javascript/jscomp/type/SemanticReverseAbstractInterpreter.java
++++ b/src/com/google/javascript/jscomp/type/SemanticReverseAbstractInterpreter.java
+@@ -404,12 +404,12 @@ public class SemanticReverseAbstractInterpreter
+    */
+   private FlowScope maybeRestrictTwoNames(
+       FlowScope blindScope,
+-      Node left, boolean leftIsRefineable, JSType restrictedLeftType,
+-      Node right, boolean rightIsRefineable, JSType restrictedRightType) {
++      Node left, JSType originalLeftType, JSType restrictedLeftType,
++      Node right, JSType originalRightType, JSType restrictedRightType) {
+     boolean shouldRefineLeft =
+-        leftIsRefineable && restrictedLeftType != null;
++        restrictedLeftType != null && restrictedLeftType != originalLeftType;
+     boolean shouldRefineRight =
+-        rightIsRefineable && restrictedRightType != null;
++        restrictedRightType != null && restrictedRightType != originalRightType;
+     if (shouldRefineLeft || shouldRefineRight) {
+       FlowScope informed = blindScope.createChildFlowScope();
+       if (shouldRefineLeft) {

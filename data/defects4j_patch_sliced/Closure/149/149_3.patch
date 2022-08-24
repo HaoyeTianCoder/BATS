@@ -1,0 +1,19 @@
+--- a/src/com/google/javascript/jscomp/AbstractCommandLineRunner.java
++++ b/src/com/google/javascript/jscomp/AbstractCommandLineRunner.java
+@@ -690,6 +686,16 @@ abstract class AbstractCommandLineRunner<A extends Compiler,
+    *    be a supported charset.
+    * @throws FlagUsageException if flag is not a valid Charset name.
+    */
++  private String getOutputCharset() throws FlagUsageException {
++    if (!config.charset.isEmpty()) {
++      if (!Charset.isSupported(config.charset)) {
++        throw new FlagUsageException(config.charset +
++            " is not a valid charset name.");
++      }
++      return config.charset;
++    }
++    return "US-ASCII";
++  }
+ 
+   protected List<JSSourceFile> createExterns() throws FlagUsageException,
+       IOException {

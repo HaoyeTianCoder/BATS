@@ -1,0 +1,17 @@
+--- a/src/com/google/javascript/jscomp/FunctionInjector.java
++++ b/src/com/google/javascript/jscomp/FunctionInjector.java
+@@ -43,6 +43,14 @@ class FunctionInjector {
+   private final boolean assumeStrictThis;
+   private final boolean assumeMinimumCapture;
+   private final Supplier<String> safeNameIdSupplier;
++  private final Supplier<String> throwawayNameSupplier =
++      new Supplier<String>() {
++    private int nextId = 0;
++    @Override
++    public String get() {
++      return String.valueOf(nextId++);
++    }
++  };
+ 
+   /**
+    * @param allowDecomposition Whether an effort should be made to break down

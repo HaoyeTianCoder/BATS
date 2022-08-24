@@ -1,0 +1,13 @@
+--- a/src/com/google/javascript/jscomp/CommandLineRunner.java
++++ b/src/com/google/javascript/jscomp/CommandLineRunner.java
+@@ -549,9 +596,7 @@ public class CommandLineRunner extends
+           .setModuleWrapper(flags.module_wrapper)
+           .setModuleOutputPathPrefix(flags.module_output_path_prefix)
+           .setCreateSourceMap(flags.create_source_map)
+-          .setJscompError(flags.jscomp_error)
+-          .setJscompWarning(flags.jscomp_warning)
+-          .setJscompOff(flags.jscomp_off)
++          .setWarningGuardSpec(Flags.warningGuardSpec)
+           .setDefine(flags.define)
+           .setCharset(flags.charset)
+           .setManageClosureDependencies(flags.manage_closure_dependencies)

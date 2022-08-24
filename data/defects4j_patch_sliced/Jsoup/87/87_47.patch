@@ -1,0 +1,12 @@
+--- a/src/main/java/org/jsoup/parser/Tag.java
++++ b/src/main/java/org/jsoup/parser/Tag.java
+@@ -40,6 +43,9 @@ public class Tag {
+      * Get this tag's normalized (lowercased) name.
+      * @return the tag's normal name.
+      */
++    public String normalName() {
++        return normalName;
++    }
+ 
+     /**
+      * Get a Tag by name. If not previously defined (unknown), returns a new generic tag, that can do anything.

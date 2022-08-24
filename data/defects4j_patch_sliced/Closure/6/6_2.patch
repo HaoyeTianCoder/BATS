@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/TypeValidator.java
++++ b/src/com/google/javascript/jscomp/TypeValidator.java
+@@ -382,7 +379,6 @@ class TypeValidator {
+           "assignment to property " + propName + " of " +
+           getReadableJSTypeName(owner, true),
+           rightType, leftType);
+-      }
+       return false;
+     }
+     return true;

@@ -1,0 +1,28 @@
+--- a/src/main/java/com/fasterxml/jackson/core/json/UTF8StreamJsonParser.java
++++ b/src/main/java/com/fasterxml/jackson/core/json/UTF8StreamJsonParser.java
+@@ -1418,8 +1427,25 @@ public final class UTF8StreamJsonParser
+      * NOTE: caller MUST ensure there is at least one character available;
+      * and that input pointer is AT given char (not past)
+      */
++    private final void _verifyRootSpace(int ch) throws IOException
++    {
+         // caller had pushed it back, before calling; reset
++        ++_inputPtr;
+         // TODO? Handle UTF-8 char decoding for error reporting
++        switch (ch) {
++        case ' ':
++        case '\t':
++            return;
++        case '\r':
++            _skipCR();
++            return;
++        case '\n':
++            ++_currInputRow;
++            _currInputRowStart = _inputPtr;
++            return;
++        }
++        _reportMissingRootWS(ch);
++    }
+ 
+     /*
+     /**********************************************************

@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/nodes/Element.java
++++ b/src/main/java/org/jsoup/nodes/Element.java
+@@ -311,7 +311,7 @@ public class Element extends Node {
+     public Element wrap(String html) {
+         Validate.notEmpty(html);
+ 
+-        Element wrapBody = Parser.parseBodyFragment(html, baseUri).body();
++        Element wrapBody = Parser.parseBodyFragmentRelaxed(html, baseUri).body();
+         Elements wrapChildren = wrapBody.children();
+         Element wrap = wrapChildren.first();
+         if (wrap == null) // nothing to wrap with; noop

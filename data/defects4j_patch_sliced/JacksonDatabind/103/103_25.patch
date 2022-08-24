@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/util/ClassUtil.java
++++ b/src/main/java/com/fasterxml/jackson/databind/util/ClassUtil.java
+@@ -7,6 +7,7 @@ import java.lang.reflect.*;
+ import java.util.*;
+ 
+ import com.fasterxml.jackson.core.JsonGenerator;
++import com.fasterxml.jackson.core.JsonProcessingException;
+ import com.fasterxml.jackson.databind.DeserializationContext;
+ import com.fasterxml.jackson.databind.JavaType;
+ import com.fasterxml.jackson.databind.JsonMappingException;

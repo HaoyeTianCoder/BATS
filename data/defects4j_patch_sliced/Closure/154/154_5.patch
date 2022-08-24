@@ -1,0 +1,12 @@
+--- a/src/com/google/javascript/jscomp/TypeValidator.java
++++ b/src/com/google/javascript/jscomp/TypeValidator.java
+@@ -114,7 +121,8 @@ class TypeValidator {
+       MISSING_EXTENDS_TAG_WARNING,
+       DUP_VAR_DECLARATION,
+       HIDDEN_PROPERTY_MISMATCH,
+-      INTERFACE_METHOD_NOT_IMPLEMENTED);
++      INTERFACE_METHOD_NOT_IMPLEMENTED,
++      HIDDEN_INTERFACE_PROPERTY_MISMATCH);
+ 
+   TypeValidator(AbstractCompiler compiler) {
+     this.compiler = compiler;

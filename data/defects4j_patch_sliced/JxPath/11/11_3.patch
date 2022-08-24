@@ -1,0 +1,10 @@
+--- a/src/java/org/apache/commons/jxpath/ri/model/jdom/JDOMAttributeIterator.java
++++ b/src/java/org/apache/commons/jxpath/ri/model/jdom/JDOMAttributeIterator.java
+@@ -20,6 +20,7 @@ import java.util.ArrayList;
+ import java.util.Collections;
+ import java.util.List;
+ 
++import org.apache.commons.jxpath.ri.NamespaceResolver;
+ import org.apache.commons.jxpath.ri.QName;
+ import org.apache.commons.jxpath.ri.model.NodeIterator;
+ import org.apache.commons.jxpath.ri.model.NodePointer;

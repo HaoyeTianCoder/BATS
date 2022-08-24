@@ -1,0 +1,18 @@
+--- a/src/com/google/javascript/jscomp/SourceMap.java
++++ b/src/com/google/javascript/jscomp/SourceMap.java
+@@ -423,13 +516,13 @@ public class SourceMap {
+         // closed in the reverse order of when they encountered.
+         while (!stack.isEmpty() && !isOverlapped(stack.peek(), m)) {
+           Mapping previous = stack.pop();
+-          writeClosedMapping(previous);
++          maybeVisit(v, previous);
+         }
+ 
+         // Any gaps between the current line position and the start of the
+         // current mapping belong to the parent.
+         Mapping parent = stack.peek();
+-        writeCharsBetween(parent, m);
++        maybeVisitParent(v, parent, m);
+ 
+         stack.push(m);
+       }

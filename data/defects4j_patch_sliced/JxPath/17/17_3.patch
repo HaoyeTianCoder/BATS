@@ -1,0 +1,14 @@
+--- a/src/java/org/apache/commons/jxpath/ri/model/jdom/JDOMAttributeIterator.java
++++ b/src/java/org/apache/commons/jxpath/ri/model/jdom/JDOMAttributeIterator.java
+@@ -67,11 +67,9 @@ public class JDOMAttributeIterator implements NodeIterator {
+             String lname = name.getName();
+             if (!lname.equals("*")) {
+                 attributes = new ArrayList();
+-                if (ns != null) {
+                 Attribute attr = element.getAttribute(lname, ns);
+                 if (attr != null) {
+                     attributes.add(attr);
+-                    }
+                 }
+             }
+             else {

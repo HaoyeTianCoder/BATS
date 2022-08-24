@@ -1,0 +1,14 @@
+--- a/src/java/org/apache/commons/jxpath/ri/compiler/Expression.java
++++ b/src/java/org/apache/commons/jxpath/ri/compiler/Expression.java
+@@ -85,6 +89,11 @@ public abstract class Expression {
+         if (result instanceof EvalContext) {
+             return (EvalContext) result;
+         }
++        if (result instanceof NodeSet) {
++            return new PointerIterator(((NodeSet) result).getPointers().iterator(),
++                    new QName(null, "value"),
++                    context.getRootContext().getCurrentNodePointer().getLocale());
++        }
+         return new PointerIterator(ValueUtils.iterate(result),
+                 new QName(null, "value"),
+                 context.getRootContext().getCurrentNodePointer().getLocale());

@@ -1,0 +1,30 @@
+--- a/src/com/google/javascript/jscomp/AbstractCommandLineRunner.java
++++ b/src/com/google/javascript/jscomp/AbstractCommandLineRunner.java
+@@ -1625,9 +1611,26 @@ abstract class AbstractCommandLineRunner<A extends Compiler,
+    * A little helper class to make it easier to collect warning types
+    * from --jscomp_error, --jscomp_warning, and --jscomp_off.
+    */
+-
++  protected static class WarningGuardSpec {
++    private static class Entry {
++      private final CheckLevel level;
++      private final String groupName;
++
++      private Entry(CheckLevel level, String groupName) {
++        this.level = level;
++        this.groupName = groupName;
++      }
++    }
+ 
+     // The entries, in the order that they were added.
++    private final List<Entry> entries = Lists.newArrayList();
+ 
++    protected void add(CheckLevel level, String groupName) {
++      entries.add(new Entry(level, groupName));
++    }
+ 
++    protected void clear() {
++      entries.clear();
++    }
++  }
+ }

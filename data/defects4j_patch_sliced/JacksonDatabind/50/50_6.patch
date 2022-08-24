@@ -1,0 +1,27 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializer.java
+@@ -930,7 +955,24 @@ public class BeanDeserializer
+     /**
+      * @since 2.8
+      */
++    static class BeanReferring extends Referring {
++        private final SettableBeanProperty _prop;
++        private Object _bean;
+ 
++        public void setBean(Object bean) {
++            _bean = bean;
++        }
+ 
++        BeanReferring(UnresolvedForwardReference ref,
++                Class<?> valueType, PropertyValueBuffer buffer, SettableBeanProperty prop)
++        {
++            super(ref, valueType);
++            _prop = prop;
++        }
+ 
++        @Override
++        public void handleResolvedForwardReference(Object id, Object value) throws IOException {
++            _prop.set(_bean, value);
++        }
++    }
+ }

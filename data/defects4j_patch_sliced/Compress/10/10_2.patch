@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/zip/ZipFile.java
++++ b/src/main/java/org/apache/commons/compress/archivers/zip/ZipFile.java
+@@ -839,6 +842,7 @@ public class ZipFile {
+                     nameMap.put(ze.getName(), ze);
+                 }
+             }
++            entries.put(ze, offsetEntry);
+         }
+     }
+ 

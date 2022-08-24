@@ -1,0 +1,19 @@
+--- a/src/java/org/apache/commons/cli2/commandline/WriteableCommandLineImpl.java
++++ b/src/java/org/apache/commons/cli2/commandline/WriteableCommandLineImpl.java
+@@ -60,9 +62,16 @@ public class WriteableCommandLineImpl
+                                     final List arguments) {
+         this.prefixes = rootOption.getPrefixes();
+         this.normalised = arguments;
++        setCurrentOption(rootOption);
+     }
+ 
++    public Option getCurrentOption() {
++        return currentOption;
++    }
+ 
++    public void setCurrentOption(Option currentOption) {
++        this.currentOption = currentOption;
++    }
+ 
+     public void addOption(Option option) {
+         options.add(option);

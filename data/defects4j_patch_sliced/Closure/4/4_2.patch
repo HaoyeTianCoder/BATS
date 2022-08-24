@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/rhino/jstype/NamedType.java
++++ b/src/com/google/javascript/rhino/jstype/NamedType.java
+@@ -199,7 +199,7 @@ class NamedType extends ProxyObjectType {
+     }
+ 
+     resolveViaProperties(t, enclosing);
+-    if (detectImplicitPrototypeCycle()) {
++    if (detectInheritanceCycle()) {
+       handleTypeCycle(t);
+     }
+ 

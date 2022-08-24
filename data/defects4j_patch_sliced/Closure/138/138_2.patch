@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/ClosureReverseAbstractInterpreter.java
++++ b/src/com/google/javascript/jscomp/ClosureReverseAbstractInterpreter.java
+@@ -215,7 +214,6 @@ class ClosureReverseAbstractInterpreter
+           if (restricter != null) {
+             return restrictParameter(param, paramType, blindScope, restricter,
+                 outcome);
+-            }
+           }
+         }
+       }

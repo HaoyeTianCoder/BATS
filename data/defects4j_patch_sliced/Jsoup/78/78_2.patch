@@ -1,0 +1,15 @@
+--- a/src/main/java/org/jsoup/helper/DataUtil.java
++++ b/src/main/java/org/jsoup/helper/DataUtil.java
+@@ -148,8 +149,12 @@ public final class DataUtil {
+             if (charsetName == null)
+                 charsetName = defaultCharset;
+             BufferedReader reader = new BufferedReader(new InputStreamReader(input, charsetName), bufferSize);
++            try {
+                 doc = parser.parseInput(reader, baseUri);
++            } catch (UncheckedIOException e) {
+                 // io exception when parsing (not seen before because reading the stream as we go)
++                throw e.ioException();
++            }
+             doc.outputSettings().charset(charsetName);
+         }
+         input.close();

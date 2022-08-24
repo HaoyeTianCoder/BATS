@@ -1,0 +1,20 @@
+--- a/src/com/google/javascript/jscomp/CollapseProperties.java
++++ b/src/com/google/javascript/jscomp/CollapseProperties.java
+@@ -650,13 +652,15 @@ class CollapseProperties implements CompilerPass {
+       insertedVarNode = true;
+     }
+ 
+-    if (isObjLit) {
++    if (canCollapseChildNames) {
++      if (isObjLit) {
+         declareVarsForObjLitValues(
+             n, alias, rvalue,
+             varNode, varParent.getChildBefore(varNode), varParent);
++      }
+ 
+-    }
+       addStubsForUndeclaredProperties(n, alias, varParent, varNode);
++    }
+ 
+     if (insertedVarNode) {
+       if (!varNode.hasChildren()) {

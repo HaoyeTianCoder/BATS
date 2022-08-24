@@ -1,0 +1,11 @@
+--- a/src/java/org/apache/commons/cli/PosixParser.java
++++ b/src/java/org/apache/commons/cli/PosixParser.java
+@@ -125,7 +125,7 @@ public class PosixParser extends Parser {
+             // single hyphen
+             else if ("-".equals(token))
+             {
+-                processSingleHyphen(token);
++                tokens.add(token);
+             }
+             else if (token.startsWith("-"))
+             {

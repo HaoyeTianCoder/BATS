@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/tar/TarArchiveOutputStream.java
++++ b/src/main/java/org/apache/commons/compress/archivers/tar/TarArchiveOutputStream.java
+@@ -184,6 +188,7 @@ public class TarArchiveOutputStream extends ArchiveOutputStream {
+             currSize = entry.getSize();
+         }
+         currName = entry.getName();
++        haveUnclosedEntry = true;
+     }
+ 
+     /**

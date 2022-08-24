@@ -1,0 +1,21 @@
+--- a/src/main/java/org/apache/commons/codec/net/QuotedPrintableCodec.java
++++ b/src/main/java/org/apache/commons/codec/net/QuotedPrintableCodec.java
+@@ -226,13 +264,16 @@ public class QuotedPrintableCodec implements BinaryEncoder, BinaryDecoder, Strin
+             if (b == ESCAPE_CHAR) {
+                 try {
+                     // if the next octet is a CR we have found a soft line break
+-                    int u = Utils.digit16(bytes[++i]);
++                    if (bytes[++i] == CR) {
++                        continue;
++                    }
++                    int u = Utils.digit16(bytes[i]);
+                     int l = Utils.digit16(bytes[++i]);
+                     buffer.write((char) ((u << 4) + l));
+                 } catch (ArrayIndexOutOfBoundsException e) {
+                     throw new DecoderException("Invalid quoted-printable encoding", e);
+                 }
+-            } else {
++            } else if (b != CR && b != LF) {
+                 // every other octet is appended except for CR & LF
+                 buffer.write(b);
+             }

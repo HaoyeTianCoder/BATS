@@ -1,0 +1,45 @@
+--- a/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
++++ b/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
+@@ -238,23 +251,35 @@ class AnalyzePrototypeProperties implements CompilerPass {
+       if (n.isGetProp()) {
+         String propName = n.getFirstChild().getNext().getString();
+ 
++        if (n.isQualifiedName()) {
+           if (propName.equals("prototype")) {
+-          processPrototypeParent(t, parent);
++            if (processPrototypeRef(t, n)) {
++              return;
++            }
+           } else if (compiler.getCodingConvention().isExported(propName)) {
+             addGlobalUseOfSymbol(propName, t.getModule(), PROPERTY);
++            return;
+           } else {
+             // Do not mark prototype prop assigns as a 'use' in the global scope.
+-          addSymbolUse(propName, t.getModule(), PROPERTY);
++            if (n.getParent().isAssign() && n.getNext() != null) {
++              String rValueName = getPrototypePropertyNameFromRValue(n);
++              if (rValueName != null) {
++                return;
++              }
++            }
++          }
+         }
+ 
+-      } else if (n.isObjectLit() &&
++        addSymbolUse(propName, t.getModule(), PROPERTY);
++      } else if (n.isObjectLit()) {
+         // Make sure that we're not handling object literals being
+         // assigned to a prototype, as in:
+         // Foo.prototype = {bar: 3, baz: 5};
+-          !(parent.isAssign() &&
+-            parent.getFirstChild().isGetProp() &&
+-            parent.getFirstChild().getLastChild().getString().equals(
+-                "prototype"))) {
++        String lValueName = NodeUtil.getBestLValueName(
++            NodeUtil.getBestLValue(n));
++        if (lValueName != null && lValueName.endsWith(".prototype")) {
++          return;
++        }
+ 
+         // var x = {a: 1, b: 2}
+         // should count as a use of property a and b.

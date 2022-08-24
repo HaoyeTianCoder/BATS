@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/util/TokenBuffer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/util/TokenBuffer.java
+@@ -826,7 +826,7 @@ sb.append("NativeObjectIds=").append(_hasNativeObjectIds).append(",");
+         }
+         Class<?> raw = value.getClass();
+         if (raw == byte[].class || (value instanceof RawValue)) {
+-            _append(JsonToken.VALUE_EMBEDDED_OBJECT, value);
++            _appendValue(JsonToken.VALUE_EMBEDDED_OBJECT, value);
+             return;
+         }
+         if (_objectCodec == null) {

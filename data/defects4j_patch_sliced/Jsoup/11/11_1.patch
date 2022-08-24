@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/select/Selector.java
++++ b/src/main/java/org/jsoup/select/Selector.java
+@@ -107,6 +107,8 @@ public class Selector {
+         if (tq.matchesAny(combinators)) { // if starts with a combinator, use root as elements
+             elements.add(root);
+             combinator(tq.consume().toString());
++        } else if (tq.matches(":has(")) {
++            elements.addAll(root.getAllElements());
+         } else {
+             addElements(findElements()); // chomp first element matcher off queue 
+         }            

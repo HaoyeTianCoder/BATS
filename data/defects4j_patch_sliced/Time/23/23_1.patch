@@ -1,0 +1,14 @@
+--- a/src/main/java/org/joda/time/DateTimeZone.java
++++ b/src/main/java/org/joda/time/DateTimeZone.java
+@@ -561,6 +561,11 @@ public abstract class DateTimeZone implements Serializable {
+             // Backwards compatibility with TimeZone.
+             map = new HashMap<String, String>();
+             map.put("GMT", "UTC");
++            map.put("WET", "WET");
++            map.put("CET", "CET");
++            map.put("MET", "CET");
++            map.put("ECT", "CET");
++            map.put("EET", "EET");
+             map.put("MIT", "Pacific/Apia");
+             map.put("HST", "Pacific/Honolulu");  // JDK 1.1 compatible
+             map.put("AST", "America/Anchorage");

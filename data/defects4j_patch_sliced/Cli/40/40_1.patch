@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/cli/TypeHandler.java
++++ b/src/main/java/org/apache/commons/cli/TypeHandler.java
+@@ -100,7 +100,7 @@ public class TypeHandler
+         }
+         else
+         {
+-            return null;
++            throw new ParseException("Unable to handle the class: " + clazz);
+         }
+     }
+ 

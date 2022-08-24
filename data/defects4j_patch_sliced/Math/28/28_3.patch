@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/math3/optimization/linear/SimplexSolver.java
++++ b/src/main/java/org/apache/commons/math3/optimization/linear/SimplexSolver.java
+@@ -135,6 +137,7 @@ public class SimplexSolver extends AbstractLinearOptimizer {
+             // Additional heuristic: if we did not get a solution after half of maxIterations
+             //                       revert to the simple case of just returning the top-most row
+             // This heuristic is based on empirical data gathered while investigating MATH-828.
++            if (getIterations() < getMaxIterations() / 2) {
+                 Integer minRow = null;
+                 int minIndex = tableau.getWidth();
+                 for (Integer row : minRatioPositions) {

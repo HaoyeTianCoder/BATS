@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/math/optimization/general/LevenbergMarquardtOptimizer.java
++++ b/src/main/java/org/apache/commons/math/optimization/general/LevenbergMarquardtOptimizer.java
+@@ -163,6 +163,7 @@ public class LevenbergMarquardtOptimizer extends AbstractLeastSquaresOptimizer {
+         setMaxIterations(1000);
+ 
+         // default values for the tuning parameters
++        setConvergenceChecker(null);
+         setInitialStepBoundFactor(100.0);
+         setCostRelativeTolerance(1.0e-10);
+         setParRelativeTolerance(1.0e-10);

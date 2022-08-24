@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/cpio/CpioArchiveInputStream.java
++++ b/src/main/java/org/apache/commons/compress/archivers/cpio/CpioArchiveInputStream.java
+@@ -152,6 +153,7 @@ public class CpioArchiveInputStream extends ArchiveInputStream implements
+     public CpioArchiveInputStream(final InputStream in, int blockSize, String encoding) {
+         this.in = in;
+         this.blockSize = blockSize;
++        this.encoding = encoding;
+         this.zipEncoding = ZipEncodingHelper.getZipEncoding(encoding);
+     }
+ 

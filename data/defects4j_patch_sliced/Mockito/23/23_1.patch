@@ -1,0 +1,21 @@
+--- a/src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java
++++ b/src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java
+@@ -41,14 +41,16 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
+     
+     private static final long serialVersionUID = -7105341425736035847L;
+ 
+-    private MockitoCore mockitoCore = new MockitoCore();
+-    private ReturnsEmptyValues delegate = new ReturnsEmptyValues();
++    private transient MockitoCore mockitoCore;
++    private transient ReturnsEmptyValues delegate;
+ 
+     public Object answer(InvocationOnMock invocation) throws Throwable {
+         GenericMetadataSupport returnTypeGenericMetadata =
+                 actualParameterizedType(invocation.getMock()).resolveGenericReturnType(invocation.getMethod());
+ 
+         Class<?> rawType = returnTypeGenericMetadata.rawType();
++        instantiateMockitoCoreIfNeeded();
++        instantiateDelegateIfNeeded();
+         if (!mockitoCore.isTypeMockable(rawType)) {
+             return delegate.returnValueFor(rawType);
+         }

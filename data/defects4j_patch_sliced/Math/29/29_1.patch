@@ -1,0 +1,16 @@
+--- a/src/main/java/org/apache/commons/math3/linear/OpenMapRealVector.java
++++ b/src/main/java/org/apache/commons/math3/linear/OpenMapRealVector.java
+@@ -346,10 +346,9 @@ public class OpenMapRealVector extends SparseRealVector
+          * this only. Indeed, if this[i] = 0d and v[i] = 0d, then
+          * this[i] / v[i] = NaN, and not 0d.
+          */
+-        Iterator iter = entries.iterator();
+-        while (iter.hasNext()) {
+-            iter.advance();
+-            res.setEntry(iter.key(), iter.value() / v.getEntry(iter.key()));
++        final int n = getDimension();
++        for (int i = 0; i < n; i++) {
++            res.setEntry(i, this.getEntry(i) / v.getEntry(i));
+         }
+         return res;
+     }

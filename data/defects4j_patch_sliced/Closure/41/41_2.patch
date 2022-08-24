@@ -1,0 +1,15 @@
+--- a/src/com/google/javascript/jscomp/FunctionTypeBuilder.java
++++ b/src/com/google/javascript/jscomp/FunctionTypeBuilder.java
+@@ -480,6 +483,12 @@ final class FunctionTypeBuilder {
+     }
+ 
+     // Copy over any old parameters that aren't in the param list.
++    if (!isVarArgs) {
++      while (oldParameterType != null && !isVarArgs) {
++        builder.newParameterFromNode(oldParameterType);
++        oldParameterType = oldParameterType.getNext();
++      }
++    }
+ 
+     if (templateTypeName != null && !foundTemplateType) {
+       reportError(TEMPLATE_TYPE_EXPECTED, fnName);

@@ -1,0 +1,14 @@
+--- a/src/main/java/org/apache/commons/math3/optimization/univariate/BrentOptimizer.java
++++ b/src/main/java/org/apache/commons/math3/optimization/univariate/BrentOptimizer.java
+@@ -271,9 +277,10 @@ public class BrentOptimizer extends BaseAbstractUnivariateOptimizer {
+                     }
+                 }
+             } else { // Default termination (Brent's criterion).
+-                return
++                return best(best,
+                             best(current,
+                                  previous,
++                                 isMinim),
+                             isMinim);
+             }
+             ++iter;

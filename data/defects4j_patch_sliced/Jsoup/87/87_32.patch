@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
+@@ -884,7 +884,7 @@ enum HtmlTreeBuilderState {
+                 }
+                 return true; // todo: as above todo
+             } else if (t.isEOF()) {
+-                if (tb.currentElement().nodeName().equals("html"))
++                if (tb.currentElement().normalName().equals("html"))
+                     tb.error(this);
+                 return true; // stops parsing
+             }

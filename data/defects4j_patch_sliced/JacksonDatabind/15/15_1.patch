@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/JavaType.java
++++ b/src/main/java/com/fasterxml/jackson/databind/JavaType.java
+@@ -299,6 +299,7 @@ public abstract class JavaType
+      *
+      * @since 2.5
+      */
++    public final boolean isJavaLangObject() { return _class == Object.class; }
+ 
+     /**
+      * Accessor for checking whether handlers for dealing with values of

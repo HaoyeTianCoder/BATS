@@ -1,0 +1,15 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/util/ClassUtil.java
++++ b/src/main/java/com/fasterxml/jackson/databind/util/ClassUtil.java
+@@ -749,6 +750,12 @@ public final class ClassUtil
+      *
+      * @since 2.9.7
+      */
++    public static String exceptionMessage(Throwable t) {
++        if (t instanceof JsonProcessingException) {
++            return ((JsonProcessingException) t).getOriginalMessage();
++        }
++        return t.getMessage();
++    }
+     
+     /*
+     /**********************************************************

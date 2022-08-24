@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/helper/StringUtil.java
++++ b/src/main/java/org/jsoup/helper/StringUtil.java
+@@ -162,7 +165,7 @@ public final class StringUtil {
+                 accum.append(' ');
+                 lastWasWhite = true;
+             }
+-            else {
++            else if (!isInvisibleChar(c)) {
+                 accum.appendCodePoint(c);
+                 lastWasWhite = false;
+                 reachedNonWhite = true;

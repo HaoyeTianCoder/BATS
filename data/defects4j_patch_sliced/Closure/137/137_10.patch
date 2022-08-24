@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/Normalize.java
++++ b/src/com/google/javascript/jscomp/Normalize.java
+@@ -99,6 +98,7 @@ class Normalize implements CompilerPass {
+     //   }
+     // otherwise 'var e = 1' would be rewritten as 'e = 1'.
+     // TODO(johnlenz): Introduce a seperate scope for catch nodes. 
++    removeDuplicateDeclarations(root);
+     new PropogateConstantAnnotations(compiler, assertOnChange)
+         .process(externs, root);
+   }

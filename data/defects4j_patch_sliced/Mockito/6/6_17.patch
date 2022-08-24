@@ -1,0 +1,11 @@
+--- a/src/org/mockito/Matchers.java
++++ b/src/org/mockito/Matchers.java
+@@ -404,7 +404,7 @@ public class Matchers {
+      * @return empty Map.
+      */
+     public static Map anyMap() {
+-        return reportMatcher(Any.ANY).returnMap();
++        return reportMatcher(new InstanceOf(Map.class)).returnMap();
+     }
+ 
+     /**

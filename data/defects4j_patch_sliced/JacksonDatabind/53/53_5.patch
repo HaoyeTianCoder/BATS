@@ -1,0 +1,31 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/type/TypeFactory.java
++++ b/src/main/java/com/fasterxml/jackson/databind/type/TypeFactory.java
+@@ -453,9 +444,28 @@ public final class TypeFactory
+         */
+     }
+ 
++    private TypeBindings _bindingsForSubtype(JavaType baseType, int typeParamCount, Class<?> subclass)
++    {
+         // But otherwise gets bit tricky, as we need to partially resolve the type hierarchy
+         // (hopefully passing null Class for root is ok)
++        int baseCount = baseType.containedTypeCount();
++        if (baseCount == typeParamCount) {
++            if (typeParamCount == 1) {
++                return TypeBindings.create(subclass, baseType.containedType(0));
++            }
++            if (typeParamCount == 2) {
++                return TypeBindings.create(subclass, baseType.containedType(0),
++                        baseType.containedType(1));
++            }
++            List<JavaType> types = new ArrayList<JavaType>(baseCount);
++            for (int i = 0; i < baseCount; ++i) {
++                types.add(baseType.containedType(i));
++            }
++            return TypeBindings.create(subclass, types);
++        }
+         // Otherwise, two choices: match N first, or empty. Do latter, for now
++        return TypeBindings.emptyBindings();
++    }
+ 
+     /**
+      * Method similar to {@link #constructSpecializedType}, but that creates a

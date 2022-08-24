@@ -1,0 +1,13 @@
+--- a/source/org/jfree/data/KeyedObjects2D.java
++++ b/source/org/jfree/data/KeyedObjects2D.java
+@@ -342,6 +364,10 @@ public class KeyedObjects2D implements Cloneable, Serializable {
+      */
+     public void removeRow(Comparable rowKey) {
+         int index = getRowIndex(rowKey);
++        if (index < 0) {
++            throw new UnknownKeyException("Row key (" + rowKey 
++                    + ") not recognised.");
++        }
+         removeRow(index);
+     }
+ 

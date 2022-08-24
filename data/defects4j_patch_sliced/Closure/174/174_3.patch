@@ -1,0 +1,16 @@
+--- a/src/com/google/javascript/jscomp/NodeUtil.java
++++ b/src/com/google/javascript/jscomp/NodeUtil.java
+@@ -2364,9 +2364,12 @@ public final class NodeUtil {
+     if (nameNode.isName()) {
+       result = IR.var(nameNode, value);
+       result.setJSDocInfo(info);
+-    } else {
++    } else if (value != null) {
+       result = IR.exprResult(IR.assign(nameNode, value));
+       result.getFirstChild().setJSDocInfo(info);
++    } else {
++      result = IR.exprResult(nameNode);
++      result.getFirstChild().setJSDocInfo(info);
+     }
+     return result;
+   }

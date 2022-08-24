@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/AnyGetterWriter.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/AnyGetterWriter.java
+@@ -72,6 +77,7 @@ public class AnyGetterWriter
+             return;
+         }
+         // ... not sure how custom handler would do it
++        _serializer.serialize(value, gen, provider);
+     }
+     
+     // Note: NOT part of ResolvableSerializer...

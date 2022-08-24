@@ -1,0 +1,13 @@
+--- a/src/main/java/org/jsoup/parser/Parser.java
++++ b/src/main/java/org/jsoup/parser/Parser.java
+@@ -130,6 +130,10 @@ public class Parser {
+      * @param inAttribute if the string is to be escaped in strict mode (as attributes are)
+      * @return an unescaped string
+      */
++    public static String unescapeEntities(String string, boolean inAttribute) {
++        Tokeniser tokeniser = new Tokeniser(new CharacterReader(string), ParseErrorList.noTracking());
++        return tokeniser.unescapeEntities(inAttribute);
++    }
+ 
+     /**
+      * @param bodyHtml HTML to parse

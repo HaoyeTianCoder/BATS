@@ -1,0 +1,10 @@
+--- a/src/main/java/org/jsoup/nodes/Document.java
++++ b/src/main/java/org/jsoup/nodes/Document.java
+@@ -2,6 +2,7 @@ package org.jsoup.nodes;
+ 
+ import org.jsoup.helper.Validate;
+ import org.jsoup.parser.Tag;
++import org.jsoup.select.Elements;
+ 
+ import java.nio.charset.Charset;
+ import java.nio.charset.CharsetEncoder;

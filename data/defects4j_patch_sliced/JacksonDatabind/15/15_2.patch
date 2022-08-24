@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/BeanSerializerFactory.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/BeanSerializerFactory.java
+@@ -160,7 +160,7 @@ public class BeanSerializerFactory
+             ser = findSerializerFromAnnotation(prov, beanDesc.getClassInfo());
+         }
+         // [databind#731]: Should skip if nominally java.lang.Object
+-        if (ser == null) {
++        if (ser == null && !delegateType.isJavaLangObject()) {
+             ser = _createSerializer2(prov, delegateType, beanDesc, true);
+         }
+         return new StdDelegatingSerializer(conv, delegateType, ser);

@@ -1,0 +1,12 @@
+--- a/src/main/java/org/apache/commons/codec/net/QuotedPrintableCodec.java
++++ b/src/main/java/org/apache/commons/codec/net/QuotedPrintableCodec.java
+@@ -149,6 +169,9 @@ public class QuotedPrintableCodec implements BinaryEncoder, BinaryDecoder, Strin
+      *                  byte to be checked
+      * @return <code>true</code> if the byte is either a space or tab character
+      */
++    private static boolean isWhitespace(final int b) {
++        return b == SPACE || b == TAB;
++    }
+ 
+     /**
+      * Encodes an array of bytes into an array of quoted-printable 7-bit characters. Unsafe characters are escaped.

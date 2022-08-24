@@ -1,0 +1,11 @@
+--- a/src/org/mockito/Matchers.java
++++ b/src/org/mockito/Matchers.java
+@@ -370,7 +370,7 @@ public class Matchers {
+      * @return empty Set
+      */
+     public static Set anySet() {
+-        return reportMatcher(Any.ANY).returnSet();
++        return reportMatcher(new InstanceOf(Set.class)).returnSet();
+     }
+     
+     /**

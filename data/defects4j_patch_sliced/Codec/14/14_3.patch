@@ -1,0 +1,12 @@
+--- a/src/main/java/org/apache/commons/codec/language/bm/PhoneticEngine.java
++++ b/src/main/java/org/apache/commons/codec/language/bm/PhoneticEngine.java
+@@ -335,7 +335,8 @@ public class PhoneticEngine {
+             return phonemeBuilder;
+         }
+ 
+-        final Set<Rule.Phoneme> phonemes = new TreeSet<Rule.Phoneme>(Rule.Phoneme.COMPARATOR);
++        final Map<Rule.Phoneme, Rule.Phoneme> phonemes =
++            new TreeMap<Rule.Phoneme, Rule.Phoneme>(Rule.Phoneme.COMPARATOR);
+ 
+         for (final Rule.Phoneme phoneme : phonemeBuilder.getPhonemes()) {
+             PhonemeBuilder subBuilder = PhonemeBuilder.empty(phoneme.getLanguages());

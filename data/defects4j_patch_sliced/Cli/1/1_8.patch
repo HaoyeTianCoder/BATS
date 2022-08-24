@@ -1,0 +1,11 @@
+--- a/src/java/org/apache/commons/cli/CommandLine.java
++++ b/src/java/org/apache/commons/cli/CommandLine.java
+@@ -296,7 +296,7 @@ public class CommandLine {
+      */
+     public Iterator iterator()
+     {
+-        return hashcodeMap.values().iterator();
++        return options.iterator();
+     }
+ 
+     /**

@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/Normalize.java
++++ b/src/com/google/javascript/jscomp/Normalize.java
+@@ -628,6 +628,7 @@ class Normalize implements CompilerPass {
+   private final class DuplicateDeclarationHandler implements
+       SyntacticScopeCreator.RedeclarationHandler {
+ 
++    private Set<Var> hasOkDuplicateDeclaration = Sets.newHashSet();
+ 
+     /**
+      * Remove duplicate VAR declarations encountered discovered during

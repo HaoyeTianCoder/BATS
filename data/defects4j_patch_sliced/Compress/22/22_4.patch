@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorInputStream.java
++++ b/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorInputStream.java
+@@ -850,7 +842,6 @@ public class BZip2CompressorInputStream extends CompressorInputStream implements
+             }
+             this.su_ch2 = su_ch2Shadow ^= (this.su_rNToGo == 1) ? 1 : 0;
+             this.su_i2++;
+-            this.currentChar = su_ch2Shadow;
+             this.currentState = RAND_PART_B_STATE;
+             this.crc.updateCRC(su_ch2Shadow);
+             return su_ch2Shadow;

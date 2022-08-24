@@ -1,0 +1,9 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/impl/InnerClassProperty.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/impl/InnerClassProperty.java
+@@ -164,4 +166,4 @@ public final class InnerClassProperty
+         }
+         return new InnerClassProperty(this, new AnnotatedConstructor(null, _creator, null, null));
+     }
+-}
++}
+\ No newline at end of file

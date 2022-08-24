@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/InlineVariables.java
++++ b/src/com/google/javascript/jscomp/InlineVariables.java
+@@ -196,6 +196,8 @@ class InlineVariables implements CompilerPass {
+     private void doInlinesForScope(NodeTraversal t,
+         Map<Var, ReferenceCollection> referenceMap) {
+ 
++      boolean maybeModifiedArguments =
++          maybeEscapedOrModifiedArguments(t.getScope(), referenceMap);
+       for (Iterator<Var> it = t.getScope().getVars(); it.hasNext();) {
+         Var v = it.next();
+ 

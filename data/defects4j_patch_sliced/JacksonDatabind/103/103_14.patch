@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/SettableAnyProperty.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/SettableAnyProperty.java
+@@ -211,7 +211,7 @@ public class SettableAnyProperty
+         ClassUtil.throwIfRTE(e);
+         // let's wrap the innermost problem
+         Throwable t = ClassUtil.getRootCause(e);
+-        throw new JsonMappingException(null, t.getMessage(), t);
++        throw new JsonMappingException(null, ClassUtil.exceptionMessage(t), t);
+     }
+ 
+     private String getClassName() { return _setter.getDeclaringClass().getName(); }

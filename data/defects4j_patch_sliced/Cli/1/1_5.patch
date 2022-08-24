@@ -1,0 +1,25 @@
+--- a/src/java/org/apache/commons/cli/CommandLine.java
++++ b/src/java/org/apache/commons/cli/CommandLine.java
+@@ -146,19 +145,13 @@ public class CommandLine {
+      */
+     public String[] getOptionValues(String opt)
+     {
+-        opt = Util.stripLeadingHyphens(opt);
+-
+-        String key = opt;
+-        if (names.containsKey(opt))
++        Option key = resolveOption( opt );
+ 
++        if (options.contains(key))
+         {
+-            key = (String) names.get(opt);
++            return key.getValues();
+         }
+ 
+-        if (options.containsKey(key))
+-        {
+-            return ((Option) options.get(key)).getValues();
+-        }
+         return null;
+         }
+ 

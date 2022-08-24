@@ -1,0 +1,20 @@
+--- a/src/main/java/com/fasterxml/jackson/core/base/ParserMinimalBase.java
++++ b/src/main/java/com/fasterxml/jackson/core/base/ParserMinimalBase.java
+@@ -562,11 +562,15 @@ public abstract class ParserMinimalBase extends JsonParser
+ 
+     // @since 2.10
+     protected void reportOverflowInt(String numDesc) throws IOException {
+-        _reportError(String.format("Numeric value (%s) out of range of int (%d - %s)",
+-                _longIntegerDesc(numDesc), Integer.MIN_VALUE, Integer.MAX_VALUE));
++        reportOverflowInt(numDesc, JsonToken.VALUE_NUMBER_INT);
+     }
+ 
+     // @since 2.10
++    protected void reportOverflowInt(String numDesc, JsonToken inputType) throws IOException {
++        _reportInputCoercion(String.format("Numeric value (%s) out of range of int (%d - %s)",
++                _longIntegerDesc(numDesc), Integer.MIN_VALUE, Integer.MAX_VALUE),
++                inputType, Integer.TYPE);
++    }
+ 
+     /**
+      * Method called to throw an exception for integral (not floating point) input

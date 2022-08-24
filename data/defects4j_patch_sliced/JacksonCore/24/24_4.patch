@@ -1,0 +1,20 @@
+--- a/src/main/java/com/fasterxml/jackson/core/base/ParserMinimalBase.java
++++ b/src/main/java/com/fasterxml/jackson/core/base/ParserMinimalBase.java
+@@ -579,11 +583,15 @@ public abstract class ParserMinimalBase extends JsonParser
+ 
+     // @since 2.10
+     protected void reportOverflowLong(String numDesc) throws IOException {
+-        _reportError(String.format("Numeric value (%s) out of range of long (%d - %s)",
+-                _longIntegerDesc(numDesc), Long.MIN_VALUE, Long.MAX_VALUE));
++        reportOverflowLong(numDesc, JsonToken.VALUE_NUMBER_INT);
+     }
+ 
+     // @since 2.10
++    protected void reportOverflowLong(String numDesc, JsonToken inputType) throws IOException {
++        _reportInputCoercion(String.format("Numeric value (%s) out of range of long (%d - %s)",
++                _longIntegerDesc(numDesc), Long.MIN_VALUE, Long.MAX_VALUE),
++                inputType, Long.TYPE);
++    }
+ 
+     /**
+      * @since 2.10

@@ -1,0 +1,67 @@
+--- a/src/com/google/javascript/jscomp/SourceMap.java
++++ b/src/com/google/javascript/jscomp/SourceMap.java
+@@ -370,29 +418,64 @@ public class SourceMap {
+       // Start the first line.
+       openLine();
+ 
++      (new MappingTraversal()).traverse(this);
+ 
+       // And close the final line.
++      closeLine();
++    }
+ 
+     /**
+      * Begin the entry for a new line.
+      */
++    private void openLine() throws IOException {
++      if (out != null) {
++        out.append("[");
++        this.firstChar = true;
++      }
++    }
+ 
+     /**
+      * End the entry for a line.
+      */
++    private void closeLine() throws IOException {
++      if (out != null) {
++        out.append("]\n");
++      }
++    }
+ 
+     /**
+      * Add a new char position entry.
+      * @param id The mapping id to record.
+      */
++    private void addCharEntry(String id) throws IOException {
++      if (out != null) {
++        if (firstChar) {
++          firstChar = false;
++        } else {
++          out.append(",");
++        }
++        out.append(id);
++      }
++    }
++  }
+ 
+   /**
+    * Mark any visited mapping as "used".
+    */
++  private class UsedMappingCheck implements MappingVisitor {
+     /**
+      * @throws IOException
+      */
++    @Override
++    public void visit(Mapping m, int line, int col, int nextLine, int nextCol)
++        throws IOException {
++      if (m != null) {
++        m.used = true;
++      }
++    }
++  }
+ 
++  private interface MappingVisitor {
+     /**
+      * @param m The mapping for the current code segment. null if the segment
+      *     is unmapped.

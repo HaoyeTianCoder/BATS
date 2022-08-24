@@ -1,0 +1,11 @@
+--- a/src/org/mockito/Matchers.java
++++ b/src/org/mockito/Matchers.java
+@@ -336,7 +336,7 @@ public class Matchers {
+      * @return empty List.
+      */
+     public static List anyList() {
+-        return reportMatcher(Any.ANY).returnList();
++        return reportMatcher(new InstanceOf(List.class)).returnList();
+     }    
+     
+     /**

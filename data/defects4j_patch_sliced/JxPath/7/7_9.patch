@@ -1,0 +1,18 @@
+--- a/src/java/org/apache/commons/jxpath/ri/compiler/CoreOperationRelationalExpression.java
++++ b/src/java/org/apache/commons/jxpath/ri/compiler/CoreOperationRelationalExpression.java
+@@ -16,6 +16,15 @@
+  */
+ package org.apache.commons.jxpath.ri.compiler;
+ 
++import java.util.Collection;
++import java.util.HashSet;
++import java.util.Iterator;
++
++import org.apache.commons.jxpath.ri.EvalContext;
++import org.apache.commons.jxpath.ri.InfoSetUtil;
++import org.apache.commons.jxpath.ri.axes.InitialContext;
++import org.apache.commons.jxpath.ri.axes.SelfContext;
++
+ /**
+  * Base implementation of Expression for the operations "&gt;", "&gt;=", "&lt;", "&lt;=".
+  *

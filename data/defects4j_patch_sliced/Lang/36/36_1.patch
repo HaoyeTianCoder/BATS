@@ -1,0 +1,11 @@
+--- a/src/java/org/apache/commons/lang3/math/NumberUtils.java
++++ b/src/java/org/apache/commons/lang3/math/NumberUtils.java
+@@ -488,7 +488,7 @@ public class NumberUtils {
+             }
+             dec = null;
+         }
+-        if (!Character.isDigit(lastChar)) {
++        if (!Character.isDigit(lastChar) && lastChar != '.') {
+             if (expPos > -1 && expPos < str.length() - 1) {
+                 exp = str.substring(expPos + 1, str.length() - 1);
+             } else {

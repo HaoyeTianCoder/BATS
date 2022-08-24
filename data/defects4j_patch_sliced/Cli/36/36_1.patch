@@ -1,0 +1,12 @@
+--- a/src/main/java/org/apache/commons/cli/OptionGroup.java
++++ b/src/main/java/org/apache/commons/cli/OptionGroup.java
+@@ -19,8 +19,8 @@ package org.apache.commons.cli;
+ 
+ import java.io.Serializable;
+ import java.util.Collection;
+-import java.util.HashMap;
+ import java.util.Iterator;
++import java.util.LinkedHashMap;
+ import java.util.Map;
+ 
+ /**

@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorInputStream.java
++++ b/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorInputStream.java
+@@ -939,7 +928,6 @@ public class BZip2CompressorInputStream extends CompressorInputStream implements
+     private int setupNoRandPartC() throws IOException {
+         if (this.su_j2 < this.su_z) {
+             int su_ch2Shadow = this.su_ch2;
+-            this.currentChar = su_ch2Shadow;
+             this.crc.updateCRC(su_ch2Shadow);
+             this.su_j2++;
+             this.currentState = NO_RAND_PART_C_STATE;

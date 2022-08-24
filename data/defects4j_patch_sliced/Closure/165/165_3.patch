@@ -1,0 +1,15 @@
+--- a/src/com/google/javascript/rhino/jstype/RecordType.java
++++ b/src/com/google/javascript/rhino/jstype/RecordType.java
+@@ -65,8 +65,12 @@ class RecordType extends PrototypeObjectType {
+   private static final long serialVersionUID = 1L;
+ 
+   private final SortedMap<String, JSType> properties = Maps.newTreeMap();
++  private final boolean declared;
+   private boolean isFrozen = false;
+ 
++  RecordType(JSTypeRegistry registry, Map<String, RecordProperty> properties) {
++    this(registry, properties, true);
++  }
+ 
+   /**
+    * Creates a record type.

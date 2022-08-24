@@ -1,0 +1,9 @@
+--- a/src/org/mockito/internal/util/Timer.java
++++ b/src/org/mockito/internal/util/Timer.java
+@@ -1,5 +1,6 @@
+ package org.mockito.internal.util;
+ 
++import org.mockito.exceptions.Reporter;
+ 
+ public class Timer {
+ 

@@ -1,0 +1,8 @@
+--- a/src/java/org/apache/commons/cli2/Option.java
++++ b/src/java/org/apache/commons/cli2/Option.java
+@@ -213,4 +214,5 @@ public interface Option {
+      *
+      * @param parent the parent option
+      */
++    void setParent(Option parent);
+ }

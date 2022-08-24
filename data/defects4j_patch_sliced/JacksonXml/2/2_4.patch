@@ -1,0 +1,21 @@
+--- a/src/main/java/com/fasterxml/jackson/dataformat/xml/deser/XmlTokenStream.java
++++ b/src/main/java/com/fasterxml/jackson/dataformat/xml/deser/XmlTokenStream.java
+@@ -503,6 +517,18 @@ public class XmlTokenStream
+     }
+ 
+ 
++    protected boolean _allWs(String str)
++    {
++        final int len = (str == null) ? 0 : str.length();
++        if (len > 0) {
++            for (int i = 0; i < len; ++i) {
++                if (str.charAt(i) > ' ') {
++                    return false;
++                }
++            }
++        }
++        return true;
++    }
+     
+     // for DEBUGGING
+     @Override

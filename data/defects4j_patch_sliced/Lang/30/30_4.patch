@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/lang3/StringUtils.java
++++ b/src/main/java/org/apache/commons/lang3/StringUtils.java
+@@ -1494,7 +1505,7 @@ public class StringUtils {
+      * @return the <code>true</code> if any of the chars are found, <code>false</code> if no match or null input
+      * @since 2.4
+      */
+-    public static boolean containsAny(CharSequence cs, String searchChars) {
++    public static boolean containsAny(String cs, String searchChars) {
+         if (searchChars == null) {
+             return false;
+         }

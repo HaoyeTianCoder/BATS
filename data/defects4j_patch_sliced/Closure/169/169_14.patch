@@ -1,0 +1,21 @@
+--- a/src/com/google/javascript/rhino/jstype/JSType.java
++++ b/src/com/google/javascript/rhino/jstype/JSType.java
+@@ -562,14 +564,14 @@ public abstract class JSType implements Serializable {
+       boolean paramsMatch = false;
+       if (thisParamType != null && thatParamType != null) {
+         paramsMatch = thisParamType.getParameterType().checkEquivalenceHelper(
+-            thatParamType.getParameterType(), tolerateUnknowns);
+-      } else if (tolerateUnknowns) {
++            thatParamType.getParameterType(), eqMethod);
++      } else if (eqMethod == EquivalenceMethod.IDENTITY) {
++        paramsMatch = false;
++      } else {
+         // If one of the type parameters is unknown, but the other is not,
+         // then we consider these the same for the purposes of data flow
+         // and invariance.
+         paramsMatch = true;
+-      } else {
+-        paramsMatch = false;
+       }
+ 
+       JSType thisRootType = thisParamType == null ?

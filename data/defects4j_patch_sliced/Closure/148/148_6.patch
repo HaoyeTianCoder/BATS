@@ -1,0 +1,33 @@
+--- a/src/com/google/javascript/jscomp/SourceMap.java
++++ b/src/com/google/javascript/jscomp/SourceMap.java
+@@ -160,23 +188,21 @@ public class SourceMap {
+       return;
+     }
+ 
+-    String escapedSourceFile;
+-    if (lastSourceFile != sourceFile) {  // yes, "s1 != s2" not "!s1.equals(s2)"
+-      lastSourceFile = sourceFile;
+-      lastSourceFileEscaped = escapeString(sourceFile);
+-    }
+-    escapedSourceFile = lastSourceFileEscaped;
+     // Create the new mapping.
+     Mapping mapping = new Mapping();
+-    mapping.id = mappings.size();
+-    mapping.sourceFile = escapedSourceFile;
++    mapping.sourceFile = sourceFile;
+     mapping.originalPosition = new Position(node.getLineno(), node.getCharno());
+ 
+     String originalName = (String)node.getProp(Node.ORIGINALNAME_PROP);
+     if (originalName != null) {
+-      mapping.originalName = escapeString(originalName);
++      mapping.originalName = originalName;
+     }
+ 
++    if (offsetPosition.getLineNumber() == 0
++        && offsetPosition.getCharacterIndex() == 0) {
++      mapping.startPosition = startPosition;
++      mapping.endPosition = endPosition;
++    } else {
+       // If the mapping is found on the first line, we need to offset
+       // its character position by the number of characters found on
+       // the *last* line of the source file to which the code is

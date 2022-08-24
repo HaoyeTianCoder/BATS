@@ -1,0 +1,10 @@
+--- a/src/main/java/org/jsoup/parser/Tokeniser.java
++++ b/src/main/java/org/jsoup/parser/Tokeniser.java
+@@ -33,7 +33,6 @@ final class Tokeniser {
+     Token.Doctype doctypePending = new Token.Doctype(); // doctype building up
+     Token.Comment commentPending = new Token.Comment(); // comment building up
+     private String lastStartTag; // the last start tag emitted, to test appropriate end tag
+-    private boolean selfClosingFlagAcknowledged = true;
+ 
+     Tokeniser(CharacterReader reader, ParseErrorList errors) {
+         this.reader = reader;

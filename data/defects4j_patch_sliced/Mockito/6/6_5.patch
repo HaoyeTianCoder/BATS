@@ -1,0 +1,11 @@
+--- a/src/org/mockito/Matchers.java
++++ b/src/org/mockito/Matchers.java
+@@ -179,7 +179,7 @@ public class Matchers {
+      * @return <code>0</code>.
+      */
+     public static long anyLong() {
+-        return reportMatcher(Any.ANY).returnZero();
++        return reportMatcher(new InstanceOf(Long.class)).returnZero();
+     }
+ 
+     /**

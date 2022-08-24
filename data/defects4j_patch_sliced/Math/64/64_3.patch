@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/math/optimization/general/LevenbergMarquardtOptimizer.java
++++ b/src/main/java/org/apache/commons/math/optimization/general/LevenbergMarquardtOptimizer.java
+@@ -275,7 +280,7 @@ public class LevenbergMarquardtOptimizer extends AbstractLeastSquaresOptimizer {
+             qrDecomposition();
+ 
+             // compute Qt.res
+-            qTy(residuals);
++            qTy(qtf);
+             // now we don't need Q anymore,
+             // so let jacobian contain the R matrix with its diagonal elements
+             for (int k = 0; k < solvedCols; ++k) {

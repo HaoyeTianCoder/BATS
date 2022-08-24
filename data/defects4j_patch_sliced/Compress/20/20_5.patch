@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/cpio/CpioArchiveInputStream.java
++++ b/src/main/java/org/apache/commons/compress/archivers/cpio/CpioArchiveInputStream.java
+@@ -384,7 +384,7 @@ public class CpioArchiveInputStream extends ArchiveInputStream implements
+         ret.setDevice(readBinaryLong(2, swapHalfWord));
+         ret.setInode(readBinaryLong(2, swapHalfWord));
+         final long mode = readBinaryLong(2, swapHalfWord);
+-        if (mode != 0){
++        if (CpioUtil.fileType(mode) != 0){
+             ret.setMode(mode);
+         }
+         ret.setUID(readBinaryLong(2, swapHalfWord));

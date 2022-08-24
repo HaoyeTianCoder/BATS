@@ -1,0 +1,12 @@
+--- a/src/com/google/javascript/jscomp/SyntacticScopeCreator.java
++++ b/src/com/google/javascript/jscomp/SyntacticScopeCreator.java
+@@ -177,8 +174,7 @@ class SyntacticScopeCreator implements ScopeCreator {
+    */
+   interface RedeclarationHandler {
+     void onRedeclaration(
+-        Scope s, String name,
+-        Node n, Node parent, Node gramps, Node nodeWithLineNumber);
++        Scope s, String name, Node n, CompilerInput input);
+   }
+ 
+   /**

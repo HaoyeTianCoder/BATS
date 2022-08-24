@@ -1,0 +1,16 @@
+--- a/src/main/java/org/apache/commons/math/optimization/direct/BOBYQAOptimizer.java
++++ b/src/main/java/org/apache/commons/math/optimization/direct/BOBYQAOptimizer.java
+@@ -1657,10 +1657,10 @@ public class BOBYQAOptimizer
+                     final int tmp2 = jpt;
+                     jpt = ipt - n;
+                     ipt = tmp2;
+-                    throw new PathIsExploredException(); // XXX
++//                     throw new PathIsExploredException(); // XXX
+                 }
+-                final int iptMinus1 = ipt;
+-                final int jptMinus1 = jpt;
++                final int iptMinus1 = ipt - 1;
++                final int jptMinus1 = jpt - 1;
+                 interpolationPoints.setEntry(nfm, iptMinus1, interpolationPoints.getEntry(ipt, iptMinus1));
+                 interpolationPoints.setEntry(nfm, jptMinus1, interpolationPoints.getEntry(jpt, jptMinus1));
+             }

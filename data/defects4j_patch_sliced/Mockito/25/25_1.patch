@@ -1,0 +1,10 @@
+--- a/src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java
++++ b/src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java
+@@ -4,6 +4,7 @@
+  */
+ package org.mockito.internal.stubbing.defaultanswers;
+ 
++import org.mockito.MockSettings;
+ import org.mockito.internal.InternalMockHandler;
+ import org.mockito.internal.creation.settings.CreationSettings;
+ import org.mockito.internal.stubbing.InvocationContainerImpl;

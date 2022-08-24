@@ -1,0 +1,17 @@
+--- a/src/com/google/javascript/jscomp/CommandLineRunner.java
++++ b/src/com/google/javascript/jscomp/CommandLineRunner.java
+@@ -415,6 +420,14 @@ public class CommandLineRunner extends
+       isConfigValid = false;
+     }
+ 
++    if (flags.version) {
++      ResourceBundle config = ResourceBundle.getBundle(configResource);
++      err.println(
++          "Closure Compiler (http://code.google.com/p/closure/compiler)\n" +
++          "Version: " + config.getString("compiler.version") + "\n" +
++          "Built on: " + config.getString("compiler.date"));
++      err.flush();
++    }
+ 
+     if (!isConfigValid || flags.display_help) {
+       isConfigValid = false;

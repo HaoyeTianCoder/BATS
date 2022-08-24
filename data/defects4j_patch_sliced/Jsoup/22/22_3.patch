@@ -1,0 +1,10 @@
+--- a/src/main/java/org/jsoup/nodes/Element.java
++++ b/src/main/java/org/jsoup/nodes/Element.java
+@@ -459,6 +467,7 @@ public class Element extends Node {
+      * @see #nextElementSibling()
+      */
+     public Element previousElementSibling() {
++        if (parentNode == null) return null;
+         List<Element> siblings = parent().children();
+         Integer index = indexInList(this, siblings);
+         Validate.notNull(index);

@@ -1,0 +1,22 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/util/StdDateFormat.java
++++ b/src/main/java/com/fasterxml/jackson/databind/util/StdDateFormat.java
+@@ -438,12 +438,19 @@ public class StdDateFormat
+         final int year = cal.get(Calendar.YEAR);
+ 
+         // Assuming GregorianCalendar, special handling needed for BCE (aka BC)
++        if (cal.get(Calendar.ERA) == GregorianCalendar.BC) {
++            _formatBCEYear(buffer, year);
++        } else {
++            if (year > 9999) {
+                 // 22-Nov-2018, tatu: Handling beyond 4-digits is not well specified wrt ISO-8601, but
+                 //   it seems that plus prefix IS mandated. Padding is an open question, but since agreeement
+                 //   for max length would be needed, we ewould need to limit to arbitrary length
+                 //   like five digits (erroring out if beyond or padding to that as minimum).
+                 //   Instead, let's just print number out as is and let decoder try to make sense of it.
++                buffer.append('+');
++            }
+             pad4(buffer, year);
++        }
+         buffer.append('-');
+         pad2(buffer, cal.get(Calendar.MONTH) + 1);
+         buffer.append('-');

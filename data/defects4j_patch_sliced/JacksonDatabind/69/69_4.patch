@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/impl/CreatorCollector.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/impl/CreatorCollector.java
+@@ -307,7 +310,7 @@ public class CreatorCollector
+             if ((_explicitCreators & mask) != 0) { // already had explicitly annotated, leave as-is
+                 // but skip, if new one not annotated
+                 if (!explicit) {
+-                    return;
++                    return false;
+                 }
+                 // both explicit: verify
+                 verify = true;

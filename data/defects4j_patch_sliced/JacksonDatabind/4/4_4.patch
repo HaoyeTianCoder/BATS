@@ -1,0 +1,13 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/std/StringArrayDeserializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/std/StringArrayDeserializer.java
+@@ -99,7 +104,10 @@ public final class StringArrayDeserializer
+                 }
+                 chunk[ix++] = value;
+             }
++        } catch (Exception e) {
+             // note: pass String.class, not String[].class, as we need element type for error info
++            throw JsonMappingException.wrapWithPath(e, String.class, ix);
++        }
+         String[] result = buffer.completeAndClearBuffer(chunk, ix, String.class);
+         ctxt.returnObjectBuffer(buffer);
+         return result;

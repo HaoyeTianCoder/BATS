@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/ScopedAliases.java
++++ b/src/com/google/javascript/jscomp/ScopedAliases.java
+@@ -374,6 +376,7 @@ class ScopedAliases implements HotSwapCompilerPass {
+ 
+           // Add $jscomp.scope.name = EXPR;
+           // Make sure we copy over all the jsdoc and debug info.
++          if (value != null || v.getJSDocInfo() != null) {
+             Node newDecl = NodeUtil.newQualifiedNameNodeDeclaration(
+                 compiler.getCodingConvention(),
+                 globalName,

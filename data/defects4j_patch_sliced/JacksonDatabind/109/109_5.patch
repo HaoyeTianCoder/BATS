@@ -1,0 +1,12 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/std/NumberSerializers.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/std/NumberSerializers.java
+@@ -97,6 +98,9 @@ public class NumberSerializers {
+             if (format != null) {
+                 switch (format.getShape()) {
+                 case STRING:
++                    if (((Class<?>) handledType()) == BigDecimal.class) {
++                        return NumberSerializer.bigDecimalAsStringSerializer();
++                    }
+                     return ToStringSerializer.instance;
+                 default:
+                 }

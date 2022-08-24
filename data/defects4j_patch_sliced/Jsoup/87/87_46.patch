@@ -1,0 +1,10 @@
+--- a/src/main/java/org/jsoup/parser/Tag.java
++++ b/src/main/java/org/jsoup/parser/Tag.java
+@@ -25,6 +27,7 @@ public class Tag {
+ 
+     private Tag(String tagName) {
+         this.tagName = tagName;
++        normalName = Normalizer.lowerCase(tagName);
+     }
+ 
+     /**

@@ -1,0 +1,15 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/ar/ArArchiveInputStream.java
++++ b/src/main/java/org/apache/commons/compress/archivers/ar/ArArchiveInputStream.java
+@@ -39,10 +39,12 @@ public class ArArchiveInputStream extends ArchiveInputStream {
+      * If getNextEnxtry has been called, the entry metadata is stored in
+      * currentEntry.
+      */
++    private ArArchiveEntry currentEntry = null;
+     /*
+      * The offset where the current entry started. -1 if no entry has been
+      * called
+      */
++    private long entryOffset = -1;
+ 
+     public ArArchiveInputStream( final InputStream pInput ) {
+         input = pInput;

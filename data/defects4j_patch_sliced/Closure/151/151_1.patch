@@ -1,0 +1,12 @@
+--- a/src/com/google/javascript/jscomp/CommandLineRunner.java
++++ b/src/com/google/javascript/jscomp/CommandLineRunner.java
+@@ -298,6 +298,9 @@ public class CommandLineRunner extends
+         + "a manifest for each module.")
+     private String output_manifest = "";
+ 
++    @Option(name = "--version",
++        usage = "Prints the compiler version to stderr.")
++    private boolean version = false;
+ 
+     // Our own option parser to be backwards-compatible.
+     // It needs to be public because of the crazy reflection that args4j does.

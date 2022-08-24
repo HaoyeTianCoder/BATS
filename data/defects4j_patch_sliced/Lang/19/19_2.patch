@@ -1,0 +1,20 @@
+--- a/src/main/java/org/apache/commons/lang3/text/translate/NumericEntityUnescaper.java
++++ b/src/main/java/org/apache/commons/lang3/text/translate/NumericEntityUnescaper.java
+@@ -47,11 +47,16 @@ public class NumericEntityUnescaper extends CharSequenceTranslator {
+                 isHex = true;
+ 
+                 // Check there's more than just an x after the &#
++                if(start == seqEnd) {
++                    return 0;
++                }
+             }
+ 
+             int end = start;
+             // Note that this supports character codes without a ; on the end
+-            while(input.charAt(end) != ';') 
++            while(end < seqEnd && ( (input.charAt(end) >= '0' && input.charAt(end) <= '9') ||
++                                    (input.charAt(end) >= 'a' && input.charAt(end) <= 'f') ||
++                                    (input.charAt(end) >= 'A' && input.charAt(end) <= 'F') ) )
+             {
+                 end++;
+             }

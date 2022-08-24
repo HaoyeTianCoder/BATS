@@ -1,0 +1,12 @@
+--- a/src/main/java/org/apache/commons/math/ode/AbstractIntegrator.java
++++ b/src/main/java/org/apache/commons/math/ode/AbstractIntegrator.java
+@@ -340,6 +342,9 @@ public abstract class AbstractIntegrator implements FirstOrderIntegrator {
+                     System.arraycopy(eventY, 0, y, 0, y.length);
+                     computeDerivatives(eventT, y, yDot);
+                     resetOccurred = true;
++                    for (final EventState remaining : occuringEvents) {
++                        remaining.stepAccepted(eventT, eventY);
++                    }
+                     return eventT;
+                 }
+ 

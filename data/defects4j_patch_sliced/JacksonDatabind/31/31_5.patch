@@ -1,0 +1,35 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/util/TokenBuffer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/util/TokenBuffer.java
+@@ -752,27 +752,27 @@ sb.append("NativeObjectIds=").append(_hasNativeObjectIds).append(",");
+ 
+     @Override
+     public void writeNumber(short i) throws IOException {
+-        _append(JsonToken.VALUE_NUMBER_INT, Short.valueOf(i));
++        _appendValue(JsonToken.VALUE_NUMBER_INT, Short.valueOf(i));
+     }
+ 
+     @Override
+     public void writeNumber(int i) throws IOException {
+-        _append(JsonToken.VALUE_NUMBER_INT, Integer.valueOf(i));
++        _appendValue(JsonToken.VALUE_NUMBER_INT, Integer.valueOf(i));
+     }
+ 
+     @Override
+     public void writeNumber(long l) throws IOException {
+-        _append(JsonToken.VALUE_NUMBER_INT, Long.valueOf(l));
++        _appendValue(JsonToken.VALUE_NUMBER_INT, Long.valueOf(l));
+     }
+ 
+     @Override
+     public void writeNumber(double d) throws IOException {
+-        _append(JsonToken.VALUE_NUMBER_FLOAT, Double.valueOf(d));
++        _appendValue(JsonToken.VALUE_NUMBER_FLOAT, Double.valueOf(d));
+     }
+ 
+     @Override
+     public void writeNumber(float f) throws IOException {
+-        _append(JsonToken.VALUE_NUMBER_FLOAT, Float.valueOf(f));
++        _appendValue(JsonToken.VALUE_NUMBER_FLOAT, Float.valueOf(f));
+     }
+ 
+     @Override

@@ -1,0 +1,27 @@
+--- a/src/java/org/apache/commons/jxpath/ri/NamespaceResolver.java
++++ b/src/java/org/apache/commons/jxpath/ri/NamespaceResolver.java
+@@ -44,6 +44,24 @@ public class NamespaceResolver implements Cloneable {
+      * @return prefix if found
+      * @since JXPath 1.3
+      */
++    protected static String getPrefix(NodePointer pointer, String namespaceURI) {
++        NodePointer currentPointer = pointer;
++        while (currentPointer != null) {
++            NodeIterator ni = currentPointer.namespaceIterator();
++            for (int position = 1; ni != null && ni.setPosition(position); position++) {
++                NodePointer nsPointer = ni.getNodePointer();
++                String uri = nsPointer.getNamespaceURI();
++                if (uri.equals(namespaceURI)) {
++                    String prefix = nsPointer.getName().getName();
++                    if (!"".equals(prefix)) {
++                        return prefix;
++                    }
++                }
++            }
++            currentPointer = pointer.getParent();
++        }
++        return null;
++    }
+ 
+     /**
+      * Create a new NamespaceResolver.

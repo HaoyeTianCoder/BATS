@@ -1,0 +1,12 @@
+--- a/src/com/google/javascript/rhino/jstype/RecordType.java
++++ b/src/com/google/javascript/rhino/jstype/RecordType.java
+@@ -201,8 +201,7 @@ class RecordType extends PrototypeObjectType {
+           JSType altPropType = alt.getPropertyType(propName);
+           if (altPropType != null && !alt.isEquivalentTo(this) &&
+               alt.isSubtype(that) &&
+-              (propType.isUnknownType() || altPropType.isUnknownType() ||
+-                  altPropType.isEquivalentTo(propType))) {
++              propType.isInvariant(altPropType)) {
+             builder.addAlternate(alt);
+           }
+         }

@@ -1,0 +1,13 @@
+--- a/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
++++ b/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
+@@ -379,8 +420,9 @@ class AnalyzePrototypeProperties implements CompilerPass {
+      * If it is, record it and return true. Otherwise, return false.
+      */
+     private boolean processGlobalFunctionDeclaration(NodeTraversal t,
+-        Node nameNode, Node parent, Node gramps) {
++        Node nameNode, Var v) {
+       Node firstChild = nameNode.getFirstChild();
++      Node parent = nameNode.getParent();
+ 
+       if (// Check for a named FUNCTION.
+           isGlobalFunctionDeclaration(t, parent) ||

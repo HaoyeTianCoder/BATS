@@ -1,0 +1,13 @@
+--- a/src/main/java/org/apache/commons/collections4/IteratorUtils.java
++++ b/src/main/java/org/apache/commons/collections4/IteratorUtils.java
+@@ -645,7 +649,9 @@ public class IteratorUtils {
+      */
+     public static <E> Iterator<E> collatedIterator(final Comparator<? super E> comparator,
+                                                    final Collection<Iterator<? extends E>> iterators) {
+-        return new CollatingIterator<E>(comparator, iterators);
++        @SuppressWarnings("unchecked")
++        final Comparator<E> comp = comparator == null ? ComparatorUtils.NATURAL_COMPARATOR : comparator;
++        return new CollatingIterator<E>(comp, iterators);
+     }
+ 
+     // Object Graph

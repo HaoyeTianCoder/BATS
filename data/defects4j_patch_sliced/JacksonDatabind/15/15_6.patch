@@ -1,0 +1,15 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/std/StdDelegatingSerializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/std/StdDelegatingSerializer.java
+@@ -169,7 +177,11 @@ public class StdDelegatingSerializer
+          *    let's give it a chance?
+          */
+         Object delegateValue = convertValue(value);
+-        _delegateSerializer.serializeWithType(delegateValue, gen, provider, typeSer);
++        JsonSerializer<Object> ser = _delegateSerializer;
++        if (ser == null) {
++            ser = _findSerializer(value, provider);
++        }
++        ser.serializeWithType(delegateValue, gen, provider, typeSer);
+     }
+ 
+     @Override

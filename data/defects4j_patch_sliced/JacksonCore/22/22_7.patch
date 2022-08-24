@@ -1,0 +1,16 @@
+--- a/src/main/java/com/fasterxml/jackson/core/filter/FilteringParserDelegate.java
++++ b/src/main/java/com/fasterxml/jackson/core/filter/FilteringParserDelegate.java
+@@ -768,6 +774,13 @@ public class FilteringParserDelegate extends JsonParserDelegate
+         }
+     }
+ 
++    private final boolean _verifyAllowedMatches() throws IOException {
++        if (_matchCount == 0 || _allowMultipleMatches) {
++            ++_matchCount;
++            return true;
++        }
++        return false;
++    }
+ 
+     @Override
+     public JsonToken nextValue() throws IOException {

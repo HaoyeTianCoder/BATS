@@ -1,0 +1,15 @@
+--- a/src/com/google/javascript/jscomp/JsAst.java
++++ b/src/com/google/javascript/jscomp/JsAst.java
+@@ -92,10 +93,11 @@ public class JsAst implements SourceAst {
+     }
+ 
+ 
+-    if (root == null || compiler.hasHaltingErrors()) {
++    if (root == null ||
+         // Most passes try to report as many errors as possible,
+         // so there may already be errors. We only care if there were
+         // errors in the code we just parsed.
++        (compiler.getErrorManager().getErrorCount() > startErrorCount && !compiler.isIdeMode())) {
+       // There was a parse error or IOException, so use a dummy block.
+       root = IR.script();
+     } else {

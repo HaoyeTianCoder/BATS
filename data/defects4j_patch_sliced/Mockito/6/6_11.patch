@@ -1,0 +1,11 @@
+--- a/src/org/mockito/Matchers.java
++++ b/src/org/mockito/Matchers.java
+@@ -306,7 +306,7 @@ public class Matchers {
+      * @return <code>null</code>.
+      */
+     public static <T> T any() {
+-        return (T) anyObject();
++        return (T) reportMatcher(Any.ANY).returnNull();
+     }
+ 
+     /**

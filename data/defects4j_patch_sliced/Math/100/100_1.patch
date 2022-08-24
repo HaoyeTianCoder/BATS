@@ -1,0 +1,11 @@
+--- a/src/java/org/apache/commons/math/estimation/AbstractEstimator.java
++++ b/src/java/org/apache/commons/math/estimation/AbstractEstimator.java
+@@ -163,7 +163,7 @@ public abstract class AbstractEstimator implements Estimator {
+ 
+         // compute transpose(J).J, avoiding building big intermediate matrices
+         final int rows = problem.getMeasurements().length;
+-        final int cols = problem.getAllParameters().length;
++        final int cols = problem.getUnboundParameters().length;
+         final int max  = cols * rows;
+         double[][] jTj = new double[cols][cols];
+         for (int i = 0; i < cols; ++i) {

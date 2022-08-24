@@ -1,0 +1,25 @@
+--- a/src/com/google/javascript/jscomp/CodeGenerator.java
++++ b/src/com/google/javascript/jscomp/CodeGenerator.java
+@@ -340,14 +340,20 @@ class CodeGenerator {
+         Node body = fn.getLastChild();
+ 
+         // Add the property name.
+-        if (TokenStream.isJSIdentifier(name) &&
++        if (!n.isQuotedString() &&
++            TokenStream.isJSIdentifier(name) &&
+             // do not encode literally any non-literal characters that were
+             // unicode escaped.
+             NodeUtil.isLatin(name)) {
+           add(name);
+         } else {
+           // Determine if the string is a simple number.
+-          add(jsString(n.getString(), outputCharsetEncoder));
++          double d = getSimpleNumber(name);
++          if (!Double.isNaN(d)) {
++            cc.addNumber(d);
++          } else {
++            add(jsString(n.getString(), outputCharsetEncoder));
++          }
+         }
+ 
+         add(parameters);

@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializerFactory.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializerFactory.java
+@@ -219,7 +219,7 @@ public class BeanDeserializerFactory
+             //   to throw proper exception, it doesn't actually have reference to this
+             //   instance so...
+             throw InvalidDefinitionException.from(ctxt.getParser(),
+-                    e.getMessage(),
++                    ClassUtil.exceptionMessage(e),
+                     beanDesc, null);
+         }
+         BeanDeserializerBuilder builder = constructBeanDeserializerBuilder(ctxt, beanDesc);

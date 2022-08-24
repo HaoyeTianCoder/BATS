@@ -1,0 +1,12 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/BeanSerializerFactory.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/BeanSerializerFactory.java
+@@ -209,6 +206,9 @@ public class BeanSerializerFactory
+             }
+             // 25-Jun-2015, tatu: Then JsonSerializable, @JsonValue etc. NOTE! Prior to 2.6,
+             //    this call was BEFORE custom serializer lookup, which was wrong.
++            if (ser == null) {
++                ser = findSerializerByAnnotations(prov, type, beanDesc);
++            }
+         }
+         
+         if (ser == null) {

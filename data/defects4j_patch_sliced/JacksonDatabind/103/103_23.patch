@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/DefaultSerializerProvider.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/DefaultSerializerProvider.java
+@@ -502,7 +502,7 @@ filter.getClass().getName(), t.getClass().getName(), t.getMessage());
+         if (e instanceof IOException) {
+             return (IOException) e;
+         }
+-        String msg = e.getMessage();
++        String msg = ClassUtil.exceptionMessage(e);
+         if (msg == null) {
+             msg = "[no message for "+e.getClass().getName()+"]";
+         }

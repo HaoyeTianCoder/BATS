@@ -1,0 +1,20 @@
+--- a/src/com/google/javascript/jscomp/CollapseProperties.java
++++ b/src/com/google/javascript/jscomp/CollapseProperties.java
+@@ -586,13 +587,14 @@ class CollapseProperties implements CompilerPass {
+ 
+     switch (n.declaration.node.getParent().getType()) {
+       case Token.ASSIGN:
+-        updateObjLitOrFunctionDeclarationAtAssignNode(n, alias);
++        updateObjLitOrFunctionDeclarationAtAssignNode(
++            n, alias, canCollapseChildNames);
+         break;
+       case Token.VAR:
+-        updateObjLitOrFunctionDeclarationAtVarNode(n);
++        updateObjLitOrFunctionDeclarationAtVarNode(n, canCollapseChildNames);
+         break;
+       case Token.FUNCTION:
+-        updateFunctionDeclarationAtFunctionNode(n);
++        updateFunctionDeclarationAtFunctionNode(n, canCollapseChildNames);
+         break;
+     }
+   }

@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/jsontype/impl/TypeDeserializerBase.java
++++ b/src/main/java/com/fasterxml/jackson/databind/jsontype/impl/TypeDeserializerBase.java
+@@ -162,7 +162,7 @@ public abstract class TypeDeserializerBase
+                     JavaType actual = _handleUnknownTypeId(ctxt, typeId);
+                     if (actual == null) { // what should this be taken to mean?
+                         // 17-Jan-2019, tatu: As per [databind#2221], better NOT return `null` but...
+-                        return null;
++                        return NullifyingDeserializer.instance;
+                     }
+                     // ... would this actually work?
+                     deser = ctxt.findContextualValueDeserializer(actual, _property);

@@ -1,0 +1,11 @@
+--- a/src/java/org/apache/commons/jxpath/ri/model/beans/NullPropertyPointer.java
++++ b/src/java/org/apache/commons/jxpath/ri/model/beans/NullPropertyPointer.java
+@@ -16,6 +16,8 @@
+  */
+ package org.apache.commons.jxpath.ri.model.beans;
+ 
++import org.apache.commons.jxpath.AbstractFactory;
++import org.apache.commons.jxpath.JXPathAbstractFactoryException;
+ import org.apache.commons.jxpath.JXPathContext;
+ import org.apache.commons.jxpath.JXPathInvalidAccessException;
+ import org.apache.commons.jxpath.ri.QName;

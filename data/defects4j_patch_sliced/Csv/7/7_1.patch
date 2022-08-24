@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/csv/CSVParser.java
++++ b/src/main/java/org/apache/commons/csv/CSVParser.java
+@@ -29,6 +29,7 @@ import java.io.StringReader;
+ import java.net.URL;
+ import java.nio.charset.Charset;
+ import java.util.ArrayList;
++import java.util.Arrays;
+ import java.util.Collection;
+ import java.util.Iterator;
+ import java.util.LinkedHashMap;

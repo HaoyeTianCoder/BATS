@@ -1,0 +1,12 @@
+--- a/src/com/google/javascript/rhino/jstype/FunctionType.java
++++ b/src/com/google/javascript/rhino/jstype/FunctionType.java
+@@ -915,7 +915,8 @@ public class FunctionType extends PrototypeObjectType {
+   }
+ 
+   public boolean hasEqualCallType(FunctionType otherType) {
+-    return this.call.checkArrowEquivalenceHelper(otherType.call, false);
++    return this.call.checkArrowEquivalenceHelper(
++        otherType.call, EquivalenceMethod.IDENTITY);
+   }
+ 
+   /**

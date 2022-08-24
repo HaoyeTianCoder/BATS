@@ -1,0 +1,22 @@
+--- a/src/main/java/org/jsoup/parser/Tokeniser.java
++++ b/src/main/java/org/jsoup/parser/Tokeniser.java
+@@ -235,4 +226,19 @@ class Tokeniser {
+      * @param inAttribute
+      * @return unescaped string from reader
+      */
++    String unescapeEntities(boolean inAttribute) {
++        StringBuilder builder = new StringBuilder();
++        while (!reader.isEmpty()) {
++            builder.append(reader.consumeTo('&'));
++            if (reader.matches('&')) {
++                reader.consume();
++                Character c = consumeCharacterReference(null, inAttribute);
++                if (c == null)
++                    builder.append('&');
++                else
++                    builder.append(c);
++            }
++        }
++        return builder.toString();
++    }
+ }

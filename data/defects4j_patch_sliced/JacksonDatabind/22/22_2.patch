@@ -1,0 +1,31 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/BasicSerializerFactory.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/BasicSerializerFactory.java
+@@ -609,19 +614,24 @@ public abstract class BasicSerializerFactory
+             for (Serializers serializers : customSerializers()) { // (1) Custom
+                 ser = serializers.findCollectionLikeSerializer(config,
+                         clType, beanDesc, elementTypeSerializer, elementValueSerializer);
++                if (ser != null) {
++                    break;
++                }
++            }
++            if (ser == null) { // (2) Annotations-based ones:
++                ser = findSerializerByAnnotations(prov, type, beanDesc);
++            }
+             if (ser != null) {
+                 if (_factoryConfig.hasSerializerModifiers()) {
+                     for (BeanSerializerModifier mod : _factoryConfig.serializerModifiers()) {
+                         ser = mod.modifyCollectionLikeSerializer(config, clType, beanDesc, ser);
+-                        }
+                     }
+-                    return ser;
+                 }
+             }
+-            return null;
++            return ser;
+         }
+         if (type.isArrayType()) {
+-            return buildArraySerializer(config, (ArrayType) type, beanDesc, staticTyping,
++            return buildArraySerializer(prov, (ArrayType) type, beanDesc, staticTyping,
+                     elementTypeSerializer, elementValueSerializer);
+         }
+         return null;

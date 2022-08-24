@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/CompilerOptions.java
++++ b/src/com/google/javascript/jscomp/CompilerOptions.java
+@@ -585,7 +585,7 @@ public class CompilerOptions implements Serializable, Cloneable {
+    * Charset to use when generating code.  If null, then output ASCII.
+    * This needs to be a string because CompilerOptions is serializable.
+    */
+-  public Charset outputCharset;
++  String outputCharset;
+ 
+   /**
+    * Whether the named objects types included 'undefined' by default.

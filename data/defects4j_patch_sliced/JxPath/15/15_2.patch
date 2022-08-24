@@ -1,0 +1,23 @@
+--- a/src/java/org/apache/commons/jxpath/ri/axes/UnionContext.java
++++ b/src/java/org/apache/commons/jxpath/ri/axes/UnionContext.java
+@@ -53,13 +55,17 @@ public class UnionContext extends NodeSetContext {
+                     while (ctx.nextNode()) {
+                         NodePointer ptr = ctx.getCurrentNodePointer();
+                         if (!pointers.contains(ptr)) {
+-                            nodeSet.add(ptr);
+                             pointers.add(ptr);
+                         }
+                     }
+                 }
+             }
++            sortPointers(pointers);
++
++            for (Iterator it = pointers.iterator(); it.hasNext();) {
++                nodeSet.add((Pointer) it.next());
++            }
+         }
+         return super.setPosition(position);
+     }
+-}
++}
+\ No newline at end of file

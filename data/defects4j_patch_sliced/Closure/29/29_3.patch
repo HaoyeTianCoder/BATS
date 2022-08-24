@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/InlineObjectLiterals.java
++++ b/src/com/google/javascript/jscomp/InlineObjectLiterals.java
+@@ -213,6 +222,7 @@ class InlineObjectLiterals implements CompilerPass {
+             return false;
+           }
+ 
++          validProperties.add(child.getString());
+ 
+           Node childVal = child.getFirstChild();
+           // Check if childVal is the parent of any of the passed in

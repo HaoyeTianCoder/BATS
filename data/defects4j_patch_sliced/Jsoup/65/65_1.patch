@@ -1,0 +1,16 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilder.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilder.java
+@@ -357,11 +357,11 @@ public class HtmlTreeBuilder extends TreeBuilder {
+     }
+ 
+     void clearStackToTableBodyContext() {
+-        clearStackToContext("tbody", "tfoot", "thead");
++        clearStackToContext("tbody", "tfoot", "thead", "template");
+     }
+ 
+     void clearStackToTableRowContext() {
+-        clearStackToContext("tr");
++        clearStackToContext("tr", "template");
+     }
+ 
+     private void clearStackToContext(String... nodeNames) {

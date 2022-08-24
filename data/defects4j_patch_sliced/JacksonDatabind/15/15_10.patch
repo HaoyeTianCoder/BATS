@@ -1,0 +1,13 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/std/StdDelegatingSerializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/std/StdDelegatingSerializer.java
+@@ -253,5 +273,10 @@ public class StdDelegatingSerializer
+      *
+      * @since 2.6
+      */
++    protected JsonSerializer<Object> _findSerializer(Object value, SerializerProvider serializers)
++        throws JsonMappingException
++    {
+         // NOTE: will NOT call contextualization
++        return serializers.findValueSerializer(value.getClass());
++    }
+ }

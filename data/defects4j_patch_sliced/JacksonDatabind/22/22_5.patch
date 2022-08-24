@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/BasicSerializerFactory.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/BasicSerializerFactory.java
+@@ -688,6 +701,7 @@ public abstract class BasicSerializerFactory
+                     if (ser == null) {
+                         ser = buildCollectionSerializer(type.getContentType(), staticTyping,
+                                 elementTypeSerializer, elementValueSerializer);
++                    }
+                 }
+             }
+         }

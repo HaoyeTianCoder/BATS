@@ -1,0 +1,13 @@
+--- a/src/com/google/javascript/jscomp/parsing/JsDocInfoParser.java
++++ b/src/com/google/javascript/jscomp/parsing/JsDocInfoParser.java
+@@ -865,9 +865,9 @@ public final class JsDocInfoParser {
+                         }
+                         break;
+                     }
++                  }
+ 
+                   token = eatTokensUntilEOL();
+-                  }
+                   continue retry;
+               }
+             }

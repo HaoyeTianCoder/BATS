@@ -1,0 +1,25 @@
+--- a/src/com/google/javascript/jscomp/SyntacticScopeCreator.java
++++ b/src/com/google/javascript/jscomp/SyntacticScopeCreator.java
+@@ -232,16 +228,17 @@ class SyntacticScopeCreator implements ScopeCreator {
+    * @param n The node corresponding to the variable name.
+    * @param declaredType The variable's type, according to JSDoc
+    */
+-  private void declareVar(String name, Node n, Node parent,
+-                          Node gramps, JSType declaredType,
+-                          Node nodeWithLineNumber) {
++  private void declareVar(Node n) {
++    Preconditions.checkState(n.getType() == Token.NAME);
+ 
++    CompilerInput input = compiler.getInput(sourceName);
++    String name = n.getString();
+     if (scope.isDeclared(name, false)
+         || (scope.isLocal() && name.equals(ARGUMENTS))) {
+       redeclarationHandler.onRedeclaration(
+-          scope, name, n, parent, gramps, nodeWithLineNumber);
++          scope, name, n, input);
+     } else {
+-      scope.declare(name, n, declaredType, compiler.getInput(sourceName));
++      scope.declare(name, n, null, input);
+     }
+   }
+ }

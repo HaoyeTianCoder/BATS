@@ -1,0 +1,29 @@
+--- a/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
++++ b/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
+@@ -620,19 +683,25 @@ class AnalyzePrototypeProperties implements CompilerPass {
+     private final Node value;
+     private final Node map;
+     private final Node assign;
++    private final Var rootVar;
+     private final JSModule module;
+ 
+     LiteralProperty(Node key, Node value, Node map, Node assign,
+-        JSModule module) {
++        Var rootVar, JSModule module) {
+       this.key = key;
+       this.value = value;
+       this.map = map;
+       this.assign = assign;
++      this.rootVar = rootVar;
+       this.module = module;
+     }
+ 
+     @Override
++    public Var getRootVar() {
++      return rootVar;
++    }
+ 
++    @Override
+     public void remove() {
+       map.removeChild(key);
+     }

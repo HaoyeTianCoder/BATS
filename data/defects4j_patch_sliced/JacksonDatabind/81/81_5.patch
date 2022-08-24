@@ -1,0 +1,12 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/introspect/JacksonAnnotationIntrospector.java
++++ b/src/main/java/com/fasterxml/jackson/databind/introspect/JacksonAnnotationIntrospector.java
+@@ -1132,7 +1139,8 @@ public class JacksonAnnotationIntrospector
+         if (type.isMapLikeType()) {
+             JavaType keyType = type.getKeyType();
+             final Class<?> keyClass = (jsonDeser == null) ? null : _classIfExplicit(jsonDeser.keyAs());
+-            if (keyClass != null) {
++            if ((keyClass != null)
++                    && !_primitiveAndWrapper(keyType, keyClass)) {
+                 try {
+                     keyType = tf.constructSpecializedType(keyType, keyClass);
+                     type = ((MapLikeType) type).withKeyType(keyType);

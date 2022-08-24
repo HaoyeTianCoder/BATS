@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/type/TypeFactory.java
++++ b/src/main/java/com/fasterxml/jackson/databind/type/TypeFactory.java
+@@ -352,7 +352,7 @@ public final class TypeFactory
+         // also: if we start from untyped, not much to save
+         do { // bogus loop to be able to break
+             if (rawBase == Object.class) {
+-                newType = _fromClass(null, subclass, TypeBindings.emptyBindings());
++                newType = _fromClass(null, subclass, EMPTY_BINDINGS);
+                 break;
+             }
+             if (!rawBase.isAssignableFrom(subclass)) {

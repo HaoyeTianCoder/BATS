@@ -1,0 +1,16 @@
+--- a/src/java/org/apache/commons/cli2/option/OptionImpl.java
++++ b/src/java/org/apache/commons/cli2/option/OptionImpl.java
+@@ -125,7 +126,13 @@ public abstract class OptionImpl implements Option {
+         // nothing to do normally
+     }
+ 
++    public Option getParent() {
++        return parent;
++    }
+ 
++    public void setParent(Option parent) {
++        this.parent = parent;
++    }
+ 
+     protected void checkPrefixes(final Set prefixes) {
+         // nothing to do if empty prefix list

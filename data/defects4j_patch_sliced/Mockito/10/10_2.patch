@@ -1,0 +1,11 @@
+--- a/src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java
++++ b/src/org/mockito/internal/stubbing/defaultanswers/ReturnsDeepStubs.java
+@@ -68,7 +69,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
+ 
+         // record deep stub answer
+         return recordDeepStubAnswer(
+-                newDeepStubMock(returnTypeGenericMetadata),
++                newDeepStubMock(returnTypeGenericMetadata, invocation.getMock()),
+                 container
+         );
+     }

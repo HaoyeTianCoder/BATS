@@ -1,0 +1,11 @@
+--- a/src/org/mockito/Matchers.java
++++ b/src/org/mockito/Matchers.java
+@@ -194,7 +194,7 @@ public class Matchers {
+      * @return <code>0</code>.
+      */
+     public static float anyFloat() {
+-        return reportMatcher(Any.ANY).returnZero();
++        return reportMatcher(new InstanceOf(Float.class)).returnZero();
+     }
+ 
+     /**

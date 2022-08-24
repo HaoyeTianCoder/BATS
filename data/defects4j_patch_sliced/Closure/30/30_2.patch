@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/MustBeReachingVariableDef.java
++++ b/src/com/google/javascript/jscomp/MustBeReachingVariableDef.java
+@@ -68,6 +68,7 @@ final class MustBeReachingVariableDef extends
+   private static class Definition {
+     final Node node;
+     final Set<Var> depends = Sets.newHashSet();
++    private boolean unknownDependencies = false;
+ 
+     Definition(Node node) {
+       this.node = node;

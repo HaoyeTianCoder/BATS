@@ -1,0 +1,16 @@
+--- a/src/main/java/org/jsoup/helper/DataUtil.java
++++ b/src/main/java/org/jsoup/helper/DataUtil.java
+@@ -109,13 +109,7 @@ public final class DataUtil {
+                     foundCharset = getCharsetFromContentType(meta.attr("content"));
+                 }
+                 if (foundCharset == null && meta.hasAttr("charset")) {
+-                    try {
+-                        if (Charset.isSupported(meta.attr("charset"))) {
+                     foundCharset = meta.attr("charset");
+-                        }
+-                    } catch (IllegalCharsetNameException e) {
+-                        foundCharset = null;
+-                    }
+                 }
+             }
+             // look for <?xml encoding='ISO-8859-1'?>

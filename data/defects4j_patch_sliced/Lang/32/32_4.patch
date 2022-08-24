@@ -1,0 +1,19 @@
+--- a/src/main/java/org/apache/commons/lang3/builder/HashCodeBuilder.java
++++ b/src/main/java/org/apache/commons/lang3/builder/HashCodeBuilder.java
+@@ -535,7 +536,15 @@ public class HashCodeBuilder {
+      * @since 2.3
+      */
+     static void unregister(Object value) {
+-        getRegistry().remove(new IDKey(value));
++        Set<IDKey> s = getRegistry();
++        if (s != null) {
++            s.remove(new IDKey(value));
++            synchronized (HashCodeBuilder.class) {
++                if (s.isEmpty()) {
++                    REGISTRY.remove();
++                }
++            }
++        }
+     }
+ 
+     /**

@@ -1,0 +1,12 @@
+--- a/src/main/java/org/jsoup/nodes/Attributes.java
++++ b/src/main/java/org/jsoup/nodes/Attributes.java
+@@ -236,6 +238,9 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
+     /**
+      * Test if this Attributes list is empty (size==0).
+      */
++    public boolean isEmpty() {
++        return size == 0;
++    }
+ 
+     /**
+      Add all the attributes from the incoming set to this set.

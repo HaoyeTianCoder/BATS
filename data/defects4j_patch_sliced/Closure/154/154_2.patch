@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/TypeCheck.java
++++ b/src/com/google/javascript/jscomp/TypeCheck.java
+@@ -239,7 +232,6 @@ public class TypeCheck implements NodeTraversal.Callback, CompilerPass {
+       HIDDEN_SUPERCLASS_PROPERTY,
+       HIDDEN_INTERFACE_PROPERTY,
+       HIDDEN_SUPERCLASS_PROPERTY_MISMATCH,
+-      HIDDEN_INTERFACE_PROPERTY_MISMATCH,
+       UNKNOWN_OVERRIDE,
+       INTERFACE_METHOD_OVERRIDE,
+       UNKNOWN_EXPR_TYPE,

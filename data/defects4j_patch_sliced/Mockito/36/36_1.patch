@@ -1,0 +1,10 @@
+--- a/src/org/mockito/internal/invocation/Invocation.java
++++ b/src/org/mockito/internal/invocation/Invocation.java
+@@ -8,6 +8,7 @@ import java.util.*;
+ 
+ import org.hamcrest.Matcher;
+ import org.mockito.exceptions.PrintableInvocation;
++import org.mockito.exceptions.Reporter;
+ import org.mockito.internal.debugging.Location;
+ import org.mockito.internal.invocation.realmethod.RealMethod;
+ import org.mockito.internal.matchers.*;

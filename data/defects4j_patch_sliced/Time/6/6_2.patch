@@ -1,0 +1,20 @@
+--- a/src/main/java/org/joda/time/chrono/GJChronology.java
++++ b/src/main/java/org/joda/time/chrono/GJChronology.java
+@@ -976,6 +980,17 @@ public final class GJChronology extends AssembledChronology {
+                 if (instant < iCutover) {
+                     // Only adjust if gap fully crossed.
+                     if (instant + iGapDuration < iCutover) {
++                        if (iConvertByWeekyear) {
++                            int wyear = iGregorianChronology.weekyear().get(instant);
++                            if (wyear <= 0) {
++                                instant = iGregorianChronology.weekyear().add(instant, -1);
++                            }
++                        } else {
++                            int year = iGregorianChronology.year().get(instant);
++                            if (year <= 0) {
++                                instant = iGregorianChronology.year().add(instant, -1);
++                            }
++                        }
+                         instant = gregorianToJulian(instant);
+                     }
+                 }

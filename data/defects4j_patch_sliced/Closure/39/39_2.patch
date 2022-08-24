@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
++++ b/src/com/google/javascript/rhino/jstype/PrototypeObjectType.java
+@@ -391,7 +391,7 @@ class PrototypeObjectType extends ObjectType {
+       prettyPrint = true;
+       return sb.toString();
+     } else {
+-      return "{...}";
++      return forAnnotations ? "?" : "{...}";
+     }
+   }
+ 

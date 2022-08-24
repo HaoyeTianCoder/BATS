@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/math/ode/AbstractIntegrator.java
++++ b/src/main/java/org/apache/commons/math/ode/AbstractIntegrator.java
+@@ -277,7 +277,6 @@ public abstract class AbstractIntegrator implements FirstOrderIntegrator {
+ 
+             double previousT = interpolator.getGlobalPreviousTime();
+             final double currentT = interpolator.getGlobalCurrentTime();
+-            resetOccurred = false;
+ 
+             // initialize the events states if needed
+             if (! statesInitialized) {

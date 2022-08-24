@@ -1,0 +1,13 @@
+--- a/src/com/google/javascript/jscomp/MakeDeclaredNamesUnique.java
++++ b/src/com/google/javascript/jscomp/MakeDeclaredNamesUnique.java
+@@ -398,8 +421,9 @@ class MakeDeclaredNamesUnique
+             String newName = null;
+             if (id != 0) {
+               newName = getUniqueName(name, id);
++            }
++            declarations.put(name, newName);
+           }
+-          declarations.put(name, newName);
+         }
+       }
+     }

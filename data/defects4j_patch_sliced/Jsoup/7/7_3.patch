@@ -1,0 +1,29 @@
+--- a/src/main/java/org/jsoup/nodes/Document.java
++++ b/src/main/java/org/jsoup/nodes/Document.java
+@@ -134,7 +137,26 @@ public class Document extends Element {
+     }
+ 
+     // merge multiple <head> or <body> contents into one, delete the remainder, and ensure they are owned by <html>
++    private void normaliseStructure(String tag, Element htmlEl) {
++        Elements elements = this.getElementsByTag(tag);
++        Element master = elements.first(); // will always be available as created above if not existent
++        if (elements.size() > 1) { // dupes, move contents to master
++            List<Node> toMove = new ArrayList<Node>();
++            for (int i = 1; i < elements.size(); i++) {
++                Node dupe = elements.get(i);
++                for (Node node : dupe.childNodes)
++                    toMove.add(node);
++                dupe.remove();
++            }
++
++            for (Node dupe : toMove)
++                master.appendChild(dupe);
++        }
+         // ensure parented by <html>
++        if (!master.parent().equals(htmlEl)) {
++            htmlEl.appendChild(master); // includes remove()            
++        }
++    }
+ 
+     // fast method to get first by tag name, used for html, head, body finders
+     private Element findFirstElementByTagName(String tag, Node node) {

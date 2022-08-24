@@ -1,0 +1,11 @@
+--- a/gson/src/main/java/com/google/gson/stream/JsonWriter.java
++++ b/gson/src/main/java/com/google/gson/stream/JsonWriter.java
+@@ -415,7 +415,7 @@ public class JsonWriter implements Closeable, Flushable {
+       return nullValue();
+     }
+     writeDeferredName();
+-    beforeValue(false);
++    beforeValue();
+     string(value);
+     return this;
+   }

@@ -1,0 +1,72 @@
+--- a/src/com/google/javascript/jscomp/SourceMap.java
++++ b/src/com/google/javascript/jscomp/SourceMap.java
+@@ -493,54 +570,47 @@ public class SourceMap {
+      * Write any needed entries from the current position to the end of the
+      * provided mapping.
+      */
+-    private void writeClosedMapping(Mapping m) throws IOException {
++    private void maybeVisit(MappingVisitor v, Mapping m) throws IOException {
+       int nextLine = getAdjustedLine(m.endPosition);
+       int nextCol = getAdjustedCol(m.endPosition);
+       // If this anything remaining in this mapping beyond the
+       // current line and column position, write it out now.
+       if (line < nextLine || (line == nextLine && col < nextCol)) {
+-        writeCharsUpTo(nextLine, nextCol, m.id);
++        visit(v, m, nextLine, nextCol);
+       }
+     }
+ 
+     /**
+      * Write any needed entries to complete the provided mapping.
+      */
+-    private void writeCharsBetween(Mapping prev, Mapping next)
++    private void maybeVisitParent(MappingVisitor v, Mapping parent, Mapping m)
+         throws IOException {
+-      int nextLine = getAdjustedLine(next.startPosition);
+-      int nextCol = getAdjustedCol(next.startPosition);
++      int nextLine = getAdjustedLine(m.startPosition);
++      int nextCol = getAdjustedCol(m.startPosition);
+       // If the previous value is null, no mapping exists.
+-      int id = (prev != null) ? prev.id : UNMAPPED;
+-      writeCharsUpTo(nextLine, nextCol, id);
++      Preconditions.checkState(line < nextLine || col <= nextCol);
++      if (line < nextLine || (line == nextLine && col < nextCol)) {
++        visit(v, parent, nextLine, nextCol);
++      }
+     }
+ 
+     /**
+      * Write any entries needed between the current position the next position
+      * and update the current position.
+      */
+-    private void writeCharsUpTo(
+-        int nextLine, int nextCol, int id)
++    private void visit(MappingVisitor v, Mapping m,
++        int nextLine, int nextCol)
+         throws IOException {
+-      Preconditions.checkState(line <= nextLine, "");
+-      Preconditions.checkState(line < nextLine || col <= nextCol);
++      Preconditions.checkState(line <= nextLine);
++      Preconditions.checkState(line < nextLine || col < nextCol);
+ 
+       if (line == nextLine && col == nextCol) {
+         // Nothing to do.
++        Preconditions.checkState(false);
+         return;
+       }
+ 
+-      String idString = (id == UNMAPPED) ? UNMAPPED_STRING : String.valueOf(id);
+-      for (int i = line; i <= nextLine; i++) {
+-        if (i == nextLine) {
+-          for (int j = col; j < nextCol; j++) {
+-            addCharEntry(idString);
+-          }
+-          break;
+-        }
+-        closeLine();
+-        openLine();
+-      }
++      v.visit(m, line, col, nextLine, nextCol);
+ 
+       line = nextLine;
+       col = nextCol;

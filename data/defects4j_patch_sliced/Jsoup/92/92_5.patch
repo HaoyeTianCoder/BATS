@@ -1,0 +1,15 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilder.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilder.java
+@@ -196,6 +196,12 @@ public class HtmlTreeBuilder extends TreeBuilder {
+ 
+     Element insert(final Token.StartTag startTag) {
+         // cleanup duplicate attributes:
++        if (!startTag.attributes.isEmpty()) {
++            int dupes = startTag.attributes.deduplicate(settings);
++            if (dupes > 0) {
++                error("Duplicate attribute");
++            }
++        }
+ 
+         // handle empty unknown tags
+         // when the spec expects an empty tag, will directly hit insertEmpty, so won't generate this fake end tag.

@@ -1,0 +1,15 @@
+--- a/src/com/google/javascript/jscomp/PureFunctionIdentifier.java
++++ b/src/com/google/javascript/jscomp/PureFunctionIdentifier.java
+@@ -174,11 +174,9 @@ class PureFunctionIdentifier implements CompilerPass {
+    */
+   private static Collection<Definition> getCallableDefinitions(
+       DefinitionProvider definitionProvider, Node name) {
++    if (NodeUtil.isGetProp(name) || NodeUtil.isName(name)) {
+       List<Definition> result = Lists.newArrayList();
+ 
+-      if (!NodeUtil.isGetProp(name) && !NodeUtil.isName(name)) {
+-        return null;
+-      }
+       Collection<Definition> decls =
+           definitionProvider.getDefinitionsReferencedAt(name);
+       if (decls == null) {

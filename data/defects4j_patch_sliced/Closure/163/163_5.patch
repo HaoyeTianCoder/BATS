@@ -1,0 +1,15 @@
+--- a/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
++++ b/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
+@@ -327,6 +349,12 @@ class AnalyzePrototypeProperties implements CompilerPass {
+      * If this is a non-function prototype assign, return the prop name.
+      * Otherwise, return null.
+      */
++    private String processNonFunctionPrototypeAssign(Node n, Node parent) {
++      if (isAssignRValue(n, parent) && !n.isFunction()) {
++        return getPrototypePropertyNameFromRValue(n);
++      }
++      return null;
++    }
+ 
+     /**
+      * Determines whether {@code n} is the FUNCTION node in a global function

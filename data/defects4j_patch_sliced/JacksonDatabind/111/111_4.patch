@@ -1,0 +1,12 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/impl/MethodProperty.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/impl/MethodProperty.java
+@@ -81,7 +81,8 @@ public final class MethodProperty
+             return this;
+         }
+         // 07-May-2019, tatu: As per [databind#2303], must keep VD/NVP in-sync if they were
+-        return new MethodProperty(this, deser, _nullProvider);
++        NullValueProvider nvp = (_valueDeserializer == _nullProvider) ? deser : _nullProvider;
++        return new MethodProperty(this, deser, nvp);
+     }
+ 
+     @Override

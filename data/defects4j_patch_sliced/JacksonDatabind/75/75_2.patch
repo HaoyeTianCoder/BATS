@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/std/EnumSerializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/std/EnumSerializer.java
+@@ -101,7 +101,7 @@ public class EnumSerializer
+                     property, handledType());
+             if (format != null) {
+                 Boolean serializeAsIndex = _isShapeWrittenUsingIndex(property.getType().getRawClass(),
+-                        format, false);
++                        format, false, _serializeAsIndex);
+                 if (serializeAsIndex != _serializeAsIndex) {
+                     return new EnumSerializer(_values, serializeAsIndex);
+                 }

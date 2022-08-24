@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilder.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilder.java
+@@ -473,7 +473,7 @@ public class HtmlTreeBuilder extends TreeBuilder {
+         // don't walk too far up the tree
+ 
+         for (int pos = bottom; pos >= top; pos--) {
+-            final String elName = stack.get(pos).nodeName();
++            final String elName = stack.get(pos).normalName();
+             if (inSorted(elName, targetNames))
+                 return true;
+             if (inSorted(elName, baseTypes))

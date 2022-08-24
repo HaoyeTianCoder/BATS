@@ -1,0 +1,13 @@
+--- a/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
++++ b/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
+@@ -424,8 +468,10 @@ class AnalyzePrototypeProperties implements CompilerPass {
+             String name = dest.getString();
+             Property prop = new AssignmentProperty(
+                 grandParent,
++                t.getScope().getVar(root.getString()),
+                 t.getModule());
+             getNameInfoForName(name, PROPERTY).getDeclarations().add(prop);
++            return true;
+           }
+           break;
+ 

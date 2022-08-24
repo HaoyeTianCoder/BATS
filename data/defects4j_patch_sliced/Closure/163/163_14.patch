@@ -1,0 +1,29 @@
+--- a/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
++++ b/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
+@@ -513,18 +563,25 @@ class AnalyzePrototypeProperties implements CompilerPass {
+    */
+   class GlobalFunction implements Symbol {
+     private final Node nameNode;
++    private final Var var;
+     private final JSModule module;
+ 
+-    GlobalFunction(Node nameNode, Node parent, Node gramps, JSModule module) {
++    GlobalFunction(Node nameNode, Var var, JSModule module) {
++      Node parent = nameNode.getParent();
+       Preconditions.checkState(
+           parent.isVar() ||
+           NodeUtil.isFunctionDeclaration(parent));
+       this.nameNode = nameNode;
++      this.var = var;
+       this.module = module;
+     }
+ 
+     @Override
++    public Var getRootVar() {
++      return var;
++    }
+ 
++    @Override
+     public void remove() {
+       Node parent = nameNode.getParent();
+       if (parent.isFunction() || parent.hasOneChild()) {

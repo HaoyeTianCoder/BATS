@@ -1,0 +1,14 @@
+--- a/src/com/google/javascript/jscomp/NodeUtil.java
++++ b/src/com/google/javascript/jscomp/NodeUtil.java
+@@ -599,8 +599,11 @@ public final class NodeUtil {
+       case Token.GETELEM:
+         return true;
+ 
++      case Token.FUNCTION:
+         // Anonymous functions definitions are not changed by side-effects,
+         // and named functions are not part of expressions.
++        Preconditions.checkState(NodeUtil.isAnonymousFunction(n));
++        return false;
+     }
+ 
+     for (Node c = n.getFirstChild(); c != null; c = c.getNext()) {

@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/AnyGetterWriter.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/AnyGetterWriter.java
+@@ -49,6 +53,7 @@ public class AnyGetterWriter
+             _mapSerializer.serializeFields((Map<?,?>) value, gen, provider);
+             return;
+         }
++        _serializer.serialize(value, gen, provider);
+     }
+ 
+     /**

@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/Compiler.java
++++ b/src/com/google/javascript/jscomp/Compiler.java
+@@ -1429,7 +1429,7 @@ public class Compiler extends AbstractCompiler {
+ 
+         // if LanguageMode is ECMASCRIPT5_STRICT, only print 'use strict'
+         // for the first input file
+-        String code = toSource(root, sourceMap);
++        String code = toSource(root, sourceMap, inputSeqNum == 0);
+         if (!code.isEmpty()) {
+           cb.append(code);
+ 

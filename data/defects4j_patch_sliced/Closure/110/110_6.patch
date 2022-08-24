@@ -1,0 +1,12 @@
+--- a/src/com/google/javascript/rhino/Node.java
++++ b/src/com/google/javascript/rhino/Node.java
+@@ -551,6 +551,9 @@ public class Node implements Cloneable, Serializable {
+       return null;
+     }
+     Node n = first;
++    if (n == null) {
++      throw new RuntimeException("node is not a child");
++    }
+ 
+     while (n.next != child) {
+       n = n.next;

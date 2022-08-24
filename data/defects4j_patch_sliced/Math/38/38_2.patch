@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/math/optimization/direct/BOBYQAOptimizer.java
++++ b/src/main/java/org/apache/commons/math/optimization/direct/BOBYQAOptimizer.java
+@@ -1749,7 +1749,7 @@ public class BOBYQAOptimizer
+                 final int ih = ipt * (ipt - 1) / 2 + jpt - 1;
+                 final double tmp = interpolationPoints.getEntry(nfm, ipt - 1) * interpolationPoints.getEntry(nfm, jpt - 1);
+                 modelSecondDerivativesValues.setEntry(ih, (fbeg - fAtInterpolationPoints.getEntry(ipt) - fAtInterpolationPoints.getEntry(jpt) + f) / tmp);
+-                throw new PathIsExploredException(); // XXX
++//                 throw new PathIsExploredException(); // XXX
+             }
+         } while (getEvaluations() < npt);
+     } // prelim

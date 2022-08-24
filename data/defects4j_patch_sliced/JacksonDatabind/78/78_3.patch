@@ -1,0 +1,20 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializerFactory.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializerFactory.java
+@@ -875,7 +890,17 @@ beanDesc.getBeanClass().getName(), name, ((AnnotatedParameter) m).getIndex());
+     /**
+      * @since 2.8.9
+      */
++    protected void checkIllegalTypes(DeserializationContext ctxt, JavaType type,
++            BeanDescription beanDesc)
++        throws JsonMappingException
++    {
+         // There are certain nasty classes that could cause problems, mostly
+         // via default typing -- catch them here.
++        String full = type.getRawClass().getName();
+ 
++        if (_cfgIllegalClassNames.contains(full)) {
++            ctxt.reportBadTypeDefinition(beanDesc,
++                    "Illegal type (%s) to deserialize: prevented for security reasons", full);
++        }
++    }
+ }

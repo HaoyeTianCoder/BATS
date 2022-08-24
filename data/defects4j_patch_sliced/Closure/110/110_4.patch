@@ -1,0 +1,22 @@
+--- a/src/com/google/javascript/jscomp/ScopedAliases.java
++++ b/src/com/google/javascript/jscomp/ScopedAliases.java
+@@ -389,9 +393,19 @@ class ScopedAliases implements HotSwapCompilerPass {
+             //
+             // This will only cause problems if this is a hoisted, recursive
+             // function, and the programmer is using the hoisting.
++            Node newName = IR.name("").useSourceInfoFrom(existingName);
++            value.replaceChild(existingName, newName);
+ 
++            varNode = IR.var(existingName).useSourceInfoFrom(existingName);
++            grandparent.replaceChild(parent, varNode);
++          } else {
++            if (value != null) {
+               // If this is a VAR, we can just detach the expression and
+               // the tree will still be valid.
++              value.detachFromParent();
++            }
++            varNode = parent;
++          }
+ 
+           // Add $jscomp.scope.name = EXPR;
+           // Make sure we copy over all the jsdoc and debug info.

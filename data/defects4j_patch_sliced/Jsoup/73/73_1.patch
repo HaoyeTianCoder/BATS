@@ -1,0 +1,10 @@
+--- a/src/main/java/org/jsoup/helper/W3CDom.java
++++ b/src/main/java/org/jsoup/helper/W3CDom.java
+@@ -19,6 +19,7 @@ import javax.xml.transform.dom.DOMSource;
+ import javax.xml.transform.stream.StreamResult;
+ import java.io.StringWriter;
+ import java.util.HashMap;
++import java.util.Stack;
+ 
+ /**
+  * Helper class to transform a {@link org.jsoup.nodes.Document} to a {@link org.w3c.dom.Document org.w3c.dom.Document},

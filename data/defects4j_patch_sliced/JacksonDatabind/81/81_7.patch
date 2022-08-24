@@ -1,0 +1,28 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/introspect/JacksonAnnotationIntrospector.java
++++ b/src/main/java/com/fasterxml/jackson/databind/introspect/JacksonAnnotationIntrospector.java
+@@ -1454,5 +1463,25 @@ public class JacksonAnnotationIntrospector
+         return StdTypeResolverBuilder.noTypeInfoBuilder();
+     }
+ 
++    private boolean _primitiveAndWrapper(Class<?> baseType, Class<?> refinement)
++    {
++        if (baseType.isPrimitive()) {
++            return baseType == ClassUtil.primitiveType(refinement);
++        }
++        if (refinement.isPrimitive()) {
++            return refinement == ClassUtil.primitiveType(baseType);
++        }
++        return false;
++    }
+ 
++    private boolean _primitiveAndWrapper(JavaType baseType, Class<?> refinement)
++    {
++        if (baseType.isPrimitive()) {
++            return baseType.hasRawClass(ClassUtil.primitiveType(refinement));
++        }
++        if (refinement.isPrimitive()) {
++            return refinement == ClassUtil.primitiveType(baseType.getRawClass());
++        }
++        return false;
++    }
+ }

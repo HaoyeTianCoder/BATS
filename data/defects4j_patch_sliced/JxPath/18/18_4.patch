@@ -1,0 +1,9 @@
+--- a/src/java/org/apache/commons/jxpath/ri/axes/AttributeContext.java
++++ b/src/java/org/apache/commons/jxpath/ri/axes/AttributeContext.java
+@@ -88,4 +99,4 @@ public class AttributeContext extends EvalContext {
+         currentNodePointer = iterator.getNodePointer();
+         return true;
+     }
+-}
++}
+\ No newline at end of file

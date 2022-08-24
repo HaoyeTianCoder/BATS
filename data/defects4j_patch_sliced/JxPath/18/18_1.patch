@@ -1,0 +1,15 @@
+--- a/src/java/org/apache/commons/jxpath/ri/axes/AttributeContext.java
++++ b/src/java/org/apache/commons/jxpath/ri/axes/AttributeContext.java
+@@ -16,10 +16,12 @@
+  */
+ package org.apache.commons.jxpath.ri.axes;
+ 
++import org.apache.commons.jxpath.ri.Compiler;
+ import org.apache.commons.jxpath.ri.EvalContext;
+ import org.apache.commons.jxpath.ri.QName;
+ import org.apache.commons.jxpath.ri.compiler.NodeNameTest;
+ import org.apache.commons.jxpath.ri.compiler.NodeTest;
++import org.apache.commons.jxpath.ri.compiler.NodeTypeTest;
+ import org.apache.commons.jxpath.ri.model.NodeIterator;
+ import org.apache.commons.jxpath.ri.model.NodePointer;
+ 

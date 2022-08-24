@@ -1,0 +1,10 @@
+--- a/src/main/java/org/jsoup/helper/W3CDom.java
++++ b/src/main/java/org/jsoup/helper/W3CDom.java
+@@ -113,6 +116,7 @@ public class W3CDom {
+             if (source instanceof org.jsoup.nodes.Element && dest.getParentNode() instanceof Element) {
+                 dest = (Element) dest.getParentNode(); // undescend. cromulent.
+             }
++            namespacesStack.pop();
+         }
+ 
+         private void copyAttributes(org.jsoup.nodes.Node source, Element el) {

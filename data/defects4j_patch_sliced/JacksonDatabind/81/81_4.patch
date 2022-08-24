@@ -1,0 +1,12 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/introspect/JacksonAnnotationIntrospector.java
++++ b/src/main/java/com/fasterxml/jackson/databind/introspect/JacksonAnnotationIntrospector.java
+@@ -1116,7 +1122,8 @@ public class JacksonAnnotationIntrospector
+         
+         // Ok: start by refining the main type itself; common to all types
+         final Class<?> valueClass = (jsonDeser == null) ? null : _classIfExplicit(jsonDeser.as());
+-        if ((valueClass != null) && !type.hasRawClass(valueClass)) {
++        if ((valueClass != null) && !type.hasRawClass(valueClass)
++                && !_primitiveAndWrapper(type, valueClass)) {
+             try {
+                 type = tf.constructSpecializedType(type, valueClass);
+             } catch (IllegalArgumentException iae) {

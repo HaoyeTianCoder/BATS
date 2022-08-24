@@ -1,0 +1,11 @@
+--- a/gson/src/main/java/com/google/gson/stream/JsonWriter.java
++++ b/gson/src/main/java/com/google/gson/stream/JsonWriter.java
+@@ -322,7 +322,7 @@ public class JsonWriter implements Closeable, Flushable {
+    * bracket.
+    */
+   private JsonWriter open(int empty, String openBracket) throws IOException {
+-    beforeValue(true);
++    beforeValue();
+     push(empty);
+     out.write(openBracket);
+     return this;

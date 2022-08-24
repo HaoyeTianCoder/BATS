@@ -1,0 +1,21 @@
+--- a/src/java/org/apache/commons/cli/CommandLine.java
++++ b/src/java/org/apache/commons/cli/CommandLine.java
+@@ -275,17 +285,7 @@ public class CommandLine {
+      */
+     void addOption(Option opt)
+     {
+-        hashcodeMap.put(new Integer(opt.hashCode()), opt);
+-        String key = opt.getKey();
+-        if (key == null)
+-        {
+-            key = opt.getLongOpt();
+-        }
+-        else
+-        {
+-            names.put(opt.getLongOpt(), key);
+-        }
+-        options.put(key, opt);
++        options.add(opt);
+     }
+ 
+     /**

@@ -1,0 +1,10 @@
+--- a/src/java/org/apache/commons/cli2/WriteableCommandLine.java
++++ b/src/java/org/apache/commons/cli2/WriteableCommandLine.java
+@@ -99,6 +99,7 @@ public interface WriteableCommandLine extends CommandLine {
+      *
+      * @return the current option
+      */
++    Option getCurrentOption();
+ 
+     /**
+      * Sets the current option. This method is called by concrete option

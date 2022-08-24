@@ -1,0 +1,16 @@
+--- a/src/com/google/javascript/jscomp/TypeInference.java
++++ b/src/com/google/javascript/jscomp/TypeInference.java
+@@ -559,10 +562,11 @@ class TypeInference
+ 
+ 
+         if (isVarTypeBetter) {
++          redeclareSimpleVar(scope, left, varType);
++        } else {
+           redeclareSimpleVar(scope, left, resultType);
+         }
+-        left.setJSType(isVarDeclaration || leftType == null ?
+-            resultType : null);
++        left.setJSType(resultType);
+ 
+         if (var != null && var.isTypeInferred()) {
+           JSType oldType = var.getType();

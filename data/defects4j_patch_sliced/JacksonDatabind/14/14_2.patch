@@ -1,0 +1,23 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ObjectReader.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ObjectReader.java
+@@ -1574,7 +1574,20 @@ public class ObjectReader
+     /**
+      * @since 2.6
+      */
++    protected JsonDeserializer<Object> _findTreeDeserializer(DeserializationContext ctxt)
++        throws JsonMappingException
++    {
++        JsonDeserializer<Object> deser = _rootDeserializers.get(JSON_NODE_TYPE);
++        if (deser == null) {
+             // Nope: need to ask provider to resolve it
++            deser = ctxt.findRootValueDeserializer(JSON_NODE_TYPE);
++            if (deser == null) { // can this happen?
++                throw new JsonMappingException("Can not find a deserializer for type "+JSON_NODE_TYPE);
++            }
++            _rootDeserializers.put(JSON_NODE_TYPE, deser);
++        }
++        return deser;
++    }
+ 
+     /**
+      * Method called to locate deserializer ahead of time, if permitted

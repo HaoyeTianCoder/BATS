@@ -1,0 +1,8 @@
+--- a/src/java/org/apache/commons/cli2/WriteableCommandLine.java
++++ b/src/java/org/apache/commons/cli2/WriteableCommandLine.java
+@@ -107,4 +108,5 @@ public interface WriteableCommandLine extends CommandLine {
+      *
+      * @param currentOption the new current option
+      */
++    void setCurrentOption(Option currentOption);
+ }

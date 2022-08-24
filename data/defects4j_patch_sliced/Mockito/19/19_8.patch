@@ -1,0 +1,11 @@
+--- a/src/org/mockito/internal/configuration/injection/filter/TypeBasedCandidateFilter.java
++++ b/src/org/mockito/internal/configuration/injection/filter/TypeBasedCandidateFilter.java
+@@ -17,7 +17,7 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
+         this.next = next;
+     }
+ 
+-    public OngoingInjecter filterCandidate(Collection<Object> mocks, Field field, Object fieldInstance) {
++    public OngoingInjecter filterCandidate(Collection<Object> mocks, Field field, List<Field> fields, Object fieldInstance) {
+         List<Object> mockTypeMatches = new ArrayList<Object>();
+         for (Object mock : mocks) {
+             if (field.getType().isAssignableFrom(mock.getClass())) {

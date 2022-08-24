@@ -1,0 +1,16 @@
+--- a/src/com/google/javascript/rhino/jstype/RecordType.java
++++ b/src/com/google/javascript/rhino/jstype/RecordType.java
+@@ -90,8 +96,13 @@ class RecordType extends PrototypeObjectType {
+         throw new IllegalStateException(
+             "RecordProperty associated with a property should not be null!");
+       }
++      if (declared) {
+         defineDeclaredProperty(
+             property, prop.getType(), prop.getPropertyNode());
++      } else {
++        defineSynthesizedProperty(
++            property, prop.getType(), prop.getPropertyNode());
++      }
+     }
+ 
+     // Freeze the record type.

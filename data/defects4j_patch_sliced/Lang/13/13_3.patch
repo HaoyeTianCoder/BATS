@@ -1,0 +1,18 @@
+--- a/src/main/java/org/apache/commons/lang3/SerializationUtils.java
++++ b/src/main/java/org/apache/commons/lang3/SerializationUtils.java
+@@ -265,7 +276,15 @@ public class SerializationUtils {
+             try {
+                 return Class.forName(name, false, classLoader);
+             } catch (ClassNotFoundException ex) {
++                try {
+                     return Class.forName(name, false, Thread.currentThread().getContextClassLoader());
++                } catch (ClassNotFoundException cnfe) {
++                    Class<?> cls = primitiveTypes.get(name);
++                    if (cls != null)
++                        return cls;
++                    else
++                        throw cnfe;
++                }
+             }
+         }
+ 

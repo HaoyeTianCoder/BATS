@@ -1,0 +1,13 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/std/StdDelegatingSerializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/std/StdDelegatingSerializer.java
+@@ -221,7 +239,9 @@ public class StdDelegatingSerializer
+          *    properly... but for now, try this:
+          */
+         // 02-Apr-2015, tatu: For dynamic case, very little we can do
+-        _delegateSerializer.acceptJsonFormatVisitor(visitor, typeHint);
++        if (_delegateSerializer != null) {
++            _delegateSerializer.acceptJsonFormatVisitor(visitor, typeHint);
++        }
+     }
+ 
+     /*

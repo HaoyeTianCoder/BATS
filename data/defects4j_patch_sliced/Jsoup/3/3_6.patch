@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/parser/Parser.java
++++ b/src/main/java/org/jsoup/parser/Parser.java
+@@ -221,7 +227,7 @@ public class Parser {
+         Tag childTag = child.tag();
+         boolean validAncestor = stackHasValidParent(childTag);
+ 
+-        if (!validAncestor) {
++        if (!validAncestor && !relaxed) {
+             // create implicit parent around this child
+             Tag parentTag = childTag.getImplicitParent();
+             Element implicit = new Element(parentTag, baseUri);

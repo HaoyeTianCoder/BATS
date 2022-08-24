@@ -1,0 +1,16 @@
+--- a/src/main/java/org/jsoup/select/Selector.java
++++ b/src/main/java/org/jsoup/select/Selector.java
+@@ -302,7 +306,13 @@ public class Selector {
+     }
+ 
+     // :not(selector)
++    private Elements not() {
++        tq.consume(":not");
++        String subQuery = tq.chompBalanced('(', ')');
++        Validate.notEmpty(subQuery, ":not(selector) subselect must not be empty");
+ 
++        return filterOut(root.getAllElements(), select(subQuery, root));
++    }
+ 
+     // direct child descendants
+     private static Elements filterForChildren(Collection<Element> parents, Collection<Element> candidates) {

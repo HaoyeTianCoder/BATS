@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
+@@ -894,7 +894,7 @@ enum HtmlTreeBuilderState {
+         boolean anythingElse(Token t, HtmlTreeBuilder tb) {
+             tb.error(this);
+             boolean processed;
+-            if (StringUtil.in(tb.currentElement().nodeName(), "table", "tbody", "tfoot", "thead", "tr")) {
++            if (StringUtil.in(tb.currentElement().normalName(), "table", "tbody", "tfoot", "thead", "tr")) {
+                 tb.setFosterInserts(true);
+                 processed = tb.process(t, InBody);
+                 tb.setFosterInserts(false);

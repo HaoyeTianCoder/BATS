@@ -1,0 +1,13 @@
+--- a/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
++++ b/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
+@@ -301,9 +325,7 @@ class AnalyzePrototypeProperties implements CompilerPass {
+       }
+ 
+       // Process prototype assignments to non-functions.
+-      if (isPrototypePropertyAssign(n) ||
+-          isGlobalFunctionDeclaration(t, n) ||
+-          n.isFunction()) {
++      if (processNonFunctionPrototypeAssign(n, parent) != null) {
+         symbolStack.pop();
+       }
+     }

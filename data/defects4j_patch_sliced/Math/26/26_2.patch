@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/math3/fraction/Fraction.java
++++ b/src/main/java/org/apache/commons/math3/fraction/Fraction.java
+@@ -206,7 +206,7 @@ public class Fraction
+             long a1 = (long)FastMath.floor(r1);
+             p2 = (a1 * p1) + p0;
+             q2 = (a1 * q1) + q0;
+-            if ((p2 > overflow) || (q2 > overflow)) {
++            if ((FastMath.abs(p2) > overflow) || (FastMath.abs(q2) > overflow)) {
+                 throw new FractionConversionException(value, p2, q2);
+             }
+ 

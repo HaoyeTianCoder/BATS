@@ -1,0 +1,12 @@
+--- a/src/main/java/org/jsoup/parser/Tokeniser.java
++++ b/src/main/java/org/jsoup/parser/Tokeniser.java
+@@ -194,6 +194,9 @@ class Tokeniser {
+         return tagPending.tagName.equals(lastStartTag.tagName);
+     }
+ 
++    String appropriateEndTagName() {
++        return lastStartTag.tagName;
++    }
+ 
+     boolean isTrackErrors() {
+         return trackErrors;

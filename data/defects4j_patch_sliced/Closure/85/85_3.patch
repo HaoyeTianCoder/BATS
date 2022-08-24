@@ -1,0 +1,16 @@
+--- a/src/com/google/javascript/jscomp/UnreachableCodeElimination.java
++++ b/src/com/google/javascript/jscomp/UnreachableCodeElimination.java
+@@ -193,6 +180,13 @@ class UnreachableCodeElimination extends AbstractPostOrderCallback
+ 
+   private Node computeFollowing(Node n) {
+     Node next = ControlFlowAnalysis.computeFollowNode(n);
++    while (next != null && next.getType() == Token.BLOCK) {
++      if (next.hasChildren()) {
++        next = next.getFirstChild();
++      } else {
++        next = computeFollowing(next);
++      }
++    }
+     return next;
+   }
+ 

@@ -1,0 +1,9 @@
+--- a/src/main/java/org/jsoup/helper/DataUtil.java
++++ b/src/main/java/org/jsoup/helper/DataUtil.java
+@@ -1,5 +1,6 @@
+ package org.jsoup.helper;
+ 
++import org.jsoup.UncheckedIOException;
+ import org.jsoup.internal.ConstrainableInputStream;
+ import org.jsoup.nodes.Document;
+ import org.jsoup.nodes.Element;

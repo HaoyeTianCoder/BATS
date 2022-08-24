@@ -1,0 +1,19 @@
+--- a/src/java/org/apache/commons/cli/Util.java
++++ b/src/java/org/apache/commons/cli/Util.java
+@@ -62,14 +62,10 @@ class Util
+      */
+     static String stripLeadingAndTrailingQuotes(String str)
+     {
+-        if (str.startsWith("\""))
+-        {
+-            str = str.substring(1, str.length());
+-        }
+         int length = str.length();
+-        if (str.endsWith("\""))
++        if (length > 1 && str.startsWith("\"") && str.endsWith("\"") && str.substring(1, length - 1).indexOf('"') == -1)
+         {
+-            str = str.substring(0, length - 1);
++            str = str.substring(1, length - 1);
+         }
+         
+         return str;

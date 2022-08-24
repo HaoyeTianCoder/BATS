@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/jsontype/impl/TypeDeserializerBase.java
++++ b/src/main/java/com/fasterxml/jackson/databind/jsontype/impl/TypeDeserializerBase.java
+@@ -174,7 +174,7 @@ public abstract class TypeDeserializerBase
+                      *   important for some reason?
+                      *   Disabling the check will break 2 Enum-related tests.
+                      */
+-                    type = _baseType.narrowBy(type.getRawClass());
++                    type = ctxt.getTypeFactory().constructSpecializedType(_baseType, type.getRawClass());
+                 }
+                 deser = ctxt.findContextualValueDeserializer(type, _property);
+             }

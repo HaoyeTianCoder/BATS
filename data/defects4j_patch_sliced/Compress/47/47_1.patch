@@ -1,0 +1,12 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/zip/ZipArchiveInputStream.java
++++ b/src/main/java/org/apache/commons/compress/archivers/zip/ZipArchiveInputStream.java
+@@ -412,7 +412,8 @@ public boolean canReadEntryData(final ArchiveEntry ae) {
+         if (ae instanceof ZipArchiveEntry) {
+             final ZipArchiveEntry ze = (ZipArchiveEntry) ae;
+             return ZipUtil.canHandleEntryData(ze)
+-                && supportsDataDescriptorFor(ze);
++                && supportsDataDescriptorFor(ze)
++                && supportsCompressedSizeFor(ze);
+         }
+         return false;
+     }

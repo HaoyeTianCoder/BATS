@@ -1,0 +1,12 @@
+--- a/src/java/org/apache/commons/jxpath/ri/model/beans/NullPropertyPointer.java
++++ b/src/java/org/apache/commons/jxpath/ri/model/beans/NullPropertyPointer.java
+@@ -135,6 +140,9 @@ public class NullPropertyPointer extends PropertyPointer {
+             return pointer;
+         }
+         else {
++            if (parent instanceof NullPointer && parent.equals(newParent)) {
++                throw createBadFactoryException(context.getFactory());
++            }
+             if (newParent instanceof PropertyOwnerPointer) {
+                 PropertyOwnerPointer pop = (PropertyOwnerPointer) newParent;
+                 newParent = pop.getPropertyPointer();

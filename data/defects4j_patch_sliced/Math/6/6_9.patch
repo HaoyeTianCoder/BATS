@@ -1,0 +1,13 @@
+--- a/src/main/java/org/apache/commons/math3/optim/nonlinear/vector/jacobian/GaussNewtonOptimizer.java
++++ b/src/main/java/org/apache/commons/math3/optim/nonlinear/vector/jacobian/GaussNewtonOptimizer.java
+@@ -103,9 +103,8 @@ public class GaussNewtonOptimizer extends AbstractLeastSquaresOptimizer {
+ 
+         // iterate until convergence is reached
+         PointVectorValuePair current = null;
+-        int iter = 0;
+         for (boolean converged = false; !converged;) {
+-            ++iter;
++            incrementIterationCount();
+ 
+             // evaluate the objective function and its jacobian
+             PointVectorValuePair previous = current;

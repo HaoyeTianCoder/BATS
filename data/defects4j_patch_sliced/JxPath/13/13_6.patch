@@ -1,0 +1,15 @@
+--- a/src/java/org/apache/commons/jxpath/ri/NamespaceResolver.java
++++ b/src/java/org/apache/commons/jxpath/ri/NamespaceResolver.java
+@@ -156,10 +169,8 @@ public class NamespaceResolver implements Cloneable {
+             }
+         }
+         String prefix = (String) reverseMap.get(namespaceURI);
+-        if (prefix == null && parent != null) {
+-            return parent.getPrefix(namespaceURI);
+-        }
+-        return prefix;
++        return prefix == null && parent != null ? parent
++                .getExternallyRegisteredPrefix(namespaceURI) : prefix;
+     }
+ 
+     /**

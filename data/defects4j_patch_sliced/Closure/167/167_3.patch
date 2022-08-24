@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/type/SemanticReverseAbstractInterpreter.java
++++ b/src/com/google/javascript/jscomp/type/SemanticReverseAbstractInterpreter.java
+@@ -391,7 +391,7 @@ public class SemanticReverseAbstractInterpreter
+    */
+   private FlowScope maybeRestrictName(
+       FlowScope blindScope, Node node, JSType originalType, JSType restrictedType) {
+-    if (restrictedType != null && !restrictedType.equals(originalType)) {
++    if (restrictedType != null && restrictedType != originalType) {
+       FlowScope informed = blindScope.createChildFlowScope();
+       declareNameInScope(informed, node, restrictedType);
+       return informed;

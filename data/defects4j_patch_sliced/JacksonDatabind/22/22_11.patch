@@ -1,0 +1,14 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/BeanSerializerFactory.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/BeanSerializerFactory.java
+@@ -171,10 +171,7 @@ public class BeanSerializerFactory
+             JavaType type, BeanDescription beanDesc, boolean staticTyping)
+         throws JsonMappingException
+     {
+-        JsonSerializer<?> ser = findSerializerByAnnotations(prov, type, beanDesc);
+-        if (ser != null) {
+-            return ser;
+-        }
++        JsonSerializer<?> ser = null;
+         final SerializationConfig config = prov.getConfig();
+         
+         // Container types differ from non-container types

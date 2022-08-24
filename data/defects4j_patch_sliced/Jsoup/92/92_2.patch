@@ -1,0 +1,16 @@
+--- a/src/main/java/org/jsoup/nodes/Attributes.java
++++ b/src/main/java/org/jsoup/nodes/Attributes.java
+@@ -115,11 +116,12 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
+      * Adds a new attribute. Will produce duplicates if the key already exists.
+      * @see Attributes#put(String, String)
+      */
+-    private void add(String key, String value) {
++    public Attributes add(String key, String value) {
+         checkCapacity(size + 1);
+         keys[size] = key;
+         vals[size] = value;
+         size++;
++        return this;
+     }
+ 
+     /**

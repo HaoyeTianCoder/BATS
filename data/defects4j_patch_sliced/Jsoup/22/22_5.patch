@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/nodes/Node.java
++++ b/src/main/java/org/jsoup/nodes/Node.java
+@@ -467,6 +474,8 @@ public abstract class Node implements Cloneable {
+      @return the previous sibling, or null if this is the first sibling
+      */
+     public Node previousSibling() {
++        if (parentNode == null)
++            return null; // root
+ 
+         List<Node> siblings = parentNode.childNodes;
+         Integer index = siblingIndex();

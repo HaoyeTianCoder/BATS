@@ -1,0 +1,10 @@
+--- a/src/org/mockito/internal/util/Timer.java
++++ b/src/org/mockito/internal/util/Timer.java
+@@ -7,6 +8,7 @@ public class Timer {
+     private long startTime = -1;
+ 
+     public Timer(long durationMillis) {
++        validateInput(durationMillis);
+         this.durationMillis = durationMillis;
+     }
+ 

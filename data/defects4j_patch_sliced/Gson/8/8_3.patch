@@ -1,0 +1,10 @@
+--- a/gson/src/main/java/com/google/gson/internal/UnsafeAllocator.java
++++ b/gson/src/main/java/com/google/gson/internal/UnsafeAllocator.java
+@@ -68,6 +70,7 @@ public abstract class UnsafeAllocator {
+         @Override
+         @SuppressWarnings("unchecked")
+         public <T> T newInstance(Class<T> c) throws Exception {
++          assertInstantiable(c);
+           return (T) newInstance.invoke(null, c, constructorId);
+         }
+       };

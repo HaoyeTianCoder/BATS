@@ -1,0 +1,16 @@
+--- a/src/com/google/javascript/jscomp/CodeGenerator.java
++++ b/src/com/google/javascript/jscomp/CodeGenerator.java
+@@ -127,12 +127,7 @@ class CodeGenerator {
+       // the IN_FOR_INIT_CLAUSE one.
+       Context rhsContext = getContextForNoInOperator(context);
+ 
+-      if (last.getType() == type &&
+-          NodeUtil.isAssociative(type)) {
+-        addExpr(first, p, context);
+-        cc.addOp(opstr, true);
+-        addExpr(last, p, rhsContext);
+-      } else if (NodeUtil.isAssignmentOp(n) && NodeUtil.isAssignmentOp(last)) {
++      if (NodeUtil.isAssignmentOp(n) && NodeUtil.isAssignmentOp(last)) {
+         // Assignments are the only right-associative binary operators
+         addExpr(first, p, context);
+         cc.addOp(opstr, true);

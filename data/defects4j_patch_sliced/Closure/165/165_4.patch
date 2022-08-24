@@ -1,0 +1,15 @@
+--- a/src/com/google/javascript/rhino/jstype/RecordType.java
++++ b/src/com/google/javascript/rhino/jstype/RecordType.java
+@@ -80,9 +84,11 @@ class RecordType extends PrototypeObjectType {
+    * @throws IllegalStateException if the {@code RecordProperty} associated
+    *         with a property is null.
+    */
+-  RecordType(JSTypeRegistry registry, Map<String, RecordProperty> properties) {
++  RecordType(JSTypeRegistry registry, Map<String, RecordProperty> properties,
++      boolean declared) {
+     super(registry, null, null);
+     setPrettyPrint(true);
++    this.declared = declared;
+ 
+     for (String property : properties.keySet()) {
+       RecordProperty prop = properties.get(property);

@@ -1,0 +1,12 @@
+--- a/src/com/google/javascript/jscomp/CheckGlobalThis.java
++++ b/src/com/google/javascript/jscomp/CheckGlobalThis.java
+@@ -105,7 +105,8 @@ final class CheckGlobalThis implements Callback {
+       if (!(pType == Token.BLOCK ||
+             pType == Token.SCRIPT ||
+             pType == Token.NAME ||
+-            pType == Token.ASSIGN)) {
++            pType == Token.ASSIGN ||
++            pType == Token.OBJECTLIT)) {
+         return false;
+       }
+     }

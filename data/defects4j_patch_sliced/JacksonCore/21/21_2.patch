@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/core/filter/FilteringParserDelegate.java
++++ b/src/main/java/com/fasterxml/jackson/core/filter/FilteringParserDelegate.java
+@@ -245,6 +246,7 @@ public class FilteringParserDelegate extends JsonParserDelegate
+                     if (!_headContext.isStartHandled() && (_itemFilter == TokenFilter.INCLUDE_ALL)) {
+                         return (_currToken = null);
+                     }
++                }
+             }
+         }
+         // Anything buffered?

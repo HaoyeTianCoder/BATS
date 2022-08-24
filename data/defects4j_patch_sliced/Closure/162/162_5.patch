@@ -1,0 +1,15 @@
+--- a/src/com/google/javascript/jscomp/ScopedAliases.java
++++ b/src/com/google/javascript/jscomp/ScopedAliases.java
+@@ -339,11 +361,7 @@ class ScopedAliases implements HotSwapCompilerPass {
+       // Validate all descendent scopes of the goog.scope block.
+       if (t.getScopeDepth() >= 2) {
+         // Check if this name points to an alias.
+-        if (n.getType() == Token.NAME) {
+-          String name = n.getString();
+-          Var aliasVar = aliases.get(name);
+-          if (aliasVar != null &&
+-              t.getScope().getVar(name) == aliasVar) {
++        if (aliasVar != null) {
+           // Note, to support the transitive case, it's important we don't
+           // clone aliasedNode here.  For example,
+           // var g = goog; var d = g.dom; d.createElement('DIV');

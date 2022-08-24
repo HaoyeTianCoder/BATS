@@ -1,0 +1,12 @@
+--- a/src/org/mockito/internal/configuration/injection/FinalMockCandidateFilter.java
++++ b/src/org/mockito/internal/configuration/injection/FinalMockCandidateFilter.java
+@@ -22,7 +23,9 @@ public class FinalMockCandidateFilter implements MockCandidateFilter {
+             return new OngoingInjecter() {
+                 public boolean thenInject() {
+                     try {
++                        if (!new BeanPropertySetter(fieldInstance, field).set(matchingMock)) {
+                             new FieldSetter(fieldInstance, field).set(matchingMock);
++                        }
+                     } catch (Exception e) {
+                         throw new MockitoException("Problems injecting dependency in " + field.getName(), e);
+                     }

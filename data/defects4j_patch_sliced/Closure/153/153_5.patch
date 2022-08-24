@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/SyntacticScopeCreator.java
++++ b/src/com/google/javascript/jscomp/SyntacticScopeCreator.java
+@@ -20,7 +20,6 @@ import com.google.common.base.Preconditions;
+ import com.google.javascript.rhino.JSDocInfo;
+ import com.google.javascript.rhino.Node;
+ import com.google.javascript.rhino.Token;
+-import com.google.javascript.rhino.jstype.JSType;
+ 
+ 
+ /**

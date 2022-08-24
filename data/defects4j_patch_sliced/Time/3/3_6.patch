@@ -1,0 +1,12 @@
+--- a/src/main/java/org/joda/time/MutableDateTime.java
++++ b/src/main/java/org/joda/time/MutableDateTime.java
+@@ -761,7 +771,9 @@ public class MutableDateTime
+      * @throws IllegalArgumentException if the value is invalid
+      */
+     public void addDays(final int days) {
++        if (days != 0) {
+             setMillis(getChronology().days().add(getMillis(), days));
++        }
+     }
+ 
+     //-----------------------------------------------------------------------

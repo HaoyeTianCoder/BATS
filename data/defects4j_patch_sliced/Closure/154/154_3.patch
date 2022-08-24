@@ -1,0 +1,19 @@
+--- a/src/com/google/javascript/jscomp/TypeCheck.java
++++ b/src/com/google/javascript/jscomp/TypeCheck.java
+@@ -1046,16 +1038,6 @@ public class TypeCheck implements NodeTraversal.Callback, CompilerPass {
+               HIDDEN_INTERFACE_PROPERTY, propertyName,
+               interfaceType.getTopMostDefiningType(propertyName).toString()));
+         }
+-        if (interfaceHasProperty) {
+-          JSType interfacePropType =
+-              interfaceType.getPrototype().getPropertyType(propertyName);
+-          if (!propertyType.canAssignTo(interfacePropType)) {
+-            compiler.report(t.makeError(n,
+-                HIDDEN_INTERFACE_PROPERTY_MISMATCH, propertyName,
+-                interfaceType.getTopMostDefiningType(propertyName).toString(),
+-                interfacePropType.toString(), propertyType.toString()));
+-          }
+-        }
+       }
+     }
+ 

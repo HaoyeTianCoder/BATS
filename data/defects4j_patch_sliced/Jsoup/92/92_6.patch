@@ -1,0 +1,12 @@
+--- a/src/main/java/org/jsoup/parser/ParseSettings.java
++++ b/src/main/java/org/jsoup/parser/ParseSettings.java
+@@ -35,6 +35,9 @@ public class ParseSettings {
+     /**
+      * Returns true if preserving attribute case.
+      */
++    public boolean preserveAttributeCase() {
++        return preserveAttributeCase;
++    }
+ 
+     /**
+      * Define parse settings.

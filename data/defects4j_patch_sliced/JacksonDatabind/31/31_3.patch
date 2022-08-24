@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/util/TokenBuffer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/util/TokenBuffer.java
+@@ -728,7 +728,7 @@ sb.append("NativeObjectIds=").append(_hasNativeObjectIds).append(",");
+ 
+     @Override
+     public void writeRawValue(String text) throws IOException {
+-        _append(JsonToken.VALUE_EMBEDDED_OBJECT, new RawValue(text));
++        _appendValue(JsonToken.VALUE_EMBEDDED_OBJECT, new RawValue(text));
+     }
+ 
+     @Override

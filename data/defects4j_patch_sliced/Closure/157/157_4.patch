@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/RenamePrototypes.java
++++ b/src/com/google/javascript/jscomp/RenamePrototypes.java
+@@ -333,7 +333,7 @@ class RenamePrototypes implements CompilerPass {
+                  child != null;
+                  child = child.getNext()) {
+ 
+-              if (child.getType() != Token.NUMBER) {
++              if (TokenStream.isJSIdentifier(child.getString())) {
+                 markObjLitPropertyCandidate(child, t.getInput());
+               }
+             }

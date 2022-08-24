@@ -1,0 +1,16 @@
+--- a/src/java/org/apache/commons/lang/time/FastDateFormat.java
++++ b/src/java/org/apache/commons/lang/time/FastDateFormat.java
+@@ -137,11 +137,11 @@ public class FastDateFormat extends Format {
+     /**
+      * The parsed rules.
+      */
+-    private Rule[] mRules;
++    private transient Rule[] mRules;
+     /**
+      * The estimated maximum length.
+      */
+-    private int mMaxLengthEstimate;
++    private transient int mMaxLengthEstimate;
+ 
+     //-----------------------------------------------------------------------
+     /**

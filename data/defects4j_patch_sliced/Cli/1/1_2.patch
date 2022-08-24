@@ -1,0 +1,16 @@
+--- a/src/java/org/apache/commons/cli/CommandLine.java
++++ b/src/java/org/apache/commons/cli/CommandLine.java
+@@ -43,12 +43,10 @@ public class CommandLine {
+     private List args = new LinkedList();
+ 
+     /** the processed options */
+-    private Map options = new HashMap();
+-    private Map names = new HashMap();
++    private Set options = new HashSet();
+ 
+     /** Map of unique options for ease to get complete list of options */
+ //    private Set allOptions = new HashSet();
+-    private Map hashcodeMap = new HashMap();
+ 
+     /**
+      * Creates a command line.

@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
+@@ -923,7 +923,7 @@ enum HtmlTreeBuilderState {
+                             if (!isWhitespace(character)) {
+                                 // InTable anything else section:
+                                 tb.error(this);
+-                                if (StringUtil.in(tb.currentElement().nodeName(), "table", "tbody", "tfoot", "thead", "tr")) {
++                                if (StringUtil.in(tb.currentElement().normalName(), "table", "tbody", "tfoot", "thead", "tr")) {
+                                     tb.setFosterInserts(true);
+                                     tb.process(new Token.Character().data(character), InBody);
+                                     tb.setFosterInserts(false);

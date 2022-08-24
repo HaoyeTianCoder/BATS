@@ -1,0 +1,17 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/MappingIterator.java
++++ b/src/main/java/com/fasterxml/jackson/databind/MappingIterator.java
+@@ -66,12 +70,13 @@ public class MappingIterator<T> implements Iterator<T>, Closeable
+      * as not <code>null</code> but set as <code>null</null> when
+      * iterator is closed, to denote closing.
+      */
+-    protected JsonParser _parser;
++    protected final JsonParser _parser;
+ 
+     /**
+      * Context to resynchronize to, in case an exception is encountered
+      * but caller wants to try to read more elements.
+      */
++    protected final JsonStreamContext _seqContext;
+     
+     /**
+      * If not null, "value to update" instead of creating a new instance

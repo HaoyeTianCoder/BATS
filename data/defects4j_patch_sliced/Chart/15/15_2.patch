@@ -1,0 +1,13 @@
+--- a/source/org/jfree/chart/plot/PiePlot.java
++++ b/source/org/jfree/chart/plot/PiePlot.java
+@@ -2048,8 +2051,10 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
+      
+         PiePlotState state = new PiePlotState(info);
+         state.setPassesRequired(2);
++        if (this.dataset != null) {
+             state.setTotal(DatasetUtilities.calculatePieDatasetTotal(
+                     plot.getDataset()));
++        }
+         state.setLatestAngle(plot.getStartAngle());
+         return state;
+         

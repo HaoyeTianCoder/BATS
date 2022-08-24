@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/rhino/jstype/RecordTypeBuilder.java
++++ b/src/com/google/javascript/rhino/jstype/RecordTypeBuilder.java
+@@ -89,7 +93,7 @@ public class RecordTypeBuilder {
+     }
+ 
+     return new RecordType(
+-        registry, Collections.unmodifiableMap(properties));
++        registry, Collections.unmodifiableMap(properties), isDeclared);
+   }
+ 
+   static class RecordProperty {

@@ -1,0 +1,28 @@
+--- a/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
++++ b/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
+@@ -573,18 +630,24 @@ class AnalyzePrototypeProperties implements CompilerPass {
+    */
+   static class AssignmentProperty implements Property {
+     private final Node exprNode;
++    private final Var rootVar;
+     private final JSModule module;
+ 
+     /**
+      * @param node An EXPR node.
+      */
+-    AssignmentProperty(Node node, JSModule module) {
++    AssignmentProperty(Node node, Var rootVar, JSModule module) {
+       this.exprNode = node;
++      this.rootVar = rootVar;
+       this.module = module;
+     }
+ 
+     @Override
++    public Var getRootVar() {
++      return rootVar;
++    }
+ 
++    @Override
+     public void remove() {
+       NodeUtil.removeChild(exprNode.getParent(), exprNode);
+     }

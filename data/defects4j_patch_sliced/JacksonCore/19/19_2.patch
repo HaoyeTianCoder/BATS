@@ -1,0 +1,13 @@
+--- a/src/main/java/com/fasterxml/jackson/core/json/UTF8StreamJsonParser.java
++++ b/src/main/java/com/fasterxml/jackson/core/json/UTF8StreamJsonParser.java
+@@ -1541,6 +1541,10 @@ public class UTF8StreamJsonParser
+ 
+         // And then see if we get other parts
+         if (c == INT_PERIOD) { // yes, fraction
++            if (outPtr >= outBuf.length) {
++                outBuf = _textBuffer.finishCurrentSegment();
++                outPtr = 0;
++            }
+             outBuf[outPtr++] = (char) c;
+ 
+             fract_loop:

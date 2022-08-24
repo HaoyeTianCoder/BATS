@@ -1,0 +1,12 @@
+--- a/src/main/java/org/joda/time/format/PeriodFormatterBuilder.java
++++ b/src/main/java/org/joda/time/format/PeriodFormatterBuilder.java
+@@ -1139,6 +1140,9 @@ public class PeriodFormatterBuilder {
+             if (iFieldType >= SECONDS_MILLIS) {
+                 int dp = (int) (Math.abs(valueLong) % DateTimeConstants.MILLIS_PER_SECOND);
+                 if (iFieldType == SECONDS_MILLIS || dp > 0) {
++                    if (valueLong < 0 && valueLong > -DateTimeConstants.MILLIS_PER_SECOND) {
++                        buf.insert(bufLen, '-');
++                    }
+                     buf.append('.');
+                     FormatUtils.appendPaddedInteger(buf, dp, 3);
+                 }

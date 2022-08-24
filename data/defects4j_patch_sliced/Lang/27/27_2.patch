@@ -1,0 +1,12 @@
+--- a/src/main/java/org/apache/commons/lang3/math/NumberUtils.java
++++ b/src/main/java/org/apache/commons/lang3/math/NumberUtils.java
+@@ -486,6 +486,9 @@ public class NumberUtils {
+             mant = str.substring(0, decPos);
+         } else {
+             if (expPos > -1) {
++                if (expPos > str.length()) {
++                    throw new NumberFormatException(str + " is not a valid number.");
++                }
+                 mant = str.substring(0, expPos);
+             } else {
+                 mant = str;

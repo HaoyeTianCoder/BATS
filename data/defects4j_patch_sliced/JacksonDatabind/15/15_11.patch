@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/std/StdSerializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/std/StdSerializer.java
+@@ -259,7 +259,7 @@ public abstract class StdSerializer<T>
+                     Converter<Object,Object> conv = provider.converterInstance(prop.getMember(), convDef);
+                     JavaType delegateType = conv.getOutputType(provider.getTypeFactory());
+                     // [databind#731]: Should skip if nominally java.lang.Object
+-                    if (existingSerializer == null) {
++                    if (existingSerializer == null && !delegateType.hasRawClass(Object.class)) {
+                         existingSerializer = provider.findValueSerializer(delegateType);
+                     }
+                     return new StdDelegatingSerializer(conv, delegateType, existingSerializer);

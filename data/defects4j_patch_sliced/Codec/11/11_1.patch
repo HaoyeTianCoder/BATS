@@ -1,0 +1,15 @@
+--- a/src/main/java/org/apache/commons/codec/net/QuotedPrintableCodec.java
++++ b/src/main/java/org/apache/commons/codec/net/QuotedPrintableCodec.java
+@@ -67,9 +67,12 @@ public class QuotedPrintableCodec implements BinaryEncoder, BinaryDecoder, Strin
+ 
+     private static final byte SPACE = 32;
+ 
++    private static final byte CR = 13;
+ 
++    private static final byte LF = 10;
+ 
+     /** Safe line length for quoted printable encoded text. */
++    private static final int SAFE_LENGTH = 73;
+ 
+     // Static initializer for printable chars collection
+     static {

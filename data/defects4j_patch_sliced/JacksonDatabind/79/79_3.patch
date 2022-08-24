@@ -1,0 +1,12 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/introspect/ObjectIdInfo.java
++++ b/src/main/java/com/fasterxml/jackson/databind/introspect/ObjectIdInfo.java
+@@ -60,6 +61,9 @@ public class ObjectIdInfo
+         _resolver = resolver;
+     }
+ 
++    public static ObjectIdInfo empty() {
++        return EMPTY;
++    }
+ 
+     public ObjectIdInfo withAlwaysAsId(boolean state) {
+         if (_alwaysAsId == state) {

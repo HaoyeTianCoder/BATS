@@ -1,0 +1,14 @@
+--- a/src/com/google/javascript/jscomp/FunctionTypeBuilder.java
++++ b/src/com/google/javascript/jscomp/FunctionTypeBuilder.java
+@@ -197,9 +198,9 @@ final class FunctionTypeBuilder {
+    */
+   FunctionTypeBuilder inferReturnType(@Nullable JSDocInfo info) {
+     returnType = info != null && info.hasReturnType() ?
+-        info.getReturnType().evaluate(scope, typeRegistry) :
+-        typeRegistry.getNativeType(UNKNOWN_TYPE);
++        info.getReturnType().evaluate(scope, typeRegistry) : null;
+     if (templateTypeName != null &&
++        returnType != null &&
+         returnType.restrictByNotNullOrUndefined().isTemplateType()) {
+       reportError(TEMPLATE_TYPE_EXPECTED, fnName);
+     }

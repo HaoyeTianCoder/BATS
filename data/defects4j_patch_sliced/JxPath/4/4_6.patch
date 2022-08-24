@@ -1,0 +1,20 @@
+--- a/src/java/org/apache/commons/jxpath/ri/model/jdom/JDOMNodePointer.java
++++ b/src/java/org/apache/commons/jxpath/ri/model/jdom/JDOMNodePointer.java
+@@ -433,12 +435,14 @@ public class JDOMNodePointer extends NodePointer {
+     }
+ 
+     protected String getLanguage() {
+-        Object n = node;
++        return findEnclosingAttribute(node, "lang", Namespace.XML_NAMESPACE);
++    }
++
++    protected static String findEnclosingAttribute(Object n, String attrName, Namespace ns) {
+         while (n != null) {
+             if (n instanceof Element) {
+                 Element e = (Element) n;
+-                String attr =
+-                    e.getAttributeValue("lang", Namespace.XML_NAMESPACE);
++                String attr = e.getAttributeValue(attrName, ns);
+                 if (attr != null && !attr.equals("")) {
+                     return attr;
+                 }

@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/AmbiguateProperties.java
++++ b/src/com/google/javascript/jscomp/AmbiguateProperties.java
+@@ -353,7 +352,7 @@ class AmbiguateProperties implements CompilerPass {
+       if (typesRelatedToSet.intersects(prop.typesSet)) {
+         return false;
+       }
+-      return !getRelated(prop.type).intersects(typesInSet);
++      return !prop.relatedTypesSet.intersects(typesInSet);
+     }
+ 
+     /**

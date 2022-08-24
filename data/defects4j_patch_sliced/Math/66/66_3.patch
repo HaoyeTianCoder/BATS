@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/math/optimization/univariate/BrentOptimizer.java
++++ b/src/main/java/org/apache/commons/math/optimization/univariate/BrentOptimizer.java
+@@ -91,8 +84,6 @@ public class BrentOptimizer extends AbstractUnivariateRealOptimizer {
+      * the function.
+      */
+     private double localMin(boolean isMinim,
+-                            UnivariateRealFunction f,
+-                            GoalType goalType,
+                             double lo, double mid, double hi,
+                             double eps, double t)
+         throws MaxIterationsExceededException, FunctionEvaluationException {

@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilder.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilder.java
+@@ -375,7 +375,7 @@ public class HtmlTreeBuilder extends TreeBuilder {
+     private void clearStackToContext(String... nodeNames) {
+         for (int pos = stack.size() -1; pos >= 0; pos--) {
+             Element next = stack.get(pos);
+-            if (StringUtil.in(next.nodeName(), nodeNames) || next.nodeName().equals("html"))
++            if (StringUtil.in(next.normalName(), nodeNames) || next.normalName().equals("html"))
+                 break;
+             else
+                 stack.remove(pos);

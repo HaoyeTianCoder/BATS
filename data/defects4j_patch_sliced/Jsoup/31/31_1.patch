@@ -1,0 +1,10 @@
+--- a/src/main/java/org/jsoup/parser/Token.java
++++ b/src/main/java/org/jsoup/parser/Token.java
+@@ -168,6 +168,7 @@ abstract class Token {
+ 
+     static class Comment extends Token {
+         final StringBuilder data = new StringBuilder();
++        boolean bogus = false;
+ 
+         Comment() {
+             type = TokenType.Comment;

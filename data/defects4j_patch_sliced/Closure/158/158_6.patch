@@ -1,0 +1,22 @@
+--- a/src/com/google/javascript/jscomp/CommandLineRunner.java
++++ b/src/com/google/javascript/jscomp/CommandLineRunner.java
+@@ -228,16 +231,19 @@ public class CommandLineRunner extends
+     private String create_source_map = "";
+ 
+     @Option(name = "--jscomp_error",
++        handler = WarningGuardErrorOptionHandler.class,
+         usage = "Make the named class of warnings an error. Options:" +
+         DiagnosticGroups.DIAGNOSTIC_GROUP_NAMES)
+     private List<String> jscomp_error = Lists.newArrayList();
+ 
+     @Option(name = "--jscomp_warning",
++        handler = WarningGuardWarningOptionHandler.class,
+         usage = "Make the named class of warnings a normal warning. " +
+         "Options:" + DiagnosticGroups.DIAGNOSTIC_GROUP_NAMES)
+     private List<String> jscomp_warning = Lists.newArrayList();
+ 
+     @Option(name = "--jscomp_off",
++        handler = WarningGuardOffOptionHandler.class,
+         usage = "Turn off the named class of warnings. Options:" +
+         DiagnosticGroups.DIAGNOSTIC_GROUP_NAMES)
+     private List<String> jscomp_off = Lists.newArrayList();

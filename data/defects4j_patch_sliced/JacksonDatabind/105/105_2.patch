@@ -1,0 +1,12 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/std/JdkDeserializers.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/std/JdkDeserializers.java
+@@ -45,6 +46,9 @@ public class JdkDeserializers
+             if (rawType == ByteBuffer.class) {
+                 return new ByteBufferDeserializer();
+             }
++            if (rawType == Void.class) {
++                return NullifyingDeserializer.instance;
++            }
+         }
+         return null;
+     }

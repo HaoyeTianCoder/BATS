@@ -1,0 +1,25 @@
+--- a/src/com/google/javascript/jscomp/MakeDeclaredNamesUnique.java
++++ b/src/com/google/javascript/jscomp/MakeDeclaredNamesUnique.java
+@@ -127,11 +119,22 @@ class MakeDeclaredNamesUnique
+             renamer.addDeclaredName(name);
+           }
+ 
++          nameStack.push(renamer);
++        }
++        break;
+ 
++      case Token.LP: {
++          Renamer renamer = nameStack.peek().forChildScope();
+ 
+           // Add the function parameters
++          for (Node c = n.getFirstChild(); c != null; c = c.getNext()) {
++            String name = c.getString();
++            renamer.addDeclaredName(name);
++          }
+ 
+           // Add the function body declarations
++          Node functionBody = n.getNext();
++          findDeclaredNames(functionBody, null, renamer);
+ 
+           nameStack.push(renamer);
+         }

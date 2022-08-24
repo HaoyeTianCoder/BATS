@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/introspect/POJOPropertyBuilder.java
++++ b/src/main/java/com/fasterxml/jackson/databind/introspect/POJOPropertyBuilder.java
+@@ -680,6 +680,7 @@ public class POJOPropertyBuilder
+                 _setters = _removeNonVisible(_setters);
+             }
+         }
++        return acc;
+     }
+ 
+     /**

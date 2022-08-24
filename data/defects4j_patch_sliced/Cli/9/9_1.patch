@@ -1,0 +1,14 @@
+--- a/src/java/org/apache/commons/cli/Parser.java
++++ b/src/java/org/apache/commons/cli/Parser.java
+@@ -317,9 +317,10 @@ public abstract class Parser implements CommandLineParser {
+             while (iter.hasNext())
+             {
+                 buff.append(iter.next());
++                buff.append(", ");
+             }
+ 
+-            throw new MissingOptionException(buff.toString());
++            throw new MissingOptionException(buff.substring(0, buff.length() - 2));
+         }
+     }
+ 

@@ -1,0 +1,11 @@
+--- a/src/java/org/apache/commons/cli/CommandLine.java
++++ b/src/java/org/apache/commons/cli/CommandLine.java
+@@ -66,7 +64,7 @@ public class CommandLine {
+      */
+     public boolean hasOption(String opt)
+     {
+-        return options.containsKey(opt);
++        return options.contains( resolveOption(opt));
+     }
+ 
+     /** 

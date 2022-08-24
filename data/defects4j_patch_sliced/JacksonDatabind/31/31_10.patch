@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/util/TokenBuffer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/util/TokenBuffer.java
+@@ -834,7 +834,7 @@ sb.append("NativeObjectIds=").append(_hasNativeObjectIds).append(",");
+              *   err out, or just embed? For now, do latter.
+              */
+ //          throw new JsonMappingException("No ObjectCodec configured for TokenBuffer, writeObject() called");
+-            _append(JsonToken.VALUE_EMBEDDED_OBJECT, value);
++            _appendValue(JsonToken.VALUE_EMBEDDED_OBJECT, value);
+         } else {
+             _objectCodec.writeValue(this, value);
+         }

@@ -1,0 +1,12 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/std/JsonValueSerializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/std/JsonValueSerializer.java
+@@ -223,7 +225,8 @@ public class JsonValueSerializer
+             // 28-Sep-2016, tatu: As per [databind#1385], we do need to do some juggling
+             //    to use different Object for type id (logical type) and actual serialization
+             //    (delegat type).
+-            ser.serializeWithType(value, gen, provider, typeSer0);
++            TypeSerializerRerouter rr = new TypeSerializerRerouter(typeSer0, bean);
++            ser.serializeWithType(value, gen, provider, rr);
+         } catch (IOException ioe) {
+             throw ioe;
+         } catch (Exception e) {

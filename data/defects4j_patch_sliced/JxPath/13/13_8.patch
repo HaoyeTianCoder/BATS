@@ -1,0 +1,10 @@
+--- a/src/java/org/apache/commons/jxpath/ri/model/dom/DOMNodePointer.java
++++ b/src/java/org/apache/commons/jxpath/ri/model/dom/DOMNodePointer.java
+@@ -26,6 +26,7 @@ import org.apache.commons.jxpath.JXPathContext;
+ import org.apache.commons.jxpath.JXPathException;
+ import org.apache.commons.jxpath.Pointer;
+ import org.apache.commons.jxpath.ri.Compiler;
++import org.apache.commons.jxpath.ri.NamespaceResolver;
+ import org.apache.commons.jxpath.ri.QName;
+ import org.apache.commons.jxpath.ri.compiler.NodeNameTest;
+ import org.apache.commons.jxpath.ri.compiler.NodeTest;

@@ -1,0 +1,14 @@
+--- a/src/main/java/com/fasterxml/jackson/core/io/NumberInput.java
++++ b/src/main/java/com/fasterxml/jackson/core/io/NumberInput.java
+@@ -292,7 +292,11 @@ public final class NumberInput
+ 
+     public static BigDecimal parseBigDecimal(String numStr) throws NumberFormatException
+     {
++        try {
+             return new BigDecimal(numStr);
++        } catch (NumberFormatException e) {
++            throw _badBigDecimal(numStr);
++        }
+     }
+ 
+     public static BigDecimal parseBigDecimal(char[] buffer) throws NumberFormatException {

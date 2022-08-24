@@ -1,0 +1,10 @@
+--- a/source/org/jfree/data/statistics/DefaultBoxAndWhiskerCategoryDataset.java
++++ b/source/org/jfree/data/statistics/DefaultBoxAndWhiskerCategoryDataset.java
+@@ -185,6 +186,7 @@ public class DefaultBoxAndWhiskerCategoryDataset extends AbstractDataset
+                 this.minimumRangeValueRow = r;
+                 this.minimumRangeValueColumn = c;
+             }
++        }
+         
+         this.rangeBounds = new Range(this.minimumRangeValue,
+               this.maximumRangeValue);

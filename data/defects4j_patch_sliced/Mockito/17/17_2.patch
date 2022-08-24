@@ -1,0 +1,11 @@
+--- a/src/org/mockito/internal/creation/MockSettingsImpl.java
++++ b/src/org/mockito/internal/creation/MockSettingsImpl.java
+@@ -71,7 +73,7 @@ public class MockSettingsImpl implements MockSettings {
+     }
+ 
+     public boolean isSerializable() {
+-        return extraInterfaces != null && java.util.Arrays.asList(extraInterfaces).contains(java.io.Serializable.class);
++        return serializable;
+     }
+ 
+     public void initiateMockName(Class classToMock) {

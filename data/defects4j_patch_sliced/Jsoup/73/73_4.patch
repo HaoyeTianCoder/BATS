@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/helper/W3CDom.java
++++ b/src/main/java/org/jsoup/helper/W3CDom.java
+@@ -141,7 +145,7 @@ public class W3CDom {
+                 } else {
+                     continue;
+                 }
+-                namespaces.put(prefix, attr.getValue());
++                namespacesStack.peek().put(prefix, attr.getValue());
+             }
+ 
+             // get the element prefix if any

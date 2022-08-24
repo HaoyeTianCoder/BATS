@@ -1,0 +1,12 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/util/StdDateFormat.java
++++ b/src/main/java/com/fasterxml/jackson/databind/util/StdDateFormat.java
+@@ -554,6 +562,9 @@ public class StdDateFormat
+                 df.setTimeZone(tz);
+             }
+         }
++        if (lenient != null) {
++            df.setLenient(lenient.booleanValue());
++        }
+         return df;
+     }
+ 

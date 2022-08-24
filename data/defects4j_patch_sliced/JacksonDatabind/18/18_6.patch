@@ -1,0 +1,39 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/MappingIterator.java
++++ b/src/main/java/com/fasterxml/jackson/databind/MappingIterator.java
+@@ -207,25 +228,28 @@ public class MappingIterator<T> implements Iterator<T>, Closeable
+      */
+     public boolean hasNextValue() throws IOException
+     {
+-        if (_parser == null) {
++        switch (_state) {
++        case STATE_CLOSED:
+             return false;
++        case STATE_NEED_RESYNC:
++            _resync();
+             // fall-through
+-        }
+-        if (!_hasNextChecked) {
++        case STATE_MAY_HAVE_VALUE:
+             JsonToken t = _parser.getCurrentToken();
+-            _hasNextChecked = true;
+             if (t == null) { // un-initialized or cleared; find next
+                 t = _parser.nextToken();
+                 // If EOF, no more, or if we hit END_ARRAY (although we don't clear the token).
+                 if (t == null || t == JsonToken.END_ARRAY) {
+-                    JsonParser jp = _parser;
+-                    _parser = null;
+-                    if (_closeParser) {
+-                        jp.close();
++                    _state = STATE_CLOSED;
++                    if (_closeParser && (_parser != null)) {
++                        _parser.close();
+                     }
+                     return false;
+                 }
+             }
++            _state = STATE_HAS_VALUE;
++            return true;
++        case STATE_HAS_VALUE:
+             // fall through
+         }
+         return true;

@@ -1,0 +1,14 @@
+--- a/src/java/org/apache/commons/cli2/commandline/WriteableCommandLineImpl.java
++++ b/src/java/org/apache/commons/cli2/commandline/WriteableCommandLineImpl.java
+@@ -71,6 +71,11 @@ public class WriteableCommandLineImpl
+         }
+ 
+         // ensure that all parent options are also added
++        Option parent = option.getParent();
++        while (parent != null && !options.contains(parent)) {
++            options.add(parent);
++            parent = parent.getParent();
++        }
+     }
+ 
+     public void addValue(final Option option,

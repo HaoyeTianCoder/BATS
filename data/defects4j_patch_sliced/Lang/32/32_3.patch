@@ -1,0 +1,14 @@
+--- a/src/main/java/org/apache/commons/lang3/builder/HashCodeBuilder.java
++++ b/src/main/java/org/apache/commons/lang3/builder/HashCodeBuilder.java
+@@ -519,6 +515,11 @@ public class HashCodeBuilder {
+      *            The object to register.
+      */
+     static void register(Object value) {
++        synchronized (HashCodeBuilder.class) {
++            if (getRegistry() == null) {
++                REGISTRY.set(new HashSet<IDKey>());
++            }
++        }
+         getRegistry().add(new IDKey(value));
+     }
+ 

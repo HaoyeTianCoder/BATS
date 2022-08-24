@@ -1,0 +1,14 @@
+--- a/src/main/java/org/jsoup/helper/DataUtil.java
++++ b/src/main/java/org/jsoup/helper/DataUtil.java
+@@ -133,6 +134,11 @@ public final class DataUtil {
+                 XmlDeclaration decl = null;
+                 if (first instanceof XmlDeclaration)
+                     decl = (XmlDeclaration) first;
++                else if (first instanceof Comment) {
++                    Comment comment = (Comment) first;
++                    if (comment.isXmlDeclaration())
++                        decl = comment.asXmlDeclaration();
++                }
+                 if (decl != null) {
+                     if (decl.name().equalsIgnoreCase("xml"))
+                         foundCharset = decl.attr("encoding");

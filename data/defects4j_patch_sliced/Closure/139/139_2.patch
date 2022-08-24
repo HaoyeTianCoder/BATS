@@ -1,0 +1,16 @@
+--- a/src/com/google/javascript/jscomp/Normalize.java
++++ b/src/com/google/javascript/jscomp/Normalize.java
+@@ -289,6 +292,13 @@ class Normalize implements CompilerPass {
+      * to:
+      *    var f = function () {};
+      */
++    private void normalizeFunctionDeclaration(Node n) {
++      Preconditions.checkState(n.getType() == Token.FUNCTION);
++      if (!NodeUtil.isFunctionAnonymous(n)
++          && !NodeUtil.isHoistedFunctionDeclaration(n)) {
++        rewriteFunctionDeclaration(n);
++      }
++    }
+ 
+     /**
+      * Rewrite the function declaration from:

@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/BasicSerializerFactory.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/BasicSerializerFactory.java
+@@ -828,7 +846,7 @@ public abstract class BasicSerializerFactory
+      * Helper method that handles configuration details when constructing serializers for
+      * <code>Object[]</code> (and subtypes, except for String).
+      */
+-    protected JsonSerializer<?> buildArraySerializer(SerializationConfig config,
++    protected JsonSerializer<?> buildArraySerializer(SerializerProvider prov,
+             ArrayType type, BeanDescription beanDesc,
+             boolean staticTyping,
+             TypeSerializer elementTypeSerializer, JsonSerializer<Object> elementValueSerializer)

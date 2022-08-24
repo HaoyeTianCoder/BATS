@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/Normalize.java
++++ b/src/com/google/javascript/jscomp/Normalize.java
+@@ -678,7 +686,7 @@ class Normalize implements CompilerPass {
+       } else if (parent.getType() == Token.VAR) {
+         Preconditions.checkState(parent.hasOneChild());
+ 
+-        replaceVarWithAssignment(n, parent, gramps);
++        replaceVarWithAssignment(n, parent, parent.getParent());
+       }
+     }
+ 

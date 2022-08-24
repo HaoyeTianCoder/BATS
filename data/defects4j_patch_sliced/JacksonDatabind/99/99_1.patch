@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/type/ReferenceType.java
++++ b/src/main/java/com/fasterxml/jackson/databind/type/ReferenceType.java
+@@ -166,6 +166,7 @@ public class ReferenceType extends SimpleType
+         sb.append(_class.getName());
+         sb.append('<');
+         sb.append(_referencedType.toCanonical());
++        sb.append('>');
+         return sb.toString();
+     }
+ 

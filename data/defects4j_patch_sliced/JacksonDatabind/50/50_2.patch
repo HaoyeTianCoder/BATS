@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializer.java
+@@ -384,6 +385,7 @@ public class BeanDeserializer
+         TokenBuffer unknown = null;
+ 
+         JsonToken t = p.getCurrentToken();
++        List<BeanReferring> referrings = null;
+         for (; t == JsonToken.FIELD_NAME; t = p.nextToken()) {
+             String propName = p.getCurrentName();
+             p.nextToken(); // to point to value

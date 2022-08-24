@@ -1,0 +1,11 @@
+--- a/src/java/org/apache/commons/cli/CommandLine.java
++++ b/src/java/org/apache/commons/cli/CommandLine.java
+@@ -306,7 +306,7 @@ public class CommandLine {
+      */
+     public Option[] getOptions()
+     {
+-        Collection processed = options.values();
++        Collection processed = options;
+ 
+         // reinitialise array
+         Option[] optionsArray = new Option[processed.size()];

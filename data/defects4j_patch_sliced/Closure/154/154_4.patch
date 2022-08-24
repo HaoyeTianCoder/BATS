@@ -1,0 +1,16 @@
+--- a/src/com/google/javascript/jscomp/TypeValidator.java
++++ b/src/com/google/javascript/jscomp/TypeValidator.java
+@@ -107,6 +107,13 @@ class TypeValidator {
+           "JSC_INTERFACE_METHOD_NOT_IMPLEMENTED",
+           "property {0} on interface {1} is not implemented by type {2}");
+ 
++  static final DiagnosticType HIDDEN_INTERFACE_PROPERTY_MISMATCH =
++      DiagnosticType.warning(
++        "JSC_HIDDEN_INTERFACE_PROPERTY_MISMATCH",
++        "mismatch of the {0} property type and the type " +
++        "of the property it overrides from interface {1}\n" +
++        "original: {2}\n" +
++        "override: {3}");
+ 
+   static final DiagnosticGroup ALL_DIAGNOSTICS = new DiagnosticGroup(
+       INVALID_CAST,

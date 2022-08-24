@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/dump/DumpArchiveInputStream.java
++++ b/src/main/java/org/apache/commons/compress/archivers/dump/DumpArchiveInputStream.java
+@@ -77,6 +77,7 @@ public class DumpArchiveInputStream extends ArchiveInputStream {
+     private final ZipEncoding zipEncoding;
+ 
+     // the provided encoding (for unit tests)
++    final String encoding;
+ 
+     /**
+      * Constructor using the platform's default encoding for file

@@ -1,0 +1,17 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/BasicSerializerFactory.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/BasicSerializerFactory.java
+@@ -734,12 +748,13 @@ public abstract class BasicSerializerFactory
+      * Helper method that handles configuration details when constructing serializers for
+      * {@link java.util.Map} types.
+      */
+-    protected JsonSerializer<?> buildMapSerializer(SerializationConfig config,
++    protected JsonSerializer<?> buildMapSerializer(SerializerProvider prov,
+             MapType type, BeanDescription beanDesc,
+             boolean staticTyping, JsonSerializer<Object> keySerializer,
+             TypeSerializer elementTypeSerializer, JsonSerializer<Object> elementValueSerializer)
+         throws JsonMappingException
+     {
++        final SerializationConfig config = prov.getConfig();
+         JsonSerializer<?> ser = null;
+ 
+         // Order of lookups:

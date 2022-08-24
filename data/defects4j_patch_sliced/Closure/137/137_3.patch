@@ -1,0 +1,24 @@
+--- a/src/com/google/javascript/jscomp/MakeDeclaredNamesUnique.java
++++ b/src/com/google/javascript/jscomp/MakeDeclaredNamesUnique.java
+@@ -232,16 +233,18 @@ class MakeDeclaredNamesUnique
+   /**
+    * Inverts the transformation by {@link ContextualRenamer}, when possible.
+    */
+-  static class ContextualRenameInverter extends AbstractPostOrderCallback
+-      implements CompilerPass {
++  static class ContextualRenameInverter
++      implements ScopedCallback, CompilerPass {
+     private final AbstractCompiler compiler;
+ 
+     // The set of names referenced in the current scope.
++    private Set<String> referencedNames = ImmutableSet.of();
+ 
+     // Stack reference sets.
++    private Deque<Set<String>> referenceStack = new ArrayDeque<Set<String>>();
+ 
+     // Name are globally unique initially, so we don't need a per-scope map.
+-    private Map<Var, String> nameMap = Maps.newHashMap();
++    private Map<String, List<Node>> nameMap = Maps.newHashMap();
+ 
+     private ContextualRenameInverter(AbstractCompiler compiler) {
+       this.compiler = compiler;

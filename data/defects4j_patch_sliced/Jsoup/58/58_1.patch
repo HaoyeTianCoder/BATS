@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/Jsoup.java
++++ b/src/main/java/org/jsoup/Jsoup.java
+@@ -247,7 +247,7 @@ public class Jsoup {
+      @see #clean(String, org.jsoup.safety.Whitelist) 
+      */
+     public static boolean isValid(String bodyHtml, Whitelist whitelist) {
+-        return new Cleaner(whitelist).isValid(parseBodyFragment(bodyHtml, ""));
++        return new Cleaner(whitelist).isValidBodyHtml(bodyHtml);
+     }
+     
+ }

@@ -1,0 +1,27 @@
+--- a/src/java/org/apache/commons/jxpath/ri/axes/AttributeContext.java
++++ b/src/java/org/apache/commons/jxpath/ri/axes/AttributeContext.java
+@@ -72,12 +75,20 @@ public class AttributeContext extends EvalContext {
+         super.setPosition(getCurrentPosition() + 1);
+         if (!setStarted) {
+             setStarted = true;
+-            if (!(nodeTest instanceof NodeNameTest)) {
++            NodeNameTest nodeNameTest = null;
++            if (nodeTest instanceof NodeTypeTest) {
++                if (((NodeTypeTest) nodeTest).getNodeType() == Compiler.NODE_TYPE_NODE) {
++                    nodeNameTest = WILDCARD_TEST;
++                }
++            }
++            else if (nodeTest instanceof NodeNameTest) {
++                nodeNameTest = (NodeNameTest) nodeTest;
++            }
++            if (nodeNameTest == null) {
+                 return false;
+             }
+-            QName name = ((NodeNameTest) nodeTest).getNodeName();
+-            iterator =
+-                parentContext.getCurrentNodePointer().attributeIterator(name);
++            iterator = parentContext.getCurrentNodePointer().attributeIterator(
++                    nodeNameTest.getNodeName());
+         }
+         if (iterator == null) {
+             return false;

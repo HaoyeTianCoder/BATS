@@ -1,0 +1,13 @@
+--- a/src/java/org/apache/commons/cli/PosixParser.java
++++ b/src/java/org/apache/commons/cli/PosixParser.java
+@@ -210,10 +210,6 @@ public class PosixParser extends Parser {
+             tokens.add(value);
+         }
+     }
+-    private void processSingleHyphen(String hyphen)
+-    {
+-        tokens.add(hyphen);
+-    }
+ 
+     /**
+      * <p>If an {@link Option} exists for <code>token</code> then

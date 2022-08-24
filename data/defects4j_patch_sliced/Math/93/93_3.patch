@@ -1,0 +1,12 @@
+--- a/src/java/org/apache/commons/math/util/MathUtils.java
++++ b/src/java/org/apache/commons/math/util/MathUtils.java
+@@ -394,6 +399,9 @@ public final class MathUtils {
+         if (n < 0) {
+             throw new IllegalArgumentException("must have n > 0 for n!");
+         }
++        if (n < 21) {
++            return Math.log(factorial(n));
++        }
+         double logSum = 0;
+         for (int i = 2; i <= n; i++) {
+             logSum += Math.log((double)i);

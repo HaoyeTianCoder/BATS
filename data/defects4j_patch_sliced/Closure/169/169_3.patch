@@ -1,0 +1,18 @@
+--- a/src/com/google/javascript/rhino/jstype/ArrowType.java
++++ b/src/com/google/javascript/rhino/jstype/ArrowType.java
+@@ -201,12 +201,12 @@ final class ArrowType extends JSType {
+   }
+ 
+   boolean checkArrowEquivalenceHelper(
+-      ArrowType that, boolean tolerateUnknowns) {
++      ArrowType that, EquivalenceMethod eqMethod) {
+     // Please keep this method in sync with the hashCode() method below.
+-    if (!returnType.checkEquivalenceHelper(that.returnType, tolerateUnknowns)) {
++    if (!returnType.checkEquivalenceHelper(that.returnType, eqMethod)) {
+       return false;
+     }
+-    return hasEqualParameters(that, tolerateUnknowns);
++    return hasEqualParameters(that, eqMethod);
+   }
+ 
+   @Override

@@ -1,0 +1,31 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/MappingIterator.java
++++ b/src/main/java/com/fasterxml/jackson/databind/MappingIterator.java
+@@ -349,8 +379,28 @@ public class MappingIterator<T> implements Iterator<T>, Closeable
+     /**********************************************************
+      */
+ 
++    protected void _resync() throws IOException
++    {
++        final JsonParser p = _parser;
+         // First, a quick check to see if we might have been lucky and no re-sync needed
++        if (p.getParsingContext() == _seqContext) {
++            return;
++        }
+ 
++        while (true) {
++            JsonToken t = p.nextToken();
++            if ((t == JsonToken.END_ARRAY) || (t == JsonToken.END_OBJECT)) {
++                if (p.getParsingContext() == _seqContext) {
++                    p.clearCurrentToken();
++                    return;
++                }
++            } else if ((t == JsonToken.START_ARRAY) || (t == JsonToken.START_OBJECT)) {
++                p.skipChildren();
++            } else if (t == null) {
++                return;
++            }
++        }
++    }
+ 
+     protected <R> R _throwNoSuchElement() {
+         throw new NoSuchElementException();

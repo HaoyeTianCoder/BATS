@@ -1,0 +1,12 @@
+--- a/src/main/java/org/apache/commons/math/geometry/euclidean/threed/Rotation.java
++++ b/src/main/java/org/apache/commons/math/geometry/euclidean/threed/Rotation.java
+@@ -341,7 +341,8 @@ public class Rotation implements Serializable {
+   Vector3D k     = v1Su1.crossProduct(v2Su2);
+   Vector3D u3    = u1.crossProduct(u2);
+   double c       = k.dotProduct(u3);
+-  if (c == 0) {
++  final double inPlaneThreshold = 0.001;
++  if (c <= inPlaneThreshold * k.getNorm() * u3.getNorm()) {
+     // the (q1, q2, q3) vector is close to the (u1, u2) plane
+     // we try other vectors
+     Vector3D v3 = Vector3D.crossProduct(v1, v2);

@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/JsonMappingException.java
++++ b/src/main/java/com/fasterxml/jackson/databind/JsonMappingException.java
+@@ -336,7 +337,7 @@ public class JsonMappingException
+         return new JsonMappingException(null,
+                 String.format("Unexpected IOException (of type %s): %s",
+                         src.getClass().getName(),
+-                        src.getMessage()));
++                        ClassUtil.exceptionMessage(src)));
+     }
+ 
+     /**

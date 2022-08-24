@@ -1,0 +1,16 @@
+--- a/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
++++ b/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
+@@ -662,10 +731,11 @@ class AnalyzePrototypeProperties implements CompilerPass {
+ 
+     // If this is a function context, then scope will be the scope of the
+     // corresponding function. Otherwise, it will be null.
+-    Scope scope;
++    final Scope scope;
+ 
+-    NameContext(NameInfo name) {
++    NameContext(NameInfo name, Scope scope) {
+       this.name = name;
++      this.scope = scope;
+     }
+   }
+ 

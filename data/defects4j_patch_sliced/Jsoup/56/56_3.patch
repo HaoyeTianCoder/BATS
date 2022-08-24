@@ -1,0 +1,19 @@
+--- a/src/main/java/org/jsoup/nodes/DocumentType.java
++++ b/src/main/java/org/jsoup/nodes/DocumentType.java
+@@ -38,7 +42,16 @@ public class DocumentType extends Node {
+      * @param systemId the doctype's system ID
+      * @param baseUri the doctype's base URI
+      */
++    public DocumentType(String name, String pubSysKey, String publicId, String systemId, String baseUri) {
++        super(baseUri);
+ 
++        attr(NAME, name);
++        if (pubSysKey != null) {
++            attr(PUB_SYS_KEY, pubSysKey);
++        }
++        attr(PUBLIC_ID, publicId);
++        attr(SYSTEM_ID, systemId);
++    }
+ 
+     @Override
+     public String nodeName() {

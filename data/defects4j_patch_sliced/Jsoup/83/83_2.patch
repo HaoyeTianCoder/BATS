@@ -1,0 +1,12 @@
+--- a/src/main/java/org/jsoup/parser/TokeniserState.java
++++ b/src/main/java/org/jsoup/parser/TokeniserState.java
+@@ -158,6 +158,9 @@ enum TokeniserState {
+                 case '/':
+                     t.transition(SelfClosingStartTag);
+                     break;
++                case '<': // NOTE: out of spec, but clear author intent
++                    t.error(this);
++                    r.unconsume();
+                     // intended fall through to next >
+                 case '>':
+                     t.emitTagPending();

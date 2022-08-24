@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
++++ b/src/com/google/javascript/jscomp/AnalyzePrototypeProperties.java
+@@ -389,7 +431,7 @@ class AnalyzePrototypeProperties implements CompilerPass {
+           isGlobalFunctionDeclaration(t, firstChild)) {
+         String name = nameNode.getString();
+         getNameInfoForName(name, VAR).getDeclarations().add(
+-            new GlobalFunction(nameNode, parent, gramps, t.getModule()));
++            new GlobalFunction(nameNode, v, t.getModule()));
+ 
+         // If the function name is exported, we should create an edge here
+         // so that it's never removed.

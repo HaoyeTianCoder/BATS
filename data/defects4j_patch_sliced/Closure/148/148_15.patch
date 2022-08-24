@@ -1,0 +1,28 @@
+--- a/src/com/google/javascript/jscomp/SourceMap.java
++++ b/src/com/google/javascript/jscomp/SourceMap.java
+@@ -438,24 +531,8 @@ public class SourceMap {
+       // mappings in the reverse order of when they encountered.
+       while (!stack.isEmpty()) {
+         Mapping m = stack.pop();
+-        writeClosedMapping(m);
+-      }
+-      closeLine();
+-    }
+-    private void openLine() throws IOException {
+-      out.append("[");
+-      this.firstChar = true;
+-    }
+-    private void closeLine() throws IOException {
+-      out.append("]\n");
+-    }
+-    private void addCharEntry(String id) throws IOException {
+-      if (firstChar) {
+-        firstChar = false;
+-      } else {
+-        out.append(",");
++        maybeVisit(v, m);
+       }
+-      out.append(id);
+     }
+ 
+     /**

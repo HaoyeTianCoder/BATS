@@ -1,0 +1,12 @@
+--- a/src/com/google/javascript/jscomp/parsing/JsDocInfoParser.java
++++ b/src/com/google/javascript/jscomp/parsing/JsDocInfoParser.java
+@@ -1411,9 +1426,6 @@ public final class JsDocInfoParser {
+             return new ExtractionInfo(multilineText, token);
+           }
+ 
+-          if (builder.length() > 0) {
+-            builder.append(' ');
+-          }
+           builder.append(toString(token));
+ 
+           line = stream.getRemainingJSDocLine();

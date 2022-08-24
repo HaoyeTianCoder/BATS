@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/parsing/JsDocInfoParser.java
++++ b/src/com/google/javascript/jscomp/parsing/JsDocInfoParser.java
+@@ -1379,6 +1381,7 @@ public final class JsDocInfoParser {
+           }
+ 
+           ignoreStar = true;
++          lineStartChar = 0;
+           token = next();
+           continue;
+ 

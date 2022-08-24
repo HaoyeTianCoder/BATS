@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/ScopedAliases.java
++++ b/src/com/google/javascript/jscomp/ScopedAliases.java
+@@ -313,6 +314,7 @@ class ScopedAliases implements HotSwapCompilerPass {
+ 
+       if (t.getScopeDepth() == 2) {
+         renameNamespaceShadows(t);
++        injectedDecls.clear();
+         aliases.clear();
+         forbiddenLocals.clear();
+         transformation = null;

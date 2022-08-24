@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/compress/archivers/tar/TarArchiveInputStream.java
++++ b/src/main/java/org/apache/commons/compress/archivers/tar/TarArchiveInputStream.java
+@@ -139,6 +140,7 @@ public class TarArchiveInputStream extends ArchiveInputStream {
+                                  String encoding) {
+         this.is = is;
+         this.hasHitEOF = false;
++        this.encoding = encoding;
+         this.zipEncoding = ZipEncodingHelper.getZipEncoding(encoding);
+         this.recordSize = recordSize;
+         this.blockSize = blockSize;

@@ -1,0 +1,15 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializerBase.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializerBase.java
+@@ -1231,10 +1233,10 @@ public abstract class BeanDeserializerBase
+             }
+             return _valueInstantiator.createFromInt(ctxt, p.getIntValue());
+         case LONG:
+-            if (_delegateDeserializer != null) {
++            if (delegateDeser != null) {
+                 if (!_valueInstantiator.canCreateFromInt()) {
+                     Object bean = _valueInstantiator.createUsingDelegate(ctxt,
+-                            _delegateDeserializer.deserialize(p, ctxt));
++                            delegateDeser.deserialize(p, ctxt));
+                     if (_injectables != null) {
+                         injectValues(ctxt, bean);
+                     }

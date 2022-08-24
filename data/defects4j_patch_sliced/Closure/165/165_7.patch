@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/rhino/jstype/RecordType.java
++++ b/src/com/google/javascript/rhino/jstype/RecordType.java
+@@ -149,6 +163,7 @@ class RecordType extends PrototypeObjectType {
+     if (that.isRecordType()) {
+       RecordType thatRecord = that.toMaybeRecordType();
+       RecordTypeBuilder builder = new RecordTypeBuilder(registry);
++      builder.setSynthesized(true);
+ 
+       // The greatest subtype consists of those *unique* properties of both
+       // record types. If any property conflicts, then the NO_TYPE type

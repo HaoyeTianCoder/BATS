@@ -1,0 +1,10 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/impl/JavaUtilCollectionsDeserializers.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/impl/JavaUtilCollectionsDeserializers.java
+@@ -44,6 +44,7 @@ public abstract class JavaUtilCollectionsDeserializers
+     /* 02-Mar-2019, tatu: for [databind#2265], need to consider possible alternate type...
+      *    which we essentially coerce into the other one
+      */
++    private final static Class<?> CLASS_UNMODIFIABLE_LIST_ALIAS;
+     private final static Class<?> CLASS_UNMODIFIABLE_MAP;
+ 
+     static {

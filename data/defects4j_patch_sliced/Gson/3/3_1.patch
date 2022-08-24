@@ -1,0 +1,13 @@
+--- a/gson/src/main/java/com/google/gson/internal/ConstructorConstructor.java
++++ b/gson/src/main/java/com/google/gson/internal/ConstructorConstructor.java
+@@ -33,6 +33,10 @@ import java.util.SortedMap;
+ import java.util.SortedSet;
+ import java.util.TreeMap;
+ import java.util.TreeSet;
++import java.util.concurrent.ConcurrentHashMap;
++import java.util.concurrent.ConcurrentMap;
++import java.util.concurrent.ConcurrentNavigableMap;
++import java.util.concurrent.ConcurrentSkipListMap;
+ 
+ import com.google.gson.InstanceCreator;
+ import com.google.gson.JsonIOException;

@@ -1,0 +1,24 @@
+--- a/src/main/java/org/jsoup/select/Selector.java
++++ b/src/main/java/org/jsoup/select/Selector.java
+@@ -396,6 +406,21 @@ public class Selector {
+     }
+ 
+     // exclude set. package open so that Elements can implement .not() selector.
++    static Elements filterOut(Collection<Element> elements, Collection<Element> outs) {
++        Elements output = new Elements();
++        for (Element el: elements) {
++            boolean found = false;
++            for (Element out: outs) {
++                if (el.equals(out)) {
++                    found = true;
++                    break;
++                }
++            }
++            if (!found)
++                output.add(el);
++        }
++        return output;
++    }
+ 
+     public static class SelectorParseException extends IllegalStateException {
+         public SelectorParseException(String msg, Object... params) {

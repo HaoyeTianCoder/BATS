@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/select/Selector.java
++++ b/src/main/java/org/jsoup/select/Selector.java
+@@ -136,7 +136,7 @@ public class Selector {
+     
+     private void combinator(char combinator) {
+         tq.consumeWhitespace();
+-        String subQuery = tq.consumeToAny(combinators);
++        String subQuery = consumeSubQuery(); // support multi > childs
+         
+         Elements output;
+         if (combinator == '>')

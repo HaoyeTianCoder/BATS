@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/compress/utils/BitInputStream.java
++++ b/src/main/java/org/apache/commons/compress/utils/BitInputStream.java
+@@ -82,7 +82,7 @@ public class BitInputStream implements Closeable {
+         if (count < 0 || count > MAXIMUM_CACHE_SIZE) {
+             throw new IllegalArgumentException("count must not be negative or greater than " + MAXIMUM_CACHE_SIZE);
+         }
+-        while (bitsCachedSize < count) {
++        while (bitsCachedSize < count && bitsCachedSize < 57) {
+             final long nextByte = in.read();
+             if (nextByte < 0) {
+                 return nextByte;

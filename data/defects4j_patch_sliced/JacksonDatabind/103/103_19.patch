@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/std/StdKeyDeserializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/std/StdKeyDeserializer.java
+@@ -259,7 +259,7 @@ public class StdKeyDeserializer extends KeyDeserializer
+     // @since 2.9
+     protected Object _weirdKey(DeserializationContext ctxt, String key, Exception e) throws IOException {
+         return ctxt.handleWeirdKey(_keyClass, key, "problem: %s",
+-                e.getMessage());
++                ClassUtil.exceptionMessage(e));
+     }
+ 
+     /*

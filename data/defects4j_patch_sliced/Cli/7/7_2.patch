@@ -1,0 +1,11 @@
+--- a/src/java/org/apache/commons/cli2/builder/PatternBuilder.java
++++ b/src/java/org/apache/commons/cli2/builder/PatternBuilder.java
+@@ -64,7 +64,7 @@ public class PatternBuilder {
+         this.abuilder = abuilder;
+     }
+ 
+-    private final Set options = new HashSet();
++    private final Set options = new LinkedHashSet();
+ 
+     /**
+      * Creates a new Option instance.

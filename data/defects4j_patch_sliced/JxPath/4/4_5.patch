@@ -1,0 +1,28 @@
+--- a/src/java/org/apache/commons/jxpath/ri/model/jdom/JDOMNodePointer.java
++++ b/src/java/org/apache/commons/jxpath/ri/model/jdom/JDOMNodePointer.java
+@@ -246,20 +253,15 @@ public class JDOMNodePointer extends NodePointer {
+             }
+             return text;
+         }
++        String result = null;
+         if (node instanceof Text) {
+-            return ((Text) node).getTextTrim();
+-        }
+-        if (node instanceof CDATA) {
+-            return ((CDATA) node).getTextTrim();
++            result = ((Text) node).getText();
+         }
+         if (node instanceof ProcessingInstruction) {
+-            String text = ((ProcessingInstruction) node).getData();
+-            if (text != null) {
+-                text = text.trim();
+-            }
+-            return text;
++            result = ((ProcessingInstruction) node).getData();
+         }
+-        return null;
++        boolean trim = !"preserve".equals(findEnclosingAttribute(node, "space", Namespace.XML_NAMESPACE));
++        return result != null && trim ? result.trim() : result;
+     }
+ 
+     public void setValue(Object value) {

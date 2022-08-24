@@ -1,0 +1,10 @@
+--- a/src/org/mockito/internal/util/MockUtil.java
++++ b/src/org/mockito/internal/util/MockUtil.java
+@@ -16,6 +16,7 @@ import org.mockito.internal.creation.MockSettingsImpl;
+ import org.mockito.internal.creation.jmock.ClassImposterizer;
+ import org.mockito.internal.util.reflection.LenientCopyTool;
+ 
++import java.io.Serializable;
+ 
+ @SuppressWarnings("unchecked")
+ public class MockUtil {

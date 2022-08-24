@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/PeepholeReplaceKnownMethods.java
++++ b/src/com/google/javascript/jscomp/PeepholeReplaceKnownMethods.java
+@@ -373,7 +373,7 @@ class PeepholeReplaceKnownMethods extends AbstractPeepholeOptimization{
+ 
+     Node right = callTarget.getNext();
+     if (right != null) {
+-      if (!NodeUtil.isImmutableValue(right)) {
++      if (right.getNext() != null || !NodeUtil.isImmutableValue(right)) {
+         return n;
+       }
+     }

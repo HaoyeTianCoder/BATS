@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/DatabindContext.java
++++ b/src/main/java/com/fasterxml/jackson/databind/DatabindContext.java
+@@ -192,7 +192,7 @@ public abstract class DatabindContext
+                 throw invalidTypeIdException(baseType, subClass, String.format(
+                         "problem: (%s) %s",
+                         e.getClass().getName(),
+-                        e.getMessage()));
++                        ClassUtil.exceptionMessage(e)));
+             }
+             if (baseType.isTypeOrSuperTypeOf(cls)) {
+                 return getTypeFactory().constructSpecializedType(baseType, cls);

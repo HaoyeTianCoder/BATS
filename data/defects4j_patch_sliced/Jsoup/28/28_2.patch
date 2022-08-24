@@ -1,0 +1,12 @@
+--- a/src/main/java/org/jsoup/nodes/Entities.java
++++ b/src/main/java/org/jsoup/nodes/Entities.java
+@@ -58,6 +59,9 @@ public class Entities {
+      * @return true if a known named entity in the base set
+      * @see #isNamedEntity(String)
+      */
++    public static boolean isBaseNamedEntity(String name) {
++        return base.containsKey(name);
++    }
+ 
+     /**
+      * Get the Character value of the named entity

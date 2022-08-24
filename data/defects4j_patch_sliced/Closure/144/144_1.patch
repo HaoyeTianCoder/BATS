@@ -1,0 +1,10 @@
+--- a/src/com/google/javascript/jscomp/FunctionTypeBuilder.java
++++ b/src/com/google/javascript/jscomp/FunctionTypeBuilder.java
+@@ -71,6 +71,7 @@ final class FunctionTypeBuilder {
+   private final Scope scope;
+ 
+   private JSType returnType = null;
++  private boolean returnTypeInferred = false;
+   private List<ObjectType> implementedInterfaces = null;
+   private ObjectType baseType = null;
+   private ObjectType thisType = null;

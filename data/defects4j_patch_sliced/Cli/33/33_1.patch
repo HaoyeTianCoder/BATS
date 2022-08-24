@@ -1,0 +1,11 @@
+--- a/src/main/java/org/apache/commons/cli/HelpFormatter.java
++++ b/src/main/java/org/apache/commons/cli/HelpFormatter.java
+@@ -727,7 +727,7 @@ public class HelpFormatter
+     {
+         StringBuffer sb = new StringBuffer(text.length());
+ 
+-        renderWrappedText(sb, width, nextLineTabStop, text);
++        renderWrappedTextBlock(sb, width, nextLineTabStop, text);
+         pw.println(sb.toString());
+     }
+ 

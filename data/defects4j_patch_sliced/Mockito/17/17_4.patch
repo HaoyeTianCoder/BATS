@@ -1,0 +1,14 @@
+--- a/src/org/mockito/internal/util/MockUtil.java
++++ b/src/org/mockito/internal/util/MockUtil.java
+@@ -42,7 +43,11 @@ public class MockUtil {
+         Class<?>[] interfaces = settings.getExtraInterfaces();
+ 
+         Class<?>[] ancillaryTypes;
++        if (settings.isSerializable()) {
++            ancillaryTypes = interfaces == null ? new Class<?>[] {Serializable.class} : new ArrayUtils().concat(interfaces, Serializable.class);
++        } else {
+             ancillaryTypes = interfaces == null ? new Class<?>[0] : interfaces;
++        }
+ 
+         Object spiedInstance = settings.getSpiedInstance();
+         

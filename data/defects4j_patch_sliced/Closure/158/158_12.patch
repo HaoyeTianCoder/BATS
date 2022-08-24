@@ -1,0 +1,17 @@
+--- a/src/com/google/javascript/jscomp/DiagnosticGroups.java
++++ b/src/com/google/javascript/jscomp/DiagnosticGroups.java
+@@ -183,12 +182,10 @@ public class DiagnosticGroups {
+   /**
+    * Adds warning levels by name.
+    */
+-  void setWarningLevels(CompilerOptions options,
+-      List<String> diagnosticGroups, CheckLevel level) {
+-    for (String name : diagnosticGroups) {
++  void setWarningLevel(CompilerOptions options,
++      String name, CheckLevel level) {
+     DiagnosticGroup group = forName(name);
+     Preconditions.checkNotNull(group, "No warning class for name: " + name);
+     options.setWarningLevel(group, level);
+-    }
+   }
+ }

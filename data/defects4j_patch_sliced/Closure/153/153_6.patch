@@ -1,0 +1,11 @@
+--- a/src/com/google/javascript/jscomp/SyntacticScopeCreator.java
++++ b/src/com/google/javascript/jscomp/SyntacticScopeCreator.java
+@@ -92,7 +91,7 @@ class SyntacticScopeCreator implements ScopeCreator {
+       // been declared in the outer scope.
+       String fnName = fnNameNode.getString();
+       if (!fnName.isEmpty() && NodeUtil.isFunctionExpression(n)) {
+-        declareVar(fnName, fnNameNode, n, null, null, n);
++        declareVar(fnNameNode);
+       }
+ 
+       // Args: Declare function variables

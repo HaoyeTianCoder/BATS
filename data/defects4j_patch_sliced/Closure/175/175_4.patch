@@ -1,0 +1,36 @@
+--- a/src/com/google/javascript/jscomp/FunctionInjector.java
++++ b/src/com/google/javascript/jscomp/FunctionInjector.java
+@@ -712,24 +719,17 @@ class FunctionInjector {
+       }
+     }
+ 
+-    Node fnParam = NodeUtil.getFunctionParameters(fnNode).getFirstChild();
+-    while (cArg != null || fnParam != null) {
+-      if (fnParam != null) {
+-        if (cArg != null) {
+-          if (NodeUtil.mayEffectMutableState(cArg, compiler)
+-              && NodeUtil.getNameReferenceCount(
+-                  block, fnParam.getString()) > 1) {
+-            return CanInlineResult.NO;
+-          }
+-        }
+-        fnParam = fnParam.getNext();
+-      }
++    Map<String, Node> args =
++        FunctionArgumentInjector.getFunctionCallParameterMap(
++            fnNode, callNode, this.throwawayNameSupplier);
++    boolean hasArgs = !args.isEmpty();
++    if (hasArgs) {
+       // Limit the inlining
+-      if (cArg != null) {
+-        if (NodeUtil.mayHaveSideEffects(cArg, compiler)) {
++      Set<String> allNamesToAlias = Sets.newHashSet(namesToAlias);
++      FunctionArgumentInjector.maybeAddTempsForCallArguments(
++          fnNode, args, allNamesToAlias, compiler.getCodingConvention());
++      if (!allNamesToAlias.isEmpty()) {
+         return CanInlineResult.NO;
+-        }
+-        cArg = cArg.getNext();
+       }
+     }
+ 

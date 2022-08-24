@@ -1,0 +1,11 @@
+--- a/src/main/java/org/jsoup/nodes/Element.java
++++ b/src/main/java/org/jsoup/nodes/Element.java
+@@ -284,7 +284,7 @@ public class Element extends Node {
+     public Element prepend(String html) {
+         Validate.notNull(html);
+         
+-        Element fragment = Parser.parseBodyFragment(html, baseUri).body();
++        Element fragment = Parser.parseBodyFragmentRelaxed(html, baseUri()).body();
+         List<Node> nodes = fragment.childNodes();
+         for (int i = nodes.size() - 1; i >= 0; i--) {
+             Node node = nodes.get(i);

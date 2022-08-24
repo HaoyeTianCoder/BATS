@@ -1,0 +1,12 @@
+--- a/src/main/java/com/fasterxml/jackson/core/json/UTF8StreamJsonParser.java
++++ b/src/main/java/com/fasterxml/jackson/core/json/UTF8StreamJsonParser.java
+@@ -2572,9 +2598,6 @@ public final class UTF8StreamJsonParser
+                 }
+                 break;
+             default: // e.g. -1
+-                if (i < 32) {
+-                    _throwInvalidSpace(i);
+-                }
+                 _reportInvalidChar(i);
+             }
+         }

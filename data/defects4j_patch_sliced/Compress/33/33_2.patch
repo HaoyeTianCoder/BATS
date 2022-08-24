@@ -1,0 +1,14 @@
+--- a/src/main/java/org/apache/commons/compress/compressors/deflate/DeflateCompressorInputStream.java
++++ b/src/main/java/org/apache/commons/compress/compressors/deflate/DeflateCompressorInputStream.java
+@@ -30,6 +30,11 @@ import org.apache.commons.compress.compressors.CompressorInputStream;
+  * @since 1.9
+  */
+ public class DeflateCompressorInputStream extends CompressorInputStream {
++    private static final int MAGIC_1 = 0x78;
++    private static final int MAGIC_2a = 0x01;
++    private static final int MAGIC_2b = 0x5e;
++    private static final int MAGIC_2c = 0x9c;
++    private static final int MAGIC_2d = 0xda;
+     
+     private final InputStream in;
+ 

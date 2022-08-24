@@ -1,0 +1,13 @@
+--- a/src/java/org/apache/commons/jxpath/ri/NamespaceResolver.java
++++ b/src/java/org/apache/commons/jxpath/ri/NamespaceResolver.java
+@@ -129,6 +148,10 @@ public class NamespaceResolver implements Cloneable {
+      * @return String prefix
+      */
+     public synchronized String getPrefix(String namespaceURI) {
++        String prefix = getExternallyRegisteredPrefix(namespaceURI);
++        return prefix == null && pointer != null ? getPrefix(pointer,
++                namespaceURI) : prefix;
++    }
+ 
+     /**
+      * Get the nearest prefix found that matches an externally-registered namespace. 

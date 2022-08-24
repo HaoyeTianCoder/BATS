@@ -1,0 +1,10 @@
+--- a/src/java/org/apache/commons/jxpath/ri/axes/AttributeContext.java
++++ b/src/java/org/apache/commons/jxpath/ri/axes/AttributeContext.java
+@@ -30,6 +32,7 @@ import org.apache.commons.jxpath.ri.model.NodePointer;
+  * @version $Revision$ $Date$
+  */
+ public class AttributeContext extends EvalContext {
++    private static final NodeNameTest WILDCARD_TEST = new NodeNameTest(new QName(null, "*"));
+ 
+     private NodeTest nodeTest;
+     private boolean setStarted = false;

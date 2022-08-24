@@ -1,0 +1,15 @@
+--- a/src/com/google/javascript/jscomp/Scope.java
++++ b/src/com/google/javascript/jscomp/Scope.java
+@@ -456,6 +482,12 @@ public class Scope implements StaticScope<JSType> {
+   /**
+    * Get a unique VAR object to represents "arguments" within this scope
+    */
++  public Var getArgumentsVar() {
++    if (arguments == null) {
++      arguments = new Arguments(this);
++    }
++    return arguments;
++  }
+ 
+   /**
+    * Returns true if a variable is declared.

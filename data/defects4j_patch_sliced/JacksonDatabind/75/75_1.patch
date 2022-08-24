@@ -1,0 +1,11 @@
+--- a/src/main/java/com/fasterxml/jackson/databind/ser/std/EnumSerializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/ser/std/EnumSerializer.java
+@@ -83,7 +83,7 @@ public class EnumSerializer
+          *   handle toString() case dynamically (for example)
+          */
+         EnumValues v = EnumValues.constructFromName(config, (Class<Enum<?>>) enumClass);
+-        Boolean serializeAsIndex = _isShapeWrittenUsingIndex(enumClass, format, true);
++        Boolean serializeAsIndex = _isShapeWrittenUsingIndex(enumClass, format, true, null);
+         return new EnumSerializer(v, serializeAsIndex);
+     }
+ 

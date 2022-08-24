@@ -1,0 +1,10 @@
+--- a/src/main/java/org/apache/commons/csv/CSVParser.java
++++ b/src/main/java/org/apache/commons/csv/CSVParser.java
+@@ -286,6 +286,7 @@ public final class CSVParser implements Iterable<CSVRecord>, Closeable {
+ 
+     private final Lexer lexer;
+ 
++    private final CSVRecordIterator csvRecordIterator;
+     
+     /** A record buffer for getRecord(). Grows as necessary and is reused. */
+     private final List<String> recordList = new ArrayList<>();

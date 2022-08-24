@@ -1,0 +1,15 @@
+--- a/src/com/google/javascript/jscomp/Compiler.java
++++ b/src/com/google/javascript/jscomp/Compiler.java
+@@ -1579,12 +1588,6 @@ public class Compiler extends AbstractCompiler {
+     if (inputs.size() > 0) {
+       return inputs.get(0).getAstRoot(this);
+     }
+-    for (JSModule m : getModuleGraph().getTransitiveDepsDeepestFirst(module)) {
+-      inputs = m.getInputs();
+-      if (inputs.size() > 0) {
+-        return inputs.get(0).getAstRoot(this);
+-      }
+-    }
+     throw new IllegalStateException("Root module has no inputs");
+   }
+ 

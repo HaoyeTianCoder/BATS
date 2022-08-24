@@ -1,0 +1,23 @@
+--- a/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java
++++ b/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java
+@@ -863,7 +916,20 @@ public final class ToXmlGenerator
+         return result;
+     }
+ 
++    private byte[] toFullBuffer(InputStream data, final int len) throws IOException 
++    {
++        byte[] result = new byte[len];
++        int offset = 0;
+ 
++        for (; offset < len; ) {
++            int count = data.read(result, offset, len - offset);
++            if (count < 0) {
++                _reportError("Too few bytes available: missing "+(len - offset)+" bytes (out of "+len+")");
++            }
++            offset += count;
++        }
++        return result;
++    }
+ 
+     /*
+     /**********************************************************

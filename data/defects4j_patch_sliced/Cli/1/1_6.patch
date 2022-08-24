@@ -1,0 +1,27 @@
+--- a/src/java/org/apache/commons/cli/CommandLine.java
++++ b/src/java/org/apache/commons/cli/CommandLine.java
+@@ -167,7 +160,24 @@ public class CommandLine {
+      * @param opt short or long name of the option
+      * @return Canonicalized option
+      */
++    private Option resolveOption( String opt )
++    {
++        opt = Util.stripLeadingHyphens(opt);
++        for ( Iterator it = options.iterator(); it.hasNext(); )
++        {
++            Option option = (Option) it.next();
++            if (opt.equals(option.getOpt()))
++            {
++                return option;
++            }
++            if (opt.equals( option.getLongOpt()))
++            {
++                return option;
++        }
+ 
++        }
++        return null;
++    }
+ 
+     /** 
+      * Retrieves the array of values, if any, of an option.

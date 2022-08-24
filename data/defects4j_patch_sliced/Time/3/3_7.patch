@@ -1,0 +1,12 @@
+--- a/src/main/java/org/joda/time/MutableDateTime.java
++++ b/src/main/java/org/joda/time/MutableDateTime.java
+@@ -782,7 +794,9 @@ public class MutableDateTime
+      * @throws IllegalArgumentException if the value is invalid
+      */
+     public void addHours(final int hours) {
++        if (hours != 0) {
+             setMillis(getChronology().hours().add(getMillis(), hours));
++        }
+     }
+     
+     //-----------------------------------------------------------------------
