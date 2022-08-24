@@ -2,9 +2,9 @@ class Config:
     def __init__(self):
         # the orginal data of test case name, test function, associated patch including 'single test case' and 'full' versions.
         self.path_test = '../data/test_case_all.pkl'
-
         # developers' patches in defects4j and generated patches of APR tools
-        self.path_patch_root = '/Users/haoye.tian/Documents/University/project/defects4j_patch_sliced/'
+        self.path_patch_root = '../data/defects4j_patch_sliced/'
+
         self.path_generated_patch = '/Users/haoye.tian/Documents/University/data/BATS_DataSet/PatchCollectingV1_sliced/'
         # for Naturalness
         # self.path_generated_patch = '/Users/haoye.tian/Documents/ISSTA2022withTextUnique/'
